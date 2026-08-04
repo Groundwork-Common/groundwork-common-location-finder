@@ -305,7 +305,7 @@ function lfndr_render_order_form( array $schema ): void {
 	?>
 	<h2><?php esc_html_e( 'Display order', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description">
-		<?php esc_html_e( 'Drag order is set with the arrow buttons. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so.', 'groundwork-common-location-finder' ); ?>
+		<?php esc_html_e( 'Use the arrow buttons to set the order. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so.', 'groundwork-common-location-finder' ); ?>
 	</p>
 
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-orders">
