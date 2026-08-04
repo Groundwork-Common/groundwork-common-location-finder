@@ -1,0 +1,12 @@
+# PHPUnit, fetched rather than committed — see the note in tests/bootstrap.php.
+phpunit.phar
+phpunit-*.phar
+.phpunit.cache/
+.phpunit.result.cache
+
+# wp-env writes this when a developer overrides ports or mounts locally.
+.wp-env.override.json
+
+node_modules/
+vendor/
+.DS_Store

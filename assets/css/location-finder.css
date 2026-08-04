@@ -1,0 +1,2035 @@
+/**
+ * Location Finder — structure, not color.
+ *
+ * ── The rule this file follows ───────────────────────────────────────────────
+ * Every interactive element declares its own shape: padding, font-size,
+ * min-height, border-width, border-radius. None of that is left for the
+ * theme's native <button>/<input> styling to supply, and that is deliberate —
+ * a theme's default button is sized and weighted for a single prominent call
+ * to action, not for a rail of eight filter chips or a list of forty result
+ * cards, and inheriting it wholesale is how a filter chip ends up the size of
+ * a "Buy now" button. This file's job is exactly the size and shape of every
+ * piece — a diaper bank's finder proved that structure out in production
+ * first, and what follows ports its measurements (pill chips, a compact type
+ * scale, a 44px touch target specifically where the input is actually a
+ * finger) rather than reinventing them.
+ *
+ * What stays out is color, font-family and absolute font sizes (em/rem only,
+ * so a theme's own base size is still respected). Native elements —
+ * <button>, <input type="search">, <select>, <details>, <dl> — still mean the
+ * theme's colors and typography apply without this file asking; this file
+ * only ever adds a border color derived from currentColor, never a fixed
+ * hue.
+ *
+ * ── The spacing scale ─────────────────────────────────────────────────────
+ * Five steps (--lfndr-space-1 through -5), and every padding/margin/gap in
+ * this file is one of them. Not because round numbers are inherently better,
+ * but because the alternative — each rule inventing its own 0.3rem or 0.35rem
+ * or 0.4rem, independently, as this file grew — is indistinguishable from
+ * inconsistency by the time there are forty rules doing it. A shared scale
+ * means two things that should match (the gap inside a row of chips and the
+ * gap inside a row of badges, say) are written as the same token and so
+ * cannot quietly drift apart the next time one of them is edited.
+ *
+ * ── On --wp--preset--* ───────────────────────────────────────────────────────
+ * This file references none of them, and that is deliberate. Those custom
+ * properties exist only for slugs the active theme defines. A classic theme
+ * with no theme.json emits zero color presets. Among block themes the slugs
+ * differ every time — Twenty Twenty-Four has accent-1 through accent-6, Twenty
+ * Twenty-Three has primary/secondary/tertiary, core's own default palette is
+ * black/cyan-bluish-gray/pale-pink. There is no slug that can be relied on, so
+ * relying on one produces a finder that looks correct on the theme it was
+ * written against and unstyled elsewhere.
+ *
+ * What it uses instead: currentColor for anything that should match the
+ * surrounding text, the CSS system colors (Canvas, CanvasText) for surfaces —
+ * which are correct in light mode, dark mode and forced-colors alike — and a
+ * handful of plugin-owned custom properties a theme can override, because only
+ * the theme knows its own slugs:
+ *
+ *     .lfndr {
+ *       --lfndr-accent: var(--wp--preset--color--accent-1);
+ *       --lfndr-radius: 8px;
+ *     }
+ *
+ * ── One honest limitation ────────────────────────────────────────────────────
+ * Custom properties cannot be used in @media width queries, so the 860px
+ * breakpoint below is a literal. There is deliberately no --lfndr-breakpoint
+ * variable, because it would look adjustable and silently do nothing.
+ */
+
+.lfndr {
+	/* Color. --lfndr-pin is its own name — rather than every pin rule reading
+	   var(--lfndr-accent) directly — so a theme, or a future opinionated skin,
+	   can recolor map pins independently of focus rings and chip borders. */
+	--lfndr-accent: currentColor;
+	--lfndr-pin: var(--lfndr-accent);
+
+	/* The closure notice's color, and only its color. Its own name rather
+	   than --lfndr-accent because the two want opposite things: an accent is
+	   the site's voice, a closure notice is a warning, and the one site that
+	   wants a red notice almost never wants red pins to go with it.
+
+	   currentColor by default, which is why the notice ships hueless — see the
+	   note above .lfndr-closure. Setting it to a real color recolors the rule,
+	   the tint, the icon and the text together, because all four are drawn from
+	   the element's own color and this sets that. */
+	--lfndr-closure: currentColor;
+
+	/* The open indicator. A hue, in a file that otherwise ships none — and the
+	   exception is the point: on a status light the color IS the information,
+	   the way it is on every appliance and dashboard anyone has ever used. Green
+	   does not decorate "open", it says it, which is why this one is worth the
+	   inconsistency that --lfndr-accent and the rest exist to avoid.
+
+	   Bright rather than dark so it reads lit on a dark canvas as well as a
+	   light one, and its own property so a theme can tune it. */
+	--lfndr-open: #22c55e;
+
+	/* System colors: correct in light and dark, and they survive
+	   forced-colors mode, which a hardcoded #fff does not. */
+	--lfndr-surface: Canvas;
+	--lfndr-on-surface: CanvasText;
+
+	/* The finder's own canvas — the ground its cards and panels sit on.
+	   Transparent by default, which is not a placeholder but the correct
+	   answer: an embedded finder should show the page it was dropped into, and
+	   painting it anything at all would put a rectangle of the plugin's opinion
+	   in the middle of somebody's layout.
+
+	   It exists for the case where that is wrong. Coloring the cards, chips and
+	   badges dark without this leaves them floating on a white page, which is
+	   not a dark finder — it is a light finder with dark parts. This is the one
+	   value that turns the set into a whole.
+
+	   --lfndr-fg goes with it and is not optional: text inside the finder
+	   inherits the page's color, so painting a canvas without setting the ink
+	   leaves the count, the field labels and the hours dark on dark. A ground
+	   and the writing on it are one decision, so they are one pair. */
+	   --lfndr-bg is deliberately NOT declared here. A property that has a value
+	   can never fall back, and two rules need to ask "the canvas, or the surface
+	   if there is no canvas" — the sticky header and full screen both have to be
+	   opaque, and painting them --lfndr-surface is what put a band of pure white
+	   across a finder whose canvas is cream. Leaving it undeclared is what makes
+	   var(--lfndr-bg, …) mean that. */
+	--lfndr-fg: inherit;
+
+	/* And the inset that has to come with them. With no canvas the finder wants
+	   none — it sits in the page's own column and adding a gutter would just
+	   indent it out of alignment with everything above and below it. The moment
+	   there IS a canvas, the same zero runs the search box and the cards flat
+	   into the edge of a colored rectangle, which is the one arrangement that
+	   makes a deliberate background look like a mistake.
+
+	   So it is a third value in the same decision, not a separate one: set a
+	   background, set the ink, set the inset. */
+	--lfndr-pad: 0;
+
+	--lfndr-line: rgba(0, 0, 0, 0.18); /* fallback first */
+	--lfndr-line: color-mix(in srgb, currentColor 20%, transparent);
+
+	/* The spacing scale. Read top to bottom: hairline, default, comfortable,
+	   base rhythm, generous. Nothing in this file uses a value outside this
+	   list — see the file header for why that matters more than any single
+	   number being "right". */
+	--lfndr-space-1: 0.25rem; /*  4px — hairline: tight list rows, small trims */
+	--lfndr-space-2: 0.5rem;  /*  8px — the default: icon-to-label, row gaps, most margins */
+	--lfndr-space-3: 0.75rem; /* 12px — comfortable: list-item separation */
+	--lfndr-space-4: 1rem;    /* 16px — base rhythm: pill-control padding, panel padding */
+	--lfndr-space-5: 1.5rem;  /* 24px — generous: panel padding, the wide side of a pill */
+
+	/* --lfndr-gap is a separate, deliberately admin-configurable knob (see
+	   Locations → Settings → Appearance) for the handful of larger structural
+	   gaps — between the whole controls block and the results, between the
+	   panel and the map. The fixed scale above is not configurable, because
+	   it is what keeps components internally consistent; --lfndr-gap is the
+	   one dial a site is meant to actually turn. */
+	--lfndr-radius: 14px;
+	--lfndr-gap: 1rem;
+	--lfndr-map-height: 480px;
+	--lfndr-panel-height: 480px;
+
+	/* Every pill control's minimum height. Not 44px by default — that number
+	   is WCAG's touch-target guidance for a finger, not a sizing convention
+	   for a mouse, and applying it unconditionally is what made a rail of
+	   chips read as oversized on an ordinary desktop layout: with this
+	   file's own padding and 14px type, a chip's natural height is already
+	   about 37px, and a flat 44px floor was adding height a mouse pointer
+	   never needed. The @media block right below restores 44px specifically
+	   where the input actually is a finger. */
+	--lfndr-control-height: 2.25rem; /* 36px */
+
+	/* ── The scroll fade ──────────────────────────────────────────────────
+	   Wherever the result list scrolls inside a fixed height, its content
+	   softens out at both ends rather than being guillotined mid-card — the
+	   cut edge is what makes a scroll region read as broken content instead
+	   of as more to come.
+
+	   A mask, not a gradient overlay in some background color. This file
+	   does not know what is behind the list: the panel has no background of
+	   its own, so it shows whatever the theme puts there, and a fade painted
+	   to Canvas would be a pale rectangle over a dark theme. A mask fades to
+	   transparent, which is right against anything.
+
+	   --lfndr-fade doubles as the panel's block padding at every site that
+	   uses it, and that pairing is load-bearing: it means the fade is sitting
+	   over empty padding at each end of the scroll, so a fully scrolled list
+	   shows its last card crisp rather than half-dissolved. */
+	--lfndr-fade: 1.5rem;
+
+	/* Written by the script from the panel's real scrollbar width — 0 when the
+	   platform draws overlay scrollbars, which is also exactly right, because
+	   then there is no gutter to keep clear. See Finder.prototype
+	   .measureScrollbar for why this cannot be a constant. */
+	--lfndr-scrollbar: 0px;
+
+	/* Stacking order, documented so nothing below has to guess. Leaflet's own
+	   panes run from 200 to 700, a .leaflet-control is 800, and the
+	   .leaflet-top/.leaflet-bottom containers those controls sit in are 1000 —
+	   that last number is the one that matters and the easy one to miss.
+	   Anything of ours that must clear the map goes above it: the sticky mobile
+	   header, the search suggestions, the detail pane, and — clearing the rest
+	   of the page, including WordPress's own admin bar at 99999 — full screen.
+
+	   --lfndr-z-raised is the header, and it carries both the suggestions list
+	   and the filter panel inside it. Because it sets a z-index at all it
+	   becomes a stacking context, which caps whatever those two ask for at this
+	   number; that is why it has to clear Leaflet on their behalf rather than
+	   leaving each of them to do it. */
+	--lfndr-z-raised: 1100;
+	--lfndr-z-suggest: 900;
+	--lfndr-z-detail: 950;
+	--lfndr-z-maximize: 999999;
+
+	position: relative;
+	container-type: inline-size;
+	background: var(--lfndr-bg, transparent);
+	color: var(--lfndr-fg);
+	padding: var(--lfndr-pad);
+	/* Harmless while the background is transparent — there is nothing to round
+	   — and what stops a colored canvas being a hard-edged rectangle. */
+	border-radius: var(--lfndr-radius);
+}
+
+/* The one rule in this file that reaches outside .lfndr, and deliberately so:
+   a full-screen takeover that still lets the page scroll behind it reads as
+   broken, the same as any lightbox. Scoped to a class the plugin adds and
+   removes itself, so it can never linger or affect a page that never opens
+   the finder full screen. */
+html.lfndr-scroll-lock {
+	overflow: hidden;
+}
+
+/* Every width and height in this file is written as though padding and border
+   are inside the box, because that is the only way "min-height: 44px" or
+   "max-height: var(--lfndr-panel-height)" means what it says once a rule adds
+   padding. Most themes set this globally and the assumption held silently on
+   the strength of that — which is exactly the kind of dependency worth not
+   having. Scoped to the finder, so it cannot reach a theme's own elements. */
+.lfndr,
+.lfndr *,
+.lfndr *::before,
+.lfndr *::after {
+	box-sizing: border-box;
+}
+
+/* ─── Shared text treatments ───────────────────────────────────────────── */
+
+/* De-emphasized meta text: facet labels, result counts, distances, the status
+   line under "Sort by distance from me", the kind label in search
+   suggestions, the label column of a detail row. One shared value here is
+   what keeps all of those reading as the same idea — secondary to whatever
+   they are labelling or counting — rather than each accumulating its own
+   slightly different number over time. */
+.lfndr__facet-label,
+.lfndr__count,
+.lfndr__locate-status,
+.lfndr__suggest-kind,
+.lfndr-card__distance,
+.lfndr-row > dt {
+	font-size: 0.9rem;
+	opacity: 0.8;
+}
+
+/* ─── Controls ─────────────────────────────────────────────────────────── */
+
+/* One row: search, then the Filters button, then Full screen — with the filter
+   panel wrapping onto a full-width line beneath them. The same arrangement at
+   every width; what changes on a narrow screen is only that the two buttons
+   drop their text labels and become squares (see the Mobile section). */
+.lfndr__controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lfndr-space-2);
+	margin-block-end: var(--lfndr-gap);
+}
+
+/* The search box takes whatever the two fixed-size buttons leave. min-width:0
+   is what lets it actually shrink — a flex item's default min-width:auto
+   floors it at the input's intrinsic size and would push the buttons off the
+   end of a narrow row instead. */
+.lfndr__search {
+	position: relative;
+	flex: 1 1 12rem;
+	min-width: 0;
+}
+
+/* Visible only to assistive tech. The placeholder already says this to
+   everyone else, and printing both put the same sentence on screen twice. */
+.lfndr__visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Every pill-shaped control in this file — this input, chips, the facet
+   select, the standalone action buttons below — shares the same padding
+   recipe (--lfndr-space-2 vertical, --lfndr-space-4 horizontal). That is the
+   direct answer to "the filters are inconsistent": one pill is not allowed to
+   be roomier than another just because a different rule happened to write
+   its own number. */
+/* Scoped under .lfndr — (0,2,0) — rather than written as the bare class it
+   looks like it should be. Themes really do ship `input[type="search"]
+   { width: 270px }`, and at (0,1,1) that beats a lone class and leaves the
+   input overflowing the row it shares with the two header buttons. This is the
+   one selector in the file that has to out-specify an attribute selector,
+   because it is the one control that is a typed <input>. */
+.lfndr .lfndr__search-input {
+	width: 100%;
+	max-width: 32rem;
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	font-size: 1rem;
+	border: 2px solid var(--lfndr-line);
+	border-radius: 999px;
+}
+
+.lfndr__suggest {
+	position: absolute;
+	z-index: var(--lfndr-z-suggest);
+	inset-inline-start: 0;
+	inset-block-start: 100%;
+	width: 100%;
+	max-width: 32rem;
+	max-height: 16rem;
+	overflow-y: auto;
+	margin: var(--lfndr-space-2) 0 0;
+	padding: var(--lfndr-space-1);
+	list-style: none;
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+	border: 1px solid var(--lfndr-line);
+	border-radius: var(--lfndr-radius);
+}
+
+/* A smaller, literal radius here on purpose — a row nested inside an already
+   rounded panel reads better with a tighter corner than the panel's own, the
+   same two-tier relationship the map/detail-pane radius has to a pill. Not
+   part of the spacing scale (it is a corner, not a gap), so not tokenized. */
+.lfndr__suggest-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: var(--lfndr-space-3);
+	padding: var(--lfndr-space-2) var(--lfndr-space-3);
+	font-size: 0.875rem;
+	border-radius: 9px;
+	cursor: pointer;
+}
+
+.lfndr__suggest-item.is-active,
+.lfndr__suggest-item:hover {
+	background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+/* ─── Filters ──────────────────────────────────────────────────────────── */
+
+/* The panel is a flex sibling of the search box and the two icon buttons, and
+   flex-basis:100% is what makes it wrap onto its own full-width line beneath
+   them rather than fighting them for room on the first.
+
+   order:1 keeps it last on that wrap regardless of where it sits in the
+   markup — the Full screen button is appended to this row by the script, so
+   in DOM order it lands after the panel, and without this it would be carried
+   down onto the panel's line the moment the panel opened. */
+/* ── The panel, and why it is two different things ─────────────────────────
+   Wide, it is not a dropdown at all: there is room for the filters to simply be
+   on screen, so they are — a plain region under the search row, and the toggle
+   that used to open it is hidden, because a button whose only job is to collapse
+   something that never needs collapsing is furniture.
+
+   Narrow, it is a popover: a real floating surface anchored under the button,
+   bordered on all four sides, rounded on all four corners, with a shadow. That
+   is a pattern people already know.
+
+   What both replaced was a hybrid of the two that was neither — a 6% gray wash,
+   open on three sides, with the toggle's bottom corners squared so a 999px pill
+   could pretend to be a tab welded onto it. Pills do not tab; and the weld only
+   read in the few pixels directly beneath the button, while the panel ran the
+   full width, so on a wide screen the button sat at the far right of a join it
+   was supposedly part of. */
+.lfndr__filters-body {
+	display: flex;
+	flex-wrap: wrap;
+	flex-basis: 100%;
+	order: 1;
+	gap: var(--lfndr-gap);
+	padding-block-start: var(--lfndr-space-2);
+}
+
+.lfndr__filters-body[hidden] {
+	display: none;
+}
+
+
+/* Clear filters is a flex item beside the facet groups, and a flex container
+   stretches its items by default — so the button was growing to the height of
+   whatever group it happened to share a line with (66px next to a
+   label-plus-chips group, against a chip's 37px). It only looked correct at
+   the widths where it happened to wrap onto a line of its own, which is what
+   made it read as an intermittent bug rather than a layout rule.
+
+   flex-end rather than flex-start: a facet group is a label stacked above a
+   chip row, so aligning to the start would float this level with the labels,
+   away from every control it sits among. The end is the chip row. */
+/* Apply and Clear, together, at the foot of the panel. Its own full-width line
+   with a rule above it, so it reads as what closes out the panel rather than as
+   one more thing to choose from. */
+.lfndr__filters-actions {
+	display: flex;
+	flex-wrap: wrap;
+	flex-basis: 100%;
+	align-items: center;
+	gap: var(--lfndr-space-2);
+	padding-block-start: var(--lfndr-space-3);
+	border-block-start: 1px solid var(--lfndr-line);
+}
+
+.lfndr__filters-actions[hidden] {
+	display: none;
+}
+
+/* Clear is the secondary action, and says so without a color: same box, same
+   height, same padding as Apply — only the outline is dropped, so it steps back
+   without anything shifting when it appears and disappears. A color would be
+   this file inventing a palette, and an opacity would make it look disabled
+   rather than quieter. */
+.lfndr .lfndr__filters-actions .lfndr__reset {
+	align-self: auto;
+	border-color: transparent;
+}
+
+/* Nothing to dismiss on a wide screen — the panel sits above the results
+   instead of covering them, so Apply would close something nobody needed
+   closed. JS sets the hidden attribute; the blanket rule in Utilities is what
+   makes it stick against the pill family's own display. */
+
+.lfndr__facet {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lfndr-space-2);
+}
+
+/* The >5-option fallback for a single-choice filter — same footprint as the
+   chip row it replaces, so switching between the two widths (choice count
+   crossing the threshold as an admin edits Fields) never jumps the layout. */
+.lfndr .lfndr__facet-select {
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	font-size: 0.875rem;
+	border: 2px solid var(--lfndr-line);
+	border-radius: 999px;
+}
+
+/* Any wrapping row of small pill elements — filter chips, badges, the header
+   buttons — uses this same gap. They are the same visual pattern (a row of
+   pills) wherever they appear, so they get the same rhythm. */
+.lfndr__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lfndr-space-2);
+}
+
+/* A chip is a small, frequent, repeated control — the opposite of what a
+   theme's default <button> is usually drawn for. Left alone it inherits
+   whatever padding a theme gives its primary call-to-action, and a rail of
+   eight of those is what "the filters are huge" actually means. So a chip
+   gets a complete, self-contained shape: a pill, sized for a thumb, with its
+   own compact type — and only its color (background, text, border tint)
+   is left for the theme or Locations → Settings → Buttons, chips & cards. */
+.lfndr .lfndr__chip {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	font-size: 0.875rem;
+	line-height: 1.2;
+	border: 2px solid var(--lfndr-line);
+	border-radius: 999px;
+	cursor: pointer;
+	/* An unpressed chip carries the surface fill so it reads as an object sitting
+	   on the filter panel rather than a hole cut in it — and so that pressing one
+	   is a change from light to dark, not from nothing to slightly-darker-than-
+	   nothing. */
+	background: var(--lfndr-surface);
+	transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+/* ── Selected ──────────────────────────────────────────────────────────────
+   A tick and an inversion, which is what a filter chip does everywhere else,
+   and what the previous attempt should have been.
+
+   What it replaced: a gray wash behind unchanged text, ringed by a border and
+   an inset outline at once. Two problems. Four pixels of concentric ring on a
+   fully-rounded pill is a shape nothing else in any UI has. And washing gray
+   over text that stays put is the universal rendering of *disabled* — the state
+   was drawn in the visual language of "off" to mean "on", so stacking more
+   signals on top could never have fixed it.
+
+   The fill is --lfndr-on-surface over --lfndr-surface, not currentColor. Partly
+   because those two are already the plugin's contrast pair, guaranteed legible
+   against each other in light and dark alike. Partly because `background:
+   currentColor` with `color: <something>` on one element does not work at all:
+   currentColor resolves against the color the same rule just set, so the fill
+   silently comes out the same shade as the text.
+
+   One ring: the border, at full strength. The tick is what carries the state
+   where color cannot — forced-colors, a theme repainting buttons, an admin
+   picking two similar shades in Settings. */
+.lfndr .lfndr__chip[aria-pressed='true'] {
+	background: var(--lfndr-on-surface);
+	color: var(--lfndr-surface);
+	border-color: var(--lfndr-on-surface);
+}
+
+/* The box is always drawn; only the tick inside it changes. That is what lets
+   the chip keep one width in both states — see lfndr_chip_box() in render.php
+   for why a visible box beats an empty reserved slot. */
+.lfndr__chip-box {
+	flex: 0 0 auto;
+	inline-size: 1.15em;
+	block-size: 1.15em;
+	margin-inline-end: var(--lfndr-space-2);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	/* Keeps the stroke the same visual weight whatever size the glyph ends up,
+	   since it scales with the chip's font-size rather than being fixed. */
+	vector-effect: non-scaling-stroke;
+}
+
+/* The empty box is quieter than the label it sits beside — it is an
+   affordance, not a thing to read. Checked, it comes up to full strength. */
+.lfndr__chip-box-frame {
+	opacity: 0.55;
+	transition: opacity 0.12s ease;
+}
+
+.lfndr__chip-box-tick {
+	opacity: 0;
+	transition: opacity 0.12s ease;
+}
+
+.lfndr__chip[aria-pressed='true'] .lfndr__chip-box-frame,
+.lfndr__chip[aria-pressed='true'] .lfndr__chip-box-tick {
+	opacity: 1;
+}
+
+.lfndr__chip-count {
+	margin-inline-start: var(--lfndr-space-2);
+	opacity: 0.65;
+	font-size: 0.85rem;
+}
+
+/* 0.65 of the surface color on the inverted fill is too faint to read; the
+   count is information, not decoration. */
+.lfndr__chip[aria-pressed='true'] .lfndr__chip-count {
+	opacity: 0.8;
+}
+
+/* ─── Pill buttons ─────────────────────────────────────────────────────── */
+
+/* ── Why every button selector here is doubled ─────────────────────────────
+   `.lfndr .lfndr__chip`, not `.lfndr__chip`, and the same for every other
+   rule in this file that gives a native <button> or <select> its shape.
+
+   A lone class is specificity (0,1,0). A theme styling its own buttons writes
+   things like `button:active { padding: 10px 24px 11px; border-width: 3px }`
+   — one type selector plus one pseudo-class, (0,1,1) — and a pseudo-class
+   counts in the same column as a real class, so the theme wins the tie-break
+   on its extra element selector even though ours names an actual class and
+   theirs does not. The symptom is not a button that looks wrong on load; it
+   is a button that jumps to a different size the instant it is pressed, and
+   drags the rest of the row around as it does. Twenty Fourteen ships exactly
+   that rule; it is not an unusual thing for a theme to do.
+
+   Scoping under .lfndr makes these (0,2,0), which clears any
+   element-plus-pseudo-class or element-plus-class rule a theme is likely to
+   have. It costs one selector and closes the whole category — the same fix,
+   and the same reason, as the .lfndr .lfndr__search-input rule above.
+   ─────────────────────────────────────────────────────────────────────────
+
+   Every standalone action button — Filters, Full screen, Sort by distance,
+   Clear filters, Show all results. Same family as a chip: the same pill
+   padding, the same height floor, the same icon-to-label gap. What used to
+   make these "a touch roomier than a chip" was one more inconsistency to
+   track for no real benefit — a single shared recipe is the more legible
+   answer. */
+.lfndr .lfndr__maximize,
+.lfndr .lfndr__filters-toggle,
+.lfndr .lfndr__apply,
+.lfndr .lfndr__reset,
+.lfndr .lfndr__more {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lfndr-space-2);
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	font-size: 0.875rem;
+	line-height: 1.2;
+	border: 2px solid var(--lfndr-line);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+/* The two header buttons never shrink or wrap — the search box beside them is
+   the flexible one. align-self:stretch matches their height to whatever the
+   search input's line-height and the theme's font produce, rather than to
+   --lfndr-control-height, which is a floor and not the same number; without
+   it the buttons sit a few pixels shorter than the box they are lined up
+   against, which is exactly the sort of near-miss that reads as sloppy. */
+.lfndr .lfndr__filters-toggle,
+.lfndr .lfndr__maximize {
+	flex: 0 0 auto;
+	align-self: stretch;
+}
+
+/* currentColor, so an icon is the same color as the label beside it in every
+   theme and in both the resting and the active state. 1em keeps it in step
+   with the type rather than at a fixed pixel size. */
+.lfndr__icon {
+	width: 1em;
+	height: 1em;
+	flex: 0 0 auto;
+	fill: currentColor;
+}
+
+/* Open: the same inversion a selected chip gets, because it is the same idea —
+   this control is on. Nothing about being welded to the panel below. */
+.lfndr .lfndr__filters-toggle[aria-expanded='true'] {
+	background: var(--lfndr-on-surface);
+	color: var(--lfndr-surface);
+	border-color: var(--lfndr-on-surface);
+}
+
+/* ─── Body: list beside map ────────────────────────────────────────────── */
+
+.lfndr__body {
+	display: grid;
+	gap: var(--lfndr-gap);
+	grid-template-columns: 1fr;
+}
+
+/* Stacked, the map leads. Whenever the two are in one column — an embedded
+   finder on a phone, a narrow page column, narrow full screen — the map is
+   the orienting element and the list is what you scroll; a list you have to
+   scroll past to discover there was a map at all gets the relationship
+   backwards.
+
+   Done with `order` rather than by moving the markup, on purpose. The list is
+   the primary content, so it should stay first in the DOM for a screen reader
+   and first in the tab order — a keyboard user reaching the results without
+   traversing an interactive map is the better outcome, not a regression.
+   Beside each other at wide widths the source order is already right, so the
+   two-column rules below put it back to 0. */
+.lfndr__map {
+	order: -1;
+}
+
+/* Container query rather than a viewport one: the finder can sit in a narrow
+   column on a wide screen, and it is the column's width that decides whether
+   two columns fit. */
+@container (min-width: 860px) {
+	/* ── The app frame ───────────────────────────────────────────────────────
+	   Wide is the only layout where the result list scrolls inside a fixed
+	   height, and a column that just stops mid-card — with the page continuing
+	   around it — reads as clipped content rather than as a scroll region. The
+	   fix is to say what it already is: a self-contained thing sitting in the
+	   page, with a header band and two panes.
+
+	   Drawn as two boxes rather than one, because .lfndr is the element that
+	   establishes the container and a container query cannot style its own
+	   container. The controls take the top border and the top corners, the body
+	   takes the rest, and they sit flush — one frame, assembled from the two
+	   elements a @container rule is allowed to reach. */
+	.lfndr__controls {
+		margin-block-end: 0;
+		padding: var(--lfndr-space-4);
+		border: 1px solid var(--lfndr-line);
+		border-start-start-radius: var(--lfndr-radius);
+		border-start-end-radius: var(--lfndr-radius);
+	}
+
+	.lfndr__body {
+		grid-template-columns: minmax(20rem, 2fr) 3fr;
+		/* The frame is one box, so its height is one number and both panes
+		   fill it exactly. Sizing the two independently — which is what the
+		   separate map and panel heights did back when they were free-floating
+		   boxes with a gap between them — leaves whichever is shorter with a
+		   band of page background below it, inside the border, which reads as
+		   a rendering fault rather than a layout. */
+		grid-template-rows: var(--lfndr-panel-height);
+		/* No gutter between the panes: the divider on the map does that job, and
+		   a gap would show page background through the middle of the frame. */
+		gap: 0;
+		border: 1px solid var(--lfndr-line);
+		border-block-start: none;
+		border-end-start-radius: var(--lfndr-radius);
+		border-end-end-radius: var(--lfndr-radius);
+		/* Keeps the map's square corners inside the frame's rounded ones. */
+		overflow: hidden;
+	}
+
+	/* Full screen: the frame is as tall as the viewport lets it be, so the
+	   row stops being a fixed height and becomes the space that is left.
+	   --lfndr-panel-height is how tall the finder stands in a page; it is not
+	   a ceiling on how tall it may become when it has the screen to itself,
+	   and leaving it in charge here pinned both panes to 480px in the middle
+	   of an otherwise full-height frame. */
+	.lfndr--maximized .lfndr__body {
+		grid-template-rows: 1fr;
+	}
+
+	/* A finder with no search box and no filters renders no controls row until
+	   the script adds one, so the body has to be able to close the frame on its
+	   own. */
+	.lfndr__body:first-child {
+		border-block-start: 1px solid var(--lfndr-line);
+		border-start-start-radius: var(--lfndr-radius);
+		border-start-end-radius: var(--lfndr-radius);
+	}
+
+	/* Side by side: list left, map right, which is what the markup already
+	   says. The map is a pane of the frame now rather than a card floating on
+	   the page, so it drops its own rounding and takes a divider instead. */
+.lfndr__map {
+		order: 0;
+		border-radius: 0;
+		border-inline-start: 1px solid var(--lfndr-line);
+	}
+
+	/* The one layout where the panel is a scroll container, and so the only one
+	   with a scrollbar for the cards to collide with. The inline-end padding is
+	   the gap between the two; the rest is the pane's own inset from the frame
+	   around it. */
+	.lfndr__panel {
+		height: 100%;
+		max-height: none;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		padding: var(--lfndr-space-4);
+		padding-inline-end: var(--lfndr-space-3);
+		padding-block: var(--lfndr-fade);
+		/* Two layers, added together: the gradient over the content column, and a
+		   flat opaque strip the exact width of the scrollbar beside it. Without the
+		   second layer the mask dissolves the scrollbar's own ends along with the
+		   list, which reads as the scrollbar being broken rather than the content
+		   running on. `add` is a union of the two alphas, so the strip stays solid
+		   through the fade at both ends. */
+		mask-image:
+			linear-gradient(
+				to bottom,
+				transparent 0,
+				#000 var(--lfndr-fade),
+				#000 calc(100% - var(--lfndr-fade)),
+				transparent 100%
+			),
+			linear-gradient(#000, #000);
+		mask-size: calc(100% - var(--lfndr-scrollbar)) 100%, var(--lfndr-scrollbar) 100%;
+		mask-position: left top, right top;
+		mask-repeat: no-repeat, no-repeat;
+		mask-composite: add;
+	}
+}
+
+/* Same rule for browsers without container queries, so the two-column layout
+   is not lost on them. */
+@supports not (container-type: inline-size) {
+	@media (min-width: 860px) {
+		/* ── The app frame ───────────────────────────────────────────────────────
+		   Wide is the only layout where the result list scrolls inside a fixed
+		   height, and a column that just stops mid-card — with the page continuing
+		   around it — reads as clipped content rather than as a scroll region. The
+		   fix is to say what it already is: a self-contained thing sitting in the
+		   page, with a header band and two panes.
+
+		   Drawn as two boxes rather than one, because .lfndr is the element that
+		   establishes the container and a container query cannot style its own
+		   container. The controls take the top border and the top corners, the body
+		   takes the rest, and they sit flush — one frame, assembled from the two
+		   elements a @container rule is allowed to reach. */
+		.lfndr__controls {
+			margin-block-end: 0;
+			padding: var(--lfndr-space-4);
+			border: 1px solid var(--lfndr-line);
+			border-start-start-radius: var(--lfndr-radius);
+			border-start-end-radius: var(--lfndr-radius);
+		}
+
+		.lfndr__body {
+			grid-template-columns: minmax(20rem, 2fr) 3fr;
+			/* The frame is one box, so its height is one number and both panes
+			   fill it exactly. Sizing the two independently — which is what the
+			   separate map and panel heights did back when they were free-floating
+			   boxes with a gap between them — leaves whichever is shorter with a
+			   band of page background below it, inside the border, which reads as
+			   a rendering fault rather than a layout. */
+			grid-template-rows: var(--lfndr-panel-height);
+			/* No gutter between the panes: the divider on the map does that job, and
+			   a gap would show page background through the middle of the frame. */
+			gap: 0;
+			border: 1px solid var(--lfndr-line);
+			border-block-start: none;
+			border-end-start-radius: var(--lfndr-radius);
+			border-end-end-radius: var(--lfndr-radius);
+			/* Keeps the map's square corners inside the frame's rounded ones. */
+			overflow: hidden;
+		}
+
+		/* Full screen: the frame is as tall as the viewport lets it be, so the
+		   row stops being a fixed height and becomes the space that is left.
+		   --lfndr-panel-height is how tall the finder stands in a page; it is not
+		   a ceiling on how tall it may become when it has the screen to itself,
+		   and leaving it in charge here pinned both panes to 480px in the middle
+		   of an otherwise full-height frame. */
+		.lfndr--maximized .lfndr__body {
+			grid-template-rows: 1fr;
+		}
+
+		/* A finder with no search box and no filters renders no controls row until
+		   the script adds one, so the body has to be able to close the frame on its
+		   own. */
+		.lfndr__body:first-child {
+			border-block-start: 1px solid var(--lfndr-line);
+			border-start-start-radius: var(--lfndr-radius);
+			border-start-end-radius: var(--lfndr-radius);
+		}
+
+		/* Side by side: list left, map right, which is what the markup already
+		   says. The map is a pane of the frame now rather than a card floating on
+		   the page, so it drops its own rounding and takes a divider instead. */
+.lfndr__map {
+			order: 0;
+			border-radius: 0;
+			border-inline-start: 1px solid var(--lfndr-line);
+		}
+
+		/* The one layout where the panel is a scroll container, and so the only one
+		   with a scrollbar for the cards to collide with. The inline-end padding is
+		   the gap between the two; the rest is the pane's own inset from the frame
+		   around it. */
+		.lfndr__panel {
+			height: 100%;
+			max-height: none;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			padding: var(--lfndr-space-4);
+			padding-inline-end: var(--lfndr-space-3);
+			padding-block: var(--lfndr-fade);
+			/* Two layers, added together: the gradient over the content column, and a
+			   flat opaque strip the exact width of the scrollbar beside it. Without the
+			   second layer the mask dissolves the scrollbar's own ends along with the
+			   list, which reads as the scrollbar being broken rather than the content
+			   running on. `add` is a union of the two alphas, so the strip stays solid
+			   through the fade at both ends. */
+			mask-image:
+				linear-gradient(
+					to bottom,
+					transparent 0,
+					#000 var(--lfndr-fade),
+					#000 calc(100% - var(--lfndr-fade)),
+					transparent 100%
+				),
+				linear-gradient(#000, #000);
+			mask-size: calc(100% - var(--lfndr-scrollbar)) 100%, var(--lfndr-scrollbar) 100%;
+			mask-position: left top, right top;
+			mask-repeat: no-repeat, no-repeat;
+			mask-composite: add;
+		}
+	}
+}
+
+.lfndr__panel {
+	position: relative;
+	min-width: 0;
+}
+
+.lfndr__map {
+	min-height: var(--lfndr-map-height);
+	height: var(--lfndr-map-height);
+	/* A tinted box while tiles load, so the space does not read as broken. */
+	background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+/* Leaflet sets its own font on the map; let the theme's win instead. */
+.lfndr .leaflet-container {
+	font: inherit;
+}
+
+/* ─── Full screen ──────────────────────────────────────────────────────── */
+
+/* Added and removed by the "Full screen" button. Everything inside keeps the
+   layout it already has — the container query above still measures this
+   element's own width, which is now the viewport's, so a wide screen simply
+   gets the existing two-column grid at full size. The narrow case needs its
+   own arrangement, which is in the Mobile section below. */
+.lfndr--maximized {
+	position: fixed;
+	inset: 0;
+	z-index: var(--lfndr-z-maximize);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	padding: var(--lfndr-gap);
+	/* Same reasoning as the sticky bar — full screen the finder IS the page, so
+	   it is the canvas that fills it. */
+	background: var(--lfndr-bg, var(--lfndr-surface));
+	color: var(--lfndr-on-surface);
+}
+
+/* Every direct child stays its natural size — the maximize row, the search and
+   filter controls — except the body, which is the one thing that should grow
+   to fill whatever space they leave. */
+.lfndr--maximized > * {
+	flex: 0 0 auto;
+}
+
+.lfndr--maximized .lfndr__body {
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.lfndr--maximized .lfndr__panel {
+	max-height: none;
+	height: 100%;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.lfndr--maximized .lfndr__map {
+	height: 100%;
+	min-height: 0;
+}
+
+/* A finder with neither a search box nor filters gets a controls row holding
+   only the Full screen button (see buildMaximizeControl), which has nothing
+   to sit beside and so is pushed to the end of the line. */
+.lfndr__controls--bare {
+	justify-content: flex-end;
+}
+
+/* ─── Panel: toolbar & count ───────────────────────────────────────────── */
+
+.lfndr__locate-status:empty {
+	display: none;
+}
+
+/* Sits directly above the result count now that the toolbar it used to live
+   in is gone. :empty keeps it out of the layout entirely until it has
+   something to announce, which is most of the time. */
+.lfndr__locate-status {
+	margin: 0 0 var(--lfndr-space-2);
+}
+
+.lfndr__count {
+	margin: 0 0 var(--lfndr-space-2);
+}
+
+.lfndr__empty {
+	margin: 0;
+	padding: var(--lfndr-gap) 0;
+}
+
+/* ─── Results ──────────────────────────────────────────────────────────── */
+
+.lfndr__results {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	/* A touch more than the 8px used for a row of chips — these are separate
+	   list entries, not one control's internal parts, and deserve a little
+	   more breathing room between them. */
+	gap: var(--lfndr-space-3);
+}
+
+.lfndr__result {
+	margin: 0;
+}
+
+.lfndr__more-row {
+	padding-block-start: var(--lfndr-space-2);
+}
+
+/* A card is a <button> for the keyboard and screen-reader semantics — focus,
+   Enter/Space, "this is one activatable thing" — not for the look. Left with
+   no color of its own it inherits a theme's *button* styling, which is
+   drawn for one prominent call to action, and a whole list of them reads as
+   a wall of CTAs rather than as content. So it gets the same neutral-panel
+   treatment as the detail pane below — background/text from
+   --lfndr-surface/--lfndr-on-surface, the same currentColor-safe system
+   colors those already use, and the same generous panel padding
+   (--lfndr-space-4 vertical, --lfndr-space-5 horizontal) — rather than a
+   theme's button palette. A theme or Locations → Settings can still give it
+   a specific color on purpose; it just no longer happens by accident. */
+.lfndr .lfndr-card__button {
+	display: block;
+	width: 100%;
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-4) var(--lfndr-space-5);
+	text-align: start;
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+	border: 1px solid var(--lfndr-line);
+	border-radius: var(--lfndr-radius);
+	cursor: pointer;
+	transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s, color 0.15s;
+}
+
+/* A resting card carries no shadow — one appears only on hover, the same
+   "something responded to you" cue as any native button's own hover state,
+   built from currentColor so it never fights whatever background color a
+   theme or Locations → Settings gives the card.
+   ── Why background/color are repeated here ─────────────────────────────
+   Restating them, not just adding the shadow, is load-bearing — for the same
+   reason every button rule in this file is written `.lfndr .lfndr__thing`
+   rather than `.lfndr__thing`. See the note on that above the pill buttons;
+   the short version is that a theme's `button:hover { background: … }` is
+   (0,1,1) and a lone class is (0,1,0), so the theme quietly wins the moment
+   the pointer arrives. This rule — class, pseudo-class, class — is (0,3,0)
+   and clears that comfortably. */
+.lfndr-card:hover .lfndr-card__button {
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+	box-shadow: 0 2px 10px color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.lfndr .lfndr-card__button:focus-visible {
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+}
+
+.lfndr-card.is-selected .lfndr-card__button {
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+/* The name and its status on one line, the status at the far end.
+   Baseline rather than center, so the status sits on the same line as the name
+   reads on rather than floating against the middle of a title that may wrap to
+   two lines. */
+.lfndr-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--lfndr-space-3);
+}
+
+.lfndr-head > .lfndr-badge {
+	flex: 0 0 auto;
+}
+
+.lfndr-card__name {
+	margin: 0;
+	font-size: 1.0625rem;
+}
+
+.lfndr-card__distance {
+	margin: var(--lfndr-space-1) 0 0;
+}
+
+/* ─── Field rows ───────────────────────────────────────────────────────── */
+
+/* ── Two surfaces, two jobs ────────────────────────────────────────────────
+   A card is scanned: forty of them go past, and what matters is that each one
+   is quickly told apart from the next. Labels are carried in the markup but
+   hidden, because "Address:" repeated forty times is noise, and the rows stay
+   tight so the whole card reads as one block.
+
+   The detail pane is read: one location, deliberately opened. Here the label
+   is the point — it says what it is you are looking at — so it is visible,
+   above its value rather than beside it, and every row is separated by a rule.
+
+   Above/below rather than a label column, and that is the fix for the specific
+   thing that looked broken before: a fixed 6rem label column has no good width.
+   Wide enough for "Temporary closures" and it strands "Phone" beside an ocean
+   of space; narrow enough to look right and the long labels wrap into two
+   lines against a single line of value. Stacking sidesteps the whole problem
+   and holds at every width this thing renders in, which is the harder
+   requirement — the same list has to work at 300px inside a card column and at
+   700px in a full-screen pane. */
+
+.lfndr-card__fields,
+.lfndr-detail__fields {
+	margin: var(--lfndr-space-2) 0 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Dense, related data rows (address, hours, phone…), not separate list items. */
+.lfndr-card__fields {
+	gap: var(--lfndr-space-1);
+}
+
+/* ── Tags flow together on a card ──────────────────────────────────────────
+   Each field is its own row, which is right in the detail pane and wrong here:
+   three fields that each render as a couple of tags took three full-width rows,
+   so a card spent most of its height on what is really one idea — what this
+   place offers and who it is for.
+
+   Rows whose whole value is tags become inline and share lines; anything with
+   prose in it — an address, a schedule — keeps its own. Which of those a row is
+   comes from what the renderer produced rather than from the field's name, so a
+   schema this file has never seen sorts itself. */
+.lfndr-card__fields {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	column-gap: var(--lfndr-space-2);
+}
+
+.lfndr-card__fields > .lfndr-row {
+	flex: 1 1 100%;
+}
+
+.lfndr-card__fields > .lfndr-row:has( > dd > .lfndr-tags ),
+.lfndr-card__fields > .lfndr-row:has( > dd > .lfndr-tag ) {
+	flex: 0 1 auto;
+}
+
+/* The tags inside a shared row need the same gap as the row itself, or two
+   groups sitting side by side read as one. */
+.lfndr-card__fields .lfndr-tags {
+	gap: var(--lfndr-space-1) var(--lfndr-space-2);
+}
+
+.lfndr-row > dd {
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+/* ── Detail: label above value, ruled ─────────────────────────────────── */
+
+.lfndr-detail__fields .lfndr-row {
+	padding-block: var(--lfndr-space-3);
+	border-block-start: 1px solid var(--lfndr-line);
+}
+
+/* The first rule would sit directly under the name and badge and read as a
+   divider for them rather than as the top of the list. */
+.lfndr-detail__fields .lfndr-row:first-child {
+	border-block-start: none;
+	padding-block-start: 0;
+}
+
+.lfndr-detail__fields .lfndr-row > dt {
+	margin-block-end: var(--lfndr-space-1);
+	font-size: 0.75rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	opacity: 0.6;
+}
+
+/* ── Values that are not statuses ──────────────────────────────────────────
+   A tag is a stored value — a service offered, an access type, a yes/no flag.
+   It is not a status and it is not a control, and it used to be drawn as both:
+   the same pill as the "Open now" badge, which made a fact about the location
+   look like a live state, and near enough to a filter chip that it invited a
+   tap that does nothing. So it gets its own flatter, quieter shape — a soft
+   fill, a small radius, no border — leaving the pill outline to mean
+   "interactive" and the badge to mean "status right now". */
+.lfndr-tags {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: var(--lfndr-space-1) var(--lfndr-space-2);
+}
+
+.lfndr-tag {
+	display: inline-block;
+	padding: 0.15rem var(--lfndr-space-2);
+	font-size: 0.8125rem;
+	line-height: 1.4;
+	border-radius: 5px;
+	background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.lfndr-badges {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: var(--lfndr-space-2);
+}
+
+/* ── A status is not a control ─────────────────────────────────────────────
+   "Open today" was a bordered pill, which is the shape this file uses for
+   things you press — so it invited a click that does nothing, and sat in a card
+   looking like a sibling of the tags below it while meaning something entirely
+   different. A tag is a fact about the location that is true all week; a status
+   is what is true at this moment.
+
+   So it loses the container altogether: a dot and a word, no fill, no border,
+   nothing to press. That also makes it the only element on the card carrying a
+   live state, which is what it is. */
+.lfndr-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lfndr-space-2);
+	margin: 0;
+	padding: 0;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	border: 0;
+}
+
+/* ── The indicator ─────────────────────────────────────────────────────────
+   Drawn as a lit lamp rather than a flat circle: an off-center highlight where
+   the light source would be, a tight ring of its own color for the bezel, and
+   a soft bloom around it. Three cheap effects, and together they read as
+   something switched on rather than a bullet point — which is the whole claim
+   the badge is making. */
+.lfndr-badge::before {
+	content: '';
+	flex: 0 0 auto;
+	inline-size: 0.5rem;
+	block-size: 0.5rem;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.lfndr-badge--now::before,
+.lfndr-badge--today::before {
+	background:
+		radial-gradient(
+			circle at 35% 32%,
+			color-mix(in srgb, #fff 65%, var(--lfndr-open)) 0%,
+			var(--lfndr-open) 55%
+		);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--lfndr-open) 45%, transparent),
+		0 0 6px color-mix(in srgb, var(--lfndr-open) 75%, transparent);
+}
+
+/* Open today is on but not right now, so the lamp is lit without the bloom —
+   the difference between a standby light and a running one. */
+.lfndr-badge--today::before {
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--lfndr-open) 45%, transparent);
+}
+
+/* Closed keeps a dot, unlit: same lamp, nothing behind it. */
+.lfndr-badge--closed::before {
+	opacity: 0.45;
+}
+
+.lfndr-hours {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lfndr-space-1);
+}
+
+.lfndr-hours__line {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 var(--lfndr-space-2);
+}
+
+/* Wide enough for "Mon–Thu" and the ordinal forms ("2nd & 4th Tue") without
+   reserving a column that leaves a visible trough on a 300px card. */
+.lfndr-hours__when {
+	min-width: 4.5rem;
+	opacity: 0.75;
+}
+
+/* Struck through rather than hidden: the normal hours are still the answer to
+   "when are they usually open", and the strike says they do not apply now. */
+.lfndr-hours.is-suspended {
+	text-decoration: line-through;
+	opacity: 0.6;
+}
+
+/* ── The closure notice ────────────────────────────────────────────────────
+   This is the one thing on a card that can make the rest of it wrong: the
+   hours are accurate and the location is still shut. It has to be the first
+   thing seen, and a rule down the left at 0.9rem was not carrying that against
+   a card full of text at the same weight.
+
+   The emphasis is fill, an icon and a rule — not a color. Red is what this
+   wants to be, and this file has no red: it ships no hue at all, so that an
+   amber notice does not become the one element fighting a green theme. Filled
+   against unfilled is the strongest contrast available without inventing one,
+   and the tint is mixed from currentColor so it lands correctly on a dark theme
+   too. An admin who does want red sets Notice color in Locations → Settings,
+   which drives --lfndr-closure.
+
+   An upcoming closure keeps the quieter treatment. It is information, not a
+   correction to everything above it. */
+.lfndr-closure {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--lfndr-space-2);
+	margin: var(--lfndr-space-2) 0;
+	padding: var(--lfndr-space-2) var(--lfndr-space-3);
+	border-inline-start: 3px solid currentColor;
+	border-radius: 0 5px 5px 0;
+	font-size: 0.9rem;
+	line-height: 1.4;
+}
+
+.lfndr-closure--active {
+	/* Set the color and everything downstream follows: the 3px rule and the
+	   icon are already currentColor, and the tint is mixed from it. */
+	color: var(--lfndr-closure);
+	background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.lfndr-closure--upcoming {
+	border-inline-start-width: 2px;
+	opacity: 0.8;
+}
+
+/* Nudged onto the first line's optical center — align-items:flex-start puts it
+   on the text's ascender, which reads as floating. */
+.lfndr-closure .lfndr__icon {
+	margin-block-start: 0.15em;
+}
+
+.lfndr-prose > p {
+	margin: 0 0 var(--lfndr-space-2);
+}
+
+.lfndr-prose > p:last-child {
+	margin-bottom: 0;
+}
+
+/* ─── Detail pane ──────────────────────────────────────────────────────── */
+
+/* While a location is open, the list underneath is entirely covered, so the
+   panel has no reason to keep a scrollbar — and keeping one cost the record
+   15px the cards do not lose, because the overlay is inset by the panel's
+   scrollbar and then reserves its own. Two scroll containers, one on top of
+   the other, both drawing a bar.
+
+   hidden rather than clip: an element with overflow:hidden is still a scroll
+   container, so scrollTop survives and the list is exactly where it was left
+   when the detail closes. clip would drop the visitor back at the top of forty
+   results. */
+.lfndr--detail .lfndr__panel {
+	overflow-y: hidden;
+}
+
+/* ── The overlay and the record are two different things ───────────────────
+   .lfndr-detail is the overlay: it covers the result list, which is still in
+   the DOM behind it, so it needs an opaque background and nothing else. The
+   bordered card is .lfndr-detail__body, and Back sits between the two — on the
+   overlay, above the card, in the gap where the list used to start.
+
+   Which is the point: Back is not part of the record. It was inside the box
+   drawn around this location's data, and no amount of styling inside that box
+   was going to stop it reading as the first line of the record. Moving it out
+   of the box is the fix; the box keeps its border, and Back keeps the panel's
+   own surface underneath it. */
+.lfndr-detail {
+	position: absolute;
+	z-index: var(--lfndr-z-detail);
+	inset: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	/* The panel's own padding, whatever it currently is.
+	   inset:0 resolves against the containing block's padding box, so this
+	   overlay starts at the panel's border and covers the padding the result
+	   list is inset by — meaning a value of its own does not adjust that inset,
+	   it replaces it, and the record ends up on a different left edge from the
+	   cards it just covered. Inheriting keeps the two aligned by construction
+	   through all four cases the panel is padded differently: stacked, wide,
+	   and either of those full screen. */
+	padding: inherit;
+	background: var(--lfndr-surface);
+	color: var(--lfndr-on-surface);
+}
+
+/* Same panel padding as a card (see the comment on .lfndr-card__button) — the
+   record and a card are the same kind of surface, one inline and one an
+   overlay, and share the same rhythm. */
+.lfndr-detail__body {
+	padding: var(--lfndr-space-4) var(--lfndr-space-5);
+	border: 1px solid var(--lfndr-line);
+	border-radius: var(--lfndr-radius);
+}
+
+/* Same box as every other pill control so nothing shifts, but outlineless —
+   the quiet treatment Clear filters uses. A back control is not competing for
+   attention with the record it sits above.
+
+   No negative margin now: the button is a sibling of the card rather than the
+   first thing inside it, so there is no inherited indent to pull back out of —
+   it lines up with the card's own edge, which is the line the eye follows. */
+.lfndr .lfndr-detail__back {
+	margin-block-end: var(--lfndr-space-2);
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lfndr-space-2);
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	font-size: 0.875rem;
+	line-height: 1.2;
+	background: none;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+@media (hover: hover) {
+	.lfndr .lfndr-detail__back:hover {
+		background: color-mix(in srgb, currentColor 8%, transparent);
+	}
+}
+
+
+
+.lfndr-detail__name {
+	margin: 0;
+}
+
+.lfndr-detail__name:focus {
+	outline: none;
+}
+
+/* ─── Mobile ───────────────────────────────────────────────────────────── */
+
+/* This is a pointer-capability query, not a width one — deliberately, since
+   width and touch are two different questions. A finder embedded in a narrow
+   column on a desktop site is still driven by a mouse; a tablet in landscape
+   can be wider than the 860px layout breakpoint and still be touched with a
+   finger. --lfndr-control-height is 36px by default (see its own comment in
+   the root block); this is the one place that grows it to the 44px WCAG
+   guidance, and only for the input method that guidance is actually about. */
+@media (pointer: coarse) {
+	.lfndr {
+		--lfndr-control-height: 44px;
+	}
+}
+
+/* ── The stacked map's height ───────────────────────────────────────────────
+   Square, or a third of the viewport, whichever is shorter. Square reads well
+   on a phone held upright; on a short or landscape viewport it would swallow
+   the screen, and the third is what stops it.
+
+   cqw, not vw: the "square" that matters is square against the finder's own
+   column, which for an embedded finder in a 600px column on a 1500px screen is
+   600px and nothing to do with the viewport. Container units are the only ones
+   that ask the right question.
+
+   --lfndr-map-height stays in the min() rather than being replaced by it. It is
+   not only the Settings default — the block and the shortcode's height="" both
+   write it inline per instance — so dropping it here would quietly ignore a
+   height somebody set on purpose. As a third term it still does what it says:
+   the map is never taller than configured, and never taller than this.
+
+   Scoped .lfndr (0,2,0) and placed after the Full screen section on purpose:
+   .lfndr--maximized .lfndr__map is the same specificity, so being later is what
+   lets one rule govern embedded and full screen alike. */
+.lfndr .lfndr__map {
+	min-height: 0;
+	height: min(100cqw, 33.333vh, var(--lfndr-map-height));
+}
+
+/* Container units travel with container queries, so the browsers that need a
+   fallback for one need it for the other. The viewport is the wrong question
+   for an embedded finder, but it is much closer than no height at all. */
+@supports not (container-type: inline-size) {
+	.lfndr .lfndr__map {
+		height: min(100vw, 33.333vh, var(--lfndr-map-height));
+	}
+}
+
+/* Beside the list, the map is a pane of the frame rather than a banner, so it
+   fills whatever row the frame gives it instead of carrying a height of its
+   own — --lfndr-panel-height embedded, and everything that is left when full
+   screen. That is why --lfndr-map-height is documented as the stacked height:
+   here, the frame decides, and two panes of a bordered box that disagree about
+   their height is the ragged edge this whole section exists to avoid. */
+@container (min-width: 860px) {
+	.lfndr .lfndr__map {
+		min-height: 0;
+		height: 100%;
+	}
+}
+@supports not (container-type: inline-size) {
+	@media (min-width: 860px) {
+		.lfndr .lfndr__map {
+			min-height: 0;
+			height: 100%;
+		}
+	}
+}
+
+/* Below the breakpoint the whole page scrolls past the finder — there is no
+   internal scroll column for search and filters to stay put in the way there
+   is on a wide screen (see the two-column rule above) — so losing them after
+   the first couple of results is a real, commonly-cited papercut. Kept to the
+   search-and-filters bar only: stacking several independently sticky elements
+   at the same top offset is a well-known way to have them overlap instead of
+   stack, and this is the one worth the trade. */
+@container (max-width: 859.98px) {
+	.lfndr__controls {
+		position: sticky;
+		inset-block-start: 0;
+		z-index: var(--lfndr-z-raised);
+		/* The canvas, not the panel color: this bar is a slice of the
+		   finder's own ground, made opaque so results cannot scroll
+		   under it. */
+		background: var(--lfndr-bg, var(--lfndr-surface));
+		padding-block: var(--lfndr-space-1);
+	}
+}
+
+@supports not (container-type: inline-size) {
+	@media (max-width: 859.98px) {
+		.lfndr__controls {
+			position: sticky;
+			inset-block-start: 0;
+			z-index: var(--lfndr-z-raised);
+			/* The canvas, not the panel color: this bar is a slice of the
+			   finder's own ground, made opaque so results cannot scroll
+			   under it. */
+			background: var(--lfndr-bg, var(--lfndr-surface));
+			padding-block: var(--lfndr-space-1);
+		}
+	}
+}
+
+/* Below the breakpoint the header is one line — search, Filters, Full screen —
+   and there is not room on it for two text labels beside a usable search box.
+   So the two buttons drop to their icons and become squares. The label stays
+   in the DOM for assistive tech rather than being replaced by an aria-label,
+   which would leave a sighted keyboard user with an unlabelled square and a
+   translator with one more string detached from the one beside it. */
+@container (max-width: 859.98px) {
+	.lfndr__filters-toggle .lfndr__button-label,
+	.lfndr__maximize .lfndr__button-label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	/* aspect-ratio rather than a fixed width, so the square tracks whatever
+	   height the icon and padding actually produce — a hardcoded width drifts
+	   out of square the moment the touch-target floor or the icon size
+	   changes. */
+	.lfndr .lfndr__filters-toggle,
+	.lfndr .lfndr__maximize {
+		aspect-ratio: 1;
+		padding-inline: 0;
+	}
+
+	/* The icon is the whole button now, so it stops taking its size from a
+	   label that is no longer beside it. */
+	.lfndr__filters-toggle .lfndr__icon,
+	.lfndr__maximize .lfndr__icon {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+}
+
+@supports not (container-type: inline-size) {
+	@media (max-width: 859.98px) {
+		.lfndr__filters-toggle .lfndr__button-label,
+		.lfndr__maximize .lfndr__button-label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			padding: 0;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		.lfndr .lfndr__filters-toggle,
+		.lfndr .lfndr__maximize {
+			aspect-ratio: 1;
+			padding-inline: 0;
+		}
+
+		.lfndr__filters-toggle .lfndr__icon,
+		.lfndr__maximize .lfndr__icon {
+			width: 1.25rem;
+			height: 1.25rem;
+		}
+	}
+}
+
+/* ─── Mobile full screen ───────────────────────────────────────────────────
+ * A viewport query rather than a container one, and necessarily so: while
+ * maximized the finder IS the viewport, and a container query cannot style
+ * the very element that establishes the container. The two agree in this mode
+ * for exactly that reason.
+ *
+ * The shape: the controls row and a short map pin to the top of the screen,
+ * and the result list scrolls underneath them. A phone showing a full-height
+ * map above a full-height list means half the screen is always scrolled out
+ * of view; a map kept deliberately short keeps both useful at once.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 859.98px) {
+	/* Edge to edge. The finder owns the whole screen in this mode, so the
+	   gutter it carries when embedded in a page is no longer paying for
+	   anything. */
+	.lfndr--maximized {
+		padding: 0;
+	}
+
+	/* The controls keep an inset of their own — the page's gutter is gone, but
+	   a search box flush against the glass is not what that was for. */
+	.lfndr--maximized .lfndr__controls {
+		position: relative;
+		margin-block-end: 0;
+		padding: var(--lfndr-space-3) var(--lfndr-space-4);
+	}
+
+
+	/* DOM order is panel-then-map, which is right everywhere else. Here the map
+	   belongs above the list, and `order` says so without the markup having to
+	   change shape per breakpoint. */
+	.lfndr--maximized .lfndr__body {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.lfndr--maximized .lfndr__map {
+		/* Order, squared corners and height all come from the stacked rules in
+		   the Mobile section above — this only has to stop the map stretching
+		   as a flex item. */
+		flex: 0 0 auto;
+		width: 100%;
+		/* Block edges only, since the map runs to the glass on both sides and a
+		   side border would just be a line down the edge of the screen. These two
+		   are doing structural work: full screen has no frame around it, so
+		   without them the tiles butt straight onto the search bar above and the
+		   first card below, and the three regions read as one continuous surface
+		   that happens to change texture. */
+		border-block: 1px solid var(--lfndr-line);
+	}
+
+	/* The one part that scrolls. min-height:0 removes the automatic content
+	   floor a flex item carries, without which it refuses to shrink and the
+	   whole column overflows instead of this box scrolling. */
+	.lfndr--maximized .lfndr__panel {
+		flex: 1 1 auto;
+		min-height: 0;
+		height: auto;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		/* The map above is deliberately edge to edge — it is a canvas, and a
+		   gutter around it only wastes the little of it there is. The list is
+		   not: cards flush against the glass read as broken, so the column
+		   they sit in keeps the same inset as the controls above it. */
+		padding-inline: var(--lfndr-space-4);
+		padding-block: var(--lfndr-fade);
+		/* Two layers, added together: the gradient over the content column, and a
+		   flat opaque strip the exact width of the scrollbar beside it. Without the
+		   second layer the mask dissolves the scrollbar's own ends along with the
+		   list, which reads as the scrollbar being broken rather than the content
+		   running on. `add` is a union of the two alphas, so the strip stays solid
+		   through the fade at both ends. */
+		mask-image:
+			linear-gradient(
+				to bottom,
+				transparent 0,
+				#000 var(--lfndr-fade),
+				#000 calc(100% - var(--lfndr-fade)),
+				transparent 100%
+			),
+			linear-gradient(#000, #000);
+		mask-size: calc(100% - var(--lfndr-scrollbar)) 100%, var(--lfndr-scrollbar) 100%;
+		mask-position: left top, right top;
+		mask-repeat: no-repeat, no-repeat;
+		mask-composite: add;
+	}
+}
+
+/* ─── Desktop full screen ──────────────────────────────────────────────────
+ * A viewport query, for the same reason the mobile block above is one: while
+ * maximized the finder IS the viewport, so the two agree — and .lfndr cannot be
+ * reached from a @container rule anyway, being the element that establishes the
+ * container.
+ *
+ * The frame earns its keep when the finder is a thing sitting in a page: the
+ * border is what says "this is one widget, and it ends here". Full screen there
+ * is no page to be distinguished from, so the same border becomes a line drawn
+ * just inside the window edge, with a strip of backdrop stranded outside it —
+ * which reads as the app having failed to fill the screen rather than as a
+ * deliberate edge.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 860px) {
+	.lfndr--maximized {
+		padding: 0;
+	}
+
+	.lfndr--maximized .lfndr__controls,
+	.lfndr--maximized .lfndr__body {
+		border: none;
+		border-radius: 0;
+	}
+
+	/* The internal divisions stay. Only the outer frame was standing in for a
+	   page boundary that is no longer there; the line under the header band and
+	   the one between the list and the map are structure, and losing them would
+	   merge three regions into one surface. */
+	.lfndr--maximized .lfndr__controls {
+		border-block-end: 1px solid var(--lfndr-line);
+	}
+}
+
+/* ─── The filter panel, per width ──────────────────────────────────────────
+ * Container queries, so an embedded finder in a narrow column gets the popover
+ * even on a wide screen — the question is how much room this finder has, not
+ * how big the monitor is.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@container (max-width: 859.98px) {
+	/* A floating surface under the toggle: bordered and rounded on all four
+	   sides, raised off what it covers, and scrolling within itself so a schema
+	   with a dozen facet groups cannot grow taller than the screen.
+
+	   Absolute rather than fixed, and that is forced rather than chosen: .lfndr
+	   sets container-type, which applies layout containment, which makes it the
+	   containing block for fixed-position descendants. A bottom sheet — the
+	   other honest pattern here — would therefore pin to the bottom of the
+	   finder rather than the viewport, which for an embedded finder is somewhere
+	   down the page. A popover anchored to the finder is correct in both. */
+	.lfndr__filters-body {
+		position: absolute;
+		inset-inline: 0;
+		inset-block-start: 100%;
+		z-index: var(--lfndr-z-suggest);
+		max-height: min(70vh, 32rem);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		margin-block-start: var(--lfndr-space-2);
+		padding: var(--lfndr-space-4);
+		background: var(--lfndr-surface);
+		color: var(--lfndr-on-surface);
+		border: 1px solid var(--lfndr-line);
+		border-radius: var(--lfndr-radius);
+		box-shadow: 0 8px 24px color-mix(in srgb, currentColor 18%, transparent);
+	}
+
+	.lfndr__controls {
+		position: relative;
+	}
+}
+
+@container (min-width: 860px) {
+	/* Nothing to open, so nothing to open it with. Scoped under .lfndr because
+	   the pill-button family that sets display on this element is itself scoped
+	   that way, and an unscoped rule here would lose to it. */
+	.lfndr .lfndr__filters-toggle {
+		display: none;
+	}
+
+	/* ...and nothing to keep it shut. Without this, closing the panel on a
+	   narrow screen and then widening it would strand the filters hidden behind
+	   a button that is no longer there. */
+	.lfndr__filters-body[hidden] {
+		display: flex;
+	}
+}
+
+/* ─── Map pins ─────────────────────────────────────────────────────────── */
+
+/* divIcon, styled entirely here, so the selected state is a class rather than a
+   second image to ship and keep aligned with the first. */
+.lfndr-pin__dot {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: 3px;
+	border-radius: 50%;
+	background: var(--lfndr-pin);
+	border: 2px solid var(--lfndr-surface);
+	box-shadow: 0 0 0 1px var(--lfndr-line);
+	transition: transform 0.15s ease;
+}
+
+.lfndr-pin.is-selected .lfndr-pin__dot {
+	width: 22px;
+	height: 22px;
+	margin: 0;
+	box-shadow: 0 0 0 3px currentColor;
+}
+
+/* Gated on real hover capability so a tap on a touch screen — which fires
+   :hover with nothing to un-hover it — can never leave a marker stuck at its
+   enlarged size. */
+@media (hover: hover) and (pointer: fine) {
+	.lfndr-pin:not(.is-selected):hover .lfndr-pin__dot {
+		transform: scale(1.18);
+	}
+}
+
+.lfndr-origin {
+	fill: var(--lfndr-accent);
+	fill-opacity: 0.9;
+	stroke: var(--lfndr-surface);
+	stroke-width: 2;
+}
+
+.lfndr-origin__accuracy {
+	fill: var(--lfndr-accent);
+	fill-opacity: 0.08;
+	stroke: var(--lfndr-accent);
+	stroke-opacity: 0.4;
+	stroke-width: 1;
+}
+
+/* ─── Focus ────────────────────────────────────────────────────────────── */
+
+/* Only where the theme has not already said something. :focus-visible keeps it
+   off mouse clicks, which is what makes an always-on outline tolerable. */
+.lfndr :focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+/* ─── Progressive enhancement ──────────────────────────────────────────── */
+
+/* Before boot the server-rendered list is on the page and the map container is
+   an empty box; hiding it until there is a map to put in it avoids a blank
+   rectangle that never fills. */
+.lfndr--no-js .lfndr__map,
+.lfndr--no-js .lfndr__reset {
+	display: none;
+}
+
+/* ─── Utilities & accessibility ────────────────────────────────────────── */
+
+/* The script hides things with the hidden attribute — Apply on a wide screen,
+   Clear when no filters are set, the suggestions list, the filter panel. That
+   attribute works by way of a UA rule at the very bottom of the cascade, and
+   several of those elements are in the pill-button family, which sets display
+   at a specificity the UA rule cannot reach. So they stayed visible while
+   claiming to be hidden: Clear filters in particular sat there permanently,
+   offering to clear nothing.
+
+   Scoped to .lfndr and placed after every rule that sets display, so it wins on
+   order rather than by !important. */
+.lfndr [hidden] {
+	display: none;
+}
+
+
+.screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lfndr * {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* ── Tile consent gate ────────────────────────────────────────────────────
+   Sits over the map, which is already interactive underneath it — Leaflet and
+   the pins are served from this site, only the tiles wait. So this is not a
+   "map disabled" state and should not look like one.
+
+   z-index 1001 clears Leaflet's own stack: its panes top out around 800 and its
+   controls sit at 1000. */
+/* Leaflet's stylesheet never positions .leaflet-container — it patches position
+   in JS at init time instead. Relying on that would make the overlay's anchor a
+   side effect of library internals, and a static ancestor here would silently
+   promote the gate to the whole page. Declared explicitly so it cannot move. */
+.lfndr .lfndr__map {
+	position: relative;
+}
+
+.lfndr .lfndr__tilegate {
+	position: absolute;
+	inset: 0;
+	z-index: 1001;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: .6rem;
+	padding: 1rem;
+	text-align: center;
+	/* Not opaque. The pins are visible behind this, which is the point: it
+	   should read as "the backdrop is missing", not "the map is broken". */
+	background: color-mix( in srgb, var( --lfndr-surface, Canvas ) 88%, transparent );
+	backdrop-filter: blur( 2px );
+}
+
+.lfndr .lfndr__tilegate-text {
+	max-width: 34ch;
+	margin: 0;
+	font-size: .875rem;
+	line-height: 1.4;
+}
+
+.lfndr .lfndr__tilegate-note {
+	max-width: 34ch;
+	margin: 0;
+	font-size: .8125rem;
+	opacity: .7;
+}
+
+/* Deliberately the plainest button in the finder. It is the one control here
+   and it should look pressable without competing with the results. */
+.lfndr .lfndr__tilegate-btn {
+	padding: .5rem 1.1rem;
+	border: 1px solid var( --lfndr-line );
+	border-radius: var( --lfndr-radius );
+	background: var( --lfndr-surface, Canvas );
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.lfndr .lfndr__tilegate-btn:hover {
+	border-color: currentColor;
+}
+
+/* The map takes focus after the gate is dismissed; it should not then show a
+   focus ring as though it were a control. */
+.lfndr .lfndr__map:focus {
+	outline: none;
+}
+
+/* ── The canvas color must stop at the frame ──────────────────────────────
+   --lfndr-pad puts space between the finder's canvas color and what sits on
+   it. That is right while the content is itself the finder's outer edge, which
+   is the case below the breakpoint.
+
+   At this width it is not. The controls and body draw a frame with a real
+   border, so the padding leaves a ring of canvas color stranded OUTSIDE that
+   border — a colored margin around the app, which reads as a rendering fault
+   rather than a design. Every preset that sets a background shows it.
+
+   The obvious fix — zero the padding here — is not available: .lfndr owns both
+   the color and the padding, and it is the element this query measures, so a
+   @container rule cannot reach it. (Same constraint that made the frame two
+   boxes instead of one; see the note on .lfndr__controls above.)
+
+   So the frame is pulled back out over the padding instead. It then covers the
+   whole colored box, the color fills to the inside of the border and stops, and
+   the padding still does its job at every narrower width where the frame does
+   not exist.
+
+   Excluded while maximized: .lfndr already sets padding: 0 there, so there is
+   nothing left to pull back over and the same negative margin instead drags the
+   frame 16px off both edges of the viewport. */
+@container (min-width: 860px) {
+	.lfndr:not(.lfndr--maximized) .lfndr__controls {
+		margin-inline: calc(-1 * var(--lfndr-pad));
+		margin-block-start: calc(-1 * var(--lfndr-pad));
+	}
+
+	.lfndr:not(.lfndr--maximized) .lfndr__body {
+		margin-inline: calc(-1 * var(--lfndr-pad));
+		margin-block-end: calc(-1 * var(--lfndr-pad));
+	}
+}
+
+@supports not (container-type: inline-size) {
+	@media (min-width: 860px) {
+		.lfndr:not(.lfndr--maximized) .lfndr__controls {
+			margin-inline: calc(-1 * var(--lfndr-pad));
+			margin-block-start: calc(-1 * var(--lfndr-pad));
+		}
+
+		.lfndr:not(.lfndr--maximized) .lfndr__body {
+			margin-inline: calc(-1 * var(--lfndr-pad));
+			margin-block-end: calc(-1 * var(--lfndr-pad));
+		}
+	}
+}
+
+/* ── Locate control ───────────────────────────────────────────────────────
+   A Leaflet control, so Leaflet owns its position; everything here is the
+   button's own look. Built to match the finder rather than Leaflet's default
+   chrome — .leaflet-bar styles anchors, and this is a <button>, so none of it
+   would have applied anyway. */
+.lfndr .lfndr__locate-control {
+	border: 0;
+	background: none;
+	box-shadow: none;
+}
+
+.lfndr .lfndr__locate-btn {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 1px solid var(--lfndr-line);
+	border-radius: var(--lfndr-radius);
+	background: var(--lfndr-surface, Canvas);
+	color: var(--lfndr-on-surface, CanvasText);
+	cursor: pointer;
+	box-shadow: 0 1px 4px rgb(0 0 0 / .2);
+}
+
+.lfndr .lfndr__locate-btn:hover {
+	border-color: currentColor;
+}
+
+/* Waiting on a fix, which can take the full ten-second timeout. Disabled
+   rather than merely dimmed, so a second press cannot start a second request
+   while the first is still outstanding. */
+.lfndr .lfndr__locate-btn[aria-busy='true'] {
+	opacity: .6;
+	cursor: progress;
+}
+
+/* While the gate is up, the map's controls are not there.
+   Putting them merely underneath it is not enough: the gate is translucent and
+   blurred rather than opaque, so a control stacked below still ghosts through
+   as a smudge that looks like a rendering artifact and invites a click that
+   lands on the overlay. Hidden outright instead, controls and all — there is
+   nothing to zoom, pan or recentre until a basemap exists, so none of them has
+   a job to do yet. They come back with the tiles. */
+.lfndr .lfndr__map--gated .leaflet-control-container {
+	display: none;
+}

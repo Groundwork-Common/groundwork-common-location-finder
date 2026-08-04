@@ -1,0 +1,2093 @@
+# Copyright (C) 2026 Groundwork Common LLC
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Location Finder 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/location-finder\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-04T20:45:19+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: location-finder\n"
+
+#. Plugin Name of the plugin
+#: location-finder.php
+#: inc/admin-screen.php:65
+#: inc/admin-screen.php:96
+#: blocks/finder/edit.js:93
+msgid "Location Finder"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: location-finder.php
+msgid "https://github.com/willsansbury/location-finder"
+msgstr ""
+
+#. Description of the plugin
+#: location-finder.php
+msgid "A map-and-list location finder whose fields you define yourself. Only the name and coordinates are built in; everything else is configured in wp-admin."
+msgstr ""
+
+#. Author of the plugin
+#: location-finder.php
+msgid "Groundwork Common LLC"
+msgstr ""
+
+#. Author URI of the plugin
+#: location-finder.php
+msgid "https://groundworkcommon.com"
+msgstr ""
+
+#: inc/admin-fields.php:43
+#: inc/admin-fields.php:721
+msgid "You do not have permission to configure location fields."
+msgstr ""
+
+#: inc/admin-fields.php:51
+msgid "This field configuration was written by a newer version of Location Finder. It is being left untouched to avoid losing settings this version does not understand. Update the plugin to edit it."
+msgstr ""
+
+#: inc/admin-fields.php:87
+#: inc/admin-screen.php:40
+msgid "Fields"
+msgstr ""
+
+#: inc/admin-fields.php:89
+#: inc/admin-fields.php:529
+msgid "Add Field"
+msgstr ""
+
+#: inc/admin-fields.php:96
+msgid "Location name, latitude and longitude are always present. Everything else a location records is defined here."
+msgstr ""
+
+#: inc/admin-fields.php:101
+msgid "No fields yet. Add one to start describing your locations — an address is usually the first."
+msgstr ""
+
+#: inc/admin-fields.php:107
+#: inc/admin-fields.php:543
+#: inc/field-address.php:325
+msgid "Label"
+msgstr ""
+
+#: inc/admin-fields.php:108
+#: inc/admin-fields.php:551
+msgid "Key"
+msgstr ""
+
+#: inc/admin-fields.php:109
+#: inc/admin-fields.php:566
+msgid "Type"
+msgstr ""
+
+#: inc/admin-fields.php:110
+msgid "Shown"
+msgstr ""
+
+#: inc/admin-fields.php:111
+msgid "Used for"
+msgstr ""
+
+#: inc/admin-fields.php:120
+msgid "primary"
+msgstr ""
+
+#: inc/admin-fields.php:123
+msgid "Edit"
+msgstr ""
+
+#: inc/admin-fields.php:131
+msgid "Retire"
+msgstr ""
+
+#: inc/admin-fields.php:160
+msgid "Card and detail"
+msgstr ""
+
+#: inc/admin-fields.php:163
+msgid "Card only"
+msgstr ""
+
+#: inc/admin-fields.php:166
+msgid "Detail only"
+msgstr ""
+
+#: inc/admin-fields.php:168
+msgid "Hidden"
+msgstr ""
+
+#: inc/admin-fields.php:180
+msgid "Search"
+msgstr ""
+
+#: inc/admin-fields.php:183
+#: inc/render.php:145
+msgid "Filters"
+msgstr ""
+
+#: inc/admin-fields.php:212
+msgid "Address used for Directions"
+msgstr ""
+
+#: inc/admin-fields.php:213
+msgid "Also the address the editor's lookup fills in when you search for a place."
+msgstr ""
+
+#: inc/admin-fields.php:216
+msgid "Hours used for \"Open now\""
+msgstr ""
+
+#: inc/admin-fields.php:217
+msgid "The schedule the open/closed badge and the \"Open today\" filter are worked out from."
+msgstr ""
+
+#: inc/admin-fields.php:220
+msgid "Closures that suspend those hours"
+msgstr ""
+
+#: inc/admin-fields.php:221
+msgid "While one of these is active the location never reads as open, and the hours above are shown struck through."
+msgstr ""
+
+#: inc/admin-fields.php:254
+#: inc/field-types.php:688
+#: inc/field-types.php:752
+msgid "— none —"
+msgstr ""
+
+#: inc/admin-fields.php:304
+msgid "Display order"
+msgstr ""
+
+#: inc/admin-fields.php:306
+msgid "Drag order is set with the arrow buttons. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so."
+msgstr ""
+
+#: inc/admin-fields.php:315
+msgid "Detail pane"
+msgstr ""
+
+#: inc/admin-fields.php:316
+msgid "Result card"
+msgstr ""
+
+#: inc/admin-fields.php:320
+msgid "Save display order"
+msgstr ""
+
+#: inc/admin-fields.php:374
+msgid "Not shown here"
+msgstr ""
+
+#: inc/admin-fields.php:383
+msgid "Order, as a comma-separated list of keys:"
+msgstr ""
+
+#: inc/admin-fields.php:406
+msgid "built in"
+msgstr ""
+
+#. translators: %s: field label.
+#: inc/admin-fields.php:412
+#, php-format
+msgid "Move %s up"
+msgstr ""
+
+#. translators: %s: field label.
+#: inc/admin-fields.php:414
+#, php-format
+msgid "Move %s down"
+msgstr ""
+
+#: inc/admin-fields.php:417
+msgid "(not shown)"
+msgstr ""
+
+#: inc/admin-fields.php:432
+msgid "Location name"
+msgstr ""
+
+#: inc/admin-fields.php:434
+#: inc/cpt.php:109
+#: assets/js/location-finder.js:1558
+msgid "Coordinates"
+msgstr ""
+
+#: inc/admin-fields.php:436
+msgid "Distance from the visitor"
+msgstr ""
+
+#: inc/admin-fields.php:438
+msgid "Directions link"
+msgstr ""
+
+#: inc/admin-fields.php:456
+msgid "Retired fields"
+msgstr ""
+
+#: inc/admin-fields.php:458
+msgid "Retiring a field removes it from the editor and the front end but keeps everything already recorded. Restore it and the data comes back exactly as it was."
+msgstr ""
+
+#. translators: %s: date.
+#: inc/admin-fields.php:473
+#, php-format
+msgid "retired %s"
+msgstr ""
+
+#. translators: %d: number of locations.
+#: inc/admin-fields.php:485
+#, php-format
+msgid "Holds data on %d location"
+msgid_plural "Holds data on %d locations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/admin-fields.php:493
+msgid "Restore"
+msgstr ""
+
+#: inc/admin-fields.php:500
+msgid "Type DELETE to confirm"
+msgstr ""
+
+#: inc/admin-fields.php:503
+msgid "Type DELETE"
+msgstr ""
+
+#: inc/admin-fields.php:504
+msgid "Erase data"
+msgstr ""
+
+#: inc/admin-fields.php:529
+msgid "Edit Field"
+msgstr ""
+
+#: inc/admin-fields.php:547
+msgid "What editors and visitors see. Safe to change at any time."
+msgstr ""
+
+#: inc/admin-fields.php:556
+msgid "Keys cannot be changed. This is what already-saved locations use to find their data — renaming it would orphan every value. To change it, retire this field and add a new one."
+msgstr ""
+
+#: inc/admin-fields.php:560
+msgid "auto-generated from the label"
+msgstr ""
+
+#: inc/admin-fields.php:561
+msgid "Lowercase letters, numbers and underscores. Permanent once saved — leave it blank to generate one from the label."
+msgstr ""
+
+#: inc/admin-fields.php:577
+msgid "Types cannot be changed either — the stored values would no longer make sense."
+msgstr ""
+
+#: inc/admin-fields.php:582
+msgid "Editor hint"
+msgstr ""
+
+#: inc/admin-fields.php:586
+msgid "Group"
+msgstr ""
+
+#: inc/admin-fields.php:589
+msgid "Fields sharing a group name are collapsed together in the location editor."
+msgstr ""
+
+#: inc/admin-fields.php:595
+msgid "Choices"
+msgstr ""
+
+#: inc/admin-fields.php:599
+msgid "One per line. Write \"Diapers\" for a simple choice, or \"diapers | Diapers\" to set the stored value separately from the label. Stored values are permanent; labels can change."
+msgstr ""
+
+#: inc/admin-fields.php:606
+msgid "Where it appears"
+msgstr ""
+
+#: inc/admin-fields.php:609
+msgid "In the detail pane"
+msgstr ""
+
+#: inc/admin-fields.php:610
+msgid "On result cards"
+msgstr ""
+
+#: inc/admin-fields.php:615
+msgid "How visitors find it"
+msgstr ""
+
+#: inc/admin-fields.php:622
+msgid "Include in the search box"
+msgstr ""
+
+#: inc/admin-fields.php:625
+msgid "— not available for this type"
+msgstr ""
+
+#: inc/admin-fields.php:630
+msgid "Offer as a filter"
+msgstr ""
+
+#: inc/admin-fields.php:633
+msgid "— only choice and yes/no fields can be filtered"
+msgstr ""
+
+#: inc/admin-fields.php:636
+msgid "A field can be searchable without being displayed — useful for an internal code visitors type but never see."
+msgstr ""
+
+#: inc/admin-fields.php:642
+msgid "Filter heading"
+msgstr ""
+
+#: inc/admin-fields.php:645
+msgid "Shown above this field's filters. Defaults to the label."
+msgstr ""
+
+#: inc/admin-fields.php:651
+msgid "Options for this type"
+msgstr ""
+
+#: inc/admin-fields.php:659
+msgid "Save field"
+msgstr ""
+
+#: inc/admin-fields.php:659
+msgid "Add field"
+msgstr ""
+
+#: inc/admin-fields.php:660
+msgid "Cancel"
+msgstr ""
+
+#: inc/admin-fields.php:962
+msgid "Field added."
+msgstr ""
+
+#: inc/admin-fields.php:963
+msgid "Field saved."
+msgstr ""
+
+#: inc/admin-fields.php:964
+msgid "Field retired. Its data is still there — restore it any time."
+msgstr ""
+
+#: inc/admin-fields.php:965
+msgid "Field restored, with everything it had recorded."
+msgstr ""
+
+#: inc/admin-fields.php:966
+msgid "Field and all of its data permanently deleted."
+msgstr ""
+
+#: inc/admin-fields.php:967
+msgid "Display order saved."
+msgstr ""
+
+#: inc/admin-fields.php:968
+msgid "Behavior saved."
+msgstr ""
+
+#: inc/admin-fields.php:969
+msgid "A field needs a label."
+msgstr ""
+
+#: inc/admin-fields.php:970
+msgid "That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores."
+msgstr ""
+
+#: inc/admin-fields.php:971
+msgid "A field with that key already exists."
+msgstr ""
+
+#: inc/admin-fields.php:972
+msgid "A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data."
+msgstr ""
+
+#: inc/admin-fields.php:973
+msgid "That field type is not available. If it came from another plugin, that plugin may be deactivated."
+msgstr ""
+
+#: inc/admin-fields.php:974
+msgid "Nothing was deleted: type DELETE in the box to confirm."
+msgstr ""
+
+#: inc/admin-fields.php:975
+msgid "That field no longer exists."
+msgstr ""
+
+#: inc/admin-screen.php:41
+msgid "Behavior"
+msgstr ""
+
+#: inc/admin-screen.php:42
+#: inc/admin-settings.php:1172
+msgid "Appearance"
+msgstr ""
+
+#: inc/admin-screen.php:43
+msgid "Advanced"
+msgstr ""
+
+#: inc/admin-screen.php:66
+#: inc/admin-settings.php:55
+msgid "Settings"
+msgstr ""
+
+#: inc/admin-screen.php:78
+#: inc/admin-settings.php:1235
+msgid "You do not have permission to change these settings."
+msgstr ""
+
+#: inc/admin-screen.php:98
+msgid "Setup sections"
+msgstr ""
+
+#: inc/admin-screen.php:148
+msgid "Results shown at once"
+msgstr ""
+
+#: inc/admin-screen.php:149
+msgid "0 shows every match. Any other number shows that many with a “Show all results” button after them. This limits what is drawn, never what is searched — a location beyond the cut is still found by typing its name."
+msgstr ""
+
+#: inc/admin-screen.php:155
+msgid "Offer sorting by distance"
+msgstr ""
+
+#: inc/admin-screen.php:156
+msgid "Lets a visitor share their location to sort the results by how near they are. Off removes it entirely."
+msgstr ""
+
+#: inc/admin-screen.php:162
+msgid "Ask before loading the map"
+msgstr ""
+
+#: inc/admin-screen.php:163
+msgid "Show a placeholder with a \"Show map\" button instead of loading map tiles straight away. Tiles are fetched by the visitor's browser, so until they choose to load them their IP address is never sent to the tile provider. The search, filters and location list all work without the map. Has no effect when the tiles are served from this site, since there is no third party involved."
+msgstr ""
+
+#: inc/admin-screen.php:169
+msgid "Ask for location on arrival"
+msgstr ""
+
+#: inc/admin-screen.php:170
+msgid "Off by default, deliberately: an unprompted permission prompt is easy to refuse and hard to ask for twice, and browsers penalize sites that do it."
+msgstr ""
+
+#: inc/admin-screen.php:177
+msgid "Distance units"
+msgstr ""
+
+#: inc/admin-screen.php:178
+msgid "Left automatic, this follows the site language — miles for US and UK English, kilometers everywhere else."
+msgstr ""
+
+#: inc/admin-screen.php:186
+msgid "Timezone for “Open now”"
+msgstr ""
+
+#: inc/admin-screen.php:187
+msgid "the site timezone"
+msgstr ""
+
+#: inc/admin-screen.php:188
+msgid "An IANA name such as America/Chicago. Left blank this follows Settings → General, which is almost always right: somebody checking a Birmingham food bank from a phone still set to Pacific time wants Birmingham’s clock."
+msgstr ""
+
+#: inc/admin-screen.php:196
+msgid "Zoom to fit the results"
+msgstr ""
+
+#: inc/admin-screen.php:197
+msgid "On, the map frames whatever is currently showing. The starting point below is the fallback for when nothing matches, so it is worth setting even with this on."
+msgstr ""
+
+#: inc/admin-screen.php:205
+msgid "Starting latitude"
+msgstr ""
+
+#: inc/admin-screen.php:206
+msgid "Defaults to 0, which is a point in the Gulf of Guinea — fine while results are showing, and an ocean the moment a filter matches nothing."
+msgstr ""
+
+#: inc/admin-screen.php:214
+msgid "Starting longitude"
+msgstr ""
+
+#: inc/admin-screen.php:223
+msgid "Starting zoom"
+msgstr ""
+
+#: inc/admin-screen.php:224
+msgid "0 is the whole world, 12 a city, 16 a few streets."
+msgstr ""
+
+#: inc/admin-screen.php:233
+msgid "Directions service"
+msgstr ""
+
+#: inc/admin-screen.php:234
+msgid "Where the Directions link sends people. The address is used in preference to the coordinates, because a street address resolves to a door and a coordinate resolves to a point — which on a large site is regularly the wrong side of the building."
+msgstr ""
+
+#: inc/admin-screen.php:240
+msgid "Custom directions URL"
+msgstr ""
+
+#: inc/admin-screen.php:242
+msgid "Only used when the service above is Custom. {query} is the formatted address, {lat} and {lng} the coordinates."
+msgstr ""
+
+#: inc/admin-screen.php:250
+msgid "Contact address for lookups"
+msgstr ""
+
+#: inc/admin-screen.php:251
+msgid "nobody@example.com"
+msgstr ""
+
+#: inc/admin-screen.php:252
+msgid "Nominatim’s usage policy requires a contact for whoever is making the requests. Without one the address lookup in the editor may be blocked — and because the policy applies per operator, an unidentified install risks the block landing on everyone using this plugin."
+msgstr ""
+
+#: inc/admin-screen.php:258
+msgid "Lookup endpoint"
+msgstr ""
+
+#: inc/admin-screen.php:260
+msgid "Point this at your own Nominatim instance, or a paid provider with a compatible response."
+msgstr ""
+
+#: inc/admin-screen.php:266
+msgid "Limit lookups to countries"
+msgstr ""
+
+#: inc/admin-screen.php:268
+msgid "Two-letter codes, comma separated. Leave blank to search everywhere."
+msgstr ""
+
+#: inc/admin-screen.php:274
+msgid "Prefer results in this box"
+msgstr ""
+
+#: inc/admin-screen.php:276
+msgid "Four numbers: west, south, east, north. Nudges results toward your region without excluding the rest."
+msgstr ""
+
+#: inc/admin-screen.php:282
+msgid "Restrict strictly to that box"
+msgstr ""
+
+#: inc/admin-screen.php:283
+msgid "Turns the preference above into a hard limit. An address outside the box then returns nothing at all, which looks like a broken lookup rather than a deliberate one — leave this off unless you mean it."
+msgstr ""
+
+#: inc/admin-screen.php:291
+msgid "Tile URL"
+msgstr ""
+
+#: inc/admin-screen.php:293
+msgid "Only used when Map style on the Appearance tab is set to Custom. Must contain {z}, {x} and {y}."
+msgstr ""
+
+#: inc/admin-screen.php:299
+msgid "Tile attribution"
+msgstr ""
+
+#: inc/admin-screen.php:300
+msgid "Printed on the map. Nearly every tile provider requires this, and removing it breaks their terms rather than merely being impolite. Links are allowed."
+msgstr ""
+
+#: inc/admin-screen.php:308
+msgid "Deepest zoom offered"
+msgstr ""
+
+#: inc/admin-screen.php:309
+msgid "Zooming past what a provider actually has produces blank tiles."
+msgstr ""
+
+#: inc/admin-screen.php:323
+msgid "Which field drives what"
+msgstr ""
+
+#: inc/admin-screen.php:324
+msgid "A location can carry more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. They all display; these choose which of them the finder acts on."
+msgstr ""
+
+#: inc/admin-screen.php:327
+msgid "Results"
+msgstr ""
+
+#: inc/admin-screen.php:331
+#: inc/field-hours.php:20
+msgid "Opening hours"
+msgstr ""
+
+#: inc/admin-screen.php:335
+msgid "Where the map opens"
+msgstr ""
+
+#: inc/admin-screen.php:339
+#: assets/js/location-finder.js:1569
+msgid "Directions"
+msgstr ""
+
+#: inc/admin-screen.php:345
+msgid "Address lookup"
+msgstr ""
+
+#: inc/admin-screen.php:346
+msgid "The editor’s “find this address” box calls an outside service. These control which one and how it behaves. Visitors never trigger it — only somebody editing a location does."
+msgstr ""
+
+#: inc/admin-screen.php:349
+msgid "Custom map tiles"
+msgstr ""
+
+#: inc/admin-screen.php:350
+msgid "Ignored unless Map style on the Appearance tab is set to Custom."
+msgstr ""
+
+#: inc/admin-screen.php:363
+msgid "Automatic — follow the site language"
+msgstr ""
+
+#: inc/admin-screen.php:364
+msgid "Miles"
+msgstr ""
+
+#: inc/admin-screen.php:365
+msgid "Kilometers"
+msgstr ""
+
+#: inc/admin-screen.php:376
+msgid "Google Maps"
+msgstr ""
+
+#: inc/admin-screen.php:377
+msgid "Apple Maps"
+msgstr ""
+
+#: inc/admin-screen.php:378
+msgid "OpenStreetMap"
+msgstr ""
+
+#: inc/admin-screen.php:379
+msgid "Custom URL"
+msgstr ""
+
+#: inc/admin-screen.php:412
+msgid "Save"
+msgstr ""
+
+#: inc/admin-settings.php:54
+#: inc/admin-settings.php:1239
+msgid "Location Finder Settings"
+msgstr ""
+
+#: inc/admin-settings.php:69
+msgid "Map & spacing"
+msgstr ""
+
+#: inc/admin-settings.php:70
+msgid "Panels & surfaces"
+msgstr ""
+
+#: inc/admin-settings.php:71
+msgid "Buttons, chips & cards"
+msgstr ""
+
+#: inc/admin-settings.php:101
+msgid "Ink"
+msgstr ""
+
+#: inc/admin-settings.php:102
+msgid "Editorial monochrome. Sharp corners, no hue at all."
+msgstr ""
+
+#: inc/admin-settings.php:126
+msgid "Slate"
+msgstr ""
+
+#: inc/admin-settings.php:127
+msgid "Cool gray and understated — the safe choice under a corporate theme."
+msgstr ""
+
+#: inc/admin-settings.php:154
+msgid "Newsprint"
+msgstr ""
+
+#: inc/admin-settings.php:155
+msgid "Warm paper and ink, square corners. Reads as print."
+msgstr ""
+
+#: inc/admin-settings.php:182
+msgid "Clinical"
+msgstr ""
+
+#: inc/admin-settings.php:183
+msgid "Blue on white, tight corners. Institutional and plain."
+msgstr ""
+
+#: inc/admin-settings.php:207
+msgid "Coast"
+msgstr ""
+
+#: inc/admin-settings.php:208
+msgid "Teal on near-white. Airy, generous corners."
+msgstr ""
+
+#: inc/admin-settings.php:235
+msgid "Forest"
+msgstr ""
+
+#: inc/admin-settings.php:236
+msgid "Deep greens. Suits conservation, parks and food growing."
+msgstr ""
+
+#: inc/admin-settings.php:263
+msgid "Civic"
+msgstr ""
+
+#: inc/admin-settings.php:264
+msgid "Terracotta and sand. Built for community organizations."
+msgstr ""
+
+#: inc/admin-settings.php:291
+msgid "Sunrise"
+msgstr ""
+
+#: inc/admin-settings.php:292
+msgid "Amber and cream, very round. Warm and informal."
+msgstr ""
+
+#: inc/admin-settings.php:319
+msgid "Rose"
+msgstr ""
+
+#: inc/admin-settings.php:320
+msgid "Burgundy on blush. Softer than red without losing weight."
+msgstr ""
+
+#: inc/admin-settings.php:347
+msgid "Plum"
+msgstr ""
+
+#: inc/admin-settings.php:348
+msgid "Deep purple on white. Quiet and a little formal."
+msgstr ""
+
+#: inc/admin-settings.php:375
+msgid "Soft"
+msgstr ""
+
+#: inc/admin-settings.php:376
+msgid "Indigo, big corners, generous spacing. Friendly."
+msgstr ""
+
+#: inc/admin-settings.php:400
+msgid "Contrast"
+msgstr ""
+
+#: inc/admin-settings.php:401
+msgid "Maximum contrast throughout, square corners, yellow selection. For sites that must be legible above all else."
+msgstr ""
+
+#: inc/admin-settings.php:428
+msgid "Night"
+msgstr ""
+
+#: inc/admin-settings.php:429
+msgid "Full dark in navy, with a bright blue accent."
+msgstr ""
+
+#: inc/admin-settings.php:456
+msgid "Graphite"
+msgstr ""
+
+#: inc/admin-settings.php:457
+msgid "Full dark in pure grayscale. No hue to clash with anything."
+msgstr ""
+
+#: inc/admin-settings.php:484
+msgid "Lagoon"
+msgstr ""
+
+#: inc/admin-settings.php:485
+msgid "Full dark in deep teal."
+msgstr ""
+
+#: inc/admin-settings.php:542
+msgid "CARTO’s free basemaps are for non-commercial use. On a commercial site choose OpenStreetMap, or Custom with a provider you have an account with."
+msgstr ""
+
+#: inc/admin-settings.php:546
+msgid "OpenStreetMap (standard)"
+msgstr ""
+
+#: inc/admin-settings.php:550
+msgid "The default. No account and no cost."
+msgstr ""
+
+#: inc/admin-settings.php:551
+msgid "Served by donated infrastructure under a usage policy meant for modest traffic. A busy site should self-host its tiles or move to a paid provider via Custom."
+msgstr ""
+
+#: inc/admin-settings.php:555
+msgid "Light — muted grays"
+msgstr ""
+
+#: inc/admin-settings.php:559
+msgid "Pale and low-contrast, so pins and the results carry the color. Suits most light palettes."
+msgstr ""
+
+#: inc/admin-settings.php:564
+msgid "Light — warm, more detail"
+msgstr ""
+
+#: inc/admin-settings.php:568
+msgid "Keeps road and place names legible. The one to pick when people navigate by the map itself."
+msgstr ""
+
+#: inc/admin-settings.php:573
+msgid "Dark"
+msgstr ""
+
+#: inc/admin-settings.php:577
+msgid "For a dark finder background. On a light one it reads as a hole in the page."
+msgstr ""
+
+#: inc/admin-settings.php:582
+msgid "Custom — set by a filter"
+msgstr ""
+
+#: inc/admin-settings.php:586
+msgid "Use the lfndr_tile_url and lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles."
+msgstr ""
+
+#: inc/admin-settings.php:628
+msgid "Map style"
+msgstr ""
+
+#: inc/admin-settings.php:630
+msgid "The basemap the pins sit on. Each option brings the attribution its provider requires."
+msgstr ""
+
+#: inc/admin-settings.php:636
+msgid "Accent color"
+msgstr ""
+
+#: inc/admin-settings.php:638
+msgid "Map pins and focus rings. Leave blank to match the surrounding text color — the right default in almost every theme. Accepts a hex code, a named color, or a theme variable such as var(--wp--preset--color--accent-1)."
+msgstr ""
+
+#: inc/admin-settings.php:644
+msgid "Map pin color"
+msgstr ""
+
+#: inc/admin-settings.php:645
+msgid "the accent color above"
+msgstr ""
+
+#: inc/admin-settings.php:646
+msgid "Set this when the pins want a different color from focus rings and chip borders — a brand color that reads well on a map is often not the one that reads well as text."
+msgstr ""
+
+#: inc/admin-settings.php:652
+msgid "Corner radius"
+msgstr ""
+
+#: inc/admin-settings.php:654
+msgid "Rounding on the map, the search suggestions and the detail pane. Filter chips, badges and buttons are always fully rounded regardless of this setting. A number with a unit, such as 8px or 0.5rem."
+msgstr ""
+
+#: inc/admin-settings.php:660
+msgid "Spacing"
+msgstr ""
+
+#: inc/admin-settings.php:662
+msgid "The base gap between the search box, filters, results and map."
+msgstr ""
+
+#: inc/admin-settings.php:668
+msgid "Map height"
+msgstr ""
+
+#: inc/admin-settings.php:670
+msgid "Map height where the map sits above the results — a phone, or a finder in a narrow column. The map is never taller than this, and never taller than a third of the screen. On a wide screen the map fills the finder instead, so use Panel height there. A single finder can still override this from its own block settings."
+msgstr ""
+
+#: inc/admin-settings.php:676
+msgid "Panel height"
+msgstr ""
+
+#: inc/admin-settings.php:678
+msgid "How tall the finder is on a wide screen, where the results and the map sit side by side inside one bordered frame. Both columns are this height; the result list scrolls within it."
+msgstr ""
+
+#: inc/admin-settings.php:686
+msgid "Finder background"
+msgstr ""
+
+#: inc/admin-settings.php:687
+msgid "the page background"
+msgstr ""
+
+#: inc/admin-settings.php:688
+msgid "The ground the whole finder sits on. Left blank it shows the page through, which is right for a finder embedded in a normal layout. Set it when the other colors here have moved away from the page — dark cards on a light page read as a light finder with dark parts rather than a dark finder."
+msgstr ""
+
+#: inc/admin-settings.php:694
+msgid "Finder text"
+msgstr ""
+
+#: inc/admin-settings.php:695
+msgid "inherited from the page"
+msgstr ""
+
+#: inc/admin-settings.php:696
+msgid "Set this whenever you set a finder background. Text inside the finder otherwise keeps the color the page gives it, which on a background that has moved away from the page means dark on dark."
+msgstr ""
+
+#: inc/admin-settings.php:702
+msgid "Finder padding"
+msgstr ""
+
+#: inc/admin-settings.php:704
+msgid "Space between the finder background and what sits on it. Set it whenever you set a background — without it the search box and cards run flat into the edge of the color. Leave blank when there is no background, so the finder stays aligned with the rest of the page."
+msgstr ""
+
+#: inc/admin-settings.php:710
+msgid "Surface color"
+msgstr ""
+
+#: inc/admin-settings.php:712
+msgid "Background of the search suggestions and the detail pane, and the ring drawn around each map pin. Leave blank to use the system background color, which already adapts to dark mode."
+msgstr ""
+
+#: inc/admin-settings.php:718
+msgid "Text on surface"
+msgstr ""
+
+#: inc/admin-settings.php:720
+msgid "Text color inside the detail pane and search suggestions. Leave blank to use the system text color."
+msgstr ""
+
+#: inc/admin-settings.php:726
+msgid "Open indicator"
+msgstr ""
+
+#: inc/admin-settings.php:728
+msgid "The lamp beside \"Open now\" and \"Open today\". Green by default, and one of only two places this plugin ships a color of its own — on a status light the color is the information rather than decoration."
+msgstr ""
+
+#: inc/admin-settings.php:734
+msgid "Closure notice color"
+msgstr ""
+
+#: inc/admin-settings.php:735
+msgid "the surrounding text color"
+msgstr ""
+
+#: inc/admin-settings.php:736
+msgid "The rule, tint, icon and text of the \"Temporarily closed\" notice, together. The plugin ships it in the text color rather than red, so that it cannot clash with a theme it has never seen — set a color here if you would rather it shouted."
+msgstr ""
+
+#: inc/admin-settings.php:742
+msgid "Border color"
+msgstr ""
+
+#: inc/admin-settings.php:743
+msgid "a soft tint of the text color"
+msgstr ""
+
+#: inc/admin-settings.php:744
+msgid "Badge outlines and dividers."
+msgstr ""
+
+#: inc/admin-settings.php:756
+msgid "Button & chip background"
+msgstr ""
+
+#: inc/admin-settings.php:757
+msgid "the theme's own button color"
+msgstr ""
+
+#: inc/admin-settings.php:758
+msgid "The search box, the filter chips, and every button — Filters, Full screen, Apply, Clear filters, Show all results. Leave blank to use the theme's own button styling."
+msgstr ""
+
+#: inc/admin-settings.php:766
+msgid "Button & chip text"
+msgstr ""
+
+#: inc/admin-settings.php:767
+msgid "the theme's own button text color"
+msgstr ""
+
+#: inc/admin-settings.php:768
+msgid "Set alongside the background above — a background with no matching text color can end up unreadable."
+msgstr ""
+
+#: inc/admin-settings.php:776
+msgid "Pressed button & chip background"
+msgstr ""
+
+#: inc/admin-settings.php:778
+msgid "A selected filter chip, the Filters button while its panel is open, or Full screen while it is open."
+msgstr ""
+
+#: inc/admin-settings.php:786
+msgid "Pressed button & chip text"
+msgstr ""
+
+#: inc/admin-settings.php:796
+msgid "Card background"
+msgstr ""
+
+#: inc/admin-settings.php:797
+msgid "a neutral system background"
+msgstr ""
+
+#: inc/admin-settings.php:798
+msgid "Each location in the result list. A card is a native button for keyboard and screen-reader purposes, but reads as content, not as an action — left blank it uses a neutral panel background rather than the theme's button color."
+msgstr ""
+
+#: inc/admin-settings.php:806
+msgid "Card text"
+msgstr ""
+
+#: inc/admin-settings.php:807
+msgid "a neutral system text color"
+msgstr ""
+
+#: inc/admin-settings.php:816
+msgid "Selected card background"
+msgstr ""
+
+#: inc/admin-settings.php:818
+msgid "The card currently open in the detail pane."
+msgstr ""
+
+#: inc/admin-settings.php:826
+msgid "Selected card text"
+msgstr ""
+
+#: inc/admin-settings.php:836
+msgid "Tag background"
+msgstr ""
+
+#: inc/admin-settings.php:838
+msgid "The small service, access and status pills shown on cards and in the detail pane."
+msgstr ""
+
+#: inc/admin-settings.php:846
+msgid "Tag text"
+msgstr ""
+
+#: inc/admin-settings.php:898
+msgid "Leave any field blank to keep the theme-matched default. Nothing on this screen is required — these exist for the times a theme's own colors or sizing are not quite right, without needing to edit CSS."
+msgstr ""
+
+#: inc/admin-settings.php:908
+msgid "Backgrounds and text for the parts of the finder that sit above the map or the result list, rather than inside them."
+msgstr ""
+
+#: inc/admin-settings.php:918
+msgid "Every clickable control in the finder is a native button, colored by your theme by default — the same principle as the rest of this plugin. Setting one of these overrides that styling just for the finder, and takes priority over the theme so the color you pick is the one you get."
+msgstr ""
+
+#. translators: %s: field label.
+#: inc/admin-settings.php:970
+#, php-format
+msgid "Pick a color for %s"
+msgstr ""
+
+#: inc/admin-settings.php:1018
+msgid "Terms of use:"
+msgstr ""
+
+#: inc/admin-settings.php:1023
+msgid "Read the terms"
+msgstr ""
+
+#: inc/admin-settings.php:1174
+msgid "Pick a set and save. Every one clears WCAG AA for text contrast, and every value it writes stays editable underneath."
+msgstr ""
+
+#: inc/admin-settings.php:1178
+msgid "Appearance preset"
+msgstr ""
+
+#: inc/admin-settings.php:1201
+msgid "Custom"
+msgstr ""
+
+#: inc/admin-settings.php:1205
+msgid "Your own values, set below. Selected because they match no preset."
+msgstr ""
+
+#: inc/admin-settings.php:1206
+msgid "Edit any value below and it becomes Custom."
+msgstr ""
+
+#: inc/admin-settings.php:1257
+msgid "Fine-tune individual values"
+msgstr ""
+
+#: inc/cpt.php:36
+msgctxt "post type general name"
+msgid "Locations"
+msgstr ""
+
+#: inc/cpt.php:37
+msgctxt "post type singular name"
+msgid "Location"
+msgstr ""
+
+#: inc/cpt.php:38
+msgctxt "admin menu"
+msgid "Locations"
+msgstr ""
+
+#: inc/cpt.php:39
+msgid "Add New"
+msgstr ""
+
+#: inc/cpt.php:40
+msgid "Add New Location"
+msgstr ""
+
+#: inc/cpt.php:41
+msgid "Edit Location"
+msgstr ""
+
+#: inc/cpt.php:42
+msgid "New Location"
+msgstr ""
+
+#: inc/cpt.php:43
+msgid "View Location"
+msgstr ""
+
+#: inc/cpt.php:44
+msgid "Search Locations"
+msgstr ""
+
+#: inc/cpt.php:45
+msgid "No locations found."
+msgstr ""
+
+#: inc/cpt.php:46
+msgid "No locations found in Trash."
+msgstr ""
+
+#: inc/cpt.php:47
+msgid "All Locations"
+msgstr ""
+
+#: inc/cpt.php:133
+msgid "This location has no coordinates and will not appear on the map."
+msgstr ""
+
+#: inc/cpt.php:134
+msgid "Not on the map"
+msgstr ""
+
+#: inc/cpt.php:172
+#: inc/render.php:405
+#: assets/js/location-finder.js:1760
+msgid "Yes"
+msgstr ""
+
+#. translators: %d: number of entries.
+#: inc/cpt.php:191
+#, php-format
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/enqueue.php:150
+msgid "Row added."
+msgstr ""
+
+#: inc/enqueue.php:151
+msgid "Row removed."
+msgstr ""
+
+#: inc/enqueue.php:163
+msgid "Searching…"
+msgstr ""
+
+#: inc/enqueue.php:164
+msgid "No matches. Try a fuller address."
+msgstr ""
+
+#: inc/enqueue.php:165
+msgid "The address lookup failed. Enter the coordinates by hand."
+msgstr ""
+
+#: inc/enqueue.php:166
+msgid "Address and coordinates filled in."
+msgstr ""
+
+#. translators: 1: field label, 2: new position, 3: total number of shown fields.
+#: inc/enqueue.php:196
+#, php-format
+msgid "%1$s moved to position %2$s of %3$s."
+msgstr ""
+
+#. translators: %s: field label.
+#: inc/enqueue.php:198
+#, php-format
+msgid "%s is no longer shown here."
+msgstr ""
+
+#: inc/facets.php:140
+#: assets/js/location-finder.js:1530
+msgid "Open today"
+msgstr ""
+
+#: inc/field-address.php:20
+msgid "Address"
+msgstr ""
+
+#: inc/field-address.php:116
+msgid "Find an address"
+msgstr ""
+
+#: inc/field-address.php:118
+msgid "Start typing an address…"
+msgstr ""
+
+#: inc/field-address.php:323
+msgid "Part"
+msgstr ""
+
+#: inc/field-address.php:324
+msgid "Use"
+msgstr ""
+
+#: inc/field-address.php:326
+msgid "On cards"
+msgstr ""
+
+#: inc/field-address.php:327
+msgid "Searchable"
+msgstr ""
+
+#. translators: %s: address part name.
+#: inc/field-address.php:337
+#, php-format
+msgid "Use the %s part"
+msgstr ""
+
+#. translators: %s: address part name.
+#: inc/field-address.php:345
+#, php-format
+msgid "Label for the %s part"
+msgstr ""
+
+#. translators: %s: address part name.
+#: inc/field-address.php:352
+#, php-format
+msgid "Show %s on cards"
+msgstr ""
+
+#. translators: %s: address part name.
+#: inc/field-address.php:359
+#, php-format
+msgid "Search the %s part"
+msgstr ""
+
+#: inc/field-address.php:368
+msgid "Default country"
+msgstr ""
+
+#: inc/field-address.php:369
+msgid "Pre-filled on new locations. A two-letter code such as US or CA."
+msgstr ""
+
+#: inc/field-address.php:374
+msgid "When looking up an address, fill the region with"
+msgstr ""
+
+#: inc/field-address.php:376
+msgid "Its full name (Alabama, Île-de-France)"
+msgstr ""
+
+#: inc/field-address.php:377
+msgid "Its short code (AL, IDF)"
+msgstr ""
+
+#: inc/field-address.php:380
+msgid "Only affects what the lookup fills in — you can always edit the box afterwards."
+msgstr ""
+
+#: inc/field-address.php:382
+msgid "Offer a Directions link"
+msgstr ""
+
+#: inc/field-closures.php:20
+msgid "Temporary closures"
+msgstr ""
+
+#: inc/field-closures.php:195
+msgid "Add a closure"
+msgstr ""
+
+#: inc/field-closures.php:196
+msgid "Closures that have already ended are removed when you save."
+msgstr ""
+
+#: inc/field-closures.php:225
+msgid "Closed from"
+msgstr ""
+
+#: inc/field-closures.php:228
+msgctxt "between two dates"
+msgid "to"
+msgstr ""
+
+#: inc/field-closures.php:229
+msgid "Closed through"
+msgstr ""
+
+#: inc/field-closures.php:231
+msgid "Reason"
+msgstr ""
+
+#: inc/field-closures.php:234
+msgid "Reason (optional, shown to visitors)"
+msgstr ""
+
+#: inc/field-closures.php:235
+#: inc/field-hours.php:626
+msgid "Remove"
+msgstr ""
+
+#: inc/field-closures.php:270
+msgid "Warn this many days ahead"
+msgstr ""
+
+#: inc/field-closures.php:271
+msgid "Shows \"Closing on the 24th\" before it happens. 0 turns the warning off."
+msgstr ""
+
+#: inc/field-closures.php:273
+msgid "Longest reason"
+msgstr ""
+
+#: inc/field-closures.php:274
+msgid "Most closures at once"
+msgstr ""
+
+#: inc/field-closures.php:274
+msgid "0 for no limit."
+msgstr ""
+
+#. translators: 1: recurrence such as "2nd & 4th", 2: day or day range such as "Tue".
+#: inc/field-hours.php:326
+#, php-format
+msgctxt "recurrence and day"
+msgid "%1$s %2$s"
+msgstr ""
+
+#. translators: 1: first day, 2: last day. Forms a range like "Mon – Fri".
+#: inc/field-hours.php:346
+#, php-format
+msgctxt "day range"
+msgid "%1$s–%2$s"
+msgstr ""
+
+#: inc/field-hours.php:375
+msgctxt "first occurrence in a month"
+msgid "1st"
+msgstr ""
+
+#: inc/field-hours.php:376
+msgctxt "second occurrence in a month"
+msgid "2nd"
+msgstr ""
+
+#: inc/field-hours.php:377
+msgctxt "third occurrence in a month"
+msgid "3rd"
+msgstr ""
+
+#: inc/field-hours.php:378
+msgctxt "fourth occurrence in a month"
+msgid "4th"
+msgstr ""
+
+#: inc/field-hours.php:379
+msgctxt "final occurrence in a month"
+msgid "last"
+msgstr ""
+
+#. translators: 1: first occurrence, 2: last occurrence. Forms a range like "1st – 3rd".
+#: inc/field-hours.php:395
+#, php-format
+msgctxt "occurrence range"
+msgid "%1$s–%2$s"
+msgstr ""
+
+#: inc/field-hours.php:406
+msgctxt "joins recurrences, as in \"2nd & 4th\""
+msgid " & "
+msgstr ""
+
+#. translators: %s: a time of day. Used when a closing time is unknown.
+#: inc/field-hours.php:447
+#, php-format
+msgid "from %s"
+msgstr ""
+
+#. translators: 1: opening time, 2: closing time.
+#: inc/field-hours.php:453
+#, php-format
+msgctxt "time range"
+msgid "%1$s–%2$s"
+msgstr ""
+
+#: inc/field-hours.php:536
+msgid "No hours set. This location will not be shown as open at any time."
+msgstr ""
+
+#: inc/field-hours.php:555
+msgid "Add hours"
+msgstr ""
+
+#: inc/field-hours.php:577
+msgid "Repeats"
+msgstr ""
+
+#: inc/field-hours.php:591
+msgid "Day"
+msgstr ""
+
+#: inc/field-hours.php:605
+msgid "Opens"
+msgstr ""
+
+#: inc/field-hours.php:605
+msgid "Closes"
+msgstr ""
+
+#: inc/field-hours.php:611
+msgid "— time —"
+msgstr ""
+
+#: inc/field-hours.php:611
+msgid "— no closing time —"
+msgstr ""
+
+#: inc/field-hours.php:718
+msgid "Time increments"
+msgstr ""
+
+#: inc/field-hours.php:720
+msgid "5 minutes"
+msgstr ""
+
+#: inc/field-hours.php:721
+msgid "10 minutes"
+msgstr ""
+
+#: inc/field-hours.php:722
+msgid "15 minutes"
+msgstr ""
+
+#: inc/field-hours.php:723
+msgid "30 minutes"
+msgstr ""
+
+#: inc/field-hours.php:724
+msgid "On the hour"
+msgstr ""
+
+#: inc/field-hours.php:729
+msgid "Earliest selectable time"
+msgstr ""
+
+#: inc/field-hours.php:729
+msgid "24-hour, such as 07:00."
+msgstr ""
+
+#: inc/field-hours.php:730
+msgid "Latest selectable time"
+msgstr ""
+
+#: inc/field-hours.php:730
+msgid "24-hour, such as 21:00."
+msgstr ""
+
+#: inc/field-hours.php:734
+msgid "Recurrence options offered"
+msgstr ""
+
+#: inc/field-hours.php:744
+msgid "Weekly is always available."
+msgstr ""
+
+#: inc/field-hours.php:746
+msgid "Schedule lines to show on a card"
+msgstr ""
+
+#: inc/field-hours.php:746
+msgid "0 shows all of them."
+msgstr ""
+
+#: inc/field-hours.php:747
+msgid "Badge locations that are open right now"
+msgstr ""
+
+#: inc/field-hours.php:748
+msgid "Offer an \"Open today\" filter"
+msgstr ""
+
+#: inc/field-types.php:56
+msgid "Text"
+msgstr ""
+
+#: inc/field-types.php:60
+msgid "Long text"
+msgstr ""
+
+#: inc/field-types.php:64
+msgid "Website"
+msgstr ""
+
+#: inc/field-types.php:68
+msgid "Email"
+msgstr ""
+
+#: inc/field-types.php:72
+msgid "Phone"
+msgstr ""
+
+#: inc/field-types.php:76
+msgid "Number"
+msgstr ""
+
+#: inc/field-types.php:99
+msgid "Yes / no"
+msgstr ""
+
+#: inc/field-types.php:115
+msgid "Choice (one)"
+msgstr ""
+
+#: inc/field-types.php:131
+msgid "Choice (many)"
+msgstr ""
+
+#: inc/field-types.php:331
+#: inc/field-types.php:379
+msgid "Maximum length"
+msgstr ""
+
+#: inc/field-types.php:332
+#: inc/field-types.php:380
+msgid "Leave at 0 for no limit."
+msgstr ""
+
+#: inc/field-types.php:375
+msgid "Rows"
+msgstr ""
+
+#: inc/field-types.php:433
+msgid "Link text"
+msgstr ""
+
+#: inc/field-types.php:435
+msgid "Domain only (example.org)"
+msgstr ""
+
+#: inc/field-types.php:436
+msgid "Full URL"
+msgstr ""
+
+#: inc/field-types.php:437
+msgid "The field label"
+msgstr ""
+
+#: inc/field-types.php:486
+msgid "Render as a clickable mailto: link"
+msgstr ""
+
+#: inc/field-types.php:531
+msgid "Render as a clickable tel: link"
+msgstr ""
+
+#: inc/field-types.php:532
+msgid "Show a \"Call\" button on small screens"
+msgstr ""
+
+#: inc/field-types.php:591
+msgid "Minimum"
+msgstr ""
+
+#: inc/field-types.php:592
+msgid "Maximum"
+msgstr ""
+
+#: inc/field-types.php:593
+msgid "Decimal places"
+msgstr ""
+
+#: inc/field-types.php:594
+msgid "Suffix"
+msgstr ""
+
+#: inc/field-types.php:594
+msgid "Shown after the number, e.g. \" seats\"."
+msgstr ""
+
+#: inc/field-types.php:662
+msgid "Label when true"
+msgstr ""
+
+#: inc/field-types.php:662
+msgid "Defaults to the field label."
+msgstr ""
+
+#: inc/field-types.php:666
+msgid "Label when false"
+msgstr ""
+
+#: inc/field-types.php:667
+msgid "Leave empty to show nothing when false — which is usually what you want. A card that announces \"Not wheelchair accessible\" on every listing is rarely the goal."
+msgstr ""
+
+#: inc/field-types.php:756
+msgid "Default value"
+msgstr ""
+
+#: inc/field-types.php:757
+msgid "Allow no value"
+msgstr ""
+
+#: inc/field-types.php:761
+msgid "Only badge \"Open now\" when this value is set"
+msgstr ""
+
+#: inc/field-types.php:764
+msgid "For an access field: a listing that is appointment-only should never show as open, however its hours read."
+msgstr ""
+
+#: inc/field-types.php:838
+msgid "Filter chips for this field use AND: a visitor selecting two values sees only locations offering both."
+msgstr ""
+
+#: inc/geocode.php:37
+msgid "Not allowed."
+msgstr ""
+
+#: inc/geocode.php:105
+msgid "Could not reach the address lookup service."
+msgstr ""
+
+#: inc/geocode.php:112
+msgid "The address lookup service refused the request."
+msgstr ""
+
+#: inc/i18n.php:53
+msgid "Monday"
+msgstr ""
+
+#: inc/i18n.php:53
+msgctxt "abbreviated weekday"
+msgid "Mon"
+msgstr ""
+
+#: inc/i18n.php:54
+msgid "Tuesday"
+msgstr ""
+
+#: inc/i18n.php:54
+msgctxt "abbreviated weekday"
+msgid "Tue"
+msgstr ""
+
+#: inc/i18n.php:55
+msgid "Wednesday"
+msgstr ""
+
+#: inc/i18n.php:55
+msgctxt "abbreviated weekday"
+msgid "Wed"
+msgstr ""
+
+#: inc/i18n.php:56
+msgid "Thursday"
+msgstr ""
+
+#: inc/i18n.php:56
+msgctxt "abbreviated weekday"
+msgid "Thu"
+msgstr ""
+
+#: inc/i18n.php:57
+msgid "Friday"
+msgstr ""
+
+#: inc/i18n.php:57
+msgctxt "abbreviated weekday"
+msgid "Fri"
+msgstr ""
+
+#: inc/i18n.php:58
+msgid "Saturday"
+msgstr ""
+
+#: inc/i18n.php:58
+msgctxt "abbreviated weekday"
+msgid "Sat"
+msgstr ""
+
+#: inc/i18n.php:59
+msgid "Sunday"
+msgstr ""
+
+#: inc/i18n.php:59
+msgctxt "abbreviated weekday"
+msgid "Sun"
+msgstr ""
+
+#: inc/i18n.php:79
+msgid "Every week"
+msgstr ""
+
+#: inc/i18n.php:80
+msgid "1st of the month"
+msgstr ""
+
+#: inc/i18n.php:81
+msgid "2nd of the month"
+msgstr ""
+
+#: inc/i18n.php:82
+msgid "3rd of the month"
+msgstr ""
+
+#: inc/i18n.php:83
+msgid "4th of the month"
+msgstr ""
+
+#: inc/i18n.php:84
+msgid "Last of the month"
+msgstr ""
+
+#: inc/i18n.php:114
+msgid "Street address"
+msgstr ""
+
+#: inc/i18n.php:115
+msgid "Suite, unit, floor"
+msgstr ""
+
+#: inc/i18n.php:116
+msgid "City"
+msgstr ""
+
+#: inc/i18n.php:117
+msgid "Region"
+msgstr ""
+
+#: inc/i18n.php:118
+msgid "Postal code"
+msgstr ""
+
+#: inc/i18n.php:119
+msgid "Country"
+msgstr ""
+
+#: inc/meta-box.php:19
+msgid "Location Details"
+msgstr ""
+
+#: inc/meta-box.php:59
+msgid "Details"
+msgstr ""
+
+#. translators: %s: URL of the Fields screen.
+#: inc/meta-box.php:81
+#, php-format
+msgid "No fields are defined yet. <a href=\"%s\">Add some on the Fields screen</a> and they will appear here."
+msgstr ""
+
+#: inc/meta-box.php:114
+msgid "Find coordinates"
+msgstr ""
+
+#: inc/meta-box.php:118
+msgid "Search for a place or address…"
+msgstr ""
+
+#: inc/meta-box.php:129
+msgid "Latitude"
+msgstr ""
+
+#: inc/meta-box.php:133
+msgid "e.g. 33.518600"
+msgstr ""
+
+#: inc/meta-box.php:137
+msgid "Longitude"
+msgstr ""
+
+#: inc/meta-box.php:141
+msgid "e.g. -86.810400"
+msgstr ""
+
+#: inc/meta-box.php:143
+msgid "Without coordinates a location is searchable but never appears on the map."
+msgstr ""
+
+#. translators: %s: number of locations.
+#: inc/render.php:81
+#: inc/render.php:656
+#, php-format
+msgid "%s location"
+msgid_plural "%s locations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/render.php:93
+msgid "Map of locations"
+msgstr ""
+
+#: inc/render.php:129
+msgid "Search…"
+msgstr ""
+
+#: inc/render.php:152
+msgid "Clear filters"
+msgstr ""
+
+#: inc/render.php:241
+msgid "Any"
+msgstr ""
+
+#: inc/render.php:304
+msgid "Search by name"
+msgstr ""
+
+#. translators: %s: comma-separated list of field labels.
+#: inc/render.php:309
+#, php-format
+msgid "Search by name, %s"
+msgstr ""
+
+#: inc/render.php:333
+msgid "No locations have been added yet."
+msgstr ""
+
+#. translators: %s: number of locations.
+#: inc/render.php:658
+#, php-format
+msgid "%s locations"
+msgstr ""
+
+#: inc/render.php:660
+msgctxt "miles, abbreviated"
+msgid "mi"
+msgstr ""
+
+#: inc/render.php:661
+msgctxt "kilometers, abbreviated"
+msgid "km"
+msgstr ""
+
+#: assets/js/location-finder.js:395
+msgid "Apply filters"
+msgstr ""
+
+#: assets/js/location-finder.js:521
+#: assets/js/location-finder.js:588
+msgid "Full screen"
+msgstr ""
+
+#: assets/js/location-finder.js:587
+msgid "Exit full screen"
+msgstr ""
+
+#: assets/js/location-finder.js:625
+msgid "Location finder"
+msgstr ""
+
+#: assets/js/location-finder.js:768
+msgid "Location needs a secure (https) connection."
+msgstr ""
+
+#: assets/js/location-finder.js:772
+msgid "Finding your location…"
+msgstr ""
+
+#: assets/js/location-finder.js:781
+msgid "your location"
+msgstr ""
+
+#: assets/js/location-finder.js:794
+msgid "Location access was blocked. You can still search by name."
+msgstr ""
+
+#: assets/js/location-finder.js:797
+msgid "Your location could not be determined right now."
+msgstr ""
+
+#: assets/js/location-finder.js:800
+msgid "Finding your location took too long. Try again."
+msgstr ""
+
+#: assets/js/location-finder.js:803
+msgid "Your location is unavailable."
+msgstr ""
+
+#: assets/js/location-finder.js:815
+msgid "Sorted by distance from you."
+msgstr ""
+
+#: assets/js/location-finder.js:970
+msgid "Location"
+msgstr ""
+
+#: assets/js/location-finder.js:1407
+msgid "No locations match. Try removing a filter."
+msgstr ""
+
+#: assets/js/location-finder.js:1421
+msgid "Show all results"
+msgstr ""
+
+#: assets/js/location-finder.js:1529
+msgid "Open now"
+msgstr ""
+
+#: assets/js/location-finder.js:1531
+#: assets/js/location-finder.js:1864
+msgid "Temporarily closed"
+msgstr ""
+
+#: assets/js/location-finder.js:1570
+msgid "Get directions"
+msgstr ""
+
+#: assets/js/location-finder.js:1824
+msgid "More hours in the details"
+msgstr ""
+
+#: assets/js/location-finder.js:1865
+msgid "Closing soon"
+msgstr ""
+
+#: assets/js/location-finder.js:1947
+msgid "Back to all results"
+msgstr ""
+
+#: assets/js/location-finder.js:2101
+#: assets/js/location-finder.js:2102
+msgid "Show my location"
+msgstr ""
+
+#: assets/js/location-finder.js:2129
+#, js-format
+msgid "The map is loaded from %s. Showing it will share your IP address with them."
+msgstr ""
+
+#: assets/js/location-finder.js:2130
+msgid "The map is loaded from another website. Showing it will share your IP address with them."
+msgstr ""
+
+#: assets/js/location-finder.js:2135
+msgid "Show map"
+msgstr ""
+
+#: assets/js/location-finder.js:2143
+msgid "The list, search and filters work without it."
+msgstr ""
+
+#: blocks/finder/edit.js:36
+msgid "Accessibility"
+msgstr ""
+
+#: blocks/finder/edit.js:48
+msgid "Accessible name"
+msgstr ""
+
+#: blocks/finder/edit.js:50
+msgid "e.g. Food pantries"
+msgstr ""
+
+#: blocks/finder/edit.js:51
+msgid "Not shown on the page. Names the finder for screen readers, which matters most in full screen and when a page has more than one finder. Leave blank to add no landmark at all."
+msgstr ""
+
+#: blocks/finder/edit.js:61
+msgid "Layout"
+msgstr ""
+
+#: blocks/finder/edit.js:63
+msgid "Show the map"
+msgstr ""
+
+#: blocks/finder/edit.js:65
+msgid "Locations appear on a map beside the list."
+msgstr ""
+
+#: blocks/finder/edit.js:66
+msgid "Only the list is shown. Coordinates still drive distance sorting."
+msgstr ""
+
+#: blocks/finder/edit.js:75
+msgid "Map height (px)"
+msgstr ""
+
+#: blocks/finder/edit.js:80
+msgid "0 uses the theme default."
+msgstr ""
+
+#: blocks/finder/edit.js:94
+msgid "The searchable map and list render on the front end. Add and edit locations under Locations, and choose what they record under Locations → Fields."
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block title"
+msgid "Location Finder"
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block description"
+msgid "A searchable map and list of your locations."
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block keyword"
+msgid "map"
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block keyword"
+msgid "locations"
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block keyword"
+msgid "finder"
+msgstr ""
+
+#: blocks/finder/block.json
+msgctxt "block keyword"
+msgid "directory"
+msgstr ""

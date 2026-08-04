@@ -1,0 +1,462 @@
+/**
+ * wp-admin styles: the Fields screen and the location meta box.
+ *
+ * Unlike the front-end stylesheet, this one is allowed to have opinions —
+ * wp-admin is a known environment with a stable design system, and matching it
+ * is the goal rather than something to avoid.
+ */
+
+/* ─── Fields screen: reorder lists ─────────────────────────────────────── */
+
+.lfndr-orders__cols {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	margin-bottom: 12px;
+}
+
+.lfndr-order h3 {
+	margin: 0 0 8px;
+}
+
+.lfndr-order__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.lfndr-order__item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 8px 10px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.lfndr-order__item:last-child {
+	border-bottom: 0;
+}
+
+.lfndr-order__label {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.lfndr-order__key {
+	flex: 0 0 auto;
+	font-size: 11px;
+	color: #646970;
+	background: transparent;
+}
+
+.lfndr-order__buttons {
+	flex: 0 0 auto;
+	display: flex;
+	gap: 4px;
+}
+
+.lfndr-order__buttons button {
+	min-width: 30px;
+}
+
+/* The grip is decorative — the buttons are the affordance. It exists so the
+   rows read as a reorderable list at a glance rather than as a table. */
+.lfndr-order__grip {
+	flex: 0 0 auto;
+	width: 10px;
+	height: 16px;
+	opacity: 0.35;
+	background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+	background-size: 5px 5px;
+}
+
+/* Everything below the divider is defined but not shown on this surface.
+   Dimming it says that without needing a second list or a legend. */
+.lfndr-order__divider {
+	padding: 6px 10px;
+	border-top: 1px solid #c3c4c7;
+	border-bottom: 1px solid #f0f0f1;
+	background: #f6f7f7;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #646970;
+}
+
+.lfndr-order__divider ~ .lfndr-order__item {
+	opacity: 0.6;
+}
+
+/* ─── Fields screen: misc ──────────────────────────────────────────────── */
+
+.lfndr-pill {
+	display: inline-block;
+	padding: 1px 7px;
+	border: 1px solid #c3c4c7;
+	border-radius: 9px;
+	font-size: 11px;
+	line-height: 1.6;
+	color: #50575e;
+	vertical-align: middle;
+}
+
+.lfndr-retired__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.lfndr-erase {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.lfndr-setting {
+	margin: 0 0 12px;
+}
+
+.lfndr-setting:last-child {
+	margin-bottom: 0;
+}
+
+/* ─── Location meta box ────────────────────────────────────────────────── */
+
+.lfndr-metabox .form-table th {
+	width: 180px;
+}
+
+.lfndr-section {
+	border-top: 1px solid #f0f0f1;
+	padding-top: 4px;
+}
+
+.lfndr-section > summary {
+	cursor: pointer;
+	padding: 10px 0;
+	font-weight: 600;
+}
+
+.lfndr-checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 18px;
+}
+
+.lfndr-req {
+	color: #b32d2e;
+}
+
+/* ─── Address composite ────────────────────────────────────────────────── */
+
+.lfndr-address__search {
+	position: relative;
+	margin: 0 0 4px;
+}
+
+.lfndr-address__status {
+	margin-left: 8px;
+	font-style: italic;
+	color: #646970;
+}
+
+.lfndr-address__results {
+	list-style: none;
+	margin: 0 0 12px;
+	padding: 0;
+	max-width: 25em;
+	max-height: 260px;
+	overflow-y: auto;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.lfndr-address__results li {
+	margin: 0;
+	padding: 6px 10px;
+	cursor: pointer;
+	font-size: 13px;
+	line-height: 1.5;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.lfndr-address__results li:last-child {
+	border-bottom: 0;
+}
+
+.lfndr-address__results li:hover,
+.lfndr-address__results li.is-active {
+	background: #f0f6fc;
+}
+
+.lfndr-address__grid {
+	display: grid;
+	gap: 0 16px;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	max-width: 46em;
+}
+
+.lfndr-address__part {
+	margin: 0 0 10px;
+}
+
+.lfndr-address__part input {
+	width: 100%;
+}
+
+/* The street line is the long one; give it the full row. */
+.lfndr-address__part--line1 {
+	grid-column: 1 / -1;
+}
+
+.lfndr-subfields {
+	margin: 0 0 14px;
+	max-width: 46em;
+}
+
+/* ─── Repeaters (hours, closures) ──────────────────────────────────────── */
+
+.lfndr-repeater__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 8px;
+	padding: 6px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.lfndr-repeater__row:last-child {
+	border-bottom: 0;
+}
+
+.lfndr-repeater__grow {
+	flex: 1 1 14em;
+	min-width: 12em;
+}
+
+.lfndr-repeater__grow input {
+	width: 100%;
+}
+
+.lfndr-repeater__sep {
+	color: #646970;
+}
+
+.lfndr-repeater__remove {
+	margin-left: auto;
+	color: #b32d2e;
+}
+
+.lfndr-inline {
+	display: inline-block;
+	margin-right: 16px;
+}
+
+.lfndr-subfields td,
+.lfndr-subfields th {
+	padding: 6px 8px;
+}
+
+.lfndr-warn {
+	color: #996800;
+}
+
+/* ─── Preset picker ─────────────────────────────────────────────────────── */
+
+/* A grid of wireframes rather than a dropdown. Fifteen sets is too many to
+   choose between by name — "Coast" and "Lagoon" are both teal and only one of
+   them is dark — and the whole decision is a visual one. */
+.lfndr-presets {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 12px;
+	max-width: 1000px;
+	margin: 1em 0 1.5em;
+	padding: 0;
+	border: 0;
+}
+
+.lfndr-preset {
+	display: block;
+	padding: 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #fff;
+	cursor: pointer;
+}
+
+.lfndr-preset:hover {
+	border-color: #8c8f94;
+}
+
+/* The radio itself is redundant once the whole card is the target, but it stays
+   in the DOM: it is what carries the choice to the form and what a screen
+   reader and the keyboard actually operate. */
+.lfndr-preset input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+}
+
+/* ── Which one is selected ────────────────────────────────────────────────
+   Two rules that say the same thing, and the order matters.
+
+   The sibling rules come first and are the ones that carry the feature. They
+   mark the THUMB rather than the card, because a sibling combinator can only
+   reach forward from the input and the card is its parent. That is a real
+   constraint, not a preference — but it is a survivable one, since the thumb is
+   the part the eye is on anyway.
+
+   The :has() rules that follow move the same emphasis out to the card edge,
+   which reads better. They are pure enhancement: Firefox before 121 and Safari
+   before 15.4 ignore the block entirely and still show a clearly selected
+   thumb. This used to be :has()-only, which meant those browsers showed no
+   selected state at all — fifteen identical cards and no way to tell which one
+   was active. An indicator with no fallback is not an indicator. */
+.lfndr-preset input:checked ~ .lfndr-preset__thumb {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 2px #2271b1;
+}
+
+/* Keyboard focus has to be visible even though the control it belongs to is
+   not — without this, tabbing through fifteen options shows nothing at all. */
+.lfndr-preset input:focus-visible ~ .lfndr-preset__thumb {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.lfndr-preset:has( input:checked ) {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.lfndr-preset:has( input:focus-visible ) {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.lfndr-preset__thumb {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	height: 92px;
+	padding: 7px;
+	overflow: hidden;
+	border: 1px solid rgb(0 0 0 / .08);
+}
+
+.lfndr-preset__thumb--none {
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	border-style: dashed;
+	color: #646970;
+	font-size: 11px;
+	background: #f6f7f7;
+}
+
+.lfndr-preset__name {
+	display: block;
+	margin-top: 7px;
+	font-weight: 600;
+	font-size: 12px;
+}
+
+.lfndr-preset__note {
+	display: block;
+	margin-top: 2px;
+	color: #646970;
+	font-size: 11px;
+	line-height: 1.35;
+}
+
+/* The fields are behind a disclosure — see lfndr_settings_screen(). Styled as a
+   quiet row rather than a heading, so it reads as "there is more here if you
+   want it" rather than as the next section to fill in. */
+.lfndr-fine-tune {
+	margin: 1.5em 0;
+	border-top: 1px solid #dcdcde;
+}
+
+.lfndr-fine-tune > summary {
+	padding: 12px 0;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.lfndr-fine-tune > summary:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+/* ─── Color fields ──────────────────────────────────────────────────────── */
+
+.lfndr-color-field {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+}
+
+/* Sized and positioned to read as belonging to the box beside it rather than
+   as a second control. Native rather than wp-color-picker — see the note in
+   lfndr_render_appearance_field() for why these fields cannot use it. */
+.lfndr-color-field__swatch {
+	flex: 0 0 auto;
+	width: 34px;
+	height: 30px;
+	padding: 2px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	cursor: pointer;
+}
+
+.lfndr-color-field__swatch:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 1px;
+}
+
+/* ── Third-party terms of use ─────────────────────────────────────────────
+   Not a validation error and not a warning about something the admin did
+   wrong, so it deliberately avoids the red WordPress uses for those. It is a
+   condition attached to a legitimate choice — amber, readable, and impossible
+   to mistake for the descriptive note it sits next to. */
+.lfndr-terms {
+	/* Same amber as .lfndr-warn above. Two shades of "caution" a few hex digits
+	   apart would read as two different severities and mean nothing. */
+	color: #996800;
+	font-style: normal;
+}
+
+.lfndr-terms--active {
+	max-width: 46em;
+	margin: .75em 0 0;
+	padding: .6em .8em;
+	border-left: 4px solid #dba617;
+	background: #fcf9e8;
+}
+
+.lfndr-terms--active a {
+	white-space: nowrap;
+}
+
+@media ( prefers-color-scheme: dark ) {
+	/* wp-admin is not dark by default, but plugins and browser extensions do
+	   darken it, and #fcf9e8 under a dark scheme is a white slab. */
+	.lfndr-terms { color: #f0c33c; }
+
+	.lfndr-terms--active {
+		background: rgb( 219 166 23 / .12 );
+	}
+}

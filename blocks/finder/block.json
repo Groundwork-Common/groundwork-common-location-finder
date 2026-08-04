@@ -1,0 +1,55 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "location-finder/finder",
+	"title": "Location Finder",
+	"category": "widgets",
+	"icon": "location-alt",
+	"description": "A searchable map and list of your locations.",
+	"textdomain": "location-finder",
+	"keywords": [
+		"map",
+		"locations",
+		"finder",
+		"directory"
+	],
+	"attributes": {
+		"showMap": {
+			"type": "boolean",
+			"default": true
+		},
+		"height": {
+			"type": "number",
+			"default": 0
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		},
+		"html": false,
+		"multiple": true
+	},
+	"editorScript": "file:./edit.js",
+	"render": "file:./render.php",
+	"style": "lfndr-finder",
+	"viewScript": "lfndr-finder"
+}
