@@ -7,9 +7,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/*
+ * The Settings API page slug: what add_settings_section() files sections
+ * under and do_settings_sections() reads them back from. It is NOT a menu
+ * page — the Appearance tab of the one real screen renders these — and the
+ * submenu that used to carry this slug was removed once the tabs landed.
+ */
 const LFNDR_SETTINGS_PAGE = 'lfndr-settings';
 
-add_action( 'admin_menu', 'lfndr_settings_menu' );
 add_action( 'admin_init', 'lfndr_register_settings' );
 
 /* ── Why this is a plain settings screen and Fields is not ───────────────────
@@ -44,20 +49,6 @@ add_action( 'admin_init', 'lfndr_register_settings' );
  * theme" — but it is no longer this plugin imposing a look; it is what an
  * admin explicitly typed into a field, on a field left blank by default.
  * ─────────────────────────────────────────────────────────────────────────── */
-
-/**
- * Register the Settings submenu.
- */
-function lfndr_settings_menu(): void {
-	add_submenu_page(
-		'edit.php?post_type=' . LFNDR_POST_TYPE,
-		__( 'Location Finder Settings', 'groundwork-common-location-finder' ),
-		__( 'Settings', 'groundwork-common-location-finder' ),
-		'manage_options',
-		LFNDR_SETTINGS_PAGE,
-		'lfndr_settings_screen'
-	);
-}
 
 /**
  * The settings screen's sections, in display order.
