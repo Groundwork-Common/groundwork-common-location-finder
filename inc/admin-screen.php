@@ -126,6 +126,50 @@ function lfndr_admin_screen(): void {
 	<?php
 }
 
+add_filter( 'admin_footer_text', 'lfndr_admin_footer_text' );
+
+/**
+ * Replace the admin footer line on this plugin's own screens.
+ *
+ * Where WordPress already says "Thank you for creating with WordPress" — the
+ * bottom of the page, quiet, expected, and out of the way of the work. That is
+ * the whole reason it goes here and not above the locations list: somebody
+ * scanning a list of records to find one is not the person to interrupt, and
+ * they would see a panel there dozens of times a week.
+ *
+ * Scoped to our screens: the locations list, the location editor, and the
+ * settings screen. Rewriting core's footer on somebody else's page would be
+ * exactly the kind of reach the directory guidelines are about, and it is a
+ * one-line change away from being that, so the check is deliberately narrow —
+ * an unrecognised screen returns the text untouched.
+ *
+ * @param string $text The existing footer text.
+ * @return string
+ */
+function lfndr_admin_footer_text( $text ) {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen ) {
+		return $text;
+	}
+
+	$ours = LFNDR_POST_TYPE === $screen->post_type
+		|| false !== strpos( (string) $screen->id, LFNDR_FIELDS_PAGE );
+
+	if ( ! $ours ) {
+		return $text;
+	}
+
+	return sprintf(
+		/* translators: %s: Groundwork Common, linked to the company site. */
+		esc_html__( 'Built by %s — technology leadership and support for nonprofits.', 'groundwork-common-location-finder' ),
+		sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( LFNDR_GWC_URL ),
+			esc_html__( 'Groundwork Common', 'groundwork-common-location-finder' )
+		)
+	);
+}
+
 /* ── Collapsing the colophon ──────────────────────────────────────────────────
  * Collapsible, never dismissible. A permanent "never show again" turns the
  * panel into something to be got rid of once and then forgotten, which is both
@@ -298,7 +342,7 @@ function lfndr_render_colophon(): void {
 
 			printf(
 				/* translators: %s: Groundwork Common, linked to the company site. */
-				esc_html__( '%s provides technology leadership and support for nonprofits — fractional, by the project, or alongside your team. We release tools like this one because good technology work should leave an organization more capable, not more dependent on whoever built it.', 'groundwork-common-location-finder' ),
+				esc_html__( '%s provides technology leadership and support for nonprofits — fractional, by the project, or alongside an in-house team. We release tools like this one because good technology work should leave an organization more capable, not more dependent on whoever built it.', 'groundwork-common-location-finder' ),
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- assembled directly above from esc_url() and esc_html__().
 				$lfndr_gwc_link
 			);
