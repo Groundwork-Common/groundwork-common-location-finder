@@ -1,0 +1,107 @@
+name: Leaflet version check
+
+# Leaflet is vendored, so nothing tells us when a new release lands — no
+# package manager, no lockfile, no Dependabot. That is the accepted cost of
+# shipping a plugin with no build step, and this is the thing that pays it:
+# once a month, ask npm what the current stable is and open an issue if the
+# copy in assets/leaflet/ is behind.
+#
+# Deliberately does NOT open a pull request. Updating Leaflet means replacing
+# a minified bundle, its stylesheet and five images, then re-checking the SRI
+# hashes and the version string in inc/enqueue.php — see LeafletVersionTest.
+# A bot cannot verify that it did that correctly, so it just says something is
+# available and leaves the judgement to a person.
+
+on:
+  schedule:
+    # 07:00 UTC on the 1st. No urgency — a Leaflet release is not a fire.
+    - cron: '0 7 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the vendored version
+        id: vendored
+        run: |
+          # Leaflet's own runtime version, not the banner comment: this is the
+          # value the library reports about itself, so it cannot disagree with
+          # what actually ships.
+          version=$(grep -oE 't\.version="[0-9]+\.[0-9]+\.[0-9]+"' assets/leaflet/leaflet.js \
+            | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          if [ -z "$version" ]; then
+            echo "Could not determine the vendored Leaflet version." >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Vendored: $version"
+
+      - name: Ask npm for the current stable
+        id: upstream
+        run: |
+          # The 'latest' dist-tag specifically. Sorting the version list would
+          # pick up 2.0.0-alpha, which is exactly what must NOT trigger this.
+          version=$(curl -fsSL https://registry.npmjs.org/leaflet \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin)["dist-tags"]["latest"])')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Upstream stable: $version"
+
+      - name: Make sure the label exists
+        if: steps.vendored.outputs.version != steps.upstream.outputs.version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # `gh issue create --label` is a hard error when the label is missing,
+          # so the whole job would fail on a fresh repo with nothing to show for
+          # it. Created here rather than assumed to exist.
+          gh label create dependencies \
+            --description "Vendored or external dependency updates" \
+            --color 0366d6 2>/dev/null || echo "Label already present."
+
+      - name: Open an issue if we are behind
+        if: steps.vendored.outputs.version != steps.upstream.outputs.version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VENDORED: ${{ steps.vendored.outputs.version }}
+          UPSTREAM: ${{ steps.upstream.outputs.version }}
+        run: |
+          title="Leaflet $UPSTREAM is available (vendored: $VENDORED)"
+
+          # One issue per upstream version. Without this the job files a
+          # duplicate every month until somebody acts on it, and a tracker that
+          # cries monthly gets muted.
+          if gh issue list --state open --search "$title in:title" --json title \
+             | grep -qF "$title"; then
+            echo "Already tracked."
+            exit 0
+          fi
+
+          gh issue create --title "$title" --label dependencies --body "$(cat <<EOF
+\`assets/leaflet/\` has **$VENDORED**; npm's \`latest\` dist-tag is now **$UPSTREAM**.
+
+Updating means replacing the vendored files by hand — there is no build step:
+
+1. Download the release from https://github.com/Leaflet/Leaflet/releases
+2. Replace \`leaflet.js\`, \`leaflet.css\` and \`assets/leaflet/images/\`
+3. Check the files against the published SRI hashes on https://leafletjs.com/download.html
+4. Update the version string in \`inc/enqueue.php\` — it is the cache buster, and
+   \`LeafletVersionTest\` fails if it disagrees with the bundle
+5. Update the version and the release link in \`readme.txt\`
+6. Run the test suite
+
+**If \$UPSTREAM is a 2.x release, stop and read this first.** Leaflet 2 is
+ESM-only and drops the UMD build. This plugin registers Leaflet as a classic
+script and uses \`window.L\` throughout, so 2.x is a migration, not an update —
+it needs \`wp_enqueue_script_module()\` (raising the WordPress floor to 6.5) or
+an import-map shim. Do not treat it as a routine bump.
+
+_Opened automatically by \`.github/workflows/leaflet-version-check.yml\`._
+EOF
+)"

@@ -2,6 +2,7 @@
 # `wp dist-archive .` reads this file.
 .git
 .gitignore
+.github
 .distignore
 .wp-env.json
 .wp-env.override.json
