@@ -370,8 +370,8 @@ function lfndr_option_fields(): array {
 			'tab'     => 'behavior',
 			'section' => 'results',
 			'type'    => 'bool',
-			'label'   => __( 'Offer sorting by distance', 'groundwork-common-location-finder' ),
-			'help'    => __( 'Lets a visitor share their location to sort the results by how near they are. Off removes it entirely.', 'groundwork-common-location-finder' ),
+			'label'   => __( 'Let visitors find what is nearest', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Adds a locate button to the map. Pressing it asks the browser for the visitor’s location, sorts the results by distance and shows how far each one is. Nothing is sent anywhere — the coordinates are used in the browser and never leave it. Needs the map, so it has no effect where the finder is set to show the list only.', 'groundwork-common-location-finder' ),
 		),
 		'tile_consent'       => array(
 			'tab'     => 'behavior',
@@ -622,31 +622,27 @@ function lfndr_render_option_tab( string $tab ): void {
 	);
 	?>
 	<?php
-	/* The roles live on the schema, not in the settings option, so they cannot
-	 * ride this form — the Settings API would post them to options.php and drop
-	 * them on the floor. Their own form with its own Save is the honest
-	 * arrangement: two different things are being written, and the screen says
-	 * so rather than implying one button saves both. */
-	if ( isset( $sections['roles'] ) ) :
-		?>
-		<h2><?php echo esc_html( $sections['roles']['title'] ); ?></h2>
-		<p class="description" style="max-width:44em"><?php echo esc_html( $sections['roles']['intro'] ); ?></p>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-			<input type="hidden" name="action" value="lfndr_save_roles" />
-			<?php
-			wp_nonce_field( 'lfndr_save_roles' );
-			lfndr_render_roles_fields();
-			submit_button( __( 'Save', 'groundwork-common-location-finder' ), 'secondary' );
-			?>
-		</form>
-		<hr />
-		<?php
-		unset( $sections['roles'] );
-	endif;
 	?>
 
 	<form method="post" action="options.php">
 		<?php settings_fields( 'lfndr_settings_group' ); ?>
+
+		<?php
+		/* The roles live on the schema rather than in lfndr_settings, and used
+		 * to have their own form and their own Save because of it. That put two
+		 * save buttons on one tab with nothing saying which covered what — the
+		 * storage layout showing through the UI. They now ride this form under
+		 * a _roles key and lfndr_sanitize_settings() writes them where they
+		 * belong, the same way _apply_preset already worked. */
+		if ( isset( $sections['roles'] ) ) :
+			?>
+			<h2><?php echo esc_html( $sections['roles']['title'] ); ?></h2>
+			<p class="description" style="max-width:44em"><?php echo esc_html( $sections['roles']['intro'] ); ?></p>
+			<?php
+			lfndr_render_roles_fields();
+			unset( $sections['roles'] );
+		endif;
+		?>
 		<?php /* Marks the tab as submitted — the only way to tell an unchecked
 		         box from a field that was never on screen. */ ?>
 		<input type="hidden" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_tab_<?php echo esc_attr( $tab ); ?>]" value="1" />

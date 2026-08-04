@@ -1320,6 +1320,14 @@ function lfndr_sanitize_settings( $raw ): array {
 	/* Never stored: it is a verb, not a setting. */
 	unset( $out['_apply_preset'] );
 
+	/* Primary roles live on the schema, not here. They ride this form so the
+	 * Behavior tab has one Save rather than two, and are written to their real
+	 * home before the key is dropped. */
+	if ( isset( $raw['_roles'] ) ) {
+		lfndr_save_primary_roles( $raw['_roles'] );
+	}
+	unset( $out['_roles'] );
+
 	/* Everything that is not about appearance — see inc/admin-screen.php. */
 	$out = lfndr_sanitize_option_fields( $raw, $out );
 

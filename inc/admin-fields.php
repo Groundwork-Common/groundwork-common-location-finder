@@ -11,7 +11,6 @@ const LFNDR_FIELDS_PAGE = 'lfndr-fields';
 
 add_action( 'admin_post_lfndr_save_field', 'lfndr_handle_save_field' );
 add_action( 'admin_post_lfndr_save_orders', 'lfndr_handle_save_orders' );
-add_action( 'admin_post_lfndr_save_roles', 'lfndr_handle_save_roles' );
 add_action( 'admin_post_lfndr_retire_field', 'lfndr_handle_retire_field' );
 add_action( 'admin_post_lfndr_restore_field', 'lfndr_handle_restore_field' );
 add_action( 'admin_post_lfndr_erase_field', 'lfndr_handle_erase_field' );
@@ -250,7 +249,7 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 			<tr>
 				<th scope="row"><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $role['label'] ); ?></label></th>
 				<td>
-					<select id="<?php echo esc_attr( $id ); ?>" name="roles[<?php echo esc_attr( $type ); ?>]">
+					<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_roles][<?php echo esc_attr( $type ); ?>]">
 						<option value=""><?php esc_html_e( '— none —', 'groundwork-common-location-finder' ); ?></option>
 						<?php foreach ( $candidates as $candidate ) : ?>
 							<option value="<?php echo esc_attr( $candidate['key'] ); ?>" <?php selected( $current, $candidate['key'] ); ?>>
@@ -268,30 +267,40 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 }
 
 /**
- * Save the roles panel.
+ * Write the primary-role choices that rode in on the settings form.
+ *
+ * These belong to the schema, not to lfndr_settings, so they used to have their
+ * own <form> and their own Save. That was honest about the storage and confusing
+ * on screen: one tab, two save buttons, and no way to tell which covered what.
+ *
+ * They now travel as a transient `_roles` key on the settings POST — the same
+ * arrangement `_apply_preset` already uses — and this writes them where they
+ * actually live. The sanitizer strips the key afterwards so nothing extra is
+ * stored in the option.
+ *
+ * @param mixed $raw The submitted _roles array, from anywhere.
  */
-function lfndr_handle_save_roles(): void {
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_save_roles' );
+function lfndr_save_primary_roles( $raw ): void {
+	if ( ! is_array( $raw ) ) {
+		return;
+	}
 
-	$schema = lfndr_get_schema();
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- unslashed here, and every value it yields goes through sanitize_key() in the loop below before it reaches the schema.
-	$raw    = isset( $_POST['roles'] ) && is_array( $_POST['roles'] ) ? wp_unslash( $_POST['roles'] ) : array();
+	$schema  = lfndr_get_schema();
+	$primary = $schema['primary'];
 
 	/* Only the roles the form actually rendered are touched. A type with no
 	 * fields yet renders no row, and a blanket overwrite would clear a role
 	 * that is simply not on screen. */
-	$primary = $schema['primary'];
 	foreach ( lfndr_primary_roles() as $type ) {
 		if ( array_key_exists( $type, $raw ) ) {
 			$primary[ $type ] = sanitize_key( (string) $raw[ $type ] );
 		}
 	}
+
 	$schema['primary'] = $primary;
 
 	// lfndr_sanitize_primary_roles() clears anything that does not resolve.
 	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
-	lfndr_fields_redirect( 'roles_saved', array( 'tab' => 'behavior' ) );
 }
 
 /* ── Order form ─────────────────────────────────────────────────────────── */
@@ -319,7 +328,7 @@ function lfndr_render_order_form( array $schema ): void {
 			?>
 		</div>
 
-		<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save display order', 'groundwork-common-location-finder' ); ?></button></p>
+		<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save Changes', 'groundwork-common-location-finder' ); ?></button></p>
 	</form>
 	<?php
 }
@@ -674,7 +683,7 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 			</table>
 
 			<p class="submit">
-				<button type="submit" class="button button-primary"><?php echo esc_html( $editing ? __( 'Save field', 'groundwork-common-location-finder' ) : __( 'Add field', 'groundwork-common-location-finder' ) ); ?></button>
+				<button type="submit" class="button button-primary"><?php echo esc_html( $editing ? __( 'Save Changes', 'groundwork-common-location-finder' ) : __( 'Add Field', 'groundwork-common-location-finder' ) ); ?></button>
 				<a class="button button-secondary" href="<?php echo esc_url( lfndr_fields_url() ); ?>"><?php esc_html_e( 'Cancel', 'groundwork-common-location-finder' ); ?></a>
 			</p>
 		</form>
