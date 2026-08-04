@@ -54,7 +54,17 @@ function lfndr_setting_defaults(): array {
 		'geo_countries'      => '',
 		'geo_viewbox'        => '',
 		'geo_bounded'        => false,
-		'geo_email'          => '',
+		/* Pre-filled with the site's admin email rather than left blank, so the
+		 * field shows the address that will be sent instead of making somebody
+		 * work out that an empty box still identifies them.
+		 *
+		 * This is a starting value, not a mirror. Once saved it is an ordinary
+		 * setting and stops following Settings → General — which is the point:
+		 * the address the lookup service sees should change when somebody
+		 * decides it should, not because an unrelated field moved. Clearing it
+		 * falls back to the admin email again, so there is no way to end up
+		 * sending nothing. */
+		'geo_email'          => (string) get_option( 'admin_email' ),
 
 		/* Appearance, set from Locations → Settings (see inc/admin-settings.php
 		 * for how each is used — some are CSS custom-property overrides, some
