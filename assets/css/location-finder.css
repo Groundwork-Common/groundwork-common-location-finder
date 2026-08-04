@@ -1178,12 +1178,6 @@ html.lfndr-scroll-lock {
 	background: color-mix(in srgb, currentColor 8%, transparent);
 }
 
-.lfndr-badges {
-	display: inline-flex;
-	flex-wrap: wrap;
-	gap: var(--lfndr-space-2);
-}
-
 /* ── A status is not a control ─────────────────────────────────────────────
    "Open today" was a bordered pill, which is the shape this file uses for
    things you press — so it invited a click that does nothing, and sat in a card

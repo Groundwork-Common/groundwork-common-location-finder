@@ -2,29 +2,26 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Location Finder 0.1.0\n"
+"Project-Id-Version: Groundwork Common Location Finder 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/location-finder\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T20:45:19+00:00\n"
+"POT-Creation-Date: 2026-08-04T21:29:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: location-finder\n"
 
 #. Plugin Name of the plugin
 #: location-finder.php
-#: inc/admin-screen.php:65
-#: inc/admin-screen.php:96
-#: blocks/finder/edit.js:93
-msgid "Location Finder"
+msgid "Groundwork Common Location Finder"
 msgstr ""
 
 #. Plugin URI of the plugin
 #: location-finder.php
-msgid "https://github.com/willsansbury/location-finder"
+msgid "https://github.com/Groundwork-Common/location-finder"
 msgstr ""
 
 #. Description of the plugin
@@ -43,7 +40,7 @@ msgid "https://groundworkcommon.com"
 msgstr ""
 
 #: inc/admin-fields.php:43
-#: inc/admin-fields.php:721
+#: inc/admin-fields.php:737
 msgid "You do not have permission to configure location fields."
 msgstr ""
 
@@ -155,8 +152,8 @@ msgid "While one of these is active the location never reads as open, and the ho
 msgstr ""
 
 #: inc/admin-fields.php:254
-#: inc/field-types.php:688
-#: inc/field-types.php:752
+#: inc/field-types.php:673
+#: inc/field-types.php:737
 msgid "— none —"
 msgstr ""
 
@@ -214,7 +211,7 @@ msgstr ""
 
 #: inc/admin-fields.php:434
 #: inc/cpt.php:109
-#: assets/js/location-finder.js:1558
+#: assets/js/location-finder.js:1559
 msgid "Coordinates"
 msgstr ""
 
@@ -368,59 +365,59 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: inc/admin-fields.php:962
+#: inc/admin-fields.php:978
 msgid "Field added."
 msgstr ""
 
-#: inc/admin-fields.php:963
+#: inc/admin-fields.php:979
 msgid "Field saved."
 msgstr ""
 
-#: inc/admin-fields.php:964
+#: inc/admin-fields.php:980
 msgid "Field retired. Its data is still there — restore it any time."
 msgstr ""
 
-#: inc/admin-fields.php:965
+#: inc/admin-fields.php:981
 msgid "Field restored, with everything it had recorded."
 msgstr ""
 
-#: inc/admin-fields.php:966
+#: inc/admin-fields.php:982
 msgid "Field and all of its data permanently deleted."
 msgstr ""
 
-#: inc/admin-fields.php:967
+#: inc/admin-fields.php:983
 msgid "Display order saved."
 msgstr ""
 
-#: inc/admin-fields.php:968
+#: inc/admin-fields.php:984
 msgid "Behavior saved."
 msgstr ""
 
-#: inc/admin-fields.php:969
+#: inc/admin-fields.php:985
 msgid "A field needs a label."
 msgstr ""
 
-#: inc/admin-fields.php:970
+#: inc/admin-fields.php:986
 msgid "That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores."
 msgstr ""
 
-#: inc/admin-fields.php:971
+#: inc/admin-fields.php:987
 msgid "A field with that key already exists."
 msgstr ""
 
-#: inc/admin-fields.php:972
+#: inc/admin-fields.php:988
 msgid "A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data."
 msgstr ""
 
-#: inc/admin-fields.php:973
+#: inc/admin-fields.php:989
 msgid "That field type is not available. If it came from another plugin, that plugin may be deactivated."
 msgstr ""
 
-#: inc/admin-fields.php:974
+#: inc/admin-fields.php:990
 msgid "Nothing was deleted: type DELETE in the box to confirm."
 msgstr ""
 
-#: inc/admin-fields.php:975
+#: inc/admin-fields.php:991
 msgid "That field no longer exists."
 msgstr ""
 
@@ -435,6 +432,12 @@ msgstr ""
 
 #: inc/admin-screen.php:43
 msgid "Advanced"
+msgstr ""
+
+#: inc/admin-screen.php:65
+#: inc/admin-screen.php:96
+#: blocks/finder/edit.js:93
+msgid "Location Finder"
 msgstr ""
 
 #: inc/admin-screen.php:66
@@ -637,7 +640,7 @@ msgid "Where the map opens"
 msgstr ""
 
 #: inc/admin-screen.php:339
-#: assets/js/location-finder.js:1569
+#: assets/js/location-finder.js:1570
 msgid "Directions"
 msgstr ""
 
@@ -1204,8 +1207,8 @@ msgid "Not on the map"
 msgstr ""
 
 #: inc/cpt.php:172
-#: inc/render.php:405
-#: assets/js/location-finder.js:1760
+#: inc/render.php:406
+#: assets/js/location-finder.js:1761
 msgid "Yes"
 msgstr ""
 
@@ -1254,7 +1257,7 @@ msgid "%s is no longer shown here."
 msgstr ""
 
 #: inc/facets.php:140
-#: assets/js/location-finder.js:1530
+#: assets/js/location-finder.js:1531
 msgid "Open today"
 msgstr ""
 
@@ -1592,101 +1595,101 @@ msgstr ""
 msgid "Choice (many)"
 msgstr ""
 
-#: inc/field-types.php:331
-#: inc/field-types.php:379
+#: inc/field-types.php:315
+#: inc/field-types.php:364
 msgid "Maximum length"
 msgstr ""
 
-#: inc/field-types.php:332
-#: inc/field-types.php:380
+#: inc/field-types.php:316
+#: inc/field-types.php:365
 msgid "Leave at 0 for no limit."
 msgstr ""
 
-#: inc/field-types.php:375
+#: inc/field-types.php:360
 msgid "Rows"
 msgstr ""
 
-#: inc/field-types.php:433
+#: inc/field-types.php:418
 msgid "Link text"
 msgstr ""
 
-#: inc/field-types.php:435
+#: inc/field-types.php:420
 msgid "Domain only (example.org)"
 msgstr ""
 
-#: inc/field-types.php:436
+#: inc/field-types.php:421
 msgid "Full URL"
 msgstr ""
 
-#: inc/field-types.php:437
+#: inc/field-types.php:422
 msgid "The field label"
 msgstr ""
 
-#: inc/field-types.php:486
+#: inc/field-types.php:471
 msgid "Render as a clickable mailto: link"
 msgstr ""
 
-#: inc/field-types.php:531
+#: inc/field-types.php:516
 msgid "Render as a clickable tel: link"
 msgstr ""
 
-#: inc/field-types.php:532
+#: inc/field-types.php:517
 msgid "Show a \"Call\" button on small screens"
 msgstr ""
 
-#: inc/field-types.php:591
+#: inc/field-types.php:576
 msgid "Minimum"
 msgstr ""
 
-#: inc/field-types.php:592
+#: inc/field-types.php:577
 msgid "Maximum"
 msgstr ""
 
-#: inc/field-types.php:593
+#: inc/field-types.php:578
 msgid "Decimal places"
 msgstr ""
 
-#: inc/field-types.php:594
+#: inc/field-types.php:579
 msgid "Suffix"
 msgstr ""
 
-#: inc/field-types.php:594
+#: inc/field-types.php:579
 msgid "Shown after the number, e.g. \" seats\"."
 msgstr ""
 
-#: inc/field-types.php:662
+#: inc/field-types.php:647
 msgid "Label when true"
 msgstr ""
 
-#: inc/field-types.php:662
+#: inc/field-types.php:647
 msgid "Defaults to the field label."
 msgstr ""
 
-#: inc/field-types.php:666
+#: inc/field-types.php:651
 msgid "Label when false"
 msgstr ""
 
-#: inc/field-types.php:667
+#: inc/field-types.php:652
 msgid "Leave empty to show nothing when false — which is usually what you want. A card that announces \"Not wheelchair accessible\" on every listing is rarely the goal."
 msgstr ""
 
-#: inc/field-types.php:756
+#: inc/field-types.php:741
 msgid "Default value"
 msgstr ""
 
-#: inc/field-types.php:757
+#: inc/field-types.php:742
 msgid "Allow no value"
 msgstr ""
 
-#: inc/field-types.php:761
+#: inc/field-types.php:746
 msgid "Only badge \"Open now\" when this value is set"
 msgstr ""
 
-#: inc/field-types.php:764
+#: inc/field-types.php:749
 msgid "For an access field: a listing that is appointment-only should never show as open, however its hours read."
 msgstr ""
 
-#: inc/field-types.php:838
+#: inc/field-types.php:823
 msgid "Filter chips for this field use AND: a visitor selecting two values sees only locations offering both."
 msgstr ""
 
@@ -1857,7 +1860,7 @@ msgstr ""
 
 #. translators: %s: number of locations.
 #: inc/render.php:81
-#: inc/render.php:656
+#: inc/render.php:657
 #, php-format
 msgid "%s location"
 msgid_plural "%s locations"
@@ -1880,141 +1883,141 @@ msgstr ""
 msgid "Any"
 msgstr ""
 
-#: inc/render.php:304
+#: inc/render.php:305
 msgid "Search by name"
 msgstr ""
 
 #. translators: %s: comma-separated list of field labels.
-#: inc/render.php:309
+#: inc/render.php:310
 #, php-format
 msgid "Search by name, %s"
 msgstr ""
 
-#: inc/render.php:333
+#: inc/render.php:334
 msgid "No locations have been added yet."
 msgstr ""
 
 #. translators: %s: number of locations.
-#: inc/render.php:658
+#: inc/render.php:659
 #, php-format
 msgid "%s locations"
 msgstr ""
 
-#: inc/render.php:660
+#: inc/render.php:661
 msgctxt "miles, abbreviated"
 msgid "mi"
 msgstr ""
 
-#: inc/render.php:661
+#: inc/render.php:662
 msgctxt "kilometers, abbreviated"
 msgid "km"
 msgstr ""
 
-#: assets/js/location-finder.js:395
+#: assets/js/location-finder.js:396
 msgid "Apply filters"
 msgstr ""
 
-#: assets/js/location-finder.js:521
-#: assets/js/location-finder.js:588
+#: assets/js/location-finder.js:522
+#: assets/js/location-finder.js:589
 msgid "Full screen"
 msgstr ""
 
-#: assets/js/location-finder.js:587
+#: assets/js/location-finder.js:588
 msgid "Exit full screen"
 msgstr ""
 
-#: assets/js/location-finder.js:625
+#: assets/js/location-finder.js:626
 msgid "Location finder"
 msgstr ""
 
-#: assets/js/location-finder.js:768
+#: assets/js/location-finder.js:769
 msgid "Location needs a secure (https) connection."
 msgstr ""
 
-#: assets/js/location-finder.js:772
+#: assets/js/location-finder.js:773
 msgid "Finding your location…"
 msgstr ""
 
-#: assets/js/location-finder.js:781
+#: assets/js/location-finder.js:782
 msgid "your location"
 msgstr ""
 
-#: assets/js/location-finder.js:794
+#: assets/js/location-finder.js:795
 msgid "Location access was blocked. You can still search by name."
 msgstr ""
 
-#: assets/js/location-finder.js:797
+#: assets/js/location-finder.js:798
 msgid "Your location could not be determined right now."
 msgstr ""
 
-#: assets/js/location-finder.js:800
+#: assets/js/location-finder.js:801
 msgid "Finding your location took too long. Try again."
 msgstr ""
 
-#: assets/js/location-finder.js:803
+#: assets/js/location-finder.js:804
 msgid "Your location is unavailable."
 msgstr ""
 
-#: assets/js/location-finder.js:815
+#: assets/js/location-finder.js:816
 msgid "Sorted by distance from you."
 msgstr ""
 
-#: assets/js/location-finder.js:970
+#: assets/js/location-finder.js:971
 msgid "Location"
 msgstr ""
 
-#: assets/js/location-finder.js:1407
+#: assets/js/location-finder.js:1408
 msgid "No locations match. Try removing a filter."
 msgstr ""
 
-#: assets/js/location-finder.js:1421
+#: assets/js/location-finder.js:1422
 msgid "Show all results"
 msgstr ""
 
-#: assets/js/location-finder.js:1529
+#: assets/js/location-finder.js:1530
 msgid "Open now"
 msgstr ""
 
-#: assets/js/location-finder.js:1531
-#: assets/js/location-finder.js:1864
+#: assets/js/location-finder.js:1532
+#: assets/js/location-finder.js:1865
 msgid "Temporarily closed"
 msgstr ""
 
-#: assets/js/location-finder.js:1570
+#: assets/js/location-finder.js:1571
 msgid "Get directions"
 msgstr ""
 
-#: assets/js/location-finder.js:1824
+#: assets/js/location-finder.js:1825
 msgid "More hours in the details"
 msgstr ""
 
-#: assets/js/location-finder.js:1865
+#: assets/js/location-finder.js:1866
 msgid "Closing soon"
 msgstr ""
 
-#: assets/js/location-finder.js:1947
+#: assets/js/location-finder.js:1948
 msgid "Back to all results"
 msgstr ""
 
-#: assets/js/location-finder.js:2101
-#: assets/js/location-finder.js:2102
+#: assets/js/location-finder.js:2105
+#: assets/js/location-finder.js:2106
 msgid "Show my location"
 msgstr ""
 
-#: assets/js/location-finder.js:2129
+#: assets/js/location-finder.js:2133
 #, js-format
 msgid "The map is loaded from %s. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2130
+#: assets/js/location-finder.js:2134
 msgid "The map is loaded from another website. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2135
+#: assets/js/location-finder.js:2139
 msgid "Show map"
 msgstr ""
 
-#: assets/js/location-finder.js:2143
+#: assets/js/location-finder.js:2147
 msgid "The list, search and filters work without it."
 msgstr ""
 

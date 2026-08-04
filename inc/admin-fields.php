@@ -716,6 +716,22 @@ function lfndr_options_from_text( string $text ): array {
  * @param string $nonce_action Nonce action.
  * @param string $nonce_field  Nonce field name.
  */
+/*
+ * Note for anyone reading a static-analysis report of this file:
+ *
+ * Every admin_post_ handler below opens with a call to this function, and this
+ * function is where the capability check and the nonce check live. PHPCS and
+ * Plugin Check cannot follow a nonce check through a helper — the sniff only
+ * recognises check_admin_referer() written literally inside the same function —
+ * so they report "Processing form data without nonce verification" against
+ * roughly thirty $_POST reads in this file. Every one of those is a false
+ * positive, and the guard below is the thing to check rather than take on
+ * trust.
+ *
+ * The guard is shared rather than inlined because a nonce check that is
+ * copy-pasted into a dozen handlers is a nonce check that will eventually be
+ * pasted into eleven.
+ */
 function lfndr_guard_admin_post( string $nonce_action, string $nonce_field = '_wpnonce' ): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'location-finder' ), '', array( 'response' => 403 ) );

@@ -14,7 +14,6 @@
 	 * a botched concatenation — returning the untranslated source string leaves
 	 * a working finder, while a TypeError here kills the whole boot. */
 	var __ = ( window.wp && window.wp.i18n && window.wp.i18n.__ ) || function ( s ) { return s; };
-	var _x = ( window.wp && window.wp.i18n && window.wp.i18n._x ) || function ( s ) { return s; };
 
 	/* Every __() call below repeats the text domain as a STRING LITERAL. That
 	 * looks like something a constant should fix, and it was a constant until

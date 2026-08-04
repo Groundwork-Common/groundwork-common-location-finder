@@ -274,6 +274,7 @@ function lfndr_render_facet_group( string $id, array $group ): void {
 				%2$s<span class="lfndr__chip-label">%3$s</span>%4$s
 			</button>',
 			esc_attr( $value['value'] ),
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lfndr_chip_box() takes no arguments and returns a fixed SVG literal.
 			lfndr_chip_box(),
 			esc_html( $value['label'] ),
 			null === $value['count']
