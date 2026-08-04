@@ -285,15 +285,21 @@ final class SchemaTest extends TestCase {
 		// which no writer could reach. Any caller that saved and then read in
 		// one request — WP-CLI, an importer, this test — got the old schema
 		// back, and a location save driven by it silently skipped the new field.
-		$this->assertSame( array(), lfndr_get_schema()['fields'] );
+		//
+		// Asserted against the starter schema rather than an empty one: what
+		// matters is that the read AFTER the write reflects the write, not what
+		// happened to be there first. An earlier version pinned the default to
+		// array(), which made this fail the day the plugin shipped with fields.
+		$before = array_column( lfndr_get_schema()['fields'], 'key' );
+		$this->assertNotContains( 'probe_key', $before );
 
 		lfndr_save_schema(
 			lfndr_sanitize_schema(
-				array( 'fields' => array( $this->field( 'phone', 'phone' ) ) )
+				array( 'fields' => array( $this->field( 'probe_key', 'phone' ) ) )
 			)
 		);
 
-		$this->assertSame( array( 'phone' ), array_column( lfndr_get_schema()['fields'], 'key' ) );
+		$this->assertSame( array( 'probe_key' ), array_column( lfndr_get_schema()['fields'], 'key' ) );
 	}
 
 	public function test_a_newer_schema_is_returned_untouched(): void {
