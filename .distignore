@@ -3,6 +3,7 @@
 .git
 .gitignore
 .github
+.wordpress-org
 .distignore
 .wp-env.json
 .wp-env.override.json
