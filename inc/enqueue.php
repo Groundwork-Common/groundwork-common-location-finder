@@ -124,10 +124,16 @@ function lfndr_admin_assets( string $hook ): void {
 	$is_editor = in_array( $hook, array( 'post.php', 'post-new.php' ), true )
 		&& $screen && LFNDR_POST_TYPE === $screen->post_type;
 
-	$is_fields   = $screen && false !== strpos( (string) $screen->id, LFNDR_FIELDS_PAGE );
-	$is_settings = $screen && false !== strpos( (string) $screen->id, LFNDR_SETTINGS_PAGE );
+	$is_fields = $screen && false !== strpos( (string) $screen->id, LFNDR_FIELDS_PAGE );
 
-	if ( ! $is_editor && ! $is_fields && ! $is_settings ) {
+	/* Which TAB, not which page. Appearance used to be its own submenu, and this
+	 * gate still matched on that page's slug after the tabs replaced it — so on
+	 * the Appearance tab the colour swatches silently had no script behind them,
+	 * while the orphaned page nobody was meant to reach still worked. Read the
+	 * tab, which is where the answer actually lives now. */
+	$is_settings = $is_fields && 'appearance' === lfndr_current_tab();
+
+	if ( ! $is_editor && ! $is_fields ) {
 		return;
 	}
 
