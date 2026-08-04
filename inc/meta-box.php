@@ -223,7 +223,8 @@ function lfndr_save_location( int $post_id ): void {
 	$raw     = isset( $_POST['lfndr_f'] ) && is_array( $_POST['lfndr_f'] ) ? wp_unslash( $_POST['lfndr_f'] ) : array();
 	$present = array();
 	if ( isset( $_POST['lfndr_present'] ) && is_array( $_POST['lfndr_present'] ) ) {
-		foreach ( array_keys( $_POST['lfndr_present'] ) as $key ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- keys only, sanitized on the next line.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- keys only, sanitized on the next line.
+		foreach ( array_keys( wp_unslash( $_POST['lfndr_present'] ) ) as $key ) {
 			$present[ sanitize_key( $key ) ] = true;
 		}
 	}

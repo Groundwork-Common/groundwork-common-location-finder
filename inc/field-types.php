@@ -162,22 +162,6 @@ function lfndr_field_types(): array {
 	return $types;
 }
 
-/**
- * Whether a type's admin control must emit a presence marker.
- *
- * See the long note in meta-box.php. Short version: a control that posts
- * nothing when empty is indistinguishable from a control that was never
- * rendered, and the difference between those two is data loss in one direction
- * or the other.
- *
- * @param string $type Type slug.
- * @return bool
- */
-function lfndr_type_needs_present( string $type ): bool {
-	$types = lfndr_field_types();
-	return ! empty( $types[ $type ]['needs_present'] );
-}
-
 /* ── Shared sanitizers and payload helpers ──────────────────────────────── */
 
 /**
@@ -345,6 +329,7 @@ function lfndr_schema_form_text( array $field ): void {
 function lfndr_admin_textarea( array $field, $value, string $name ): void {
 	printf(
 		'<textarea class="large-text" rows="%1$d" id="%2$s" name="%3$s" placeholder="%4$s">%5$s</textarea>',
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- an int cast printed through %d; the sniff cannot see through max().
 		max( 2, (int) ( $field['settings']['rows'] ?? 4 ) ),
 		esc_attr( 'lfndr-f-' . $field['key'] ),
 		esc_attr( $name ),

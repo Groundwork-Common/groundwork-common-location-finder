@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Location Finder
+ * Plugin Name:       Groundwork Common Location Finder
  * Plugin URI:        https://github.com/Groundwork-Common/location-finder
  * Description:       A map-and-list location finder whose fields you define yourself. Only the name and coordinates are built in; everything else is configured in wp-admin.
  * Version:           0.1.0
