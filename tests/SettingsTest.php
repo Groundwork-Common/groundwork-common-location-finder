@@ -535,6 +535,32 @@ final class SettingsTest extends TestCase {
 		$this->assertFalse( $out['near_me'] );
 	}
 
+	/* ── The lookup contact address ─────────────────────────────────────── */
+
+	public function test_the_lookup_contact_defaults_to_the_admin_email(): void {
+		// Pre-filled rather than blank, so the field shows the address that will
+		// actually be sent instead of an empty box that still identifies the
+		// site to the lookup service.
+		update_option( 'admin_email', 'admin@charity.org' );
+
+		$this->assertSame( 'admin@charity.org', lfndr_setting_defaults()['geo_email'] );
+	}
+
+	public function test_a_saved_contact_address_does_not_follow_the_admin_email(): void {
+		// The default is a starting value, not a mirror. Once somebody has
+		// chosen an address, changing the site's admin email under Settings →
+		// General must not quietly change who the lookup service is told is
+		// asking.
+		update_option( 'admin_email', 'admin@charity.org' );
+		update_option( LFNDR_SETTINGS_OPTION, lfndr_sanitize_settings( array( '_tab_advanced' => '1', 'geo_email' => 'locations@charity.org' ) ) );
+		lfndr_settings_cache( null, true );
+
+		update_option( 'admin_email', 'somebody-else@charity.org' );
+		lfndr_settings_cache( null, true );
+
+		$this->assertSame( 'locations@charity.org', lfndr_setting( 'geo_email' ) );
+	}
+
 	public function test_saving_one_tab_leaves_another_tabs_values_alone(): void {
 		update_option( LFNDR_SETTINGS_OPTION, array( 'near_me' => true, 'geo_email' => 'a@example.com' ) );
 		$out = lfndr_sanitize_settings( array( '_tab_advanced' => '1', 'geo_email' => 'b@example.com' ) );
