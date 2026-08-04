@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T22:27:24+00:00\n"
+"POT-Creation-Date: 2026-08-04T22:33:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: groundwork-common-location-finder.php
-msgid "https://github.com/Groundwork-Common/location-finder"
+msgid "https://github.com/Groundwork-Common/groundwork-common-location-finder"
 msgstr ""
 
 #. Description of the plugin
@@ -40,7 +40,7 @@ msgid "https://groundworkcommon.com"
 msgstr ""
 
 #: inc/admin-fields.php:43
-#: inc/admin-fields.php:738
+#: inc/admin-fields.php:755
 msgid "You do not have permission to configure location fields."
 msgstr ""
 
@@ -329,95 +329,99 @@ msgstr ""
 msgid "— not available for this type"
 msgstr ""
 
-#: inc/admin-fields.php:632
+#: inc/admin-fields.php:644
+msgid "Search runs in the visitor’s browser, so ticking this publishes the value in the page source — including for fields hidden from the card and detail pane. Leave it off for anything private."
+msgstr ""
+
+#: inc/admin-fields.php:649
 msgid "Offer as a filter"
 msgstr ""
 
-#: inc/admin-fields.php:635
+#: inc/admin-fields.php:652
 msgid "— only choice and yes/no fields can be filtered"
 msgstr ""
 
-#: inc/admin-fields.php:638
+#: inc/admin-fields.php:655
 msgid "A field can be searchable without being displayed — useful for an internal code visitors type but never see."
 msgstr ""
 
-#: inc/admin-fields.php:644
+#: inc/admin-fields.php:661
 msgid "Filter heading"
 msgstr ""
 
-#: inc/admin-fields.php:647
+#: inc/admin-fields.php:664
 msgid "Shown above this field's filters. Defaults to the label."
 msgstr ""
 
-#: inc/admin-fields.php:653
+#: inc/admin-fields.php:670
 msgid "Options for this type"
 msgstr ""
 
-#: inc/admin-fields.php:661
+#: inc/admin-fields.php:678
 msgid "Save field"
 msgstr ""
 
-#: inc/admin-fields.php:661
+#: inc/admin-fields.php:678
 msgid "Add field"
 msgstr ""
 
-#: inc/admin-fields.php:662
+#: inc/admin-fields.php:679
 msgid "Cancel"
 msgstr ""
 
-#: inc/admin-fields.php:992
+#: inc/admin-fields.php:1009
 msgid "Field added."
 msgstr ""
 
-#: inc/admin-fields.php:993
+#: inc/admin-fields.php:1010
 msgid "Field saved."
 msgstr ""
 
-#: inc/admin-fields.php:994
+#: inc/admin-fields.php:1011
 msgid "Field retired. Its data is still there — restore it any time."
 msgstr ""
 
-#: inc/admin-fields.php:995
+#: inc/admin-fields.php:1012
 msgid "Field restored, with everything it had recorded."
 msgstr ""
 
-#: inc/admin-fields.php:996
+#: inc/admin-fields.php:1013
 msgid "Field and all of its data permanently deleted."
 msgstr ""
 
-#: inc/admin-fields.php:997
+#: inc/admin-fields.php:1014
 msgid "Display order saved."
 msgstr ""
 
-#: inc/admin-fields.php:998
+#: inc/admin-fields.php:1015
 msgid "Behavior saved."
 msgstr ""
 
-#: inc/admin-fields.php:999
+#: inc/admin-fields.php:1016
 msgid "A field needs a label."
 msgstr ""
 
-#: inc/admin-fields.php:1000
+#: inc/admin-fields.php:1017
 msgid "That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores."
 msgstr ""
 
-#: inc/admin-fields.php:1001
+#: inc/admin-fields.php:1018
 msgid "A field with that key already exists."
 msgstr ""
 
-#: inc/admin-fields.php:1002
+#: inc/admin-fields.php:1019
 msgid "A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data."
 msgstr ""
 
-#: inc/admin-fields.php:1003
+#: inc/admin-fields.php:1020
 msgid "That field type is not available. If it came from another plugin, that plugin may be deactivated."
 msgstr ""
 
-#: inc/admin-fields.php:1004
+#: inc/admin-fields.php:1021
 msgid "Nothing was deleted: type DELETE in the box to confirm."
 msgstr ""
 
-#: inc/admin-fields.php:1005
+#: inc/admin-fields.php:1022
 msgid "That field no longer exists."
 msgstr ""
 
