@@ -15,8 +15,16 @@
 	margin-bottom: 12px;
 }
 
+/* wp-admin renders h2 and h3 at the same 16.9px/600 inside .wrap, so "Display
+   order" and the two lists under it came out identical and the nesting was
+   invisible. The markup was already h2 then h3; only the styling failed to say
+   so. Smaller and quieter, without inventing a new treatment — these label the
+   two lists, they are not a second section. */
 .lfndr-order h3 {
 	margin: 0 0 8px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #50575e;
 }
 
 .lfndr-order__list {
