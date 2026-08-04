@@ -3,7 +3,7 @@
  * Plugin Name:       Groundwork Common Location Finder
  * Plugin URI:        https://github.com/Groundwork-Common/location-finder
  * Description:       A map-and-list location finder whose fields you define yourself. Only the name and coordinates are built in; everything else is configured in wp-admin.
- * Version:           0.1.0
+ * Version:           1.0.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            Groundwork Common LLC
@@ -40,7 +40,7 @@ defined( 'ABSPATH' ) || exit;
  * dealer network can all install it without a fork.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_VERSION        = '0.1.0';
+const LFNDR_VERSION        = '1.0.0';
 const LFNDR_SCHEMA_VERSION = 2;
 
 define( 'LFNDR_FILE', __FILE__ );
