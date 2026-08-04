@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T23:19:57+00:00\n"
+"POT-Creation-Date: 2026-08-04T23:26:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -39,389 +39,383 @@ msgstr ""
 msgid "https://groundworkcommon.com"
 msgstr ""
 
-#: inc/admin-fields.php:43
-#: inc/admin-fields.php:754
+#: inc/admin-fields.php:42
+#: inc/admin-fields.php:763
 msgid "You do not have permission to configure location fields."
 msgstr ""
 
-#: inc/admin-fields.php:51
+#: inc/admin-fields.php:50
 msgid "This field configuration was written by a newer version of Location Finder. It is being left untouched to avoid losing settings this version does not understand. Update the plugin to edit it."
 msgstr ""
 
-#: inc/admin-fields.php:87
+#: inc/admin-fields.php:86
 #: inc/admin-screen.php:40
 msgid "Fields"
 msgstr ""
 
-#: inc/admin-fields.php:89
-#: inc/admin-fields.php:530
+#: inc/admin-fields.php:88
+#: inc/admin-fields.php:539
+#: inc/admin-fields.php:686
 msgid "Add Field"
 msgstr ""
 
-#: inc/admin-fields.php:96
+#: inc/admin-fields.php:95
 msgid "Location name, latitude and longitude are always present. Everything else a location records is defined here."
 msgstr ""
 
-#: inc/admin-fields.php:101
+#: inc/admin-fields.php:100
 msgid "No fields yet. Add one to start describing your locations — an address is usually the first."
 msgstr ""
 
-#: inc/admin-fields.php:107
-#: inc/admin-fields.php:544
+#: inc/admin-fields.php:106
+#: inc/admin-fields.php:553
 #: inc/field-address.php:325
 msgid "Label"
 msgstr ""
 
-#: inc/admin-fields.php:108
-#: inc/admin-fields.php:552
+#: inc/admin-fields.php:107
+#: inc/admin-fields.php:561
 msgid "Key"
 msgstr ""
 
-#: inc/admin-fields.php:109
-#: inc/admin-fields.php:567
+#: inc/admin-fields.php:108
+#: inc/admin-fields.php:576
 msgid "Type"
 msgstr ""
 
-#: inc/admin-fields.php:110
+#: inc/admin-fields.php:109
 msgid "Shown"
 msgstr ""
 
-#: inc/admin-fields.php:111
+#: inc/admin-fields.php:110
 msgid "Used for"
 msgstr ""
 
-#: inc/admin-fields.php:120
+#: inc/admin-fields.php:119
 msgid "primary"
 msgstr ""
 
-#: inc/admin-fields.php:123
+#: inc/admin-fields.php:122
 msgid "Edit"
 msgstr ""
 
-#: inc/admin-fields.php:131
+#: inc/admin-fields.php:130
 msgid "Retire"
 msgstr ""
 
-#: inc/admin-fields.php:160
+#: inc/admin-fields.php:159
 msgid "Card and detail"
 msgstr ""
 
-#: inc/admin-fields.php:163
+#: inc/admin-fields.php:162
 msgid "Card only"
 msgstr ""
 
-#: inc/admin-fields.php:166
+#: inc/admin-fields.php:165
 msgid "Detail only"
 msgstr ""
 
-#: inc/admin-fields.php:168
+#: inc/admin-fields.php:167
 msgid "Hidden"
 msgstr ""
 
-#: inc/admin-fields.php:180
+#: inc/admin-fields.php:179
 msgid "Search"
 msgstr ""
 
-#: inc/admin-fields.php:183
+#: inc/admin-fields.php:182
 #: inc/render.php:145
 msgid "Filters"
 msgstr ""
 
-#: inc/admin-fields.php:212
+#: inc/admin-fields.php:211
 msgid "Address used for Directions"
 msgstr ""
 
-#: inc/admin-fields.php:213
+#: inc/admin-fields.php:212
 msgid "Also the address the editor's lookup fills in when you search for a place."
 msgstr ""
 
-#: inc/admin-fields.php:216
+#: inc/admin-fields.php:215
 msgid "Hours used for \"Open now\""
 msgstr ""
 
-#: inc/admin-fields.php:217
+#: inc/admin-fields.php:216
 msgid "The schedule the open/closed badge and the \"Open today\" filter are worked out from."
 msgstr ""
 
-#: inc/admin-fields.php:220
+#: inc/admin-fields.php:219
 msgid "Closures that suspend those hours"
 msgstr ""
 
-#: inc/admin-fields.php:221
+#: inc/admin-fields.php:220
 msgid "While one of these is active the location never reads as open, and the hours above are shown struck through."
 msgstr ""
 
-#: inc/admin-fields.php:254
+#: inc/admin-fields.php:253
 #: inc/field-types.php:673
 #: inc/field-types.php:737
 msgid "— none —"
 msgstr ""
 
-#: inc/admin-fields.php:306
+#: inc/admin-fields.php:315
 msgid "Display order"
 msgstr ""
 
-#: inc/admin-fields.php:308
+#: inc/admin-fields.php:317
 msgid "Use the arrow buttons to set the order. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so."
 msgstr ""
 
-#: inc/admin-fields.php:317
+#: inc/admin-fields.php:326
 msgid "Detail pane"
 msgstr ""
 
-#: inc/admin-fields.php:318
+#: inc/admin-fields.php:327
 msgid "Result card"
 msgstr ""
 
-#: inc/admin-fields.php:322
-msgid "Save display order"
-msgstr ""
-
-#: inc/admin-fields.php:376
-msgid "Not shown here"
+#: inc/admin-fields.php:331
+#: inc/admin-fields.php:686
+msgid "Save Changes"
 msgstr ""
 
 #: inc/admin-fields.php:385
+msgid "Not shown here"
+msgstr ""
+
+#: inc/admin-fields.php:394
 msgid "Order, as a comma-separated list of keys:"
 msgstr ""
 
-#: inc/admin-fields.php:407
+#: inc/admin-fields.php:416
 msgid "built in"
 msgstr ""
 
 #. translators: %s: field label.
-#: inc/admin-fields.php:413
+#: inc/admin-fields.php:422
 #, php-format
 msgid "Move %s up"
 msgstr ""
 
 #. translators: %s: field label.
-#: inc/admin-fields.php:415
+#: inc/admin-fields.php:424
 #, php-format
 msgid "Move %s down"
 msgstr ""
 
-#: inc/admin-fields.php:418
+#: inc/admin-fields.php:427
 msgid "(not shown)"
 msgstr ""
 
-#: inc/admin-fields.php:433
+#: inc/admin-fields.php:442
 msgid "Location name"
 msgstr ""
 
-#: inc/admin-fields.php:435
+#: inc/admin-fields.php:444
 #: inc/cpt.php:109
 #: assets/js/location-finder.js:1559
 msgid "Coordinates"
 msgstr ""
 
-#: inc/admin-fields.php:437
+#: inc/admin-fields.php:446
 msgid "Distance from the visitor"
 msgstr ""
 
-#: inc/admin-fields.php:439
+#: inc/admin-fields.php:448
 msgid "Directions link"
 msgstr ""
 
-#: inc/admin-fields.php:457
+#: inc/admin-fields.php:466
 msgid "Retired fields"
 msgstr ""
 
-#: inc/admin-fields.php:459
+#: inc/admin-fields.php:468
 msgid "Retiring a field removes it from the editor and the front end but keeps everything already recorded. Restore it and the data comes back exactly as it was."
 msgstr ""
 
 #. translators: %s: date.
-#: inc/admin-fields.php:474
+#: inc/admin-fields.php:483
 #, php-format
 msgid "retired %s"
 msgstr ""
 
 #. translators: %d: number of locations.
-#: inc/admin-fields.php:486
+#: inc/admin-fields.php:495
 #, php-format
 msgid "Holds data on %d location"
 msgid_plural "Holds data on %d locations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/admin-fields.php:494
+#: inc/admin-fields.php:503
 msgid "Restore"
 msgstr ""
 
-#: inc/admin-fields.php:501
+#: inc/admin-fields.php:510
 msgid "Type DELETE to confirm"
 msgstr ""
 
-#: inc/admin-fields.php:504
+#: inc/admin-fields.php:513
 msgid "Type DELETE"
 msgstr ""
 
-#: inc/admin-fields.php:505
+#: inc/admin-fields.php:514
 msgid "Erase data"
 msgstr ""
 
-#: inc/admin-fields.php:530
+#: inc/admin-fields.php:539
 msgid "Edit Field"
 msgstr ""
 
-#: inc/admin-fields.php:548
+#: inc/admin-fields.php:557
 msgid "What editors and visitors see. Safe to change at any time."
 msgstr ""
 
-#: inc/admin-fields.php:557
+#: inc/admin-fields.php:566
 msgid "Keys cannot be changed. This is what already-saved locations use to find their data — renaming it would orphan every value. To change it, retire this field and add a new one."
 msgstr ""
 
-#: inc/admin-fields.php:561
+#: inc/admin-fields.php:570
 msgid "auto-generated from the label"
 msgstr ""
 
-#: inc/admin-fields.php:562
+#: inc/admin-fields.php:571
 msgid "Lowercase letters, numbers and underscores. Permanent once saved — leave it blank to generate one from the label."
 msgstr ""
 
-#: inc/admin-fields.php:578
+#: inc/admin-fields.php:587
 msgid "Types cannot be changed either — the stored values would no longer make sense."
 msgstr ""
 
-#: inc/admin-fields.php:583
+#: inc/admin-fields.php:592
 msgid "Editor hint"
 msgstr ""
 
-#: inc/admin-fields.php:587
+#: inc/admin-fields.php:596
 msgid "Group"
 msgstr ""
 
-#: inc/admin-fields.php:590
+#: inc/admin-fields.php:599
 msgid "Fields sharing a group name are collapsed together in the location editor."
 msgstr ""
 
-#: inc/admin-fields.php:596
+#: inc/admin-fields.php:605
 msgid "Choices"
 msgstr ""
 
-#: inc/admin-fields.php:600
+#: inc/admin-fields.php:609
 msgid "One per line. Write \"Diapers\" for a simple choice, or \"diapers | Diapers\" to set the stored value separately from the label. Stored values are permanent; labels can change."
 msgstr ""
 
-#: inc/admin-fields.php:607
+#: inc/admin-fields.php:616
 msgid "Where it appears"
 msgstr ""
 
-#: inc/admin-fields.php:610
+#: inc/admin-fields.php:619
 msgid "In the detail pane"
 msgstr ""
 
-#: inc/admin-fields.php:611
+#: inc/admin-fields.php:620
 msgid "On result cards"
 msgstr ""
 
-#: inc/admin-fields.php:616
+#: inc/admin-fields.php:625
 msgid "How visitors find it"
 msgstr ""
 
-#: inc/admin-fields.php:623
+#: inc/admin-fields.php:632
 msgid "Include in the search box"
 msgstr ""
 
-#: inc/admin-fields.php:626
+#: inc/admin-fields.php:635
 msgid "— not available for this type"
 msgstr ""
 
-#: inc/admin-fields.php:643
+#: inc/admin-fields.php:652
 msgid "Search runs in the visitor’s browser, so ticking this publishes the value in the page source — including for fields hidden from the card and detail pane. Leave it off for anything private."
 msgstr ""
 
-#: inc/admin-fields.php:648
+#: inc/admin-fields.php:657
 msgid "Offer as a filter"
 msgstr ""
 
-#: inc/admin-fields.php:651
+#: inc/admin-fields.php:660
 msgid "— only choice and yes/no fields can be filtered"
 msgstr ""
 
-#: inc/admin-fields.php:654
+#: inc/admin-fields.php:663
 msgid "A field can be searchable without being displayed — useful for an internal code visitors type but never see."
 msgstr ""
 
-#: inc/admin-fields.php:660
+#: inc/admin-fields.php:669
 msgid "Filter heading"
 msgstr ""
 
-#: inc/admin-fields.php:663
+#: inc/admin-fields.php:672
 msgid "Shown above this field's filters. Defaults to the label."
 msgstr ""
 
-#: inc/admin-fields.php:669
+#: inc/admin-fields.php:678
 msgid "Options for this type"
 msgstr ""
 
-#: inc/admin-fields.php:677
-msgid "Save field"
-msgstr ""
-
-#: inc/admin-fields.php:677
-msgid "Add field"
-msgstr ""
-
-#: inc/admin-fields.php:678
+#: inc/admin-fields.php:687
 msgid "Cancel"
 msgstr ""
 
-#: inc/admin-fields.php:1008
+#: inc/admin-fields.php:1017
 msgid "Field added."
 msgstr ""
 
-#: inc/admin-fields.php:1009
+#: inc/admin-fields.php:1018
 msgid "Field saved."
 msgstr ""
 
-#: inc/admin-fields.php:1010
+#: inc/admin-fields.php:1019
 msgid "Field retired. Its data is still there — restore it any time."
 msgstr ""
 
-#: inc/admin-fields.php:1011
+#: inc/admin-fields.php:1020
 msgid "Field restored, with everything it had recorded."
 msgstr ""
 
-#: inc/admin-fields.php:1012
+#: inc/admin-fields.php:1021
 msgid "Field and all of its data permanently deleted."
 msgstr ""
 
-#: inc/admin-fields.php:1013
+#: inc/admin-fields.php:1022
 msgid "Display order saved."
 msgstr ""
 
-#: inc/admin-fields.php:1014
+#: inc/admin-fields.php:1023
 msgid "Behavior saved."
 msgstr ""
 
-#: inc/admin-fields.php:1015
+#: inc/admin-fields.php:1024
 msgid "A field needs a label."
 msgstr ""
 
-#: inc/admin-fields.php:1016
+#: inc/admin-fields.php:1025
 msgid "That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores."
 msgstr ""
 
-#: inc/admin-fields.php:1017
+#: inc/admin-fields.php:1026
 msgid "A field with that key already exists."
 msgstr ""
 
-#: inc/admin-fields.php:1018
+#: inc/admin-fields.php:1027
 msgid "A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data."
 msgstr ""
 
-#: inc/admin-fields.php:1019
+#: inc/admin-fields.php:1028
 msgid "That field type is not available. If it came from another plugin, that plugin may be deactivated."
 msgstr ""
 
-#: inc/admin-fields.php:1020
+#: inc/admin-fields.php:1029
 msgid "Nothing was deleted: type DELETE in the box to confirm."
 msgstr ""
 
-#: inc/admin-fields.php:1021
+#: inc/admin-fields.php:1030
 msgid "That field no longer exists."
 msgstr ""
 
@@ -506,11 +500,11 @@ msgid "0 shows every match. Any other number shows that many with a “Show all 
 msgstr ""
 
 #: inc/admin-screen.php:373
-msgid "Offer sorting by distance"
+msgid "Let visitors find what is nearest"
 msgstr ""
 
 #: inc/admin-screen.php:374
-msgid "Lets a visitor share their location to sort the results by how near they are. Off removes it entirely."
+msgid "Adds a locate button to the map. Pressing it asks the browser for the visitor’s location, sorts the results by distance and shows how far each one is. Nothing is sent anywhere — the coordinates are used in the browser and never leave it. Needs the map, so it has no effect where the finder is set to show the list only."
 msgstr ""
 
 #: inc/admin-screen.php:380
@@ -725,10 +719,6 @@ msgstr ""
 
 #: inc/admin-screen.php:606
 msgid "Custom URL"
-msgstr ""
-
-#: inc/admin-screen.php:639
-msgid "Save"
 msgstr ""
 
 #: inc/admin-settings.php:60
