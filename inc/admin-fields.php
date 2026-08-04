@@ -54,7 +54,7 @@ function lfndr_fields_screen(): void {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only view routing.
 	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'list';
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only view routing.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only view routing; lfndr_sanitize_field_key() validates against ^[a-z][a-z0-9_]{0,39}$ and rejects anything else.
 	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
 
 	if ( 'add' === $action ) {
@@ -271,9 +271,11 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
  * Save the roles panel.
  */
 function lfndr_handle_save_roles(): void {
-	lfndr_guard_admin_post( 'lfndr_save_roles' );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_save_roles' );
 
 	$schema = lfndr_get_schema();
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- unslashed here, and every value it yields goes through sanitize_key() in the loop below before it reaches the schema.
 	$raw    = isset( $_POST['roles'] ) && is_array( $_POST['roles'] ) ? wp_unslash( $_POST['roles'] ) : array();
 
 	/* Only the roles the form actually rendered are touched. A type with no
@@ -716,27 +718,25 @@ function lfndr_options_from_text( string $text ): array {
  * @param string $nonce_action Nonce action.
  * @param string $nonce_field  Nonce field name.
  */
-/*
- * Note for anyone reading a static-analysis report of this file:
+/**
+ * Die unless the current user may configure fields.
  *
- * Every admin_post_ handler below opens with a call to this function, and this
- * function is where the capability check and the nonce check live. PHPCS and
- * Plugin Check cannot follow a nonce check through a helper — the sniff only
- * recognises check_admin_referer() written literally inside the same function —
- * so they report "Processing form data without nonce verification" against
- * roughly thirty $_POST reads in this file. Every one of those is a false
- * positive, and the guard below is the thing to check rather than take on
- * trust.
+ * The capability half of the old lfndr_guard_admin_post(). The nonce half now
+ * lives at each call site as a literal check_admin_referer(), which is a real
+ * improvement rather than a concession to tooling: a reader opening any handler
+ * sees both checks in the first two lines, instead of having to go and confirm
+ * that a helper called "guard" guards the thing they care about. Static
+ * analysis agrees — PHPCS only recognises a nonce check written inside the
+ * function that reads the request, so the shared version silently produced
+ * thirty-odd "processing form data without nonce verification" warnings.
  *
- * The guard is shared rather than inlined because a nonce check that is
- * copy-pasted into a dozen handlers is a nonce check that will eventually be
- * pasted into eleven.
+ * The capability check stays shared because it is genuinely identical
+ * everywhere and carries no argument to get wrong.
  */
-function lfndr_guard_admin_post( string $nonce_action, string $nonce_field = '_wpnonce' ): void {
+function lfndr_require_admin_caps(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'groundwork-common-location-finder' ), '', array( 'response' => 403 ) );
 	}
-	check_admin_referer( $nonce_action, $nonce_field );
 }
 
 /**
@@ -756,9 +756,11 @@ function lfndr_fields_redirect( string $message, array $args = array() ): void {
  * Add or update one field.
  */
 function lfndr_handle_save_field(): void {
-	lfndr_guard_admin_post( 'lfndr_save_field' );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_save_field' );
 
 	$schema   = lfndr_get_schema();
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
 	$original = isset( $_POST['original_key'] ) ? lfndr_sanitize_field_key( wp_unslash( $_POST['original_key'] ) ) : '';
 	$editing  = '' !== $original && null !== lfndr_get_field( $original, $schema );
 
@@ -770,6 +772,7 @@ function lfndr_handle_save_field(): void {
 	if ( $editing ) {
 		$key = $original;
 	} else {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- passed straight to lfndr_sanitize_field_key() on the next line, and a '' result redirects rather than proceeding.
 		$requested = isset( $_POST['key'] ) ? (string) wp_unslash( $_POST['key'] ) : '';
 		$key       = lfndr_sanitize_field_key( '' !== trim( $requested ) ? $requested : $label );
 		if ( '' === $key ) {
@@ -842,7 +845,8 @@ function lfndr_handle_save_field(): void {
  * Save both display orders, and the show flags they imply.
  */
 function lfndr_handle_save_orders(): void {
-	lfndr_guard_admin_post( 'lfndr_save_orders' );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_save_orders' );
 
 	$schema = lfndr_get_schema();
 	$valid  = array_merge( wp_list_pluck( $schema['fields'], 'key' ), LFNDR_SYNTHETIC_KEYS );
@@ -875,8 +879,10 @@ function lfndr_handle_retire_field(): void {
 	 * key is needed to know which nonce to demand. Tampering with it therefore
 	 * fails the check on the next line rather than bypassing it — and the value
 	 * is reduced to a field key before it is used for anything at all. */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
 	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
-	lfndr_guard_admin_post( 'lfndr_retire_' . $key );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_retire_' . $key );
 
 	$schema = lfndr_get_schema();
 	$field  = lfndr_get_field( $key, $schema );
@@ -903,8 +909,10 @@ function lfndr_handle_retire_field(): void {
  * Restore a retired field, with its data intact.
  */
 function lfndr_handle_restore_field(): void {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
 	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
-	lfndr_guard_admin_post( 'lfndr_restore_' . $key );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_restore_' . $key );
 
 	$schema  = lfndr_get_schema();
 	$restore = null;
@@ -939,8 +947,10 @@ function lfndr_handle_restore_field(): void {
  * DELETE typed out.
  */
 function lfndr_handle_erase_field(): void {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
 	$key = isset( $_POST['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_POST['field'] ) ) : '';
-	lfndr_guard_admin_post( 'lfndr_erase_' . $key );
+	lfndr_require_admin_caps();
+	check_admin_referer( 'lfndr_erase_' . $key );
 
 	$confirm = isset( $_POST['confirm'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['confirm'] ) ) ) : '';
 	if ( 'DELETE' !== strtoupper( $confirm ) ) {
