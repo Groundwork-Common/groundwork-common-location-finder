@@ -60,7 +60,7 @@ function lfndr_current_tab(): string {
  * One submenu entry, replacing the two that described the same thing.
  */
 function lfndr_admin_menu(): void {
-	add_submenu_page(
+	$hook = add_submenu_page(
 		'edit.php?post_type=' . LFNDR_POST_TYPE,
 		__( 'Location Finder', 'groundwork-common-location-finder' ),
 		__( 'Settings', 'groundwork-common-location-finder' ),
@@ -68,6 +68,16 @@ function lfndr_admin_menu(): void {
 		LFNDR_FIELDS_PAGE,
 		'lfndr_admin_screen'
 	);
+
+	/* Help tabs have to be added before the screen renders, and load-{$hook} is
+	 * the only point where WP_Screen still accepts them. The suffix is whatever
+	 * add_submenu_page() just returned rather than a string built by hand,
+	 * because it encodes the parent page and would be wrong the moment the menu
+	 * moved. It is false when the capability check fails, which is exactly when
+	 * there is no screen to help with. */
+	if ( $hook ) {
+		add_action( 'load-' . $hook, 'lfndr_add_help_tabs' );
+	}
 }
 
 /**

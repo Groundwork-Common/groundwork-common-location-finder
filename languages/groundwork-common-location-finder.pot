@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T23:29:33+00:00\n"
+"POT-Creation-Date: 2026-08-04T23:33:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -49,6 +49,7 @@ msgid "This field configuration was written by a newer version of Location Finde
 msgstr ""
 
 #: inc/admin-fields.php:86
+#: inc/admin-help.php:70
 #: inc/admin-screen.php:40
 msgid "Fields"
 msgstr ""
@@ -419,6 +420,169 @@ msgstr ""
 msgid "That field no longer exists."
 msgstr ""
 
+#: inc/admin-help.php:60
+msgid "Overview"
+msgstr ""
+
+#: inc/admin-help.php:62
+msgid "Three things about a location are built in: its name, and its latitude and longitude. Everything else — an address, opening hours, services offered, a phone number — is a field you define here, and the same definition drives the editor, the search, the filters and what visitors see."
+msgstr ""
+
+#: inc/admin-help.php:63
+msgid "That is the trade this plugin makes. Nothing is assumed about what a location is, so nothing has to be worked around when your locations are not shops."
+msgstr ""
+
+#: inc/admin-help.php:72
+msgid "A field’s key is permanent; its label is not. Rename “Phone” to “Contact number” whenever you like — the key underneath never moves, which is why existing locations keep their data."
+msgstr ""
+
+#: inc/admin-help.php:73
+msgid "Changing a key is therefore not offered. It would be a delete followed by a create, and every location’s value for that field would be stranded. If you need a different key, add the new field, move the values across, then retire the old one."
+msgstr ""
+
+#: inc/admin-help.php:77
+msgid "Deleting a field"
+msgstr ""
+
+#: inc/admin-help.php:79
+msgid "Deleting a field does not delete anything a location holds. The definition moves to Retired and the values stay exactly where they are, so restoring it brings everything back."
+msgstr ""
+
+#: inc/admin-help.php:80
+msgid "Erasing the data is a separate action, listed with a count of how many locations it would affect, and it asks you to type a confirmation. It is the only thing on this screen that cannot be undone."
+msgstr ""
+
+#: inc/admin-help.php:84
+msgid "Where a field appears"
+msgstr ""
+
+#: inc/admin-help.php:86
+msgid "The result card and the detail pane are separate choices, and the two order lists below let you arrange each independently. A phone number belongs in the detail pane and clutters a card; a city belongs on a card and is redundant beside the full address in detail."
+msgstr ""
+
+#: inc/admin-help.php:87
+msgid "Moving a field below the divider in either list is the same as unchecking it for that view. It stays defined, and it stays searchable if you marked it so."
+msgstr ""
+
+#: inc/admin-help.php:88
+msgid "Searching runs in the visitor’s browser, which means anything marked searchable is present in the page source even when it is shown nowhere. That is fine for an internal reference code and wrong for a private note."
+msgstr ""
+
+#: inc/admin-help.php:94
+#: inc/admin-screen.php:604
+msgid "Which field drives what"
+msgstr ""
+
+#: inc/admin-help.php:96
+msgid "You can define more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. All of them display. These settings pick which single one the plugin acts on."
+msgstr ""
+
+#: inc/admin-help.php:97
+msgid "Only the chosen address places the map pin and feeds the Directions link. Only the chosen schedule decides “Open now”. Only the chosen closure list suspends those hours. The others are shown and searched like any other field, and drive nothing."
+msgstr ""
+
+#: inc/admin-help.php:101
+msgid "Finding what is nearest"
+msgstr ""
+
+#: inc/admin-help.php:103
+msgid "When this is on, the map carries a locate button. Pressing it asks the browser for the visitor’s position, sorts the results by distance and shows how far away each one is. The coordinates are used in the browser and never sent anywhere."
+msgstr ""
+
+#: inc/admin-help.php:104
+msgid "It is a sort, not a filter: the nearest location is always shown, even if it is forty miles away. And it lives on the map, so it has no effect where the finder is set to show the list only."
+msgstr ""
+
+#: inc/admin-help.php:108
+msgid "Results shown"
+msgstr ""
+
+#: inc/admin-help.php:110
+msgid "The results limit caps how many cards are drawn at once, not how many locations reach the page. Every location is always available to search and filter, which is why a search can turn up something that was not in the initial list."
+msgstr ""
+
+#: inc/admin-help.php:116
+msgid "Presets"
+msgstr ""
+
+#: inc/admin-help.php:118
+msgid "A preset is a bundle of the values below and nothing more. Choosing one writes them in, and they stay editable afterwards — so a preset is a starting point, not a mode you are locked into."
+msgstr ""
+
+#: inc/admin-help.php:119
+msgid "Which preset is highlighted is worked out by comparing the current values, not remembered. Change any one of them and the selection becomes Custom by itself, because that is what it now is."
+msgstr ""
+
+#: inc/admin-help.php:123
+msgid "Leaving a value blank"
+msgstr ""
+
+#: inc/admin-help.php:125
+msgid "Blank is not broken. A field left empty reproduces the plugin’s own default, so a site that never opens this tab looks exactly as it did before the tab existed."
+msgstr ""
+
+#: inc/admin-help.php:126
+msgid "Colours accept anything CSS does, including currentColor and a custom property from your theme — which is often a better answer than a hex value, because it follows the theme when the theme changes."
+msgstr ""
+
+#: inc/admin-help.php:130
+msgid "When your theme wins"
+msgstr ""
+
+#: inc/admin-help.php:132
+msgid "Most settings here set a custom property and do not force anything, so a theme that deliberately styles the finder still wins. That is intentional: the finder is meant to belong to your site rather than to this plugin."
+msgstr ""
+
+#: inc/admin-help.php:133
+msgid "The button, chip and card colours are the exception. Those are native elements the plugin otherwise leaves alone, so there is nothing for a value to attach to unless it overrides the theme outright — which is what those settings do, and why they are worth setting only if the defaults genuinely clash."
+msgstr ""
+
+#: inc/admin-help.php:139
+msgid "Map tiles"
+msgstr ""
+
+#: inc/admin-help.php:141
+msgid "Tiles are fetched by the visitor’s browser directly from whichever provider you choose, so that provider sees the visitor’s IP address. Nothing on your server can change that once a map is on screen, which is why the finder asks before loading one."
+msgstr ""
+
+#: inc/admin-help.php:142
+msgid "CARTO’s free basemaps are for non-commercial use. Commercial sites should use OpenStreetMap, or Custom with a provider they have an account with. Attribution is a licence condition rather than decoration and must not be removed."
+msgstr ""
+
+#: inc/admin-help.php:143
+msgid "Serving tiles from your own site removes the third party altogether. Point the Custom tile URL at them and the consent prompt disappears on its own, because there is no longer anyone to warn about."
+msgstr ""
+
+#: inc/admin-help.php:147
+#: inc/admin-screen.php:626
+msgid "Address lookup"
+msgstr ""
+
+#: inc/admin-help.php:149
+msgid "The lookup runs only in the editor, only for signed-in users who can edit locations, and only when somebody types into the address search. Visitors never trigger it."
+msgstr ""
+
+#: inc/admin-help.php:150
+msgid "The contact address is sent so the lookup service knows which site is asking; leave it blank and your admin email is used. Requests are limited to one a second per user. Without a contact address the service can refuse them, and the editor stops filling in coordinates."
+msgstr ""
+
+#: inc/admin-help.php:184
+msgid "More"
+msgstr ""
+
+#: inc/admin-help.php:186
+#: inc/admin-screen.php:178
+#: inc/admin-screen.php:306
+#: inc/admin-screen.php:336
+#: inc/admin-screen.php:350
+msgid "Groundwork Common"
+msgstr ""
+
+#: inc/admin-help.php:188
+#: inc/admin-screen.php:391
+msgid "Report a problem"
+msgstr ""
+
 #: inc/admin-screen.php:41
 msgid "Behavior"
 msgstr ""
@@ -433,7 +597,7 @@ msgid "Advanced"
 msgstr ""
 
 #: inc/admin-screen.php:65
-#: inc/admin-screen.php:96
+#: inc/admin-screen.php:106
 #: blocks/finder/edit.js:93
 msgid "Location Finder"
 msgstr ""
@@ -442,289 +606,270 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: inc/admin-screen.php:78
+#: inc/admin-screen.php:88
 #: inc/admin-settings.php:1226
 msgid "You do not have permission to change these settings."
 msgstr ""
 
-#: inc/admin-screen.php:100
+#: inc/admin-screen.php:110
 msgid "Setup sections"
 msgstr ""
 
 #. translators: %s: Groundwork Common, linked to the company site.
-#: inc/admin-screen.php:164
+#: inc/admin-screen.php:174
 #, php-format
 msgid "Built by %s — technology leadership and support for nonprofits."
 msgstr ""
 
-#: inc/admin-screen.php:168
-#: inc/admin-screen.php:296
-#: inc/admin-screen.php:326
-#: inc/admin-screen.php:340
-msgid "Groundwork Common"
-msgstr ""
-
-#: inc/admin-screen.php:298
+#: inc/admin-screen.php:308
 msgid "Show"
 msgstr ""
 
-#: inc/admin-screen.php:306
+#: inc/admin-screen.php:316
 msgid "Hide for 30 days"
 msgstr ""
 
 #. translators: %s: Groundwork Common, linked to the company site.
-#: inc/admin-screen.php:345
+#: inc/admin-screen.php:355
 #, php-format
 msgid "%s provides technology leadership and support for nonprofits — fractional, by the project, or alongside an in-house team. We release tools like this one because good technology work should leave an organization more capable, not more dependent on whoever built it."
 msgstr ""
 
-#: inc/admin-screen.php:353
+#: inc/admin-screen.php:363
 msgid "If you find this plugin useful, the most valuable thing you can do for us is mention us to a nonprofit who might benefit from our services. Referrals are how our business continues to grow its impact and reach."
 msgstr ""
 
-#: inc/admin-screen.php:359
+#: inc/admin-screen.php:369
 msgid "Learn about Groundwork Common"
 msgstr ""
 
-#: inc/admin-screen.php:369
+#: inc/admin-screen.php:379
 msgid "You can also support our WordPress plugins directly. While we offer the plugin free to you, it costs us to maintain it — the security updates, the compatibility testing against each new WordPress release, the bug nobody but you has hit. We can’t do it without your support, and we appreciate whatever support you can give."
 msgstr ""
 
-#: inc/admin-screen.php:374
+#: inc/admin-screen.php:384
 msgid "Support our work"
 msgstr ""
 
-#: inc/admin-screen.php:381
-msgid "Report a problem"
-msgstr ""
-
-#: inc/admin-screen.php:410
+#: inc/admin-screen.php:420
 msgid "Results shown at once"
 msgstr ""
 
-#: inc/admin-screen.php:411
+#: inc/admin-screen.php:421
 msgid "0 shows every match. Any other number shows that many with a “Show all results” button after them. This limits what is drawn, never what is searched — a location beyond the cut is still found by typing its name."
 msgstr ""
 
-#: inc/admin-screen.php:417
+#: inc/admin-screen.php:427
 msgid "Let visitors find what is nearest"
 msgstr ""
 
-#: inc/admin-screen.php:418
+#: inc/admin-screen.php:428
 msgid "Adds a locate button to the map. Pressing it asks the browser for the visitor’s location, sorts the results by distance and shows how far each one is. Nothing is sent anywhere — the coordinates are used in the browser and never leave it. Needs the map, so it has no effect where the finder is set to show the list only."
 msgstr ""
 
-#: inc/admin-screen.php:424
+#: inc/admin-screen.php:434
 msgid "Ask before loading the map"
 msgstr ""
 
-#: inc/admin-screen.php:425
+#: inc/admin-screen.php:435
 msgid "Show a placeholder with a \"Show map\" button instead of loading map tiles straight away. Tiles are fetched by the visitor's browser, so until they choose to load them their IP address is never sent to the tile provider. The search, filters and location list all work without the map. Has no effect when the tiles are served from this site, since there is no third party involved."
 msgstr ""
 
-#: inc/admin-screen.php:431
+#: inc/admin-screen.php:441
 msgid "Ask for location on arrival"
 msgstr ""
 
-#: inc/admin-screen.php:432
+#: inc/admin-screen.php:442
 msgid "Off by default, deliberately: an unprompted permission prompt is easy to refuse and hard to ask for twice, and browsers penalize sites that do it."
 msgstr ""
 
-#: inc/admin-screen.php:439
+#: inc/admin-screen.php:449
 msgid "Distance units"
 msgstr ""
 
-#: inc/admin-screen.php:440
+#: inc/admin-screen.php:450
 msgid "Left automatic, this follows the site language — miles for US and UK English, kilometers everywhere else."
 msgstr ""
 
-#: inc/admin-screen.php:448
+#: inc/admin-screen.php:458
 msgid "Timezone for “Open now”"
 msgstr ""
 
-#: inc/admin-screen.php:449
+#: inc/admin-screen.php:459
 msgid "the site timezone"
 msgstr ""
 
-#: inc/admin-screen.php:450
+#: inc/admin-screen.php:460
 msgid "An IANA name such as America/Chicago. Left blank this follows Settings → General, which is almost always right: somebody checking a Birmingham food bank from a phone still set to Pacific time wants Birmingham’s clock."
 msgstr ""
 
-#: inc/admin-screen.php:458
+#: inc/admin-screen.php:468
 msgid "Zoom to fit the results"
 msgstr ""
 
-#: inc/admin-screen.php:459
+#: inc/admin-screen.php:469
 msgid "On, the map frames whatever is currently showing. The starting point below is the fallback for when nothing matches, so it is worth setting even with this on."
 msgstr ""
 
-#: inc/admin-screen.php:467
+#: inc/admin-screen.php:477
 msgid "Starting latitude"
 msgstr ""
 
-#: inc/admin-screen.php:468
+#: inc/admin-screen.php:478
 msgid "Defaults to 0, which is a point in the Gulf of Guinea — fine while results are showing, and an ocean the moment a filter matches nothing."
 msgstr ""
 
-#: inc/admin-screen.php:476
+#: inc/admin-screen.php:486
 msgid "Starting longitude"
 msgstr ""
 
-#: inc/admin-screen.php:485
+#: inc/admin-screen.php:495
 msgid "Starting zoom"
 msgstr ""
 
-#: inc/admin-screen.php:486
+#: inc/admin-screen.php:496
 msgid "0 is the whole world, 12 a city, 16 a few streets."
 msgstr ""
 
-#: inc/admin-screen.php:495
+#: inc/admin-screen.php:505
 msgid "Directions service"
 msgstr ""
 
-#: inc/admin-screen.php:496
+#: inc/admin-screen.php:506
 msgid "Where the Directions link sends people. The address is used in preference to the coordinates, because a street address resolves to a door and a coordinate resolves to a point — which on a large site is regularly the wrong side of the building."
 msgstr ""
 
-#: inc/admin-screen.php:502
+#: inc/admin-screen.php:512
 msgid "Custom directions URL"
 msgstr ""
 
-#: inc/admin-screen.php:504
+#: inc/admin-screen.php:514
 msgid "Only used when the service above is Custom. {query} is the formatted address, {lat} and {lng} the coordinates."
 msgstr ""
 
-#: inc/admin-screen.php:512
+#: inc/admin-screen.php:522
 msgid "Contact address for lookups"
 msgstr ""
 
-#: inc/admin-screen.php:523
+#: inc/admin-screen.php:533
 msgid "Sent with each lookup so the address service knows which site is asking. Leave it blank to use your admin email. Without a contact address the service can refuse the request, and the address finder in the location editor stops filling in coordinates."
 msgstr ""
 
-#: inc/admin-screen.php:529
+#: inc/admin-screen.php:539
 msgid "Lookup endpoint"
 msgstr ""
 
-#: inc/admin-screen.php:531
+#: inc/admin-screen.php:541
 msgid "Point this at your own Nominatim instance, or a paid provider with a compatible response."
 msgstr ""
 
-#: inc/admin-screen.php:537
+#: inc/admin-screen.php:547
 msgid "Limit lookups to countries"
 msgstr ""
 
-#: inc/admin-screen.php:539
+#: inc/admin-screen.php:549
 msgid "Two-letter codes, comma separated. Leave blank to search everywhere."
 msgstr ""
 
-#: inc/admin-screen.php:545
+#: inc/admin-screen.php:555
 msgid "Prefer results in this box"
 msgstr ""
 
-#: inc/admin-screen.php:547
+#: inc/admin-screen.php:557
 msgid "Four numbers: west, south, east, north. Nudges results toward your region without excluding the rest."
 msgstr ""
 
-#: inc/admin-screen.php:553
+#: inc/admin-screen.php:563
 msgid "Restrict strictly to that box"
 msgstr ""
 
-#: inc/admin-screen.php:554
+#: inc/admin-screen.php:564
 msgid "Turns the preference above into a hard limit. An address outside the box then returns nothing at all, which looks like a broken lookup rather than a deliberate one — leave this off unless you mean it."
 msgstr ""
 
-#: inc/admin-screen.php:562
+#: inc/admin-screen.php:572
 msgid "Tile URL"
 msgstr ""
 
-#: inc/admin-screen.php:564
+#: inc/admin-screen.php:574
 msgid "Only used when Map style on the Appearance tab is set to Custom. Must contain {z}, {x} and {y}."
 msgstr ""
 
-#: inc/admin-screen.php:570
+#: inc/admin-screen.php:580
 msgid "Tile attribution"
 msgstr ""
 
-#: inc/admin-screen.php:571
+#: inc/admin-screen.php:581
 msgid "Printed on the map. Nearly every tile provider requires this, and removing it breaks their terms rather than merely being impolite. Links are allowed."
 msgstr ""
 
-#: inc/admin-screen.php:579
+#: inc/admin-screen.php:589
 msgid "Deepest zoom offered"
 msgstr ""
 
-#: inc/admin-screen.php:580
+#: inc/admin-screen.php:590
 msgid "Zooming past what a provider actually has produces blank tiles."
 msgstr ""
 
-#: inc/admin-screen.php:594
-msgid "Which field drives what"
-msgstr ""
-
-#: inc/admin-screen.php:595
+#: inc/admin-screen.php:605
 msgid "A location can carry more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. They all display; these choose which of them the finder acts on."
 msgstr ""
 
-#: inc/admin-screen.php:598
+#: inc/admin-screen.php:608
 msgid "Results"
 msgstr ""
 
-#: inc/admin-screen.php:602
+#: inc/admin-screen.php:612
 #: inc/field-hours.php:20
 msgid "Opening hours"
 msgstr ""
 
-#: inc/admin-screen.php:606
+#: inc/admin-screen.php:616
 msgid "Where the map opens"
 msgstr ""
 
-#: inc/admin-screen.php:610
+#: inc/admin-screen.php:620
 #: assets/js/location-finder.js:1570
 msgid "Directions"
 msgstr ""
 
-#: inc/admin-screen.php:616
-msgid "Address lookup"
-msgstr ""
-
-#: inc/admin-screen.php:617
+#: inc/admin-screen.php:627
 msgid "The editor’s “find this address” box calls an outside service. These control which one and how it behaves. Visitors never trigger it — only somebody editing a location does."
 msgstr ""
 
-#: inc/admin-screen.php:620
+#: inc/admin-screen.php:630
 msgid "Custom map tiles"
 msgstr ""
 
-#: inc/admin-screen.php:621
+#: inc/admin-screen.php:631
 msgid "Ignored unless Map style on the Appearance tab is set to Custom."
 msgstr ""
 
-#: inc/admin-screen.php:634
+#: inc/admin-screen.php:644
 msgid "Automatic — follow the site language"
 msgstr ""
 
-#: inc/admin-screen.php:635
+#: inc/admin-screen.php:645
 msgid "Miles"
 msgstr ""
 
-#: inc/admin-screen.php:636
+#: inc/admin-screen.php:646
 msgid "Kilometers"
 msgstr ""
 
-#: inc/admin-screen.php:647
+#: inc/admin-screen.php:657
 msgid "Google Maps"
 msgstr ""
 
-#: inc/admin-screen.php:648
+#: inc/admin-screen.php:658
 msgid "Apple Maps"
 msgstr ""
 
-#: inc/admin-screen.php:649
+#: inc/admin-screen.php:659
 msgid "OpenStreetMap"
 msgstr ""
 
-#: inc/admin-screen.php:650
+#: inc/admin-screen.php:660
 msgid "Custom URL"
 msgstr ""
 

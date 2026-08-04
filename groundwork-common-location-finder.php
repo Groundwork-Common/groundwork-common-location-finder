@@ -130,6 +130,11 @@ if ( ! function_exists( 'lfndr_fields_screen' ) ) {
 
 	// The tab shell and the settings that were not reachable before it.
 	require LFNDR_DIR . 'inc/admin-screen.php';
+
+	/* Contextual help for the settings screen. Loaded after admin-screen.php
+	 * because it is that screen's help, and after admin-fields.php because it
+	 * describes what those screens do. */
+	require LFNDR_DIR . 'inc/admin-help.php';
 }
 
 /* ── Activation ──────────────────────────────────────────────────────────────
