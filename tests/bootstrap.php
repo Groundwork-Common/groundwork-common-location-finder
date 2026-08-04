@@ -30,6 +30,7 @@ define( 'LFNDR_DIR', dirname( __DIR__ ) . '/' );
 define( 'LFNDR_URL', 'https://example.test/wp-content/plugins/location-finder/' );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
+defined( 'YEAR_IN_SECONDS' ) || define( 'YEAR_IN_SECONDS', 31536000 );
 
 /** In-memory option store, reset between tests by lfndr_test_reset(). */
 $GLOBALS['lfndr_test_options'] = array();

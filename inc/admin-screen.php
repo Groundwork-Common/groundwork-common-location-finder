@@ -126,6 +126,102 @@ function lfndr_admin_screen(): void {
 	<?php
 }
 
+/* ── Collapsing the colophon ──────────────────────────────────────────────────
+ * Collapsible, never dismissible. A permanent "never show again" turns the
+ * panel into something to be got rid of once and then forgotten, which is both
+ * worse for us and worse for whoever inherits the site and never learns who
+ * maintains the plugin. Folding it away for a month is the honest middle: it
+ * respects somebody who is trying to work, and it comes back.
+ *
+ * Stored per user rather than per site. One administrator collapsing it should
+ * not decide for their colleagues, and user meta is where a personal display
+ * preference belongs.
+ *
+ * The stored value is WHEN it was collapsed, not THAT it was — which is what
+ * makes the thirty days fall out of a comparison instead of needing a scheduled
+ * event to come round and clear a flag.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+const LFNDR_COLOPHON_META   = 'lfndr_colophon_collapsed_at';
+const LFNDR_COLOPHON_SNOOZE = 30 * DAY_IN_SECONDS;
+
+add_action( 'admin_init', 'lfndr_handle_colophon_toggle' );
+
+/**
+ * Is a collapse from $collapsed_at still in force at $now?
+ *
+ * Split out from the user-meta read so the only part with a decision in it can
+ * be tested without WordPress. Zero means never collapsed. A timestamp in the
+ * future — a clock correction, a bad import — reads as collapsed rather than
+ * throwing, and expires on its own once the clock catches up.
+ *
+ * @param int $collapsed_at Unix time the user collapsed it, or 0.
+ * @param int $now          Unix time now.
+ * @return bool
+ */
+function lfndr_colophon_snoozed( int $collapsed_at, int $now ): bool {
+	if ( $collapsed_at <= 0 ) {
+		return false;
+	}
+	return ( $now - $collapsed_at ) < LFNDR_COLOPHON_SNOOZE;
+}
+
+/**
+ * Whether to render the colophon collapsed for the current user.
+ *
+ * @return bool
+ */
+function lfndr_colophon_is_collapsed(): bool {
+	$at = (int) get_user_meta( get_current_user_id(), LFNDR_COLOPHON_META, true );
+	return lfndr_colophon_snoozed( $at, time() );
+}
+
+/**
+ * Collapse or expand, then send the browser back where it was.
+ *
+ * A nonced link handled server-side rather than a script and an AJAX route.
+ * This runs at most twice a month per person, so a page load costs nothing —
+ * and the alternative would add an endpoint, a nonce to ship to the browser and
+ * a script, all to avoid a reload nobody will notice.
+ */
+function lfndr_handle_colophon_toggle(): void {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- presence check only; the nonce is verified below before anything is written.
+	if ( ! isset( $_GET['lfndr_colophon'] ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	check_admin_referer( 'lfndr_colophon' );
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- verified directly above.
+	$wanted = sanitize_key( wp_unslash( $_GET['lfndr_colophon'] ) );
+
+	if ( 'collapse' === $wanted ) {
+		update_user_meta( get_current_user_id(), LFNDR_COLOPHON_META, time() );
+	} else {
+		delete_user_meta( get_current_user_id(), LFNDR_COLOPHON_META );
+	}
+
+	/* Back to the same tab, minus the toggle. Without stripping the arguments a
+	 * refresh would re-fire the toggle, and the nonce in the URL would outlive
+	 * its usefulness in the address bar. */
+	wp_safe_redirect( remove_query_arg( array( 'lfndr_colophon', '_wpnonce' ) ) );
+	exit;
+}
+
+/**
+ * The collapse/expand link, nonced.
+ *
+ * @param string $action 'collapse' or 'expand'.
+ * @return string
+ */
+function lfndr_colophon_toggle_url( string $action ): string {
+	return wp_nonce_url( add_query_arg( 'lfndr_colophon', $action ), 'lfndr_colophon' );
+}
+
 /**
  * Who made this, and the one thing worth asking of someone using it.
  *
@@ -150,7 +246,22 @@ function lfndr_admin_screen(): void {
  */
 function lfndr_render_colophon(): void {
 	?>
+	<?php if ( lfndr_colophon_is_collapsed() ) : ?>
+		<div class="lfndr-colophon lfndr-colophon--collapsed">
+			<span class="lfndr-colophon__logo" aria-hidden="true"></span>
+			<span class="screen-reader-text"><?php esc_html_e( 'Groundwork Common', 'groundwork-common-location-finder' ); ?></span>
+			<a class="lfndr-colophon__toggle" href="<?php echo esc_url( lfndr_colophon_toggle_url( 'expand' ) ); ?>">
+				<?php esc_html_e( 'Show', 'groundwork-common-location-finder' ); ?>
+			</a>
+		</div>
+		<?php return; ?>
+	<?php endif; ?>
+
 	<div class="lfndr-colophon">
+		<a class="lfndr-colophon__toggle" href="<?php echo esc_url( lfndr_colophon_toggle_url( 'collapse' ) ); ?>">
+			<?php esc_html_e( 'Hide for 30 days', 'groundwork-common-location-finder' ); ?>
+		</a>
+
 		<div class="lfndr-colophon__main">
 		<h2 class="lfndr-colophon__brand">
 			<?php
@@ -201,7 +312,7 @@ function lfndr_render_colophon(): void {
 		<?php /* Directly under the referral ask, which is what it answers. */ ?>
 		<p>
 			<a class="button" href="<?php echo esc_url( LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
-				<?php esc_html_e( 'See what we do', 'groundwork-common-location-finder' ); ?>
+				<?php esc_html_e( 'Learn about Groundwork Common', 'groundwork-common-location-finder' ); ?>
 			</a>
 		</p>
 
