@@ -466,8 +466,17 @@ function lfndr_option_fields(): array {
 			'section'     => 'geocode',
 			'type'        => 'email',
 			'label'       => __( 'Contact address for lookups', 'groundwork-common-location-finder' ),
-			'placeholder' => __( 'nobody@example.com', 'groundwork-common-location-finder' ),
-			'help'        => __( 'Nominatim’s usage policy requires a contact for whoever is making the requests. Without one the address lookup in the editor may be blocked — and because the policy applies per operator, an unidentified install risks the block landing on everyone using this plugin.', 'groundwork-common-location-finder' ),
+			/* The real fallback, not a stand-in. lfndr_geocode_contact_email()
+			 * already uses the admin email when this is blank, so showing
+			 * nobody@example.com described a behaviour the plugin does not have
+			 * and invited people to type in something it did not need.
+			 *
+			 * Shown rather than stored: copying the address into the option
+			 * would go stale the moment somebody changes it under Settings →
+			 * General, and there would be nothing to indicate which of the two
+			 * was being sent. */
+			'placeholder' => (string) get_option( 'admin_email' ),
+			'help'        => __( 'Sent with each lookup so the address service knows which site is asking. Leave it blank to use your admin email. Without a contact address the service can refuse the request, and the address finder in the location editor stops filling in coordinates.', 'groundwork-common-location-finder' ),
 		),
 		'geo_endpoint'       => array(
 			'tab'         => 'advanced',

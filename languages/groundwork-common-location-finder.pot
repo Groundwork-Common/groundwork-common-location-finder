@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T23:14:57+00:00\n"
+"POT-Creation-Date: 2026-08-04T23:17:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -597,141 +597,137 @@ msgstr ""
 msgid "Contact address for lookups"
 msgstr ""
 
-#: inc/admin-screen.php:469
-msgid "nobody@example.com"
+#: inc/admin-screen.php:479
+msgid "Sent with each lookup so the address service knows which site is asking. Leave it blank to use your admin email. Without a contact address the service can refuse the request, and the address finder in the location editor stops filling in coordinates."
 msgstr ""
 
-#: inc/admin-screen.php:470
-msgid "Nominatim’s usage policy requires a contact for whoever is making the requests. Without one the address lookup in the editor may be blocked — and because the policy applies per operator, an unidentified install risks the block landing on everyone using this plugin."
-msgstr ""
-
-#: inc/admin-screen.php:476
+#: inc/admin-screen.php:485
 msgid "Lookup endpoint"
 msgstr ""
 
-#: inc/admin-screen.php:478
+#: inc/admin-screen.php:487
 msgid "Point this at your own Nominatim instance, or a paid provider with a compatible response."
 msgstr ""
 
-#: inc/admin-screen.php:484
+#: inc/admin-screen.php:493
 msgid "Limit lookups to countries"
 msgstr ""
 
-#: inc/admin-screen.php:486
+#: inc/admin-screen.php:495
 msgid "Two-letter codes, comma separated. Leave blank to search everywhere."
 msgstr ""
 
-#: inc/admin-screen.php:492
+#: inc/admin-screen.php:501
 msgid "Prefer results in this box"
 msgstr ""
 
-#: inc/admin-screen.php:494
+#: inc/admin-screen.php:503
 msgid "Four numbers: west, south, east, north. Nudges results toward your region without excluding the rest."
 msgstr ""
 
-#: inc/admin-screen.php:500
+#: inc/admin-screen.php:509
 msgid "Restrict strictly to that box"
 msgstr ""
 
-#: inc/admin-screen.php:501
+#: inc/admin-screen.php:510
 msgid "Turns the preference above into a hard limit. An address outside the box then returns nothing at all, which looks like a broken lookup rather than a deliberate one — leave this off unless you mean it."
 msgstr ""
 
-#: inc/admin-screen.php:509
+#: inc/admin-screen.php:518
 msgid "Tile URL"
 msgstr ""
 
-#: inc/admin-screen.php:511
+#: inc/admin-screen.php:520
 msgid "Only used when Map style on the Appearance tab is set to Custom. Must contain {z}, {x} and {y}."
 msgstr ""
 
-#: inc/admin-screen.php:517
+#: inc/admin-screen.php:526
 msgid "Tile attribution"
 msgstr ""
 
-#: inc/admin-screen.php:518
+#: inc/admin-screen.php:527
 msgid "Printed on the map. Nearly every tile provider requires this, and removing it breaks their terms rather than merely being impolite. Links are allowed."
 msgstr ""
 
-#: inc/admin-screen.php:526
+#: inc/admin-screen.php:535
 msgid "Deepest zoom offered"
 msgstr ""
 
-#: inc/admin-screen.php:527
+#: inc/admin-screen.php:536
 msgid "Zooming past what a provider actually has produces blank tiles."
 msgstr ""
 
-#: inc/admin-screen.php:541
+#: inc/admin-screen.php:550
 msgid "Which field drives what"
 msgstr ""
 
-#: inc/admin-screen.php:542
+#: inc/admin-screen.php:551
 msgid "A location can carry more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. They all display; these choose which of them the finder acts on."
 msgstr ""
 
-#: inc/admin-screen.php:545
+#: inc/admin-screen.php:554
 msgid "Results"
 msgstr ""
 
-#: inc/admin-screen.php:549
+#: inc/admin-screen.php:558
 #: inc/field-hours.php:20
 msgid "Opening hours"
 msgstr ""
 
-#: inc/admin-screen.php:553
+#: inc/admin-screen.php:562
 msgid "Where the map opens"
 msgstr ""
 
-#: inc/admin-screen.php:557
+#: inc/admin-screen.php:566
 #: assets/js/location-finder.js:1570
 msgid "Directions"
 msgstr ""
 
-#: inc/admin-screen.php:563
+#: inc/admin-screen.php:572
 msgid "Address lookup"
 msgstr ""
 
-#: inc/admin-screen.php:564
+#: inc/admin-screen.php:573
 msgid "The editor’s “find this address” box calls an outside service. These control which one and how it behaves. Visitors never trigger it — only somebody editing a location does."
 msgstr ""
 
-#: inc/admin-screen.php:567
+#: inc/admin-screen.php:576
 msgid "Custom map tiles"
 msgstr ""
 
-#: inc/admin-screen.php:568
+#: inc/admin-screen.php:577
 msgid "Ignored unless Map style on the Appearance tab is set to Custom."
 msgstr ""
 
-#: inc/admin-screen.php:581
+#: inc/admin-screen.php:590
 msgid "Automatic — follow the site language"
 msgstr ""
 
-#: inc/admin-screen.php:582
+#: inc/admin-screen.php:591
 msgid "Miles"
 msgstr ""
 
-#: inc/admin-screen.php:583
+#: inc/admin-screen.php:592
 msgid "Kilometers"
 msgstr ""
 
-#: inc/admin-screen.php:594
+#: inc/admin-screen.php:603
 msgid "Google Maps"
 msgstr ""
 
-#: inc/admin-screen.php:595
+#: inc/admin-screen.php:604
 msgid "Apple Maps"
 msgstr ""
 
-#: inc/admin-screen.php:596
+#: inc/admin-screen.php:605
 msgid "OpenStreetMap"
 msgstr ""
 
-#: inc/admin-screen.php:597
+#: inc/admin-screen.php:606
 msgid "Custom URL"
 msgstr ""
 
-#: inc/admin-screen.php:630
+#: inc/admin-screen.php:639
 msgid "Save"
 msgstr ""
 
@@ -1301,6 +1297,7 @@ msgid "Open today"
 msgstr ""
 
 #: inc/field-address.php:20
+#: inc/schema.php:81
 msgid "Address"
 msgstr ""
 
@@ -1615,6 +1612,7 @@ msgid "Email"
 msgstr ""
 
 #: inc/field-types.php:72
+#: inc/schema.php:105
 msgid "Phone"
 msgstr ""
 
@@ -1950,6 +1948,10 @@ msgstr ""
 #: inc/render.php:662
 msgctxt "kilometers, abbreviated"
 msgid "km"
+msgstr ""
+
+#: inc/schema.php:94
+msgid "Hours"
 msgstr ""
 
 #: assets/js/location-finder.js:396

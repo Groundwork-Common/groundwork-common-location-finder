@@ -53,12 +53,79 @@ const LFNDR_SYNTHETIC_KEYS = array( '__name', '__coords', '__distance', '__direc
  * @return array
  */
 function lfndr_default_schema(): array {
+	/* ── Why a fresh install is not empty ────────────────────────────────────
+	 * An empty schema is defensible and was wrong. It makes the first run of a
+	 * plugin whose entire idea is "you define the fields" a blank screen with
+	 * an Add Field button and no indication of what a field looks like when it
+	 * is done well — the hardest possible place to start.
+	 *
+	 * These three cover the ordinary case outright: somewhere with an address,
+	 * opening times, and a phone number. A site that needs nothing else never
+	 * opens the Fields screen at all. A site that needs more now has three
+	 * worked examples to copy, including the two composites whose settings are
+	 * the least guessable.
+	 *
+	 * Deliberately three and not more. Every extra default is a row somebody
+	 * has to understand and delete, and deleting is the one action here with
+	 * consequences worth pausing over.
+	 *
+	 * This only ever applies to a site with no stored schema. An existing
+	 * install has its own and is never reshaped by a change here — that is what
+	 * the migration runner is for, and adding fields to somebody's live
+	 * configuration is not a migration, it is an opinion.
+	 * ─────────────────────────────────────────────────────────────────────── */
+	$fields = array(
+		array(
+			'key'         => 'address',
+			'type'        => 'address',
+			'label'       => __( 'Address', 'groundwork-common-location-finder' ),
+			'icon'        => 'pin',
+			'show_card'   => true,
+			'searchable'  => true,
+			'settings'    => array(
+				'subfields'   => array( 'line1', 'line2', 'city', 'region', 'postal' ),
+				'card_parts'  => array( 'city', 'region' ),
+				'directions'  => true,
+			),
+		),
+		array(
+			'key'        => 'hours',
+			'type'       => 'hours',
+			'label'      => __( 'Hours', 'groundwork-common-location-finder' ),
+			'icon'       => 'clock',
+			'show_card'  => true,
+			/* The open/closed badge and the "Open today" filter both come from
+			 * here, and neither is discoverable if the field is only ever in the
+			 * detail pane. */
+			'filterable' => true,
+		),
+		array(
+			'key'         => 'phone',
+			'type'        => 'phone',
+			'label'       => __( 'Phone', 'groundwork-common-location-finder' ),
+			'icon'        => 'phone',
+			/* Detail only. A phone number on a result card costs a line and is
+			 * not what anyone scans a list of locations for. */
+			'show_detail' => true,
+		),
+	);
+
+	foreach ( $fields as $i => $field ) {
+		$fields[ $i ] = array_merge( lfndr_field_defaults(), $field );
+	}
+
 	return array(
 		'version'      => LFNDR_SCHEMA_VERSION,
-		'fields'       => array(),
-		'primary'      => lfndr_empty_primary_roles(),
-		'detail_order' => array( '__name', '__directions' ),
-		'card_order'   => array( '__name', '__distance' ),
+		'fields'       => $fields,
+		'primary'      => array_merge(
+			lfndr_empty_primary_roles(),
+			array(
+				'address' => 'address',
+				'hours'   => 'hours',
+			)
+		),
+		'detail_order' => array( '__name', 'address', '__directions', 'hours', 'phone' ),
+		'card_order'   => array( '__name', 'address', 'hours', '__distance' ),
 		'retired'      => array(),
 	);
 }
