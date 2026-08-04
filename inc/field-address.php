@@ -17,7 +17,7 @@ add_filter( 'lfndr_field_types', 'lfndr_register_address_type' );
  */
 function lfndr_register_address_type( array $types ): array {
 	$types['address'] = array(
-		'label'             => __( 'Address', 'location-finder' ),
+		'label'             => __( 'Address', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
 		'render_admin'      => 'lfndr_admin_address',
@@ -113,9 +113,9 @@ function lfndr_admin_address( array $field, $value, string $name ): void {
 			</p>
 			<ul class="lfndr-address__results" id="%3$s" role="listbox" hidden></ul>',
 			esc_attr( 'lfndr-geo-' . $field['key'] ),
-			esc_html__( 'Find an address', 'location-finder' ),
+			esc_html__( 'Find an address', 'groundwork-common-location-finder' ),
 			esc_attr( 'lfndr-geo-results-' . $field['key'] ),
-			esc_attr__( 'Start typing an address…', 'location-finder' )
+			esc_attr__( 'Start typing an address…', 'groundwork-common-location-finder' )
 		);
 	}
 
@@ -320,11 +320,11 @@ function lfndr_schema_form_address( array $field ): void {
 	$custom    = (array) ( $settings['labels'] ?? array() );
 
 	echo '<table class="widefat striped lfndr-subfields"><thead><tr>';
-	printf( '<th scope="col">%s</th>', esc_html__( 'Part', 'location-finder' ) );
-	printf( '<th scope="col">%s</th>', esc_html__( 'Use', 'location-finder' ) );
-	printf( '<th scope="col">%s</th>', esc_html__( 'Label', 'location-finder' ) );
-	printf( '<th scope="col">%s</th>', esc_html__( 'On cards', 'location-finder' ) );
-	printf( '<th scope="col">%s</th>', esc_html__( 'Searchable', 'location-finder' ) );
+	printf( '<th scope="col">%s</th>', esc_html__( 'Part', 'groundwork-common-location-finder' ) );
+	printf( '<th scope="col">%s</th>', esc_html__( 'Use', 'groundwork-common-location-finder' ) );
+	printf( '<th scope="col">%s</th>', esc_html__( 'Label', 'groundwork-common-location-finder' ) );
+	printf( '<th scope="col">%s</th>', esc_html__( 'On cards', 'groundwork-common-location-finder' ) );
+	printf( '<th scope="col">%s</th>', esc_html__( 'Searchable', 'groundwork-common-location-finder' ) );
 	echo '</tr></thead><tbody>';
 
 	foreach ( LFNDR_ADDRESS_SUBFIELD_KEYS as $key ) {
@@ -334,7 +334,7 @@ function lfndr_schema_form_address( array $field ): void {
 			esc_attr( $key ),
 			checked( in_array( $key, $enabled, true ), true, false ),
 			/* translators: %s: address part name. */
-			esc_attr( sprintf( __( 'Use the %s part', 'location-finder' ), $labels[ $key ] ) )
+			esc_attr( sprintf( __( 'Use the %s part', 'groundwork-common-location-finder' ), $labels[ $key ] ) )
 		);
 		printf(
 			'<td><input type="text" name="settings[labels][%1$s]" value="%2$s" placeholder="%3$s" aria-label="%4$s" /></td>',
@@ -342,21 +342,21 @@ function lfndr_schema_form_address( array $field ): void {
 			esc_attr( (string) ( $custom[ $key ] ?? '' ) ),
 			esc_attr( $labels[ $key ] ),
 			/* translators: %s: address part name. */
-			esc_attr( sprintf( __( 'Label for the %s part', 'location-finder' ), $labels[ $key ] ) )
+			esc_attr( sprintf( __( 'Label for the %s part', 'groundwork-common-location-finder' ), $labels[ $key ] ) )
 		);
 		printf(
 			'<td><input type="checkbox" name="settings[card_parts][]" value="%1$s"%2$s aria-label="%3$s" /></td>',
 			esc_attr( $key ),
 			checked( in_array( $key, $card, true ), true, false ),
 			/* translators: %s: address part name. */
-			esc_attr( sprintf( __( 'Show %s on cards', 'location-finder' ), $labels[ $key ] ) )
+			esc_attr( sprintf( __( 'Show %s on cards', 'groundwork-common-location-finder' ), $labels[ $key ] ) )
 		);
 		printf(
 			'<td><input type="checkbox" name="settings[search_parts][]" value="%1$s"%2$s aria-label="%3$s" /></td>',
 			esc_attr( $key ),
 			checked( in_array( $key, $searchset, true ), true, false ),
 			/* translators: %s: address part name. */
-			esc_attr( sprintf( __( 'Search the %s part', 'location-finder' ), $labels[ $key ] ) )
+			esc_attr( sprintf( __( 'Search the %s part', 'groundwork-common-location-finder' ), $labels[ $key ] ) )
 		);
 		echo '</tr>';
 	}
@@ -365,20 +365,20 @@ function lfndr_schema_form_address( array $field ): void {
 	lfndr_schema_text_control(
 		$field,
 		'default_country',
-		__( 'Default country', 'location-finder' ),
-		__( 'Pre-filled on new locations. A two-letter code such as US or CA.', 'location-finder' )
+		__( 'Default country', 'groundwork-common-location-finder' ),
+		__( 'Pre-filled on new locations. A two-letter code such as US or CA.', 'groundwork-common-location-finder' )
 	);
 	lfndr_schema_select_control(
 		$field,
 		'region_format',
-		__( 'When looking up an address, fill the region with', 'location-finder' ),
+		__( 'When looking up an address, fill the region with', 'groundwork-common-location-finder' ),
 		array(
-			'name' => __( 'Its full name (Alabama, Île-de-France)', 'location-finder' ),
-			'code' => __( 'Its short code (AL, IDF)', 'location-finder' ),
+			'name' => __( 'Its full name (Alabama, Île-de-France)', 'groundwork-common-location-finder' ),
+			'code' => __( 'Its short code (AL, IDF)', 'groundwork-common-location-finder' ),
 		),
 		'name',
-		__( 'Only affects what the lookup fills in — you can always edit the box afterwards.', 'location-finder' )
+		__( 'Only affects what the lookup fills in — you can always edit the box afterwards.', 'groundwork-common-location-finder' )
 	);
-	lfndr_schema_checkbox_control( $field, 'directions', __( 'Offer a Directions link', 'location-finder' ), true );
+	lfndr_schema_checkbox_control( $field, 'directions', __( 'Offer a Directions link', 'groundwork-common-location-finder' ), true );
 }
 

@@ -48,7 +48,7 @@ function lfndr_register_front_assets(): void {
 		true
 	);
 
-	wp_set_script_translations( 'lfndr-finder', 'location-finder', LFNDR_DIR . 'languages' );
+	wp_set_script_translations( 'lfndr-finder', 'groundwork-common-location-finder', LFNDR_DIR . 'languages' );
 
 	/* Attached to the handle, not printed directly: wp_add_inline_style() only
 	 * ever outputs alongside a style that actually gets enqueued, so a site
@@ -90,7 +90,7 @@ function lfndr_page_may_have_finder(): bool {
 		if ( has_shortcode( $post->post_content, 'location_finder' ) ) {
 			return true;
 		}
-		if ( has_block( 'location-finder/finder', $post ) ) {
+		if ( has_block( 'groundwork-common-location-finder/finder', $post ) ) {
 			return true;
 		}
 		if ( has_block( 'core/shortcode', $post ) && false !== strpos( $post->post_content, 'location_finder' ) ) {
@@ -147,8 +147,8 @@ function lfndr_admin_assets( string $hook ): void {
 			'lfndr-admin-repeater',
 			'LFNDR_REPEATER',
 			array(
-				'added'   => __( 'Row added.', 'location-finder' ),
-				'removed' => __( 'Row removed.', 'location-finder' ),
+				'added'   => __( 'Row added.', 'groundwork-common-location-finder' ),
+				'removed' => __( 'Row removed.', 'groundwork-common-location-finder' ),
 			)
 		);
 
@@ -160,10 +160,10 @@ function lfndr_admin_assets( string $hook ): void {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'lfndr_geocode' ),
 				'strings' => array(
-					'searching' => __( 'Searching…', 'location-finder' ),
-					'none'      => __( 'No matches. Try a fuller address.', 'location-finder' ),
-					'error'     => __( 'The address lookup failed. Enter the coordinates by hand.', 'location-finder' ),
-					'filled'    => __( 'Address and coordinates filled in.', 'location-finder' ),
+					'searching' => __( 'Searching…', 'groundwork-common-location-finder' ),
+					'none'      => __( 'No matches. Try a fuller address.', 'groundwork-common-location-finder' ),
+					'error'     => __( 'The address lookup failed. Enter the coordinates by hand.', 'groundwork-common-location-finder' ),
+					'filled'    => __( 'Address and coordinates filled in.', 'groundwork-common-location-finder' ),
 				),
 			)
 		);
@@ -193,9 +193,9 @@ function lfndr_admin_assets( string $hook ): void {
 			'typesWithOptions' => $with_options,
 			'strings'          => array(
 				/* translators: 1: field label, 2: new position, 3: total number of shown fields. */
-				'moved'  => __( '%1$s moved to position %2$s of %3$s.', 'location-finder' ),
+				'moved'  => __( '%1$s moved to position %2$s of %3$s.', 'groundwork-common-location-finder' ),
 				/* translators: %s: field label. */
-				'hidden' => __( '%s is no longer shown here.', 'location-finder' ),
+				'hidden' => __( '%s is no longer shown here.', 'groundwork-common-location-finder' ),
 			),
 		)
 	);

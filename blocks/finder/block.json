@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "location-finder/finder",
+	"name": "groundwork-common-location-finder/finder",
 	"title": "Location Finder",
 	"category": "widgets",
 	"icon": "location-alt",
 	"description": "A searchable map and list of your locations.",
-	"textdomain": "location-finder",
+	"textdomain": "groundwork-common-location-finder",
 	"keywords": [
 		"map",
 		"locations",

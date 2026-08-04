@@ -51,8 +51,8 @@ add_action( 'admin_init', 'lfndr_register_settings' );
 function lfndr_settings_menu(): void {
 	add_submenu_page(
 		'edit.php?post_type=' . LFNDR_POST_TYPE,
-		__( 'Location Finder Settings', 'location-finder' ),
-		__( 'Settings', 'location-finder' ),
+		__( 'Location Finder Settings', 'groundwork-common-location-finder' ),
+		__( 'Settings', 'groundwork-common-location-finder' ),
 		'manage_options',
 		LFNDR_SETTINGS_PAGE,
 		'lfndr_settings_screen'
@@ -66,9 +66,9 @@ function lfndr_settings_menu(): void {
  */
 function lfndr_appearance_sections(): array {
 	return array(
-		'lfndr_section_map'      => __( 'Map & spacing', 'location-finder' ),
-		'lfndr_section_surfaces' => __( 'Panels & surfaces', 'location-finder' ),
-		'lfndr_section_controls' => __( 'Buttons, chips & cards', 'location-finder' ),
+		'lfndr_section_map'      => __( 'Map & spacing', 'groundwork-common-location-finder' ),
+		'lfndr_section_surfaces' => __( 'Panels & surfaces', 'groundwork-common-location-finder' ),
+		'lfndr_section_controls' => __( 'Buttons, chips & cards', 'groundwork-common-location-finder' ),
 	);
 }
 
@@ -98,8 +98,8 @@ function lfndr_appearance_sections(): array {
 function lfndr_style_presets(): array {
 	return array(
 		'ink' => array(
-			'label'  => __( 'Ink', 'location-finder' ),
-			'note'   => __( 'Editorial monochrome. Sharp corners, no hue at all.', 'location-finder' ),
+			'label'  => __( 'Ink', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Editorial monochrome. Sharp corners, no hue at all.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#111827',
 				'badge_bg' => '#f4f4f5',
@@ -123,8 +123,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'slate' => array(
-			'label'  => __( 'Slate', 'location-finder' ),
-			'note'   => __( 'Cool gray and understated — the safe choice under a corporate theme.', 'location-finder' ),
+			'label'  => __( 'Slate', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Cool gray and understated — the safe choice under a corporate theme.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#334155',
 				'badge_bg' => '#e2e8f0',
@@ -151,8 +151,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'newsprint' => array(
-			'label'  => __( 'Newsprint', 'location-finder' ),
-			'note'   => __( 'Warm paper and ink, square corners. Reads as print.', 'location-finder' ),
+			'label'  => __( 'Newsprint', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Warm paper and ink, square corners. Reads as print.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#44403c',
 				'badge_bg' => '#ece5d8',
@@ -179,8 +179,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'clinical' => array(
-			'label'  => __( 'Clinical', 'location-finder' ),
-			'note'   => __( 'Blue on white, tight corners. Institutional and plain.', 'location-finder' ),
+			'label'  => __( 'Clinical', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Blue on white, tight corners. Institutional and plain.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#1d4ed8',
 				'badge_bg' => '#e2e8f0',
@@ -204,8 +204,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'coast' => array(
-			'label'  => __( 'Coast', 'location-finder' ),
-			'note'   => __( 'Teal on near-white. Airy, generous corners.', 'location-finder' ),
+			'label'  => __( 'Coast', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Teal on near-white. Airy, generous corners.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#0e7490',
 				'badge_bg' => '#cffafe',
@@ -232,8 +232,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'forest' => array(
-			'label'  => __( 'Forest', 'location-finder' ),
-			'note'   => __( 'Deep greens. Suits conservation, parks and food growing.', 'location-finder' ),
+			'label'  => __( 'Forest', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Deep greens. Suits conservation, parks and food growing.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#166534',
 				'badge_bg' => '#dcfce7',
@@ -260,8 +260,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'civic' => array(
-			'label'  => __( 'Civic', 'location-finder' ),
-			'note'   => __( 'Terracotta and sand. Built for community organizations.', 'location-finder' ),
+			'label'  => __( 'Civic', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Terracotta and sand. Built for community organizations.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#9a3412',
 				'badge_bg' => '#fde8d7',
@@ -288,8 +288,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'sunrise' => array(
-			'label'  => __( 'Sunrise', 'location-finder' ),
-			'note'   => __( 'Amber and cream, very round. Warm and informal.', 'location-finder' ),
+			'label'  => __( 'Sunrise', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Amber and cream, very round. Warm and informal.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#b45309',
 				'badge_bg' => '#fef3c7',
@@ -316,8 +316,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'rose' => array(
-			'label'  => __( 'Rose', 'location-finder' ),
-			'note'   => __( 'Burgundy on blush. Softer than red without losing weight.', 'location-finder' ),
+			'label'  => __( 'Rose', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Burgundy on blush. Softer than red without losing weight.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#9f1239',
 				'badge_bg' => '#ffe4e6',
@@ -344,8 +344,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'plum' => array(
-			'label'  => __( 'Plum', 'location-finder' ),
-			'note'   => __( 'Deep purple on white. Quiet and a little formal.', 'location-finder' ),
+			'label'  => __( 'Plum', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Deep purple on white. Quiet and a little formal.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#6b21a8',
 				'badge_bg' => '#f3e8ff',
@@ -372,8 +372,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'soft' => array(
-			'label'  => __( 'Soft', 'location-finder' ),
-			'note'   => __( 'Indigo, big corners, generous spacing. Friendly.', 'location-finder' ),
+			'label'  => __( 'Soft', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Indigo, big corners, generous spacing. Friendly.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#4f46e5',
 				'badge_bg' => '#ede9fe',
@@ -397,8 +397,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'contrast' => array(
-			'label'  => __( 'Contrast', 'location-finder' ),
-			'note'   => __( 'Maximum contrast throughout, square corners, yellow selection. For sites that must be legible above all else.', 'location-finder' ),
+			'label'  => __( 'Contrast', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Maximum contrast throughout, square corners, yellow selection. For sites that must be legible above all else.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#000000',
 				'badge_bg' => '#ffffff',
@@ -425,8 +425,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'night' => array(
-			'label'  => __( 'Night', 'location-finder' ),
-			'note'   => __( 'Full dark in navy, with a bright blue accent.', 'location-finder' ),
+			'label'  => __( 'Night', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Full dark in navy, with a bright blue accent.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#38bdf8',
 				'badge_bg' => '#334155',
@@ -453,8 +453,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'graphite' => array(
-			'label'  => __( 'Graphite', 'location-finder' ),
-			'note'   => __( 'Full dark in pure grayscale. No hue to clash with anything.', 'location-finder' ),
+			'label'  => __( 'Graphite', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Full dark in pure grayscale. No hue to clash with anything.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#d4d4d8',
 				'badge_bg' => '#3f3f46',
@@ -481,8 +481,8 @@ function lfndr_style_presets(): array {
 			),
 		),
 		'lagoon' => array(
-			'label'  => __( 'Lagoon', 'location-finder' ),
-			'note'   => __( 'Full dark in deep teal.', 'location-finder' ),
+			'label'  => __( 'Lagoon', 'groundwork-common-location-finder' ),
+			'note'   => __( 'Full dark in deep teal.', 'groundwork-common-location-finder' ),
 			'values' => array(
 				'accent_color' => '#2dd4bf',
 				'badge_bg' => '#115e59',
@@ -539,51 +539,51 @@ function lfndr_map_styles(): array {
 	 * site, which is exactly why it has to be said at the point of choosing
 	 * instead of only in readme.txt, where nobody is looking while picking from
 	 * a dropdown. Any CARTO-backed style added later must carry it too. */
-	$carto_terms = __( 'CARTO’s free basemaps are for non-commercial use. On a commercial site choose OpenStreetMap, or Custom with a provider you have an account with.', 'location-finder' );
+	$carto_terms = __( 'CARTO’s free basemaps are for non-commercial use. On a commercial site choose OpenStreetMap, or Custom with a provider you have an account with.', 'groundwork-common-location-finder' );
 
 	return array(
 		'osm'      => array(
-			'label'       => __( 'OpenStreetMap (standard)', 'location-finder' ),
+			'label'       => __( 'OpenStreetMap (standard)', 'groundwork-common-location-finder' ),
 			'url'         => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 			'attribution' => $osm,
 			'max_zoom'    => 19,
-			'note'        => __( 'The default. No account and no cost.', 'location-finder' ),
-			'terms'       => __( 'Served by donated infrastructure under a usage policy meant for modest traffic. A busy site should self-host its tiles or move to a paid provider via Custom.', 'location-finder' ),
+			'note'        => __( 'The default. No account and no cost.', 'groundwork-common-location-finder' ),
+			'terms'       => __( 'Served by donated infrastructure under a usage policy meant for modest traffic. A busy site should self-host its tiles or move to a paid provider via Custom.', 'groundwork-common-location-finder' ),
 			'terms_url'   => 'https://operations.osmfoundation.org/policies/tiles/',
 		),
 		'positron' => array(
-			'label'       => __( 'Light — muted grays', 'location-finder' ),
+			'label'       => __( 'Light — muted grays', 'groundwork-common-location-finder' ),
 			'url'         => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
 			'attribution' => $carto,
 			'max_zoom'    => 20,
-			'note'        => __( 'Pale and low-contrast, so pins and the results carry the color. Suits most light palettes.', 'location-finder' ),
+			'note'        => __( 'Pale and low-contrast, so pins and the results carry the color. Suits most light palettes.', 'groundwork-common-location-finder' ),
 			'terms'       => $carto_terms,
 			'terms_url'   => 'https://carto.com/legal/',
 		),
 		'voyager'  => array(
-			'label'       => __( 'Light — warm, more detail', 'location-finder' ),
+			'label'       => __( 'Light — warm, more detail', 'groundwork-common-location-finder' ),
 			'url'         => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
 			'attribution' => $carto,
 			'max_zoom'    => 20,
-			'note'        => __( 'Keeps road and place names legible. The one to pick when people navigate by the map itself.', 'location-finder' ),
+			'note'        => __( 'Keeps road and place names legible. The one to pick when people navigate by the map itself.', 'groundwork-common-location-finder' ),
 			'terms'       => $carto_terms,
 			'terms_url'   => 'https://carto.com/legal/',
 		),
 		'dark'     => array(
-			'label'       => __( 'Dark', 'location-finder' ),
+			'label'       => __( 'Dark', 'groundwork-common-location-finder' ),
 			'url'         => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
 			'attribution' => $carto,
 			'max_zoom'    => 20,
-			'note'        => __( 'For a dark finder background. On a light one it reads as a hole in the page.', 'location-finder' ),
+			'note'        => __( 'For a dark finder background. On a light one it reads as a hole in the page.', 'groundwork-common-location-finder' ),
 			'terms'       => $carto_terms,
 			'terms_url'   => 'https://carto.com/legal/',
 		),
 		'custom'   => array(
-			'label'       => __( 'Custom — set by a filter', 'location-finder' ),
+			'label'       => __( 'Custom — set by a filter', 'groundwork-common-location-finder' ),
 			'url'         => '',
 			'attribution' => '',
 			'max_zoom'    => 19,
-			'note'        => __( 'Use the lfndr_tile_url and lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles.', 'location-finder' ),
+			'note'        => __( 'Use the lfndr_tile_url and lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles.', 'groundwork-common-location-finder' ),
 		),
 	);
 }
@@ -625,57 +625,57 @@ function lfndr_appearance_fields(): array {
 			'mode'        => 'choice',
 			'type'        => 'choice',
 			'choices'     => 'lfndr_map_styles',
-			'label'       => __( 'Map style', 'location-finder' ),
+			'label'       => __( 'Map style', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
-			'help'        => __( 'The basemap the pins sit on. Each option brings the attribution its provider requires.', 'location-finder' ),
+			'help'        => __( 'The basemap the pins sit on. Each option brings the attribution its provider requires.', 'groundwork-common-location-finder' ),
 		),
 		'accent_color'        => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-accent',
 			'type'        => 'color',
-			'label'       => __( 'Accent color', 'location-finder' ),
+			'label'       => __( 'Accent color', 'groundwork-common-location-finder' ),
 			'placeholder' => 'currentColor',
-			'help'        => __( 'Map pins and focus rings. Leave blank to match the surrounding text color — the right default in almost every theme. Accepts a hex code, a named color, or a theme variable such as var(--wp--preset--color--accent-1).', 'location-finder' ),
+			'help'        => __( 'Map pins and focus rings. Leave blank to match the surrounding text color — the right default in almost every theme. Accepts a hex code, a named color, or a theme variable such as var(--wp--preset--color--accent-1).', 'groundwork-common-location-finder' ),
 		),
 		'pin_color'           => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-pin',
 			'type'        => 'color',
-			'label'       => __( 'Map pin color', 'location-finder' ),
-			'placeholder' => __( 'the accent color above', 'location-finder' ),
-			'help'        => __( 'Set this when the pins want a different color from focus rings and chip borders — a brand color that reads well on a map is often not the one that reads well as text.', 'location-finder' ),
+			'label'       => __( 'Map pin color', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'the accent color above', 'groundwork-common-location-finder' ),
+			'help'        => __( 'Set this when the pins want a different color from focus rings and chip borders — a brand color that reads well on a map is often not the one that reads well as text.', 'groundwork-common-location-finder' ),
 		),
 		'radius'              => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-radius',
 			'type'        => 'length',
-			'label'       => __( 'Corner radius', 'location-finder' ),
+			'label'       => __( 'Corner radius', 'groundwork-common-location-finder' ),
 			'placeholder' => '14px',
-			'help'        => __( 'Rounding on the map, the search suggestions and the detail pane. Filter chips, badges and buttons are always fully rounded regardless of this setting. A number with a unit, such as 8px or 0.5rem.', 'location-finder' ),
+			'help'        => __( 'Rounding on the map, the search suggestions and the detail pane. Filter chips, badges and buttons are always fully rounded regardless of this setting. A number with a unit, such as 8px or 0.5rem.', 'groundwork-common-location-finder' ),
 		),
 		'gap'                 => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-gap',
 			'type'        => 'length',
-			'label'       => __( 'Spacing', 'location-finder' ),
+			'label'       => __( 'Spacing', 'groundwork-common-location-finder' ),
 			'placeholder' => '1rem',
-			'help'        => __( 'The base gap between the search box, filters, results and map.', 'location-finder' ),
+			'help'        => __( 'The base gap between the search box, filters, results and map.', 'groundwork-common-location-finder' ),
 		),
 		'map_height'          => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-map-height',
 			'type'        => 'length',
-			'label'       => __( 'Map height', 'location-finder' ),
+			'label'       => __( 'Map height', 'groundwork-common-location-finder' ),
 			'placeholder' => '480px',
-			'help'        => __( 'Map height where the map sits above the results — a phone, or a finder in a narrow column. The map is never taller than this, and never taller than a third of the screen. On a wide screen the map fills the finder instead, so use Panel height there. A single finder can still override this from its own block settings.', 'location-finder' ),
+			'help'        => __( 'Map height where the map sits above the results — a phone, or a finder in a narrow column. The map is never taller than this, and never taller than a third of the screen. On a wide screen the map fills the finder instead, so use Panel height there. A single finder can still override this from its own block settings.', 'groundwork-common-location-finder' ),
 		),
 		'panel_height'        => array(
 			'section'     => 'lfndr_section_map',
 			'css_var'     => '--lfndr-panel-height',
 			'type'        => 'length',
-			'label'       => __( 'Panel height', 'location-finder' ),
+			'label'       => __( 'Panel height', 'groundwork-common-location-finder' ),
 			'placeholder' => '480px',
-			'help'        => __( 'How tall the finder is on a wide screen, where the results and the map sit side by side inside one bordered frame. Both columns are this height; the result list scrolls within it.', 'location-finder' ),
+			'help'        => __( 'How tall the finder is on a wide screen, where the results and the map sit side by side inside one bordered frame. Both columns are this height; the result list scrolls within it.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Panels & surfaces ────────────────────────────────────────────
@@ -683,65 +683,65 @@ function lfndr_appearance_fields(): array {
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-bg',
 			'type'        => 'color',
-			'label'       => __( 'Finder background', 'location-finder' ),
-			'placeholder' => __( 'the page background', 'location-finder' ),
-			'help'        => __( 'The ground the whole finder sits on. Left blank it shows the page through, which is right for a finder embedded in a normal layout. Set it when the other colors here have moved away from the page — dark cards on a light page read as a light finder with dark parts rather than a dark finder.', 'location-finder' ),
+			'label'       => __( 'Finder background', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'the page background', 'groundwork-common-location-finder' ),
+			'help'        => __( 'The ground the whole finder sits on. Left blank it shows the page through, which is right for a finder embedded in a normal layout. Set it when the other colors here have moved away from the page — dark cards on a light page read as a light finder with dark parts rather than a dark finder.', 'groundwork-common-location-finder' ),
 		),
 		'finder_text'         => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-fg',
 			'type'        => 'color',
-			'label'       => __( 'Finder text', 'location-finder' ),
-			'placeholder' => __( 'inherited from the page', 'location-finder' ),
-			'help'        => __( 'Set this whenever you set a finder background. Text inside the finder otherwise keeps the color the page gives it, which on a background that has moved away from the page means dark on dark.', 'location-finder' ),
+			'label'       => __( 'Finder text', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'inherited from the page', 'groundwork-common-location-finder' ),
+			'help'        => __( 'Set this whenever you set a finder background. Text inside the finder otherwise keeps the color the page gives it, which on a background that has moved away from the page means dark on dark.', 'groundwork-common-location-finder' ),
 		),
 		'finder_padding'      => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-pad',
 			'type'        => 'length',
-			'label'       => __( 'Finder padding', 'location-finder' ),
+			'label'       => __( 'Finder padding', 'groundwork-common-location-finder' ),
 			'placeholder' => '0',
-			'help'        => __( 'Space between the finder background and what sits on it. Set it whenever you set a background — without it the search box and cards run flat into the edge of the color. Leave blank when there is no background, so the finder stays aligned with the rest of the page.', 'location-finder' ),
+			'help'        => __( 'Space between the finder background and what sits on it. Set it whenever you set a background — without it the search box and cards run flat into the edge of the color. Leave blank when there is no background, so the finder stays aligned with the rest of the page.', 'groundwork-common-location-finder' ),
 		),
 		'surface_color'       => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-surface',
 			'type'        => 'color',
-			'label'       => __( 'Surface color', 'location-finder' ),
+			'label'       => __( 'Surface color', 'groundwork-common-location-finder' ),
 			'placeholder' => 'Canvas',
-			'help'        => __( 'Background of the search suggestions and the detail pane, and the ring drawn around each map pin. Leave blank to use the system background color, which already adapts to dark mode.', 'location-finder' ),
+			'help'        => __( 'Background of the search suggestions and the detail pane, and the ring drawn around each map pin. Leave blank to use the system background color, which already adapts to dark mode.', 'groundwork-common-location-finder' ),
 		),
 		'on_surface_color'    => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-on-surface',
 			'type'        => 'color',
-			'label'       => __( 'Text on surface', 'location-finder' ),
+			'label'       => __( 'Text on surface', 'groundwork-common-location-finder' ),
 			'placeholder' => 'CanvasText',
-			'help'        => __( 'Text color inside the detail pane and search suggestions. Leave blank to use the system text color.', 'location-finder' ),
+			'help'        => __( 'Text color inside the detail pane and search suggestions. Leave blank to use the system text color.', 'groundwork-common-location-finder' ),
 		),
 		'open_color'          => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-open',
 			'type'        => 'color',
-			'label'       => __( 'Open indicator', 'location-finder' ),
+			'label'       => __( 'Open indicator', 'groundwork-common-location-finder' ),
 			'placeholder' => '#22c55e',
-			'help'        => __( 'The lamp beside "Open now" and "Open today". Green by default, and one of only two places this plugin ships a color of its own — on a status light the color is the information rather than decoration.', 'location-finder' ),
+			'help'        => __( 'The lamp beside "Open now" and "Open today". Green by default, and one of only two places this plugin ships a color of its own — on a status light the color is the information rather than decoration.', 'groundwork-common-location-finder' ),
 		),
 		'closure_color'       => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-closure',
 			'type'        => 'color',
-			'label'       => __( 'Closure notice color', 'location-finder' ),
-			'placeholder' => __( 'the surrounding text color', 'location-finder' ),
-			'help'        => __( 'The rule, tint, icon and text of the "Temporarily closed" notice, together. The plugin ships it in the text color rather than red, so that it cannot clash with a theme it has never seen — set a color here if you would rather it shouted.', 'location-finder' ),
+			'label'       => __( 'Closure notice color', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'the surrounding text color', 'groundwork-common-location-finder' ),
+			'help'        => __( 'The rule, tint, icon and text of the "Temporarily closed" notice, together. The plugin ships it in the text color rather than red, so that it cannot clash with a theme it has never seen — set a color here if you would rather it shouted.', 'groundwork-common-location-finder' ),
 		),
 		'line_color'          => array(
 			'section'     => 'lfndr_section_surfaces',
 			'css_var'     => '--lfndr-line',
 			'type'        => 'color',
-			'label'       => __( 'Border color', 'location-finder' ),
-			'placeholder' => __( 'a soft tint of the text color', 'location-finder' ),
-			'help'        => __( 'Badge outlines and dividers.', 'location-finder' ),
+			'label'       => __( 'Border color', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'a soft tint of the text color', 'groundwork-common-location-finder' ),
+			'help'        => __( 'Badge outlines and dividers.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Buttons, chips & cards ───────────────────────────────────────
@@ -753,9 +753,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $chips,
 			'property'    => 'background-color',
 			'type'        => 'color',
-			'label'       => __( 'Button & chip background', 'location-finder' ),
-			'placeholder' => __( "the theme's own button color", 'location-finder' ),
-			'help'        => __( 'The search box, the filter chips, and every button — Filters, Full screen, Apply, Clear filters, Show all results. Leave blank to use the theme\'s own button styling.', 'location-finder' ),
+			'label'       => __( 'Button & chip background', 'groundwork-common-location-finder' ),
+			'placeholder' => __( "the theme's own button color", 'groundwork-common-location-finder' ),
+			'help'        => __( 'The search box, the filter chips, and every button — Filters, Full screen, Apply, Clear filters, Show all results. Leave blank to use the theme\'s own button styling.', 'groundwork-common-location-finder' ),
 		),
 		'control_text'        => array(
 			'section'     => 'lfndr_section_controls',
@@ -763,9 +763,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $chips,
 			'property'    => 'color',
 			'type'        => 'color',
-			'label'       => __( 'Button & chip text', 'location-finder' ),
-			'placeholder' => __( "the theme's own button text color", 'location-finder' ),
-			'help'        => __( 'Set alongside the background above — a background with no matching text color can end up unreadable.', 'location-finder' ),
+			'label'       => __( 'Button & chip text', 'groundwork-common-location-finder' ),
+			'placeholder' => __( "the theme's own button text color", 'groundwork-common-location-finder' ),
+			'help'        => __( 'Set alongside the background above — a background with no matching text color can end up unreadable.', 'groundwork-common-location-finder' ),
 		),
 		'control_active_bg'   => array(
 			'section'     => 'lfndr_section_controls',
@@ -773,9 +773,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $active,
 			'property'    => 'background-color',
 			'type'        => 'color',
-			'label'       => __( 'Pressed button & chip background', 'location-finder' ),
+			'label'       => __( 'Pressed button & chip background', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
-			'help'        => __( 'A selected filter chip, the Filters button while its panel is open, or Full screen while it is open.', 'location-finder' ),
+			'help'        => __( 'A selected filter chip, the Filters button while its panel is open, or Full screen while it is open.', 'groundwork-common-location-finder' ),
 		),
 		'control_active_text' => array(
 			'section'     => 'lfndr_section_controls',
@@ -783,7 +783,7 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $active,
 			'property'    => 'color',
 			'type'        => 'color',
-			'label'       => __( 'Pressed button & chip text', 'location-finder' ),
+			'label'       => __( 'Pressed button & chip text', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
 			'help'        => '',
 		),
@@ -793,9 +793,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $card,
 			'property'    => 'background-color',
 			'type'        => 'color',
-			'label'       => __( 'Card background', 'location-finder' ),
-			'placeholder' => __( 'a neutral system background', 'location-finder' ),
-			'help'        => __( 'Each location in the result list. A card is a native button for keyboard and screen-reader purposes, but reads as content, not as an action — left blank it uses a neutral panel background rather than the theme\'s button color.', 'location-finder' ),
+			'label'       => __( 'Card background', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'a neutral system background', 'groundwork-common-location-finder' ),
+			'help'        => __( 'Each location in the result list. A card is a native button for keyboard and screen-reader purposes, but reads as content, not as an action — left blank it uses a neutral panel background rather than the theme\'s button color.', 'groundwork-common-location-finder' ),
 		),
 		'card_text'           => array(
 			'section'     => 'lfndr_section_controls',
@@ -803,8 +803,8 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $card,
 			'property'    => 'color',
 			'type'        => 'color',
-			'label'       => __( 'Card text', 'location-finder' ),
-			'placeholder' => __( 'a neutral system text color', 'location-finder' ),
+			'label'       => __( 'Card text', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'a neutral system text color', 'groundwork-common-location-finder' ),
 			'help'        => '',
 		),
 		'card_selected_bg'    => array(
@@ -813,9 +813,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $card_s,
 			'property'    => 'background-color',
 			'type'        => 'color',
-			'label'       => __( 'Selected card background', 'location-finder' ),
+			'label'       => __( 'Selected card background', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
-			'help'        => __( 'The card currently open in the detail pane.', 'location-finder' ),
+			'help'        => __( 'The card currently open in the detail pane.', 'groundwork-common-location-finder' ),
 		),
 		'card_selected_text'  => array(
 			'section'     => 'lfndr_section_controls',
@@ -823,7 +823,7 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $card_s,
 			'property'    => 'color',
 			'type'        => 'color',
-			'label'       => __( 'Selected card text', 'location-finder' ),
+			'label'       => __( 'Selected card text', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
 			'help'        => '',
 		),
@@ -833,9 +833,9 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $badge,
 			'property'    => 'background-color',
 			'type'        => 'color',
-			'label'       => __( 'Tag background', 'location-finder' ),
+			'label'       => __( 'Tag background', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
-			'help'        => __( 'The small service, access and status pills shown on cards and in the detail pane.', 'location-finder' ),
+			'help'        => __( 'The small service, access and status pills shown on cards and in the detail pane.', 'groundwork-common-location-finder' ),
 		),
 		'badge_text'          => array(
 			'section'     => 'lfndr_section_controls',
@@ -843,7 +843,7 @@ function lfndr_appearance_fields(): array {
 			'selector'    => $badge,
 			'property'    => 'color',
 			'type'        => 'color',
-			'label'       => __( 'Tag text', 'location-finder' ),
+			'label'       => __( 'Tag text', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
 			'help'        => '',
 		),
@@ -895,7 +895,7 @@ function lfndr_register_settings(): void {
 function lfndr_section_intro_map(): void {
 	printf(
 		'<p class="description">%s</p>',
-		esc_html__( 'Leave any field blank to keep the theme-matched default. Nothing on this screen is required — these exist for the times a theme\'s own colors or sizing are not quite right, without needing to edit CSS.', 'location-finder' )
+		esc_html__( 'Leave any field blank to keep the theme-matched default. Nothing on this screen is required — these exist for the times a theme\'s own colors or sizing are not quite right, without needing to edit CSS.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -905,7 +905,7 @@ function lfndr_section_intro_map(): void {
 function lfndr_section_intro_surfaces(): void {
 	printf(
 		'<p class="description">%s</p>',
-		esc_html__( 'Backgrounds and text for the parts of the finder that sit above the map or the result list, rather than inside them.', 'location-finder' )
+		esc_html__( 'Backgrounds and text for the parts of the finder that sit above the map or the result list, rather than inside them.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -915,7 +915,7 @@ function lfndr_section_intro_surfaces(): void {
 function lfndr_section_intro_controls(): void {
 	printf(
 		'<p class="description">%s</p>',
-		esc_html__( 'Every clickable control in the finder is a native button, colored by your theme by default — the same principle as the rest of this plugin. Setting one of these overrides that styling just for the finder, and takes priority over the theme so the color you pick is the one you get.', 'location-finder' )
+		esc_html__( 'Every clickable control in the finder is a native button, colored by your theme by default — the same principle as the rest of this plugin. Setting one of these overrides that styling just for the finder, and takes priority over the theme so the color you pick is the one you get.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -967,7 +967,7 @@ function lfndr_render_appearance_field( array $args ): void {
 				'<input type="color" class="lfndr-color-field__swatch" value="%1$s" data-for="lfndr-setting-%2$s" aria-label="%3$s" />',
 				esc_attr( preg_match( '/^#[0-9a-f]{6}$/i', $value ) ? $value : '#ffffff' ),
 				esc_attr( $key ),
-				esc_attr( sprintf( /* translators: %s: field label. */ __( 'Pick a color for %s', 'location-finder' ), $field['label'] ) )
+				esc_attr( sprintf( /* translators: %s: field label. */ __( 'Pick a color for %s', 'groundwork-common-location-finder' ), $field['label'] ) )
 			)
 			: ''
 	);
@@ -1015,12 +1015,12 @@ function lfndr_render_choice_field( string $key, array $field, string $value ): 
 	if ( $current && '' !== ( $current['terms'] ?? '' ) ) {
 		printf(
 			'<p class="lfndr-terms lfndr-terms--active"><strong>%1$s</strong> %2$s %3$s</p>',
-			esc_html__( 'Terms of use:', 'location-finder' ),
+			esc_html__( 'Terms of use:', 'groundwork-common-location-finder' ),
 			esc_html( $current['terms'] ),
 			'' === ( $current['terms_url'] ?? '' ) ? '' : sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
 				esc_url( $current['terms_url'] ),
-				esc_html__( 'Read the terms', 'location-finder' )
+				esc_html__( 'Read the terms', 'groundwork-common-location-finder' )
 			)
 		);
 	}
@@ -1169,13 +1169,13 @@ function lfndr_render_preset_picker(): void {
 	$presets = lfndr_style_presets();
 	$current = lfndr_current_preset();
 	?>
-	<h2><?php esc_html_e( 'Appearance', 'location-finder' ); ?></h2>
+	<h2><?php esc_html_e( 'Appearance', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description" style="max-width:44em">
-		<?php esc_html_e( 'Pick a set and save. Every one clears WCAG AA for text contrast, and every value it writes stays editable underneath.', 'location-finder' ); ?>
+		<?php esc_html_e( 'Pick a set and save. Every one clears WCAG AA for text contrast, and every value it writes stays editable underneath.', 'groundwork-common-location-finder' ); ?>
 	</p>
 
 	<fieldset class="lfndr-presets">
-		<legend class="screen-reader-text"><?php esc_html_e( 'Appearance preset', 'location-finder' ); ?></legend>
+		<legend class="screen-reader-text"><?php esc_html_e( 'Appearance preset', 'groundwork-common-location-finder' ); ?></legend>
 
 		<?php foreach ( $presets as $key => $preset ) : ?>
 			<label class="lfndr-preset">
@@ -1198,12 +1198,12 @@ function lfndr_render_preset_picker(): void {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized colors; see lfndr_preset_thumbnail().
 			echo lfndr_preset_thumbnail( lfndr_current_values() );
 			?>
-			<span class="lfndr-preset__name"><?php esc_html_e( 'Custom', 'location-finder' ); ?></span>
+			<span class="lfndr-preset__name"><?php esc_html_e( 'Custom', 'groundwork-common-location-finder' ); ?></span>
 			<span class="lfndr-preset__note">
 				<?php
 				echo '' === $current
-					? esc_html__( 'Your own values, set below. Selected because they match no preset.', 'location-finder' )
-					: esc_html__( 'Edit any value below and it becomes Custom.', 'location-finder' );
+					? esc_html__( 'Your own values, set below. Selected because they match no preset.', 'groundwork-common-location-finder' )
+					: esc_html__( 'Edit any value below and it becomes Custom.', 'groundwork-common-location-finder' );
 				?>
 			</span>
 		</label>
@@ -1232,11 +1232,11 @@ function lfndr_current_values(): array {
  */
 function lfndr_settings_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to change these settings.', 'location-finder' ) );
+		wp_die( esc_html__( 'You do not have permission to change these settings.', 'groundwork-common-location-finder' ) );
 	}
 	?>
 	<div class="wrap lfndr-admin">
-		<h1><?php esc_html_e( 'Location Finder Settings', 'location-finder' ); ?></h1>
+		<h1><?php esc_html_e( 'Location Finder Settings', 'groundwork-common-location-finder' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( 'lfndr_settings_group' );
@@ -1254,7 +1254,7 @@ function lfndr_settings_screen(): void {
 			$custom   = '' === lfndr_current_preset();
 			?>
 			<details class="lfndr-fine-tune"<?php echo $custom ? ' open' : ''; ?>>
-				<summary><?php esc_html_e( 'Fine-tune individual values', 'location-finder' ); ?></summary>
+				<summary><?php esc_html_e( 'Fine-tune individual values', 'groundwork-common-location-finder' ); ?></summary>
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings API output, escaped at source.
 				echo $sections;

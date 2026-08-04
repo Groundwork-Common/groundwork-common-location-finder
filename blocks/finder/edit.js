@@ -19,7 +19,7 @@
 	var el = element.createElement;
 	var __ = i18n.__;
 
-	blocks.registerBlockType( 'location-finder/finder', {
+	blocks.registerBlockType( 'groundwork-common-location-finder/finder', {
 		edit: function ( props ) {
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
@@ -33,7 +33,7 @@
 					null,
 					el(
 						components.PanelBody,
-						{ title: __( 'Accessibility', 'location-finder' ) },
+						{ title: __( 'Accessibility', 'groundwork-common-location-finder' ) },
 						/* Deliberately not a visible heading. A Heading block above
 						 * the finder does that job better — it lands at the right
 						 * level for the page outline and takes the theme's type,
@@ -45,10 +45,10 @@
 						 * two finders on one page, which are otherwise identical to
 						 * anyone navigating by landmark. */
 						el( components.TextControl, {
-							label: __( 'Accessible name', 'location-finder' ),
+							label: __( 'Accessible name', 'groundwork-common-location-finder' ),
 							value: attributes.label || '',
-							placeholder: __( 'e.g. Food pantries', 'location-finder' ),
-							help: __( 'Not shown on the page. Names the finder for screen readers, which matters most in full screen and when a page has more than one finder. Leave blank to add no landmark at all.', 'location-finder' ),
+							placeholder: __( 'e.g. Food pantries', 'groundwork-common-location-finder' ),
+							help: __( 'Not shown on the page. Names the finder for screen readers, which matters most in full screen and when a page has more than one finder. Leave blank to add no landmark at all.', 'groundwork-common-location-finder' ),
 							onChange: function ( value ) {
 								setAttributes( { label: value } );
 							},
@@ -58,12 +58,12 @@
 					),
 					el(
 						components.PanelBody,
-						{ title: __( 'Layout', 'location-finder' ) },
+						{ title: __( 'Layout', 'groundwork-common-location-finder' ) },
 						el( components.ToggleControl, {
-							label: __( 'Show the map', 'location-finder' ),
+							label: __( 'Show the map', 'groundwork-common-location-finder' ),
 							help: attributes.showMap
-								? __( 'Locations appear on a map beside the list.', 'location-finder' )
-								: __( 'Only the list is shown. Coordinates still drive distance sorting.', 'location-finder' ),
+								? __( 'Locations appear on a map beside the list.', 'groundwork-common-location-finder' )
+								: __( 'Only the list is shown. Coordinates still drive distance sorting.', 'groundwork-common-location-finder' ),
 							checked: !! attributes.showMap,
 							onChange: function ( value ) {
 								setAttributes( { showMap: value } );
@@ -72,12 +72,12 @@
 						} ),
 						attributes.showMap &&
 							el( components.RangeControl, {
-								label: __( 'Map height (px)', 'location-finder' ),
+								label: __( 'Map height (px)', 'groundwork-common-location-finder' ),
 								value: attributes.height || 0,
 								min: 0,
 								max: 900,
 								step: 20,
-								help: __( '0 uses the theme default.', 'location-finder' ),
+								help: __( '0 uses the theme default.', 'groundwork-common-location-finder' ),
 								onChange: function ( value ) {
 									setAttributes( { height: value || 0 } );
 								},
@@ -90,10 +90,10 @@
 					components.Placeholder,
 					{
 						icon: 'location-alt',
-						label: __( 'Location Finder', 'location-finder' ),
+						label: __( 'Location Finder', 'groundwork-common-location-finder' ),
 						instructions: __(
 							'The searchable map and list render on the front end. Add and edit locations under Locations, and choose what they record under Locations → Fields.',
-							'location-finder'
+							'groundwork-common-location-finder'
 						)
 					}
 				)

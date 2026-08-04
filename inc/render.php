@@ -78,7 +78,7 @@ function lfndr_render_finder( array $atts = array() ): string {
 					printf(
 						esc_html(
 							/* translators: %s: number of locations. */
-							_n( '%s location', '%s locations', count( $locations ), 'location-finder' )
+							_n( '%s location', '%s locations', count( $locations ), 'groundwork-common-location-finder' )
 						),
 						esc_html( number_format_i18n( count( $locations ) ) )
 					);
@@ -90,7 +90,7 @@ function lfndr_render_finder( array $atts = array() ): string {
 
 			<?php if ( $show_map ) : ?>
 				<div class="lfndr__map" id="<?php echo esc_attr( $id ); ?>-map" role="application"
-					aria-label="<?php esc_attr_e( 'Map of locations', 'location-finder' ); ?>"></div>
+					aria-label="<?php esc_attr_e( 'Map of locations', 'groundwork-common-location-finder' ); ?>"></div>
 			<?php endif; ?>
 		</div>
 
@@ -126,7 +126,7 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 				<input type="search" id="<?php echo esc_attr( $id ); ?>-q" class="lfndr__search-input"
 					autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
 					aria-controls="<?php echo esc_attr( $id ); ?>-suggest"
-					placeholder="<?php esc_attr_e( 'Search…', 'location-finder' ); ?>" />
+					placeholder="<?php esc_attr_e( 'Search…', 'groundwork-common-location-finder' ); ?>" />
 				<ul class="lfndr__suggest" id="<?php echo esc_attr( $id ); ?>-suggest" role="listbox" hidden></ul>
 			</div>
 		<?php endif; ?>
@@ -142,14 +142,14 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 			<button type="button" class="lfndr__filters-toggle" aria-expanded="true"
 				aria-controls="<?php echo esc_attr( $id ); ?>-filters">
 				<?php echo lfndr_icon( 'filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, literal markup; see lfndr_icon(). ?>
-				<span class="lfndr__button-label"><?php esc_html_e( 'Filters', 'location-finder' ); ?></span>
+				<span class="lfndr__button-label"><?php esc_html_e( 'Filters', 'groundwork-common-location-finder' ); ?></span>
 			</button>
 			<div class="lfndr__filters-body" id="<?php echo esc_attr( $id ); ?>-filters">
 				<?php foreach ( $facets as $group ) : ?>
 					<?php lfndr_render_facet_group( $id, $group ); ?>
 				<?php endforeach; ?>
 				<button type="button" class="lfndr__reset" hidden>
-					<?php esc_html_e( 'Clear filters', 'location-finder' ); ?>
+					<?php esc_html_e( 'Clear filters', 'groundwork-common-location-finder' ); ?>
 				</button>
 			</div>
 		<?php endif; ?>
@@ -238,7 +238,7 @@ function lfndr_render_facet_group( string $id, array $group ): void {
 			esc_attr( $group['match'] ),
 			esc_attr( $group_id ),
 			esc_html( $group['label'] ),
-			esc_html__( 'Any', 'location-finder' )
+			esc_html__( 'Any', 'groundwork-common-location-finder' )
 		);
 		foreach ( $group['values'] as $value ) {
 			printf(
@@ -302,12 +302,12 @@ function lfndr_searchable_summary(): string {
 
 	/* The name is always searchable, so the box always has a purpose. */
 	if ( ! $labels ) {
-		return __( 'Search by name', 'location-finder' );
+		return __( 'Search by name', 'groundwork-common-location-finder' );
 	}
 
 	return sprintf(
 		/* translators: %s: comma-separated list of field labels. */
-		__( 'Search by name, %s', 'location-finder' ),
+		__( 'Search by name, %s', 'groundwork-common-location-finder' ),
 		implode( ', ', array_map( 'strtolower', array_slice( $labels, 0, 3 ) ) )
 	);
 }
@@ -331,7 +331,7 @@ function lfndr_render_static_list( array $locations, array $schema ): void {
 	if ( ! $locations ) {
 		printf(
 			'<p class="lfndr__empty">%s</p>',
-			esc_html__( 'No locations have been added yet.', 'location-finder' )
+			esc_html__( 'No locations have been added yet.', 'groundwork-common-location-finder' )
 		);
 		return;
 	}
@@ -403,7 +403,7 @@ function lfndr_static_field_text( array $location, array $field ): string {
 			 * Step-free access". Matches the script's boolean renderer. */
 			$true_label = (string) ( $field['settings']['true_label'] ?? '' );
 			return ( '' === $true_label || 0 === strcasecmp( $true_label, (string) $field['label'] ) )
-				? __( 'Yes', 'location-finder' )
+				? __( 'Yes', 'groundwork-common-location-finder' )
 				: $true_label;
 
 		case 'select':
@@ -654,11 +654,11 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 function lfndr_front_strings(): array {
 	return array(
 		/* translators: %s: number of locations. */
-		'countOne'  => __( '%s location', 'location-finder' ),
+		'countOne'  => __( '%s location', 'groundwork-common-location-finder' ),
 		/* translators: %s: number of locations. */
-		'countMany' => __( '%s locations', 'location-finder' ),
+		'countMany' => __( '%s locations', 'groundwork-common-location-finder' ),
 		'unit'      => 'mi' === lfndr_units()
-			? _x( 'mi', 'miles, abbreviated', 'location-finder' )
-			: _x( 'km', 'kilometers, abbreviated', 'location-finder' ),
+			? _x( 'mi', 'miles, abbreviated', 'groundwork-common-location-finder' )
+			: _x( 'km', 'kilometers, abbreviated', 'groundwork-common-location-finder' ),
 	);
 }

@@ -37,10 +37,10 @@ add_action( 'admin_menu', 'lfndr_admin_menu', 9 );
  */
 function lfndr_admin_tabs(): array {
 	return array(
-		'fields'     => __( 'Fields', 'location-finder' ),
-		'behavior'   => __( 'Behavior', 'location-finder' ),
-		'appearance' => __( 'Appearance', 'location-finder' ),
-		'advanced'   => __( 'Advanced', 'location-finder' ),
+		'fields'     => __( 'Fields', 'groundwork-common-location-finder' ),
+		'behavior'   => __( 'Behavior', 'groundwork-common-location-finder' ),
+		'appearance' => __( 'Appearance', 'groundwork-common-location-finder' ),
+		'advanced'   => __( 'Advanced', 'groundwork-common-location-finder' ),
 	);
 }
 
@@ -62,8 +62,8 @@ function lfndr_current_tab(): string {
 function lfndr_admin_menu(): void {
 	add_submenu_page(
 		'edit.php?post_type=' . LFNDR_POST_TYPE,
-		__( 'Location Finder', 'location-finder' ),
-		__( 'Settings', 'location-finder' ),
+		__( 'Location Finder', 'groundwork-common-location-finder' ),
+		__( 'Settings', 'groundwork-common-location-finder' ),
 		'manage_options',
 		LFNDR_FIELDS_PAGE,
 		'lfndr_admin_screen'
@@ -75,7 +75,7 @@ function lfndr_admin_menu(): void {
  */
 function lfndr_admin_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to change these settings.', 'location-finder' ) );
+		wp_die( esc_html__( 'You do not have permission to change these settings.', 'groundwork-common-location-finder' ) );
 	}
 
 	$current = lfndr_current_tab();
@@ -93,9 +93,9 @@ function lfndr_admin_screen(): void {
 
 	?>
 	<div class="wrap lfndr-admin">
-		<h1><?php esc_html_e( 'Location Finder', 'location-finder' ); ?></h1>
+		<h1><?php esc_html_e( 'Location Finder', 'groundwork-common-location-finder' ); ?></h1>
 
-		<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Setup sections', 'location-finder' ); ?>">
+		<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Setup sections', 'groundwork-common-location-finder' ); ?>">
 			<?php foreach ( lfndr_admin_tabs() as $slug => $label ) : ?>
 				<a href="<?php echo esc_url( lfndr_fields_url( array( 'tab' => $slug ) ) ); ?>"
 					class="nav-tab<?php echo $slug === $current ? ' nav-tab-active' : ''; ?>"
@@ -145,37 +145,37 @@ function lfndr_option_fields(): array {
 			'type'    => 'int',
 			'min'     => 0,
 			'max'     => 500,
-			'label'   => __( 'Results shown at once', 'location-finder' ),
-			'help'    => __( '0 shows every match. Any other number shows that many with a “Show all results” button after them. This limits what is drawn, never what is searched — a location beyond the cut is still found by typing its name.', 'location-finder' ),
+			'label'   => __( 'Results shown at once', 'groundwork-common-location-finder' ),
+			'help'    => __( '0 shows every match. Any other number shows that many with a “Show all results” button after them. This limits what is drawn, never what is searched — a location beyond the cut is still found by typing its name.', 'groundwork-common-location-finder' ),
 		),
 		'near_me'            => array(
 			'tab'     => 'behavior',
 			'section' => 'results',
 			'type'    => 'bool',
-			'label'   => __( 'Offer sorting by distance', 'location-finder' ),
-			'help'    => __( 'Lets a visitor share their location to sort the results by how near they are. Off removes it entirely.', 'location-finder' ),
+			'label'   => __( 'Offer sorting by distance', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Lets a visitor share their location to sort the results by how near they are. Off removes it entirely.', 'groundwork-common-location-finder' ),
 		),
 		'tile_consent'       => array(
 			'tab'     => 'behavior',
 			'section' => 'map',
 			'type'    => 'bool',
-			'label'   => __( 'Ask before loading the map', 'location-finder' ),
-			'help'    => __( 'Show a placeholder with a "Show map" button instead of loading map tiles straight away. Tiles are fetched by the visitor\'s browser, so until they choose to load them their IP address is never sent to the tile provider. The search, filters and location list all work without the map. Has no effect when the tiles are served from this site, since there is no third party involved.', 'location-finder' ),
+			'label'   => __( 'Ask before loading the map', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Show a placeholder with a "Show map" button instead of loading map tiles straight away. Tiles are fetched by the visitor\'s browser, so until they choose to load them their IP address is never sent to the tile provider. The search, filters and location list all work without the map. Has no effect when the tiles are served from this site, since there is no third party involved.', 'groundwork-common-location-finder' ),
 		),
 		'auto_locate'        => array(
 			'tab'     => 'behavior',
 			'section' => 'results',
 			'type'    => 'bool',
-			'label'   => __( 'Ask for location on arrival', 'location-finder' ),
-			'help'    => __( 'Off by default, deliberately: an unprompted permission prompt is easy to refuse and hard to ask for twice, and browsers penalize sites that do it.', 'location-finder' ),
+			'label'   => __( 'Ask for location on arrival', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Off by default, deliberately: an unprompted permission prompt is easy to refuse and hard to ask for twice, and browsers penalize sites that do it.', 'groundwork-common-location-finder' ),
 		),
 		'units'              => array(
 			'tab'     => 'behavior',
 			'section' => 'results',
 			'type'    => 'select',
 			'choices' => 'lfndr_unit_choices',
-			'label'   => __( 'Distance units', 'location-finder' ),
-			'help'    => __( 'Left automatic, this follows the site language — miles for US and UK English, kilometers everywhere else.', 'location-finder' ),
+			'label'   => __( 'Distance units', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Left automatic, this follows the site language — miles for US and UK English, kilometers everywhere else.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Behavior: opening hours ──────────────────────────────────────
@@ -183,9 +183,9 @@ function lfndr_option_fields(): array {
 			'tab'         => 'behavior',
 			'section'     => 'hours',
 			'type'        => 'text',
-			'label'       => __( 'Timezone for “Open now”', 'location-finder' ),
-			'placeholder' => __( 'the site timezone', 'location-finder' ),
-			'help'        => __( 'An IANA name such as America/Chicago. Left blank this follows Settings → General, which is almost always right: somebody checking a Birmingham food bank from a phone still set to Pacific time wants Birmingham’s clock.', 'location-finder' ),
+			'label'       => __( 'Timezone for “Open now”', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'the site timezone', 'groundwork-common-location-finder' ),
+			'help'        => __( 'An IANA name such as America/Chicago. Left blank this follows Settings → General, which is almost always right: somebody checking a Birmingham food bank from a phone still set to Pacific time wants Birmingham’s clock.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Behavior: where the map opens ────────────────────────────────
@@ -193,8 +193,8 @@ function lfndr_option_fields(): array {
 			'tab'     => 'behavior',
 			'section' => 'start',
 			'type'    => 'bool',
-			'label'   => __( 'Zoom to fit the results', 'location-finder' ),
-			'help'    => __( 'On, the map frames whatever is currently showing. The starting point below is the fallback for when nothing matches, so it is worth setting even with this on.', 'location-finder' ),
+			'label'   => __( 'Zoom to fit the results', 'groundwork-common-location-finder' ),
+			'help'    => __( 'On, the map frames whatever is currently showing. The starting point below is the fallback for when nothing matches, so it is worth setting even with this on.', 'groundwork-common-location-finder' ),
 		),
 		'center_lat'         => array(
 			'tab'     => 'behavior',
@@ -202,8 +202,8 @@ function lfndr_option_fields(): array {
 			'type'    => 'float',
 			'min'     => -90,
 			'max'     => 90,
-			'label'   => __( 'Starting latitude', 'location-finder' ),
-			'help'    => __( 'Defaults to 0, which is a point in the Gulf of Guinea — fine while results are showing, and an ocean the moment a filter matches nothing.', 'location-finder' ),
+			'label'   => __( 'Starting latitude', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Defaults to 0, which is a point in the Gulf of Guinea — fine while results are showing, and an ocean the moment a filter matches nothing.', 'groundwork-common-location-finder' ),
 		),
 		'center_lng'         => array(
 			'tab'     => 'behavior',
@@ -211,7 +211,7 @@ function lfndr_option_fields(): array {
 			'type'    => 'float',
 			'min'     => -180,
 			'max'     => 180,
-			'label'   => __( 'Starting longitude', 'location-finder' ),
+			'label'   => __( 'Starting longitude', 'groundwork-common-location-finder' ),
 			'help'    => '',
 		),
 		'zoom'               => array(
@@ -220,8 +220,8 @@ function lfndr_option_fields(): array {
 			'type'    => 'int',
 			'min'     => 0,
 			'max'     => 19,
-			'label'   => __( 'Starting zoom', 'location-finder' ),
-			'help'    => __( '0 is the whole world, 12 a city, 16 a few streets.', 'location-finder' ),
+			'label'   => __( 'Starting zoom', 'groundwork-common-location-finder' ),
+			'help'    => __( '0 is the whole world, 12 a city, 16 a few streets.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Behavior: directions ─────────────────────────────────────────
@@ -230,16 +230,16 @@ function lfndr_option_fields(): array {
 			'section' => 'directions',
 			'type'    => 'select',
 			'choices' => 'lfndr_directions_choices',
-			'label'   => __( 'Directions service', 'location-finder' ),
-			'help'    => __( 'Where the Directions link sends people. The address is used in preference to the coordinates, because a street address resolves to a door and a coordinate resolves to a point — which on a large site is regularly the wrong side of the building.', 'location-finder' ),
+			'label'   => __( 'Directions service', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Where the Directions link sends people. The address is used in preference to the coordinates, because a street address resolves to a door and a coordinate resolves to a point — which on a large site is regularly the wrong side of the building.', 'groundwork-common-location-finder' ),
 		),
 		'directions_pattern' => array(
 			'tab'         => 'behavior',
 			'section'     => 'directions',
 			'type'        => 'text',
-			'label'       => __( 'Custom directions URL', 'location-finder' ),
+			'label'       => __( 'Custom directions URL', 'groundwork-common-location-finder' ),
 			'placeholder' => 'https://example.com/?to={query}',
-			'help'        => __( 'Only used when the service above is Custom. {query} is the formatted address, {lat} and {lng} the coordinates.', 'location-finder' ),
+			'help'        => __( 'Only used when the service above is Custom. {query} is the formatted address, {lat} and {lng} the coordinates.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Advanced: address lookup ─────────────────────────────────────
@@ -247,40 +247,40 @@ function lfndr_option_fields(): array {
 			'tab'         => 'advanced',
 			'section'     => 'geocode',
 			'type'        => 'email',
-			'label'       => __( 'Contact address for lookups', 'location-finder' ),
-			'placeholder' => __( 'nobody@example.com', 'location-finder' ),
-			'help'        => __( 'Nominatim’s usage policy requires a contact for whoever is making the requests. Without one the address lookup in the editor may be blocked — and because the policy applies per operator, an unidentified install risks the block landing on everyone using this plugin.', 'location-finder' ),
+			'label'       => __( 'Contact address for lookups', 'groundwork-common-location-finder' ),
+			'placeholder' => __( 'nobody@example.com', 'groundwork-common-location-finder' ),
+			'help'        => __( 'Nominatim’s usage policy requires a contact for whoever is making the requests. Without one the address lookup in the editor may be blocked — and because the policy applies per operator, an unidentified install risks the block landing on everyone using this plugin.', 'groundwork-common-location-finder' ),
 		),
 		'geo_endpoint'       => array(
 			'tab'         => 'advanced',
 			'section'     => 'geocode',
 			'type'        => 'url',
-			'label'       => __( 'Lookup endpoint', 'location-finder' ),
+			'label'       => __( 'Lookup endpoint', 'groundwork-common-location-finder' ),
 			'placeholder' => 'https://nominatim.openstreetmap.org/search',
-			'help'        => __( 'Point this at your own Nominatim instance, or a paid provider with a compatible response.', 'location-finder' ),
+			'help'        => __( 'Point this at your own Nominatim instance, or a paid provider with a compatible response.', 'groundwork-common-location-finder' ),
 		),
 		'geo_countries'      => array(
 			'tab'         => 'advanced',
 			'section'     => 'geocode',
 			'type'        => 'text',
-			'label'       => __( 'Limit lookups to countries', 'location-finder' ),
+			'label'       => __( 'Limit lookups to countries', 'groundwork-common-location-finder' ),
 			'placeholder' => 'us, ca',
-			'help'        => __( 'Two-letter codes, comma separated. Leave blank to search everywhere.', 'location-finder' ),
+			'help'        => __( 'Two-letter codes, comma separated. Leave blank to search everywhere.', 'groundwork-common-location-finder' ),
 		),
 		'geo_viewbox'        => array(
 			'tab'         => 'advanced',
 			'section'     => 'geocode',
 			'type'        => 'text',
-			'label'       => __( 'Prefer results in this box', 'location-finder' ),
+			'label'       => __( 'Prefer results in this box', 'groundwork-common-location-finder' ),
 			'placeholder' => '-88.0,33.0,-85.0,35.0',
-			'help'        => __( 'Four numbers: west, south, east, north. Nudges results toward your region without excluding the rest.', 'location-finder' ),
+			'help'        => __( 'Four numbers: west, south, east, north. Nudges results toward your region without excluding the rest.', 'groundwork-common-location-finder' ),
 		),
 		'geo_bounded'        => array(
 			'tab'     => 'advanced',
 			'section' => 'geocode',
 			'type'    => 'bool',
-			'label'   => __( 'Restrict strictly to that box', 'location-finder' ),
-			'help'    => __( 'Turns the preference above into a hard limit. An address outside the box then returns nothing at all, which looks like a broken lookup rather than a deliberate one — leave this off unless you mean it.', 'location-finder' ),
+			'label'   => __( 'Restrict strictly to that box', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Turns the preference above into a hard limit. An address outside the box then returns nothing at all, which looks like a broken lookup rather than a deliberate one — leave this off unless you mean it.', 'groundwork-common-location-finder' ),
 		),
 
 		// ── Advanced: custom tiles ───────────────────────────────────────
@@ -288,16 +288,16 @@ function lfndr_option_fields(): array {
 			'tab'         => 'advanced',
 			'section'     => 'tiles',
 			'type'        => 'text',
-			'label'       => __( 'Tile URL', 'location-finder' ),
+			'label'       => __( 'Tile URL', 'groundwork-common-location-finder' ),
 			'placeholder' => 'https://tile.example.com/{z}/{x}/{y}.png',
-			'help'        => __( 'Only used when Map style on the Appearance tab is set to Custom. Must contain {z}, {x} and {y}.', 'location-finder' ),
+			'help'        => __( 'Only used when Map style on the Appearance tab is set to Custom. Must contain {z}, {x} and {y}.', 'groundwork-common-location-finder' ),
 		),
 		'tile_attr'          => array(
 			'tab'     => 'advanced',
 			'section' => 'tiles',
 			'type'    => 'text',
-			'label'   => __( 'Tile attribution', 'location-finder' ),
-			'help'    => __( 'Printed on the map. Nearly every tile provider requires this, and removing it breaks their terms rather than merely being impolite. Links are allowed.', 'location-finder' ),
+			'label'   => __( 'Tile attribution', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Printed on the map. Nearly every tile provider requires this, and removing it breaks their terms rather than merely being impolite. Links are allowed.', 'groundwork-common-location-finder' ),
 		),
 		'tile_maxzoom'       => array(
 			'tab'     => 'advanced',
@@ -305,8 +305,8 @@ function lfndr_option_fields(): array {
 			'type'    => 'int',
 			'min'     => 1,
 			'max'     => 22,
-			'label'   => __( 'Deepest zoom offered', 'location-finder' ),
-			'help'    => __( 'Zooming past what a provider actually has produces blank tiles.', 'location-finder' ),
+			'label'   => __( 'Deepest zoom offered', 'groundwork-common-location-finder' ),
+			'help'    => __( 'Zooming past what a provider actually has produces blank tiles.', 'groundwork-common-location-finder' ),
 		),
 	);
 }
@@ -320,34 +320,34 @@ function lfndr_option_sections(): array {
 	return array(
 		'behavior' => array(
 			'roles'      => array(
-				'title' => __( 'Which field drives what', 'location-finder' ),
-				'intro' => __( 'A location can carry more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. They all display; these choose which of them the finder acts on.', 'location-finder' ),
+				'title' => __( 'Which field drives what', 'groundwork-common-location-finder' ),
+				'intro' => __( 'A location can carry more than one address, schedule or closure list — a mailing address and a visiting one, pantry hours and office hours. They all display; these choose which of them the finder acts on.', 'groundwork-common-location-finder' ),
 			),
 			'results'    => array(
-				'title' => __( 'Results', 'location-finder' ),
+				'title' => __( 'Results', 'groundwork-common-location-finder' ),
 				'intro' => '',
 			),
 			'hours'      => array(
-				'title' => __( 'Opening hours', 'location-finder' ),
+				'title' => __( 'Opening hours', 'groundwork-common-location-finder' ),
 				'intro' => '',
 			),
 			'start'      => array(
-				'title' => __( 'Where the map opens', 'location-finder' ),
+				'title' => __( 'Where the map opens', 'groundwork-common-location-finder' ),
 				'intro' => '',
 			),
 			'directions' => array(
-				'title' => __( 'Directions', 'location-finder' ),
+				'title' => __( 'Directions', 'groundwork-common-location-finder' ),
 				'intro' => '',
 			),
 		),
 		'advanced' => array(
 			'geocode' => array(
-				'title' => __( 'Address lookup', 'location-finder' ),
-				'intro' => __( 'The editor’s “find this address” box calls an outside service. These control which one and how it behaves. Visitors never trigger it — only somebody editing a location does.', 'location-finder' ),
+				'title' => __( 'Address lookup', 'groundwork-common-location-finder' ),
+				'intro' => __( 'The editor’s “find this address” box calls an outside service. These control which one and how it behaves. Visitors never trigger it — only somebody editing a location does.', 'groundwork-common-location-finder' ),
 			),
 			'tiles'   => array(
-				'title' => __( 'Custom map tiles', 'location-finder' ),
-				'intro' => __( 'Ignored unless Map style on the Appearance tab is set to Custom.', 'location-finder' ),
+				'title' => __( 'Custom map tiles', 'groundwork-common-location-finder' ),
+				'intro' => __( 'Ignored unless Map style on the Appearance tab is set to Custom.', 'groundwork-common-location-finder' ),
 			),
 		),
 	);
@@ -360,9 +360,9 @@ function lfndr_option_sections(): array {
  */
 function lfndr_unit_choices(): array {
 	return array(
-		''   => __( 'Automatic — follow the site language', 'location-finder' ),
-		'mi' => __( 'Miles', 'location-finder' ),
-		'km' => __( 'Kilometers', 'location-finder' ),
+		''   => __( 'Automatic — follow the site language', 'groundwork-common-location-finder' ),
+		'mi' => __( 'Miles', 'groundwork-common-location-finder' ),
+		'km' => __( 'Kilometers', 'groundwork-common-location-finder' ),
 	);
 }
 
@@ -373,10 +373,10 @@ function lfndr_unit_choices(): array {
  */
 function lfndr_directions_choices(): array {
 	return array(
-		'google' => __( 'Google Maps', 'location-finder' ),
-		'apple'  => __( 'Apple Maps', 'location-finder' ),
-		'osm'    => __( 'OpenStreetMap', 'location-finder' ),
-		'custom' => __( 'Custom URL', 'location-finder' ),
+		'google' => __( 'Google Maps', 'groundwork-common-location-finder' ),
+		'apple'  => __( 'Apple Maps', 'groundwork-common-location-finder' ),
+		'osm'    => __( 'OpenStreetMap', 'groundwork-common-location-finder' ),
+		'custom' => __( 'Custom URL', 'groundwork-common-location-finder' ),
 	);
 }
 
@@ -409,7 +409,7 @@ function lfndr_render_option_tab( string $tab ): void {
 			<?php
 			wp_nonce_field( 'lfndr_save_roles' );
 			lfndr_render_roles_fields();
-			submit_button( __( 'Save', 'location-finder' ), 'secondary' );
+			submit_button( __( 'Save', 'groundwork-common-location-finder' ), 'secondary' );
 			?>
 		</form>
 		<hr />

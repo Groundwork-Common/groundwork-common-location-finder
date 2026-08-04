@@ -17,7 +17,7 @@ add_filter( 'lfndr_field_types', 'lfndr_register_hours_type' );
  */
 function lfndr_register_hours_type( array $types ): array {
 	$types['hours'] = array(
-		'label'             => __( 'Opening hours', 'location-finder' ),
+		'label'             => __( 'Opening hours', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
 		'render_admin'      => 'lfndr_admin_hours',
@@ -323,7 +323,7 @@ function lfndr_hour_when_label( array $freqs, array $days ): string {
 	return '' === $freq_label
 		? $day_label
 		/* translators: 1: recurrence such as "2nd & 4th", 2: day or day range such as "Tue". */
-		: sprintf( _x( '%1$s %2$s', 'recurrence and day', 'location-finder' ), $freq_label, $day_label );
+		: sprintf( _x( '%1$s %2$s', 'recurrence and day', 'groundwork-common-location-finder' ), $freq_label, $day_label );
 }
 
 /**
@@ -343,7 +343,7 @@ function lfndr_hour_days_label( array $days ): string {
 		if ( count( $run ) >= 3 ) {
 			$parts[] = sprintf(
 				/* translators: 1: first day, 2: last day. Forms a range like "Mon – Fri". */
-				_x( '%1$s–%2$s', 'day range', 'location-finder' ),
+				_x( '%1$s–%2$s', 'day range', 'groundwork-common-location-finder' ),
 				$names[ $run[0] ][1],
 				$names[ end( $run ) ][1]
 			);
@@ -372,11 +372,11 @@ function lfndr_hour_freqs_label( array $freqs ): string {
 	/* Short forms, not the settings-screen sentences: "2nd & 4th Tue" is the
 	 * goal, never "2nd of the month & 4th of the month Tue". */
 	$short = array(
-		'1st'  => _x( '1st', 'first occurrence in a month', 'location-finder' ),
-		'2nd'  => _x( '2nd', 'second occurrence in a month', 'location-finder' ),
-		'3rd'  => _x( '3rd', 'third occurrence in a month', 'location-finder' ),
-		'4th'  => _x( '4th', 'fourth occurrence in a month', 'location-finder' ),
-		'last' => _x( 'last', 'final occurrence in a month', 'location-finder' ),
+		'1st'  => _x( '1st', 'first occurrence in a month', 'groundwork-common-location-finder' ),
+		'2nd'  => _x( '2nd', 'second occurrence in a month', 'groundwork-common-location-finder' ),
+		'3rd'  => _x( '3rd', 'third occurrence in a month', 'groundwork-common-location-finder' ),
+		'4th'  => _x( '4th', 'fourth occurrence in a month', 'groundwork-common-location-finder' ),
+		'last' => _x( 'last', 'final occurrence in a month', 'groundwork-common-location-finder' ),
 	);
 
 	$indices = array();
@@ -392,7 +392,7 @@ function lfndr_hour_freqs_label( array $freqs ): string {
 		if ( count( $run ) >= 3 ) {
 			$parts[] = sprintf(
 				/* translators: 1: first occurrence, 2: last occurrence. Forms a range like "1st – 3rd". */
-				_x( '%1$s–%2$s', 'occurrence range', 'location-finder' ),
+				_x( '%1$s–%2$s', 'occurrence range', 'groundwork-common-location-finder' ),
 				$short[ $by_index[ $run[0] ] ] ?? '',
 				$short[ $by_index[ end( $run ) ] ] ?? ''
 			);
@@ -403,7 +403,7 @@ function lfndr_hour_freqs_label( array $freqs ): string {
 		}
 	}
 
-	return implode( _x( ' & ', 'joins recurrences, as in "2nd & 4th"', 'location-finder' ), $parts );
+	return implode( _x( ' & ', 'joins recurrences, as in "2nd & 4th"', 'groundwork-common-location-finder' ), $parts );
 }
 
 /**
@@ -444,13 +444,13 @@ function lfndr_hour_window_label( string $start, string $end ): string {
 	if ( '' === $end ) {
 		return sprintf(
 			/* translators: %s: a time of day. Used when a closing time is unknown. */
-			__( 'from %s', 'location-finder' ),
+			__( 'from %s', 'groundwork-common-location-finder' ),
 			lfndr_format_time( $start )
 		);
 	}
 	return sprintf(
 		/* translators: 1: opening time, 2: closing time. */
-		_x( '%1$s–%2$s', 'time range', 'location-finder' ),
+		_x( '%1$s–%2$s', 'time range', 'groundwork-common-location-finder' ),
 		lfndr_format_time( $start ),
 		lfndr_format_time( $end )
 	);
@@ -533,7 +533,7 @@ function lfndr_admin_hours( array $field, $value, string $name ): void {
 	printf(
 		'<div class="lfndr-repeater" data-lfndr-repeater="%s" data-empty-text="%s">',
 		esc_attr( $field['key'] ),
-		esc_attr__( 'No hours set. This location will not be shown as open at any time.', 'location-finder' )
+		esc_attr__( 'No hours set. This location will not be shown as open at any time.', 'groundwork-common-location-finder' )
 	);
 
 	echo '<div class="lfndr-repeater__rows">';
@@ -552,7 +552,7 @@ function lfndr_admin_hours( array $field, $value, string $name ): void {
 
 	printf(
 		'<p><button type="button" class="button lfndr-repeater__add">%s</button></p>',
-		esc_html__( 'Add hours', 'location-finder' )
+		esc_html__( 'Add hours', 'groundwork-common-location-finder' )
 	);
 
 	echo '</div>';
@@ -574,7 +574,7 @@ function lfndr_render_hour_row( string $name, string $index, array $slot, array 
 
 	echo '<div class="lfndr-repeater__row">';
 
-	printf( '<label><span class="screen-reader-text">%s</span><select name="%s[freq]">', esc_html__( 'Repeats', 'location-finder' ), esc_attr( $base ) );
+	printf( '<label><span class="screen-reader-text">%s</span><select name="%s[freq]">', esc_html__( 'Repeats', 'groundwork-common-location-finder' ), esc_attr( $base ) );
 	foreach ( $frequencies as $slug ) {
 		if ( ! isset( $freqs[ $slug ] ) ) {
 			continue;
@@ -588,7 +588,7 @@ function lfndr_render_hour_row( string $name, string $index, array $slot, array 
 	}
 	echo '</select></label>';
 
-	printf( '<label><span class="screen-reader-text">%s</span><select name="%s[day]">', esc_html__( 'Day', 'location-finder' ), esc_attr( $base ) );
+	printf( '<label><span class="screen-reader-text">%s</span><select name="%s[day]">', esc_html__( 'Day', 'groundwork-common-location-finder' ), esc_attr( $base ) );
 	foreach ( $days as $number => $labels ) {
 		printf(
 			'<option value="%1$d"%2$s>%3$s</option>',
@@ -602,13 +602,13 @@ function lfndr_render_hour_row( string $name, string $index, array $slot, array 
 	foreach ( array( 'start', 'end' ) as $which ) {
 		printf(
 			'<label><span class="screen-reader-text">%s</span><select name="%s[%s]">',
-			'start' === $which ? esc_html__( 'Opens', 'location-finder' ) : esc_html__( 'Closes', 'location-finder' ),
+			'start' === $which ? esc_html__( 'Opens', 'groundwork-common-location-finder' ) : esc_html__( 'Closes', 'groundwork-common-location-finder' ),
 			esc_attr( $base ),
 			esc_attr( $which )
 		);
 		printf(
 			'<option value="">%s</option>',
-			'start' === $which ? esc_html__( '— time —', 'location-finder' ) : esc_html__( '— no closing time —', 'location-finder' )
+			'start' === $which ? esc_html__( '— time —', 'groundwork-common-location-finder' ) : esc_html__( '— no closing time —', 'groundwork-common-location-finder' )
 		);
 		foreach ( $times as $time => $label ) {
 			printf(
@@ -623,7 +623,7 @@ function lfndr_render_hour_row( string $name, string $index, array $slot, array 
 
 	printf(
 		'<button type="button" class="button-link lfndr-repeater__remove">%s</button>',
-		esc_html__( 'Remove', 'location-finder' )
+		esc_html__( 'Remove', 'groundwork-common-location-finder' )
 	);
 
 	echo '</div>';
@@ -715,23 +715,23 @@ function lfndr_schema_form_hours( array $field ): void {
 	lfndr_schema_select_control(
 		$field,
 		'step_minutes',
-		__( 'Time increments', 'location-finder' ),
+		__( 'Time increments', 'groundwork-common-location-finder' ),
 		array(
-			'5'  => __( '5 minutes', 'location-finder' ),
-			'10' => __( '10 minutes', 'location-finder' ),
-			'15' => __( '15 minutes', 'location-finder' ),
-			'30' => __( '30 minutes', 'location-finder' ),
-			'60' => __( 'On the hour', 'location-finder' ),
+			'5'  => __( '5 minutes', 'groundwork-common-location-finder' ),
+			'10' => __( '10 minutes', 'groundwork-common-location-finder' ),
+			'15' => __( '15 minutes', 'groundwork-common-location-finder' ),
+			'30' => __( '30 minutes', 'groundwork-common-location-finder' ),
+			'60' => __( 'On the hour', 'groundwork-common-location-finder' ),
 		),
 		(string) LFNDR_HOUR_STEP_DEFAULT
 	);
 
-	lfndr_schema_text_control( $field, 'range_start', __( 'Earliest selectable time', 'location-finder' ), __( '24-hour, such as 07:00.', 'location-finder' ) );
-	lfndr_schema_text_control( $field, 'range_end', __( 'Latest selectable time', 'location-finder' ), __( '24-hour, such as 21:00.', 'location-finder' ) );
+	lfndr_schema_text_control( $field, 'range_start', __( 'Earliest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 07:00.', 'groundwork-common-location-finder' ) );
+	lfndr_schema_text_control( $field, 'range_end', __( 'Latest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 21:00.', 'groundwork-common-location-finder' ) );
 
 	$freqs   = lfndr_hour_freqs();
 	$enabled = (array) ( $field['settings']['frequencies'] ?? array_keys( $freqs ) );
-	echo '<fieldset class="lfndr-setting"><legend>' . esc_html__( 'Recurrence options offered', 'location-finder' ) . '</legend>';
+	echo '<fieldset class="lfndr-setting"><legend>' . esc_html__( 'Recurrence options offered', 'groundwork-common-location-finder' ) . '</legend>';
 	foreach ( $freqs as $slug => $label ) {
 		printf(
 			'<label class="lfndr-inline"><input type="checkbox" name="settings[frequencies][]" value="%1$s"%2$s%3$s /> %4$s</label>',
@@ -741,9 +741,9 @@ function lfndr_schema_form_hours( array $field ): void {
 			esc_html( $label )
 		);
 	}
-	printf( '<p class="description">%s</p></fieldset>', esc_html__( 'Weekly is always available.', 'location-finder' ) );
+	printf( '<p class="description">%s</p></fieldset>', esc_html__( 'Weekly is always available.', 'groundwork-common-location-finder' ) );
 
-	lfndr_schema_number_control( $field, 'card_rows', __( 'Schedule lines to show on a card', 'location-finder' ), __( '0 shows all of them.', 'location-finder' ) );
-	lfndr_schema_checkbox_control( $field, 'open_now', __( 'Badge locations that are open right now', 'location-finder' ), true );
-	lfndr_schema_checkbox_control( $field, 'open_today', __( 'Offer an "Open today" filter', 'location-finder' ), true );
+	lfndr_schema_number_control( $field, 'card_rows', __( 'Schedule lines to show on a card', 'groundwork-common-location-finder' ), __( '0 shows all of them.', 'groundwork-common-location-finder' ) );
+	lfndr_schema_checkbox_control( $field, 'open_now', __( 'Badge locations that are open right now', 'groundwork-common-location-finder' ), true );
+	lfndr_schema_checkbox_control( $field, 'open_today', __( 'Offer an "Open today" filter', 'groundwork-common-location-finder' ), true );
 }

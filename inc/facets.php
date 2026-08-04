@@ -137,7 +137,7 @@ function lfndr_build_facet_group( array $field, array $type, array $counts, int 
 			'values' => array(
 				array(
 					'value' => 'open-today',
-					'label' => __( 'Open today', 'location-finder' ),
+					'label' => __( 'Open today', 'groundwork-common-location-finder' ),
 					'count' => null,
 				),
 			),

@@ -40,7 +40,7 @@ function lfndr_fields_url( array $args = array() ): string {
  */
 function lfndr_fields_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'location-finder' ) );
+		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'groundwork-common-location-finder' ) );
 	}
 
 	$schema = lfndr_get_schema();
@@ -48,7 +48,7 @@ function lfndr_fields_screen(): void {
 	if ( $schema['version'] > LFNDR_SCHEMA_VERSION ) {
 		printf(
 			'<div class="notice notice-warning"><p>%s</p></div>',
-			esc_html__( 'This field configuration was written by a newer version of Location Finder. It is being left untouched to avoid losing settings this version does not understand. Update the plugin to edit it.', 'location-finder' )
+			esc_html__( 'This field configuration was written by a newer version of Location Finder. It is being left untouched to avoid losing settings this version does not understand. Update the plugin to edit it.', 'groundwork-common-location-finder' )
 		);
 	}
 
@@ -84,31 +84,31 @@ function lfndr_fields_list_screen( array $schema ): void {
 	$types = lfndr_field_types();
 	?>
 	<div class="lfndr-fields">
-		<h2 class="wp-heading-inline"><?php esc_html_e( 'Fields', 'location-finder' ); ?></h2>
+		<h2 class="wp-heading-inline"><?php esc_html_e( 'Fields', 'groundwork-common-location-finder' ); ?></h2>
 		<a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'add' ) ) ); ?>" class="page-title-action">
-			<?php esc_html_e( 'Add Field', 'location-finder' ); ?>
+			<?php esc_html_e( 'Add Field', 'groundwork-common-location-finder' ); ?>
 		</a>
 		<hr class="wp-header-end" />
 
 		<?php lfndr_admin_notices(); ?>
 
 		<p class="description">
-			<?php esc_html_e( 'Location name, latitude and longitude are always present. Everything else a location records is defined here.', 'location-finder' ); ?>
+			<?php esc_html_e( 'Location name, latitude and longitude are always present. Everything else a location records is defined here.', 'groundwork-common-location-finder' ); ?>
 		</p>
 
 		<?php if ( empty( $schema['fields'] ) ) : ?>
 			<div class="notice notice-info inline"><p>
-				<?php esc_html_e( 'No fields yet. Add one to start describing your locations — an address is usually the first.', 'location-finder' ); ?>
+				<?php esc_html_e( 'No fields yet. Add one to start describing your locations — an address is usually the first.', 'groundwork-common-location-finder' ); ?>
 			</p></div>
 		<?php else : ?>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Label', 'location-finder' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Key', 'location-finder' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Type', 'location-finder' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Shown', 'location-finder' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Used for', 'location-finder' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Label', 'groundwork-common-location-finder' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Key', 'groundwork-common-location-finder' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Type', 'groundwork-common-location-finder' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Shown', 'groundwork-common-location-finder' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Used for', 'groundwork-common-location-finder' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -117,10 +117,10 @@ function lfndr_fields_list_screen( array $schema ): void {
 						<td>
 							<strong><a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'edit', 'field' => $field['key'] ) ) ); ?>"><?php echo esc_html( $field['label'] ); ?></a></strong>
 							<?php if ( ! empty( $field['settings']['primary'] ) ) : ?>
-								<span class="lfndr-pill"><?php esc_html_e( 'primary', 'location-finder' ); ?></span>
+								<span class="lfndr-pill"><?php esc_html_e( 'primary', 'groundwork-common-location-finder' ); ?></span>
 							<?php endif; ?>
 							<div class="row-actions">
-								<span class="edit"><a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'edit', 'field' => $field['key'] ) ) ); ?>"><?php esc_html_e( 'Edit', 'location-finder' ); ?></a> | </span>
+								<span class="edit"><a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'edit', 'field' => $field['key'] ) ) ); ?>"><?php esc_html_e( 'Edit', 'groundwork-common-location-finder' ); ?></a> | </span>
 								<span class="trash">
 									<?php
 									$retire = wp_nonce_url(
@@ -128,7 +128,7 @@ function lfndr_fields_list_screen( array $schema ): void {
 										'lfndr_retire_' . $field['key']
 									);
 									?>
-									<a href="<?php echo esc_url( $retire ); ?>"><?php esc_html_e( 'Retire', 'location-finder' ); ?></a>
+									<a href="<?php echo esc_url( $retire ); ?>"><?php esc_html_e( 'Retire', 'groundwork-common-location-finder' ); ?></a>
 								</span>
 							</div>
 						</td>
@@ -157,15 +157,15 @@ function lfndr_fields_list_screen( array $schema ): void {
  */
 function lfndr_describe_visibility( array $field ): string {
 	if ( ! empty( $field['show_card'] ) && ! empty( $field['show_detail'] ) ) {
-		return __( 'Card and detail', 'location-finder' );
+		return __( 'Card and detail', 'groundwork-common-location-finder' );
 	}
 	if ( ! empty( $field['show_card'] ) ) {
-		return __( 'Card only', 'location-finder' );
+		return __( 'Card only', 'groundwork-common-location-finder' );
 	}
 	if ( ! empty( $field['show_detail'] ) ) {
-		return __( 'Detail only', 'location-finder' );
+		return __( 'Detail only', 'groundwork-common-location-finder' );
 	}
-	return __( 'Hidden', 'location-finder' );
+	return __( 'Hidden', 'groundwork-common-location-finder' );
 }
 
 /**
@@ -177,10 +177,10 @@ function lfndr_describe_visibility( array $field ): string {
 function lfndr_describe_usage( array $field ): string {
 	$parts = array();
 	if ( ! empty( $field['searchable'] ) ) {
-		$parts[] = __( 'Search', 'location-finder' );
+		$parts[] = __( 'Search', 'groundwork-common-location-finder' );
 	}
 	if ( ! empty( $field['filterable'] ) ) {
-		$parts[] = __( 'Filters', 'location-finder' );
+		$parts[] = __( 'Filters', 'groundwork-common-location-finder' );
 	}
 	return $parts ? implode( ', ', $parts ) : '—';
 }
@@ -209,16 +209,16 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 	$schema = $schema ? $schema : lfndr_get_schema();
 	$roles = array(
 		'address'  => array(
-			'label' => __( 'Address used for Directions', 'location-finder' ),
-			'help'  => __( 'Also the address the editor\'s lookup fills in when you search for a place.', 'location-finder' ),
+			'label' => __( 'Address used for Directions', 'groundwork-common-location-finder' ),
+			'help'  => __( 'Also the address the editor\'s lookup fills in when you search for a place.', 'groundwork-common-location-finder' ),
 		),
 		'hours'    => array(
-			'label' => __( 'Hours used for "Open now"', 'location-finder' ),
-			'help'  => __( 'The schedule the open/closed badge and the "Open today" filter are worked out from.', 'location-finder' ),
+			'label' => __( 'Hours used for "Open now"', 'groundwork-common-location-finder' ),
+			'help'  => __( 'The schedule the open/closed badge and the "Open today" filter are worked out from.', 'groundwork-common-location-finder' ),
 		),
 		'closures' => array(
-			'label' => __( 'Closures that suspend those hours', 'location-finder' ),
-			'help'  => __( 'While one of these is active the location never reads as open, and the hours above are shown struck through.', 'location-finder' ),
+			'label' => __( 'Closures that suspend those hours', 'groundwork-common-location-finder' ),
+			'help'  => __( 'While one of these is active the location never reads as open, and the hours above are shown struck through.', 'groundwork-common-location-finder' ),
 		),
 	);
 
@@ -251,7 +251,7 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 				<th scope="row"><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $role['label'] ); ?></label></th>
 				<td>
 					<select id="<?php echo esc_attr( $id ); ?>" name="roles[<?php echo esc_attr( $type ); ?>]">
-						<option value=""><?php esc_html_e( '— none —', 'location-finder' ); ?></option>
+						<option value=""><?php esc_html_e( '— none —', 'groundwork-common-location-finder' ); ?></option>
 						<?php foreach ( $candidates as $candidate ) : ?>
 							<option value="<?php echo esc_attr( $candidate['key'] ); ?>" <?php selected( $current, $candidate['key'] ); ?>>
 								<?php echo esc_html( $candidate['label'] ); ?>
@@ -301,9 +301,9 @@ function lfndr_handle_save_roles(): void {
  */
 function lfndr_render_order_form( array $schema ): void {
 	?>
-	<h2><?php esc_html_e( 'Display order', 'location-finder' ); ?></h2>
+	<h2><?php esc_html_e( 'Display order', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description">
-		<?php esc_html_e( 'Drag order is set with the arrow buttons. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so.', 'location-finder' ); ?>
+		<?php esc_html_e( 'Drag order is set with the arrow buttons. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so.', 'groundwork-common-location-finder' ); ?>
 	</p>
 
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-orders">
@@ -312,12 +312,12 @@ function lfndr_render_order_form( array $schema ): void {
 
 		<div class="lfndr-orders__cols">
 			<?php
-			lfndr_render_order_list( 'detail', $schema, __( 'Detail pane', 'location-finder' ) );
-			lfndr_render_order_list( 'card', $schema, __( 'Result card', 'location-finder' ) );
+			lfndr_render_order_list( 'detail', $schema, __( 'Detail pane', 'groundwork-common-location-finder' ) );
+			lfndr_render_order_list( 'card', $schema, __( 'Result card', 'groundwork-common-location-finder' ) );
 			?>
 		</div>
 
-		<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save display order', 'location-finder' ); ?></button></p>
+		<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save display order', 'groundwork-common-location-finder' ); ?></button></p>
 	</form>
 	<?php
 }
@@ -371,7 +371,7 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 			<?php endforeach; ?>
 
 			<li class="lfndr-order__divider" data-divider="1">
-				<span><?php esc_html_e( 'Not shown here', 'location-finder' ); ?></span>
+				<span><?php esc_html_e( 'Not shown here', 'groundwork-common-location-finder' ); ?></span>
 			</li>
 
 			<?php foreach ( $hidden as $field ) : ?>
@@ -380,7 +380,7 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 		</ol>
 
 		<p class="lfndr-order__manual">
-			<label for="lfndr-order-<?php echo esc_attr( $surface ); ?>"><?php esc_html_e( 'Order, as a comma-separated list of keys:', 'location-finder' ); ?></label><br />
+			<label for="lfndr-order-<?php echo esc_attr( $surface ); ?>"><?php esc_html_e( 'Order, as a comma-separated list of keys:', 'groundwork-common-location-finder' ); ?></label><br />
 			<input type="text" class="large-text code" id="lfndr-order-<?php echo esc_attr( $surface ); ?>"
 				name="<?php echo esc_attr( $surface ); ?>_order"
 				value="<?php echo esc_attr( implode( ',', $visible ) ); ?>" />
@@ -403,18 +403,18 @@ function lfndr_render_order_item( string $key, string $label, string $type, bool
 		<span class="lfndr-order__grip" aria-hidden="true"></span>
 		<span class="lfndr-order__label"><?php echo esc_html( $label ); ?></span>
 		<?php if ( '' === $type ) : ?>
-			<span class="lfndr-pill"><?php esc_html_e( 'built in', 'location-finder' ); ?></span>
+			<span class="lfndr-pill"><?php esc_html_e( 'built in', 'groundwork-common-location-finder' ); ?></span>
 		<?php else : ?>
 			<code class="lfndr-order__key"><?php echo esc_html( $key ); ?></code>
 		<?php endif; ?>
 		<span class="lfndr-order__buttons" hidden>
 			<button type="button" class="button button-small" data-move="up"
-				aria-label="<?php /* translators: %s: field label. */ echo esc_attr( sprintf( __( 'Move %s up', 'location-finder' ), $label ) ); ?>">&uarr;</button>
+				aria-label="<?php /* translators: %s: field label. */ echo esc_attr( sprintf( __( 'Move %s up', 'groundwork-common-location-finder' ), $label ) ); ?>">&uarr;</button>
 			<button type="button" class="button button-small" data-move="down"
-				aria-label="<?php /* translators: %s: field label. */ echo esc_attr( sprintf( __( 'Move %s down', 'location-finder' ), $label ) ); ?>">&darr;</button>
+				aria-label="<?php /* translators: %s: field label. */ echo esc_attr( sprintf( __( 'Move %s down', 'groundwork-common-location-finder' ), $label ) ); ?>">&darr;</button>
 		</span>
 		<?php if ( ! $shown ) : ?>
-			<span class="screen-reader-text"><?php esc_html_e( '(not shown)', 'location-finder' ); ?></span>
+			<span class="screen-reader-text"><?php esc_html_e( '(not shown)', 'groundwork-common-location-finder' ); ?></span>
 		<?php endif; ?>
 	</li>
 	<?php
@@ -429,13 +429,13 @@ function lfndr_render_order_item( string $key, string $label, string $type, bool
 function lfndr_synthetic_label( string $key ): string {
 	switch ( $key ) {
 		case '__name':
-			return __( 'Location name', 'location-finder' );
+			return __( 'Location name', 'groundwork-common-location-finder' );
 		case '__coords':
-			return __( 'Coordinates', 'location-finder' );
+			return __( 'Coordinates', 'groundwork-common-location-finder' );
 		case '__distance':
-			return __( 'Distance from the visitor', 'location-finder' );
+			return __( 'Distance from the visitor', 'groundwork-common-location-finder' );
 		case '__directions':
-			return __( 'Directions link', 'location-finder' );
+			return __( 'Directions link', 'groundwork-common-location-finder' );
 		default:
 			return $key;
 	}
@@ -453,9 +453,9 @@ function lfndr_render_retired_section( array $schema ): void {
 		return;
 	}
 	?>
-	<h2><?php esc_html_e( 'Retired fields', 'location-finder' ); ?></h2>
+	<h2><?php esc_html_e( 'Retired fields', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description">
-		<?php esc_html_e( 'Retiring a field removes it from the editor and the front end but keeps everything already recorded. Restore it and the data comes back exactly as it was.', 'location-finder' ); ?>
+		<?php esc_html_e( 'Retiring a field removes it from the editor and the front end but keeps everything already recorded. Restore it and the data comes back exactly as it was.', 'groundwork-common-location-finder' ); ?>
 	</p>
 	<table class="wp-list-table widefat fixed striped">
 		<tbody>
@@ -470,7 +470,7 @@ function lfndr_render_retired_section( array $schema ): void {
 							<?php
 							printf(
 								/* translators: %s: date. */
-								esc_html__( 'retired %s', 'location-finder' ),
+								esc_html__( 'retired %s', 'groundwork-common-location-finder' ),
 								esc_html( $field['retired_at'] )
 							);
 							?>
@@ -482,7 +482,7 @@ function lfndr_render_retired_section( array $schema ): void {
 					printf(
 						esc_html(
 							/* translators: %d: number of locations. */
-							_n( 'Holds data on %d location', 'Holds data on %d locations', $count, 'location-finder' )
+							_n( 'Holds data on %d location', 'Holds data on %d locations', $count, 'groundwork-common-location-finder' )
 						),
 						(int) $count
 					);
@@ -490,18 +490,18 @@ function lfndr_render_retired_section( array $schema ): void {
 				</td>
 				<td class="lfndr-retired__actions">
 					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=lfndr_restore_field&field=' . rawurlencode( $field['key'] ) ), 'lfndr_restore_' . $field['key'] ) ); ?>">
-						<?php esc_html_e( 'Restore', 'location-finder' ); ?>
+						<?php esc_html_e( 'Restore', 'groundwork-common-location-finder' ); ?>
 					</a>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-erase">
 						<input type="hidden" name="action" value="lfndr_erase_field" />
 						<input type="hidden" name="field" value="<?php echo esc_attr( $field['key'] ); ?>" />
 						<?php wp_nonce_field( 'lfndr_erase_' . $field['key'] ); ?>
 						<label class="screen-reader-text" for="lfndr-erase-<?php echo esc_attr( $field['key'] ); ?>">
-							<?php esc_html_e( 'Type DELETE to confirm', 'location-finder' ); ?>
+							<?php esc_html_e( 'Type DELETE to confirm', 'groundwork-common-location-finder' ); ?>
 						</label>
 						<input type="text" id="lfndr-erase-<?php echo esc_attr( $field['key'] ); ?>" name="confirm"
-							placeholder="<?php esc_attr_e( 'Type DELETE', 'location-finder' ); ?>" size="12" autocomplete="off" />
-						<button type="submit" class="button button-link-delete"><?php esc_html_e( 'Erase data', 'location-finder' ); ?></button>
+							placeholder="<?php esc_attr_e( 'Type DELETE', 'groundwork-common-location-finder' ); ?>" size="12" autocomplete="off" />
+						<button type="submit" class="button button-link-delete"><?php esc_html_e( 'Erase data', 'groundwork-common-location-finder' ); ?></button>
 					</form>
 				</td>
 			</tr>
@@ -526,7 +526,7 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 	$type_meta = $types[ $field['type'] ] ?? array();
 	?>
 	<div class="wrap lfndr-admin">
-		<h1><?php echo esc_html( $editing ? __( 'Edit Field', 'location-finder' ) : __( 'Add Field', 'location-finder' ) ); ?></h1>
+		<h1><?php echo esc_html( $editing ? __( 'Edit Field', 'groundwork-common-location-finder' ) : __( 'Add Field', 'groundwork-common-location-finder' ) ); ?></h1>
 
 		<?php lfndr_admin_notices(); ?>
 
@@ -540,30 +540,30 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 			<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
-						<th scope="row"><label for="lfndr-label"><?php esc_html_e( 'Label', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-label"><?php esc_html_e( 'Label', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<input type="text" class="regular-text" id="lfndr-label" name="label" required
 								value="<?php echo esc_attr( $field['label'] ); ?>" />
-							<p class="description"><?php esc_html_e( 'What editors and visitors see. Safe to change at any time.', 'location-finder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'What editors and visitors see. Safe to change at any time.', 'groundwork-common-location-finder' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lfndr-key"><?php esc_html_e( 'Key', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-key"><?php esc_html_e( 'Key', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<?php if ( $editing ) : ?>
 								<input type="text" class="regular-text code" id="lfndr-key" value="<?php echo esc_attr( $field['key'] ); ?>" disabled />
 								<p class="description">
-									<?php esc_html_e( 'Keys cannot be changed. This is what already-saved locations use to find their data — renaming it would orphan every value. To change it, retire this field and add a new one.', 'location-finder' ); ?>
+									<?php esc_html_e( 'Keys cannot be changed. This is what already-saved locations use to find their data — renaming it would orphan every value. To change it, retire this field and add a new one.', 'groundwork-common-location-finder' ); ?>
 								</p>
 							<?php else : ?>
 								<input type="text" class="regular-text code" id="lfndr-key" name="key"
-									placeholder="<?php esc_attr_e( 'auto-generated from the label', 'location-finder' ); ?>" />
-								<p class="description"><?php esc_html_e( 'Lowercase letters, numbers and underscores. Permanent once saved — leave it blank to generate one from the label.', 'location-finder' ); ?></p>
+									placeholder="<?php esc_attr_e( 'auto-generated from the label', 'groundwork-common-location-finder' ); ?>" />
+								<p class="description"><?php esc_html_e( 'Lowercase letters, numbers and underscores. Permanent once saved — leave it blank to generate one from the label.', 'groundwork-common-location-finder' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lfndr-type"><?php esc_html_e( 'Type', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-type"><?php esc_html_e( 'Type', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<select id="lfndr-type" name="type"<?php disabled( $editing ); ?>>
 								<?php foreach ( $types as $slug => $meta ) : ?>
@@ -574,81 +574,81 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 							</select>
 							<?php if ( $editing ) : ?>
 								<input type="hidden" name="type" value="<?php echo esc_attr( $field['type'] ); ?>" />
-								<p class="description"><?php esc_html_e( 'Types cannot be changed either — the stored values would no longer make sense.', 'location-finder' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Types cannot be changed either — the stored values would no longer make sense.', 'groundwork-common-location-finder' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lfndr-help"><?php esc_html_e( 'Editor hint', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-help"><?php esc_html_e( 'Editor hint', 'groundwork-common-location-finder' ); ?></label></th>
 						<td><input type="text" class="large-text" id="lfndr-help" name="help" value="<?php echo esc_attr( $field['help'] ); ?>" /></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lfndr-section"><?php esc_html_e( 'Group', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-section"><?php esc_html_e( 'Group', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<input type="text" class="regular-text" id="lfndr-section" name="section" value="<?php echo esc_attr( $field['section'] ); ?>" />
-							<p class="description"><?php esc_html_e( 'Fields sharing a group name are collapsed together in the location editor.', 'location-finder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Fields sharing a group name are collapsed together in the location editor.', 'groundwork-common-location-finder' ); ?></p>
 						</td>
 					</tr>
 
 					<?php if ( ! empty( $type_meta['has_options'] ) || ! $editing ) : ?>
 					<tr class="lfndr-row-options">
-						<th scope="row"><label for="lfndr-options"><?php esc_html_e( 'Choices', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-options"><?php esc_html_e( 'Choices', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<textarea id="lfndr-options" name="options" rows="6" class="large-text code"><?php echo esc_textarea( lfndr_options_to_text( $field['options'] ) ); ?></textarea>
 							<p class="description">
-								<?php esc_html_e( 'One per line. Write "Diapers" for a simple choice, or "diapers | Diapers" to set the stored value separately from the label. Stored values are permanent; labels can change.', 'location-finder' ); ?>
+								<?php esc_html_e( 'One per line. Write "Diapers" for a simple choice, or "diapers | Diapers" to set the stored value separately from the label. Stored values are permanent; labels can change.', 'groundwork-common-location-finder' ); ?>
 							</p>
 						</td>
 					</tr>
 					<?php endif; ?>
 
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Where it appears', 'location-finder' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Where it appears', 'groundwork-common-location-finder' ); ?></th>
 						<td>
 							<fieldset>
-								<label><input type="checkbox" name="show_detail" value="1"<?php checked( ! empty( $field['show_detail'] ) ); ?> /> <?php esc_html_e( 'In the detail pane', 'location-finder' ); ?></label><br />
-								<label><input type="checkbox" name="show_card" value="1"<?php checked( ! empty( $field['show_card'] ) ); ?> /> <?php esc_html_e( 'On result cards', 'location-finder' ); ?></label>
+								<label><input type="checkbox" name="show_detail" value="1"<?php checked( ! empty( $field['show_detail'] ) ); ?> /> <?php esc_html_e( 'In the detail pane', 'groundwork-common-location-finder' ); ?></label><br />
+								<label><input type="checkbox" name="show_card" value="1"<?php checked( ! empty( $field['show_card'] ) ); ?> /> <?php esc_html_e( 'On result cards', 'groundwork-common-location-finder' ); ?></label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'How visitors find it', 'location-finder' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'How visitors find it', 'groundwork-common-location-finder' ); ?></th>
 						<td>
 							<fieldset>
 								<?php $can_search = ! empty( $type_meta['search_text'] ); ?>
 								<?php $can_filter = ! empty( $type_meta['facet_tokens'] ); ?>
 								<label>
 									<input type="checkbox" name="searchable" value="1"<?php checked( ! empty( $field['searchable'] ) ); ?><?php disabled( ! $can_search ); ?> />
-									<?php esc_html_e( 'Include in the search box', 'location-finder' ); ?>
+									<?php esc_html_e( 'Include in the search box', 'groundwork-common-location-finder' ); ?>
 								</label>
 								<?php if ( ! $can_search ) : ?>
-									<span class="description"><?php esc_html_e( '— not available for this type', 'location-finder' ); ?></span>
+									<span class="description"><?php esc_html_e( '— not available for this type', 'groundwork-common-location-finder' ); ?></span>
 								<?php endif; ?>
 								<br />
 								<label>
 									<input type="checkbox" name="filterable" value="1"<?php checked( ! empty( $field['filterable'] ) ); ?><?php disabled( ! $can_filter ); ?> />
-									<?php esc_html_e( 'Offer as a filter', 'location-finder' ); ?>
+									<?php esc_html_e( 'Offer as a filter', 'groundwork-common-location-finder' ); ?>
 								</label>
 								<?php if ( ! $can_filter ) : ?>
-									<span class="description"><?php esc_html_e( '— only choice and yes/no fields can be filtered', 'location-finder' ); ?></span>
+									<span class="description"><?php esc_html_e( '— only choice and yes/no fields can be filtered', 'groundwork-common-location-finder' ); ?></span>
 								<?php endif; ?>
 								<p class="description">
-									<?php esc_html_e( 'A field can be searchable without being displayed — useful for an internal code visitors type but never see.', 'location-finder' ); ?>
+									<?php esc_html_e( 'A field can be searchable without being displayed — useful for an internal code visitors type but never see.', 'groundwork-common-location-finder' ); ?>
 								</p>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="lfndr-filter-label"><?php esc_html_e( 'Filter heading', 'location-finder' ); ?></label></th>
+						<th scope="row"><label for="lfndr-filter-label"><?php esc_html_e( 'Filter heading', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
 							<input type="text" class="regular-text" id="lfndr-filter-label" name="filter_label" value="<?php echo esc_attr( $field['filter_label'] ); ?>" />
-							<p class="description"><?php esc_html_e( 'Shown above this field\'s filters. Defaults to the label.', 'location-finder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Shown above this field\'s filters. Defaults to the label.', 'groundwork-common-location-finder' ); ?></p>
 						</td>
 					</tr>
 
 					<?php if ( ! empty( $type_meta['schema_form'] ) && is_callable( $type_meta['schema_form'] ) ) : ?>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Options for this type', 'location-finder' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Options for this type', 'groundwork-common-location-finder' ); ?></th>
 						<td><?php call_user_func( $type_meta['schema_form'], $field ); ?></td>
 					</tr>
 					<?php endif; ?>
@@ -656,8 +656,8 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 			</table>
 
 			<p class="submit">
-				<button type="submit" class="button button-primary"><?php echo esc_html( $editing ? __( 'Save field', 'location-finder' ) : __( 'Add field', 'location-finder' ) ); ?></button>
-				<a class="button button-secondary" href="<?php echo esc_url( lfndr_fields_url() ); ?>"><?php esc_html_e( 'Cancel', 'location-finder' ); ?></a>
+				<button type="submit" class="button button-primary"><?php echo esc_html( $editing ? __( 'Save field', 'groundwork-common-location-finder' ) : __( 'Add field', 'groundwork-common-location-finder' ) ); ?></button>
+				<a class="button button-secondary" href="<?php echo esc_url( lfndr_fields_url() ); ?>"><?php esc_html_e( 'Cancel', 'groundwork-common-location-finder' ); ?></a>
 			</p>
 		</form>
 	</div>
@@ -734,7 +734,7 @@ function lfndr_options_from_text( string $text ): array {
  */
 function lfndr_guard_admin_post( string $nonce_action, string $nonce_field = '_wpnonce' ): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'location-finder' ), '', array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'groundwork-common-location-finder' ), '', array( 'response' => 403 ) );
 	}
 	check_admin_referer( $nonce_action, $nonce_field );
 }
@@ -979,20 +979,20 @@ function lfndr_admin_notices(): void {
 	}
 
 	$messages = array(
-		'field_added'      => array( 'success', __( 'Field added.', 'location-finder' ) ),
-		'field_saved'      => array( 'success', __( 'Field saved.', 'location-finder' ) ),
-		'field_retired'    => array( 'success', __( 'Field retired. Its data is still there — restore it any time.', 'location-finder' ) ),
-		'field_restored'   => array( 'success', __( 'Field restored, with everything it had recorded.', 'location-finder' ) ),
-		'field_erased'     => array( 'success', __( 'Field and all of its data permanently deleted.', 'location-finder' ) ),
-		'orders_saved'     => array( 'success', __( 'Display order saved.', 'location-finder' ) ),
-		'roles_saved'      => array( 'success', __( 'Behavior saved.', 'location-finder' ) ),
-		'label_required'   => array( 'error', __( 'A field needs a label.', 'location-finder' ) ),
-		'bad_key'          => array( 'error', __( 'That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores.', 'location-finder' ) ),
-		'duplicate_key'    => array( 'error', __( 'A field with that key already exists.', 'location-finder' ) ),
-		'retired_key'      => array( 'error', __( 'A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data.', 'location-finder' ) ),
-		'bad_type'         => array( 'error', __( 'That field type is not available. If it came from another plugin, that plugin may be deactivated.', 'location-finder' ) ),
-		'confirm_required' => array( 'error', __( 'Nothing was deleted: type DELETE in the box to confirm.', 'location-finder' ) ),
-		'not_found'        => array( 'error', __( 'That field no longer exists.', 'location-finder' ) ),
+		'field_added'      => array( 'success', __( 'Field added.', 'groundwork-common-location-finder' ) ),
+		'field_saved'      => array( 'success', __( 'Field saved.', 'groundwork-common-location-finder' ) ),
+		'field_retired'    => array( 'success', __( 'Field retired. Its data is still there — restore it any time.', 'groundwork-common-location-finder' ) ),
+		'field_restored'   => array( 'success', __( 'Field restored, with everything it had recorded.', 'groundwork-common-location-finder' ) ),
+		'field_erased'     => array( 'success', __( 'Field and all of its data permanently deleted.', 'groundwork-common-location-finder' ) ),
+		'orders_saved'     => array( 'success', __( 'Display order saved.', 'groundwork-common-location-finder' ) ),
+		'roles_saved'      => array( 'success', __( 'Behavior saved.', 'groundwork-common-location-finder' ) ),
+		'label_required'   => array( 'error', __( 'A field needs a label.', 'groundwork-common-location-finder' ) ),
+		'bad_key'          => array( 'error', __( 'That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores.', 'groundwork-common-location-finder' ) ),
+		'duplicate_key'    => array( 'error', __( 'A field with that key already exists.', 'groundwork-common-location-finder' ) ),
+		'retired_key'      => array( 'error', __( 'A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data.', 'groundwork-common-location-finder' ) ),
+		'bad_type'         => array( 'error', __( 'That field type is not available. If it came from another plugin, that plugin may be deactivated.', 'groundwork-common-location-finder' ) ),
+		'confirm_required' => array( 'error', __( 'Nothing was deleted: type DELETE in the box to confirm.', 'groundwork-common-location-finder' ) ),
+		'not_found'        => array( 'error', __( 'That field no longer exists.', 'groundwork-common-location-finder' ) ),
 	);
 
 	if ( ! isset( $messages[ $code ] ) ) {
