@@ -473,8 +473,11 @@
 	   empty tint that read as a layout fault rather than a column. */
 	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 	gap: 8px 40px;
-	align-items: start;
-	margin: 12px 0 4px;
+	/* Stretch, not start: the columns have to be full height for the rule
+	   between them to be, and a rule that stops where the shorter column's text
+	   ends reads as an accident. Each column then centres its own content. */
+	align-items: stretch;
+	margin: 12px 0 24px;
 	padding: 20px 24px;
 	border-left: 4px solid #2271b1;
 	background: #f6f7f7;
@@ -491,6 +494,17 @@
 
 /* A rule between the columns rather than a box around the aside: it separates
    without making the support ask look like a second, competing notice. */
+/* Both columns centre their own text against the panel's full height, so
+   neither hangs off the top when the other is taller. The toggle is positioned
+   absolutely and is deliberately not part of this — it stays pinned top right,
+   where it has room and is out of the reading path. */
+.lfndr-colophon__main,
+.lfndr-colophon__aside {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
 .lfndr-colophon__aside {
 	padding-left: 40px;
 	border-left: 1px solid #dcdcde;
