@@ -402,7 +402,6 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 function lfndr_render_order_item( string $key, string $label, string $type, bool $shown ): void {
 	?>
 	<li class="lfndr-order__item" data-key="<?php echo esc_attr( $key ); ?>">
-		<span class="lfndr-order__grip" aria-hidden="true"></span>
 		<span class="lfndr-order__label"><?php echo esc_html( $label ); ?></span>
 		<?php if ( '' === $type ) : ?>
 			<span class="lfndr-pill"><?php esc_html_e( 'built in', 'groundwork-common-location-finder' ); ?></span>

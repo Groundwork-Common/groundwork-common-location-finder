@@ -64,17 +64,6 @@
 	min-width: 30px;
 }
 
-/* The grip is decorative — the buttons are the affordance. It exists so the
-   rows read as a reorderable list at a glance rather than as a table. */
-.lfndr-order__grip {
-	flex: 0 0 auto;
-	width: 10px;
-	height: 16px;
-	opacity: 0.35;
-	background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
-	background-size: 5px 5px;
-}
-
 /* Everything below the divider is defined but not shown on this surface.
    Dimming it says that without needing a second list or a legend. */
 .lfndr-order__divider {
