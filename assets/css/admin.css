@@ -468,11 +468,14 @@
    like a notice demanding action. */
 .lfndr-colophon {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 20em);
-	gap: 8px 32px;
+	/* Even halves. An asymmetric split left the narrative column far wider than
+	   the measure cap allowed it to fill, so the left half ended in a band of
+	   empty tint that read as a layout fault rather than a column. */
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	gap: 8px 40px;
 	align-items: start;
 	margin: 12px 0 4px;
-	padding: 12px 16px;
+	padding: 20px 24px;
 	border-left: 4px solid #2271b1;
 	background: #f6f7f7;
 }
@@ -489,7 +492,7 @@
 /* A rule between the columns rather than a box around the aside: it separates
    without making the support ask look like a second, competing notice. */
 .lfndr-colophon__aside {
-	padding-left: 32px;
+	padding-left: 40px;
 	border-left: 1px solid #dcdcde;
 }
 
@@ -517,7 +520,7 @@
 }
 
 .lfndr-colophon h2 {
-	margin: 0 0 10px;
+	margin: 0 0 16px;
 	font-size: 14px;
 	line-height: 1.4;
 }
@@ -548,10 +551,6 @@
    full-width panel whose text stops at a readable line length reads as
    deliberate — and prose past roughly 80 characters a line is measurably
    harder to track back to the next one. */
-.lfndr-colophon__main p {
-	max-width: 68ch;
-}
-
 .lfndr-colophon p {
 	margin: 0 0 8px;
 	font-size: 13px;
@@ -575,4 +574,48 @@
 		color: inherit;
 		opacity: .85;
 	}
+}
+
+/* ─── Colophon: collapsed ───────────────────────────────────────────────────
+   A strip, not a disappearance. Collapsing is a request for less noise while
+   working, not a request never to be told who maintains the plugin — and it
+   has to leave something to click to get back. */
+.lfndr-colophon--collapsed {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 10px 24px;
+}
+
+.lfndr-colophon--collapsed .lfndr-colophon__logo {
+	width: 122px;
+	height: 22px;
+	flex: 0 0 auto;
+}
+
+/* Top-right of the panel, out of the reading path. Deliberately a quiet link
+   rather than a button: it competes with nothing, and a prominent control for
+   getting rid of something is an invitation to use it. */
+.lfndr-colophon {
+	position: relative;
+}
+
+.lfndr-colophon__toggle {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	font-size: 12px;
+	color: #646970;
+	text-decoration: none;
+}
+
+.lfndr-colophon__toggle:hover,
+.lfndr-colophon__toggle:focus {
+	color: #2271b1;
+	text-decoration: underline;
+}
+
+.lfndr-colophon--collapsed .lfndr-colophon__toggle {
+	position: static;
+	margin-left: auto;
 }
