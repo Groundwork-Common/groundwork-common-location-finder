@@ -26,12 +26,23 @@ defined( 'ABSPATH' ) || exit;
  * Tables that carry no strings — sort orders, numeric maps — stay const.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-add_action(
-	'init',
-	static function (): void {
-		load_plugin_textdomain( 'location-finder', false, dirname( plugin_basename( LFNDR_FILE ) ) . '/languages' );
-	}
-);
+/* ── No load_plugin_textdomain() call, deliberately ──────────────────────────
+ * WordPress has loaded translations for directory-hosted plugins by itself
+ * since 4.6, and calling it anyway is actively worse than redundant: it forces
+ * the .mo file to be read on every request, including the overwhelming majority
+ * where nothing translatable is ever rendered. Just-in-time loading reads it
+ * only when the first __() actually runs.
+ *
+ * Nothing is lost by dropping it. This plugin ships a .pot for translators and
+ * no compiled .mo files, so there was never a bundled catalogue that only an
+ * explicit call could find — the translations users receive come from
+ * translate.wordpress.org, into wp-content/languages/plugins/, which is exactly
+ * where the automatic loader looks.
+ *
+ * wp_set_script_translations() in inc/enqueue.php is a separate mechanism and
+ * is still required: JavaScript translations are shipped as .json and are not
+ * covered by any of the above.
+ * ─────────────────────────────────────────────────────────────────────────── */
 
 /**
  * Weekday labels, keyed 1 (Monday) through 7 (Sunday).
