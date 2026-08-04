@@ -1,5 +1,6 @@
 === Groundwork Common Location Finder ===
 Contributors: groundworkcommon
+Donate link: https://www.groundworkcommon.com/support/
 Tags: locations, map, store locator, leaflet, openstreetmap
 Requires at least: 6.3
 Tested up to: 7.0
@@ -130,6 +131,33 @@ Privacy: https://wiki.osmfoundation.org/wiki/Privacy_Policy
 **Not a service call:** the *Get directions* link points at Google Maps or Apple
 Maps. It is an ordinary link — nothing is sent until a visitor clicks it, and
 then it is their browser making the request, not your site.
+
+== About Groundwork Common ==
+
+This plugin is built and maintained by Groundwork Common, a technology practice
+for nonprofits: fractional technology leadership, project work, and training for
+organizations that need senior help and cannot carry a full-time technologist.
+
+One of our working principles is that good technology work should leave an
+organization more capable, not more dependent on whoever did it. Releasing this
+plugin is that principle applied. A food bank or a clinic should be able to put
+its locations on a map without commissioning custom work or renting something
+this ordinary by the month.
+
+If you find this plugin useful, three things genuinely help:
+
+* **Recommend us.** Mention us to a nonprofit who might benefit from our
+  services. Referrals are how our business continues to grow its impact and
+  reach.
+* **Support our WordPress plugins directly.** While we offer the plugin free to
+  you, it costs us to maintain it — the security updates, the compatibility
+  testing against each new WordPress release, the bug nobody but you has hit.
+  We can't do it without your support, and we appreciate whatever support you
+  can give.
+* **Report what broke.** A clear bug report is worth more to us than most
+  feature requests.
+
+https://www.groundworkcommon.com
 
 == Third-party libraries ==
 

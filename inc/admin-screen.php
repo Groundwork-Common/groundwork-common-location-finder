@@ -95,6 +95,8 @@ function lfndr_admin_screen(): void {
 	<div class="wrap lfndr-admin">
 		<h1><?php esc_html_e( 'Location Finder', 'groundwork-common-location-finder' ); ?></h1>
 
+		<?php lfndr_render_colophon(); ?>
+
 		<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Setup sections', 'groundwork-common-location-finder' ); ?>">
 			<?php foreach ( lfndr_admin_tabs() as $slug => $label ) : ?>
 				<a href="<?php echo esc_url( lfndr_fields_url( array( 'tab' => $slug ) ) ); ?>"
@@ -120,6 +122,111 @@ function lfndr_admin_screen(): void {
 				lfndr_fields_screen();
 		}
 		?>
+	</div>
+	<?php
+}
+
+/**
+ * Who made this, and the one thing worth asking of someone using it.
+ *
+ * Between the page title and the tab bar, and on this screen only. Above the
+ * tabs because it introduces the whole screen rather than any one section of
+ * it, and because a colophon below four tabs of settings is one nobody reaches.
+ *
+ * Still not a notice. A plugin that interrupts an unrelated admin page to talk
+ * about its author is the behaviour the directory guidelines exist to stop, and
+ * it earns the dismissal it gets. Somebody who has opened this screen has
+ * chosen to be here; that is the whole difference.
+ *
+ * Two asks, in the order they are actually worth: a referral, then ongoing
+ * support for the work itself.
+ *
+ * Neither is called a donation. Groundwork Common is a services practice, not
+ * a charity, so "donate" would imply a tax status that does not exist — and
+ * asking a nonprofit to donate to its vendor points the arrow the wrong way.
+ * Sponsorship is the honest word for paying to keep freely released software
+ * maintained, and it describes the exchange accurately: the money buys
+ * continued work, not goodwill.
+ */
+function lfndr_render_colophon(): void {
+	?>
+	<div class="lfndr-colophon">
+		<div class="lfndr-colophon__main">
+		<h2 class="lfndr-colophon__brand">
+			<?php
+			/*
+			 * The wordmark carries the name visually and the heading carries it
+			 * to everything else. Marked aria-hidden and paired with real text
+			 * rather than given alt text, because an <img alt="Groundwork
+			 * Common"> immediately after a heading saying the same words is read
+			 * out twice.
+			 *
+			 * Two files, swapped by colour scheme in the stylesheet: the logo is
+			 * ink on transparent, so one version or the other disappears
+			 * depending on what it is sitting on. Naming is by BACKGROUND, not
+			 * by ink — "-light" is the one for light backgrounds.
+			 */
+			?>
+			<a href="<?php echo esc_url( LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
+				<span class="screen-reader-text"><?php esc_html_e( 'Groundwork Common', 'groundwork-common-location-finder' ); ?></span>
+				<span class="lfndr-colophon__logo" aria-hidden="true"></span>
+			</a>
+		</h2>
+
+		<p>
+			<?php
+			/* The anchor is built here rather than carried inside the
+			 * translatable string, so a translator is never handed markup they
+			 * can break and no HTML has to survive a round trip through
+			 * translate.wordpress.org. */
+			$lfndr_gwc_link = sprintf(
+				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+				esc_url( LFNDR_GWC_URL ),
+				esc_html__( 'Groundwork Common', 'groundwork-common-location-finder' )
+			);
+
+			printf(
+				/* translators: %s: Groundwork Common, linked to the company site. */
+				esc_html__( '%s provides technology leadership and support for nonprofits — fractional, by the project, or alongside your team. We release tools like this one because good technology work should leave an organization more capable, not more dependent on whoever built it.', 'groundwork-common-location-finder' ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- assembled directly above from esc_url() and esc_html__().
+				$lfndr_gwc_link
+			);
+			?>
+		</p>
+
+		<p>
+			<?php esc_html_e( 'If you find this plugin useful, the most valuable thing you can do for us is mention us to a nonprofit who might benefit from our services. Referrals are how our business continues to grow its impact and reach.', 'groundwork-common-location-finder' ); ?>
+		</p>
+
+		<?php /* Directly under the referral ask, which is what it answers. */ ?>
+		<p>
+			<a class="button" href="<?php echo esc_url( LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'See what we do', 'groundwork-common-location-finder' ); ?>
+			</a>
+		</p>
+
+	</div>
+
+		<?php /* Second column: the two things a reader can act on. */ ?>
+		<div class="lfndr-colophon__aside">
+			<?php if ( '' !== LFNDR_SPONSOR_URL ) : ?>
+				<p>
+					<?php esc_html_e( 'You can also support our WordPress plugins directly. While we offer the plugin free to you, it costs us to maintain it — the security updates, the compatibility testing against each new WordPress release, the bug nobody but you has hit. We can’t do it without your support, and we appreciate whatever support you can give.', 'groundwork-common-location-finder' ); ?>
+				</p>
+
+				<p>
+					<a class="button button-primary" href="<?php echo esc_url( LFNDR_SPONSOR_URL ); ?>" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Support our work', 'groundwork-common-location-finder' ); ?>
+					</a>
+				</p>
+			<?php endif; ?>
+
+			<p>
+				<a href="https://github.com/Groundwork-Common/groundwork-common-location-finder/issues" target="_blank" rel="noopener noreferrer">
+					<?php esc_html_e( 'Report a problem', 'groundwork-common-location-finder' ); ?>
+				</a>
+			</p>
+		</div>
 	</div>
 	<?php
 }
