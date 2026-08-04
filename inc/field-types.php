@@ -53,27 +53,27 @@ function lfndr_field_types(): array {
 
 	$simple = array(
 		'text'     => array(
-			'label' => __( 'Text', 'location-finder' ),
+			'label' => __( 'Text', 'groundwork-common-location-finder' ),
 			'js'    => 'text',
 		),
 		'textarea' => array(
-			'label' => __( 'Long text', 'location-finder' ),
+			'label' => __( 'Long text', 'groundwork-common-location-finder' ),
 			'js'    => 'textarea',
 		),
 		'url'      => array(
-			'label' => __( 'Website', 'location-finder' ),
+			'label' => __( 'Website', 'groundwork-common-location-finder' ),
 			'js'    => 'url',
 		),
 		'email'    => array(
-			'label' => __( 'Email', 'location-finder' ),
+			'label' => __( 'Email', 'groundwork-common-location-finder' ),
 			'js'    => 'email',
 		),
 		'phone'    => array(
-			'label' => __( 'Phone', 'location-finder' ),
+			'label' => __( 'Phone', 'groundwork-common-location-finder' ),
 			'js'    => 'phone',
 		),
 		'number'   => array(
-			'label' => __( 'Number', 'location-finder' ),
+			'label' => __( 'Number', 'groundwork-common-location-finder' ),
 			'js'    => 'number',
 		),
 	);
@@ -96,7 +96,7 @@ function lfndr_field_types(): array {
 	}
 
 	$types['boolean'] = array(
-		'label'             => __( 'Yes / no', 'location-finder' ),
+		'label'             => __( 'Yes / no', 'groundwork-common-location-finder' ),
 		'group'             => 'simple',
 		'multiple'          => true,
 		'render_admin'      => 'lfndr_admin_boolean',
@@ -112,7 +112,7 @@ function lfndr_field_types(): array {
 	);
 
 	$types['select'] = array(
-		'label'             => __( 'Choice (one)', 'location-finder' ),
+		'label'             => __( 'Choice (one)', 'groundwork-common-location-finder' ),
 		'group'             => 'choice',
 		'multiple'          => true,
 		'render_admin'      => 'lfndr_admin_select',
@@ -128,7 +128,7 @@ function lfndr_field_types(): array {
 	);
 
 	$types['multiselect'] = array(
-		'label'         => __( 'Choice (many)', 'location-finder' ),
+		'label'         => __( 'Choice (many)', 'groundwork-common-location-finder' ),
 		'group'         => 'choice',
 		'multiple'      => true,
 		'render_admin'  => 'lfndr_admin_multiselect',
@@ -152,7 +152,7 @@ function lfndr_field_types(): array {
 	 *         return document.createTextNode(String(value)); // Node or null
 	 *     };
 	 *
-	 * enqueued with 'location-finder' as a dependency. Without one the field
+	 * enqueued with 'groundwork-common-location-finder' as a dependency. Without one the field
 	 * falls back to plain text rather than breaking the card.
 	 *
 	 * @param array $types Registry keyed by type slug.
@@ -312,8 +312,8 @@ function lfndr_schema_form_text( array $field ): void {
 	lfndr_schema_number_control(
 		$field,
 		'maxlength',
-		__( 'Maximum length', 'location-finder' ),
-		__( 'Leave at 0 for no limit.', 'location-finder' )
+		__( 'Maximum length', 'groundwork-common-location-finder' ),
+		__( 'Leave at 0 for no limit.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -357,12 +357,12 @@ function lfndr_sanitize_textarea( $raw, array $field ): string {
  * @param array $field Field definition.
  */
 function lfndr_schema_form_textarea( array $field ): void {
-	lfndr_schema_number_control( $field, 'rows', __( 'Rows', 'location-finder' ), '' );
+	lfndr_schema_number_control( $field, 'rows', __( 'Rows', 'groundwork-common-location-finder' ), '' );
 	lfndr_schema_number_control(
 		$field,
 		'maxlength',
-		__( 'Maximum length', 'location-finder' ),
-		__( 'Leave at 0 for no limit.', 'location-finder' )
+		__( 'Maximum length', 'groundwork-common-location-finder' ),
+		__( 'Leave at 0 for no limit.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -415,11 +415,11 @@ function lfndr_schema_form_url( array $field ): void {
 	lfndr_schema_select_control(
 		$field,
 		'link_text',
-		__( 'Link text', 'location-finder' ),
+		__( 'Link text', 'groundwork-common-location-finder' ),
 		array(
-			'host'  => __( 'Domain only (example.org)', 'location-finder' ),
-			'full'  => __( 'Full URL', 'location-finder' ),
-			'label' => __( 'The field label', 'location-finder' ),
+			'host'  => __( 'Domain only (example.org)', 'groundwork-common-location-finder' ),
+			'full'  => __( 'Full URL', 'groundwork-common-location-finder' ),
+			'label' => __( 'The field label', 'groundwork-common-location-finder' ),
 		),
 		'host'
 	);
@@ -468,7 +468,7 @@ function lfndr_schema_form_email( array $field ): void {
 	lfndr_schema_checkbox_control(
 		$field,
 		'mailto',
-		__( 'Render as a clickable mailto: link', 'location-finder' ),
+		__( 'Render as a clickable mailto: link', 'groundwork-common-location-finder' ),
 		true
 	);
 }
@@ -513,8 +513,8 @@ function lfndr_sanitize_phone( $raw ): string {
  * @param array $field Field definition.
  */
 function lfndr_schema_form_phone( array $field ): void {
-	lfndr_schema_checkbox_control( $field, 'tel_link', __( 'Render as a clickable tel: link', 'location-finder' ), true );
-	lfndr_schema_checkbox_control( $field, 'mobile_action', __( 'Show a "Call" button on small screens', 'location-finder' ), false );
+	lfndr_schema_checkbox_control( $field, 'tel_link', __( 'Render as a clickable tel: link', 'groundwork-common-location-finder' ), true );
+	lfndr_schema_checkbox_control( $field, 'mobile_action', __( 'Show a "Call" button on small screens', 'groundwork-common-location-finder' ), false );
 }
 
 /* ── number ─────────────────────────────────────────────────────────────── */
@@ -573,10 +573,10 @@ function lfndr_sanitize_number( $raw, array $field ): string {
  * @param array $field Field definition.
  */
 function lfndr_schema_form_number( array $field ): void {
-	lfndr_schema_number_control( $field, 'min', __( 'Minimum', 'location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'max', __( 'Maximum', 'location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'decimals', __( 'Decimal places', 'location-finder' ), '' );
-	lfndr_schema_text_control( $field, 'suffix', __( 'Suffix', 'location-finder' ), __( 'Shown after the number, e.g. " seats".', 'location-finder' ) );
+	lfndr_schema_number_control( $field, 'min', __( 'Minimum', 'groundwork-common-location-finder' ), '' );
+	lfndr_schema_number_control( $field, 'max', __( 'Maximum', 'groundwork-common-location-finder' ), '' );
+	lfndr_schema_number_control( $field, 'decimals', __( 'Decimal places', 'groundwork-common-location-finder' ), '' );
+	lfndr_schema_text_control( $field, 'suffix', __( 'Suffix', 'groundwork-common-location-finder' ), __( 'Shown after the number, e.g. " seats".', 'groundwork-common-location-finder' ) );
 }
 
 /* ── boolean ────────────────────────────────────────────────────────────── */
@@ -644,12 +644,12 @@ function lfndr_settings_boolean( array $raw ): array {
  * @param array $field Field definition.
  */
 function lfndr_schema_form_boolean( array $field ): void {
-	lfndr_schema_text_control( $field, 'true_label', __( 'Label when true', 'location-finder' ), __( 'Defaults to the field label.', 'location-finder' ) );
+	lfndr_schema_text_control( $field, 'true_label', __( 'Label when true', 'groundwork-common-location-finder' ), __( 'Defaults to the field label.', 'groundwork-common-location-finder' ) );
 	lfndr_schema_text_control(
 		$field,
 		'false_label',
-		__( 'Label when false', 'location-finder' ),
-		__( 'Leave empty to show nothing when false — which is usually what you want. A card that announces "Not wheelchair accessible" on every listing is rarely the goal.', 'location-finder' )
+		__( 'Label when false', 'groundwork-common-location-finder' ),
+		__( 'Leave empty to show nothing when false — which is usually what you want. A card that announces "Not wheelchair accessible" on every listing is rarely the goal.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -670,7 +670,7 @@ function lfndr_admin_select( array $field, $value, string $name ): void {
 		esc_attr( $name )
 	);
 	if ( $allow_empty ) {
-		printf( '<option value="">%s</option>', esc_html__( '— none —', 'location-finder' ) );
+		printf( '<option value="">%s</option>', esc_html__( '— none —', 'groundwork-common-location-finder' ) );
 	}
 	foreach ( $field['options'] as $option ) {
 		printf(
@@ -734,19 +734,19 @@ function lfndr_settings_select( array $raw, array $field ): array {
  * @param array $field Field definition.
  */
 function lfndr_schema_form_select( array $field ): void {
-	$choices = array( '' => __( '— none —', 'location-finder' ) );
+	$choices = array( '' => __( '— none —', 'groundwork-common-location-finder' ) );
 	foreach ( $field['options'] as $option ) {
 		$choices[ $option['value'] ] = $option['label'];
 	}
-	lfndr_schema_select_control( $field, 'default', __( 'Default value', 'location-finder' ), $choices, '' );
-	lfndr_schema_checkbox_control( $field, 'allow_empty', __( 'Allow no value', 'location-finder' ), true );
+	lfndr_schema_select_control( $field, 'default', __( 'Default value', 'groundwork-common-location-finder' ), $choices, '' );
+	lfndr_schema_checkbox_control( $field, 'allow_empty', __( 'Allow no value', 'groundwork-common-location-finder' ), true );
 	lfndr_schema_select_control(
 		$field,
 		'open_now_gate',
-		__( 'Only badge "Open now" when this value is set', 'location-finder' ),
+		__( 'Only badge "Open now" when this value is set', 'groundwork-common-location-finder' ),
 		$choices,
 		'',
-		__( 'For an access field: a listing that is appointment-only should never show as open, however its hours read.', 'location-finder' )
+		__( 'For an access field: a listing that is appointment-only should never show as open, however its hours read.', 'groundwork-common-location-finder' )
 	);
 }
 
@@ -820,7 +820,7 @@ function lfndr_schema_form_multiselect( array $field ): void {
 	unset( $field );
 	printf(
 		'<p class="description">%s</p>',
-		esc_html__( 'Filter chips for this field use AND: a visitor selecting two values sees only locations offering both.', 'location-finder' )
+		esc_html__( 'Filter chips for this field use AND: a visitor selecting two values sees only locations offering both.', 'groundwork-common-location-finder' )
 	);
 }
 

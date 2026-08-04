@@ -61,13 +61,13 @@ function lfndr_hour_days(): array {
 		return $days;
 	}
 	$days = array(
-		1 => array( __( 'Monday', 'location-finder' ), _x( 'Mon', 'abbreviated weekday', 'location-finder' ) ),
-		2 => array( __( 'Tuesday', 'location-finder' ), _x( 'Tue', 'abbreviated weekday', 'location-finder' ) ),
-		3 => array( __( 'Wednesday', 'location-finder' ), _x( 'Wed', 'abbreviated weekday', 'location-finder' ) ),
-		4 => array( __( 'Thursday', 'location-finder' ), _x( 'Thu', 'abbreviated weekday', 'location-finder' ) ),
-		5 => array( __( 'Friday', 'location-finder' ), _x( 'Fri', 'abbreviated weekday', 'location-finder' ) ),
-		6 => array( __( 'Saturday', 'location-finder' ), _x( 'Sat', 'abbreviated weekday', 'location-finder' ) ),
-		7 => array( __( 'Sunday', 'location-finder' ), _x( 'Sun', 'abbreviated weekday', 'location-finder' ) ),
+		1 => array( __( 'Monday', 'groundwork-common-location-finder' ), _x( 'Mon', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		2 => array( __( 'Tuesday', 'groundwork-common-location-finder' ), _x( 'Tue', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		3 => array( __( 'Wednesday', 'groundwork-common-location-finder' ), _x( 'Wed', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		4 => array( __( 'Thursday', 'groundwork-common-location-finder' ), _x( 'Thu', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		5 => array( __( 'Friday', 'groundwork-common-location-finder' ), _x( 'Fri', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		6 => array( __( 'Saturday', 'groundwork-common-location-finder' ), _x( 'Sat', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
+		7 => array( __( 'Sunday', 'groundwork-common-location-finder' ), _x( 'Sun', 'abbreviated weekday', 'groundwork-common-location-finder' ) ),
 	);
 	return $days;
 }
@@ -87,12 +87,12 @@ function lfndr_hour_freqs(): array {
 		return $freqs;
 	}
 	$freqs = array(
-		'weekly' => __( 'Every week', 'location-finder' ),
-		'1st'    => __( '1st of the month', 'location-finder' ),
-		'2nd'    => __( '2nd of the month', 'location-finder' ),
-		'3rd'    => __( '3rd of the month', 'location-finder' ),
-		'4th'    => __( '4th of the month', 'location-finder' ),
-		'last'   => __( 'Last of the month', 'location-finder' ),
+		'weekly' => __( 'Every week', 'groundwork-common-location-finder' ),
+		'1st'    => __( '1st of the month', 'groundwork-common-location-finder' ),
+		'2nd'    => __( '2nd of the month', 'groundwork-common-location-finder' ),
+		'3rd'    => __( '3rd of the month', 'groundwork-common-location-finder' ),
+		'4th'    => __( '4th of the month', 'groundwork-common-location-finder' ),
+		'last'   => __( 'Last of the month', 'groundwork-common-location-finder' ),
 	);
 	return $freqs;
 }
@@ -122,12 +122,12 @@ function lfndr_address_subfields(): array {
 		return $subfields;
 	}
 	$subfields = array(
-		'line1'   => __( 'Street address', 'location-finder' ),
-		'line2'   => __( 'Suite, unit, floor', 'location-finder' ),
-		'city'    => __( 'City', 'location-finder' ),
-		'region'  => __( 'Region', 'location-finder' ),
-		'postal'  => __( 'Postal code', 'location-finder' ),
-		'country' => __( 'Country', 'location-finder' ),
+		'line1'   => __( 'Street address', 'groundwork-common-location-finder' ),
+		'line2'   => __( 'Suite, unit, floor', 'groundwork-common-location-finder' ),
+		'city'    => __( 'City', 'groundwork-common-location-finder' ),
+		'region'  => __( 'Region', 'groundwork-common-location-finder' ),
+		'postal'  => __( 'Postal code', 'groundwork-common-location-finder' ),
+		'country' => __( 'Country', 'groundwork-common-location-finder' ),
 	);
 	return $subfields;
 }

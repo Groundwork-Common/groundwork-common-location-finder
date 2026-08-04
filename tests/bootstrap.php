@@ -25,7 +25,7 @@
 define( 'ABSPATH', __DIR__ . '/' );
 define( 'LFNDR_VERSION', 'test' );
 define( 'LFNDR_SCHEMA_VERSION', 1 );
-define( 'LFNDR_FILE', dirname( __DIR__ ) . '/location-finder.php' );
+define( 'LFNDR_FILE', dirname( __DIR__ ) . '/groundwork-common-location-finder.php' );
 define( 'LFNDR_DIR', dirname( __DIR__ ) . '/' );
 define( 'LFNDR_URL', 'https://example.test/wp-content/plugins/location-finder/' );
 define( 'HOUR_IN_SECONDS', 3600 );

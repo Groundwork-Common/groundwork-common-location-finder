@@ -23,7 +23,7 @@
 	 * plugin still ran and still looked correct — the strings simply never
 	 * reached the .pot, so no translation could ever exist for them.
 	 *
-	 * So: do not hoist 'location-finder' into a variable here. The repetition is
+	 * So: do not hoist 'groundwork-common-location-finder' into a variable here. The repetition is
 	 * what makes the front end translatable at all. */
 	var BREAKPOINT = 860;
 	var DETAIL_ZOOM = 14;
@@ -393,7 +393,7 @@
 		this.applyButton = el( 'button', {
 			type: 'button',
 			class: 'lfndr__apply',
-			text: __( 'Apply filters', 'location-finder' )
+			text: __( 'Apply filters', 'groundwork-common-location-finder' )
 		} );
 		this.applyButton.addEventListener( 'click', function () {
 			self.setFiltersOpen( false );
@@ -519,7 +519,7 @@
 		this.maximizeIcon = icon( 'expand' );
 		this.maximizeLabel = el( 'span', {
 			class: 'lfndr__button-label',
-			text: __( 'Full screen', 'location-finder' )
+			text: __( 'Full screen', 'groundwork-common-location-finder' )
 		} );
 
 		this.maximizeButton = el(
@@ -585,8 +585,8 @@
 
 		this.maximizeButton.setAttribute( 'aria-pressed', maximized ? 'true' : 'false' );
 		this.maximizeLabel.textContent = maximized
-			? __( 'Exit full screen', 'location-finder' )
-			: __( 'Full screen', 'location-finder' );
+			? __( 'Exit full screen', 'groundwork-common-location-finder' )
+			: __( 'Full screen', 'groundwork-common-location-finder' );
 
 		if ( next && this.maximizeIcon ) {
 			this.maximizeButton.replaceChild( next, this.maximizeIcon );
@@ -623,7 +623,7 @@
 		 * site gave the finder a name it is already on the element and is the
 		 * better one; this only fills the gap. */
 		if ( ! this.root.getAttribute( 'aria-label' ) && ! this.root.getAttribute( 'aria-labelledby' ) ) {
-			this.root.setAttribute( 'aria-label', __( 'Location finder', 'location-finder' ) );
+			this.root.setAttribute( 'aria-label', __( 'Location finder', 'groundwork-common-location-finder' ) );
 			this._borrowedLabel = true;
 		}
 
@@ -766,11 +766,11 @@
 		// fail every call, so feature detection alone reports the wrong reason
 		// and the user is left retrying a permission they never denied.
 		if ( window.isSecureContext === false ) {
-			this.say( __( 'Location needs a secure (https) connection.', 'location-finder' ) );
+			this.say( __( 'Location needs a secure (https) connection.', 'groundwork-common-location-finder' ) );
 			return;
 		}
 
-		this.say( __( 'Finding your location…', 'location-finder' ) );
+		this.say( __( 'Finding your location…', 'groundwork-common-location-finder' ) );
 		this.setLocateBusy( true );
 
 		navigator.geolocation.getCurrentPosition(
@@ -779,7 +779,7 @@
 				self.setOrigin(
 					position.coords.latitude,
 					position.coords.longitude,
-					__( 'your location', 'location-finder' ),
+					__( 'your location', 'groundwork-common-location-finder' ),
 					'geolocation',
 					position.coords.accuracy
 				);
@@ -792,16 +792,16 @@
 				var message;
 				switch ( error.code ) {
 					case error.PERMISSION_DENIED:
-						message = __( 'Location access was blocked. You can still search by name.', 'location-finder' );
+						message = __( 'Location access was blocked. You can still search by name.', 'groundwork-common-location-finder' );
 						break;
 					case error.POSITION_UNAVAILABLE:
-						message = __( 'Your location could not be determined right now.', 'location-finder' );
+						message = __( 'Your location could not be determined right now.', 'groundwork-common-location-finder' );
 						break;
 					case error.TIMEOUT:
-						message = __( 'Finding your location took too long. Try again.', 'location-finder' );
+						message = __( 'Finding your location took too long. Try again.', 'groundwork-common-location-finder' );
 						break;
 					default:
-						message = __( 'Your location is unavailable.', 'location-finder' );
+						message = __( 'Your location is unavailable.', 'groundwork-common-location-finder' );
 				}
 				self.say( message );
 			},
@@ -813,7 +813,7 @@
 		this.origin = { lat: lat, lng: lng, label: label, source: source, accuracy: accuracy || 0 };
 		this.state.sort = 'distance';
 
-		this.say( __( 'Sorted by distance from you.', 'location-finder' ) );
+		this.say( __( 'Sorted by distance from you.', 'groundwork-common-location-finder' ) );
 
 		this.drawOrigin();
 		this.update();
@@ -968,7 +968,7 @@
 			var nameKey = 'n:' + location.name.toLowerCase();
 			if ( ! seen[ nameKey ] ) {
 				seen[ nameKey ] = true;
-				pool.push( { label: location.name, kind: __( 'Location', 'location-finder' ), id: location.id } );
+				pool.push( { label: location.name, kind: __( 'Location', 'groundwork-common-location-finder' ), id: location.id } );
 			}
 
 			Object.keys( location.f || {} ).forEach( function ( key ) {
@@ -1405,7 +1405,7 @@
 
 		if ( ! list.length ) {
 			this.results.appendChild(
-				el( 'li', { class: 'lfndr__empty', text: __( 'No locations match. Try removing a filter.', 'location-finder' ) } )
+				el( 'li', { class: 'lfndr__empty', text: __( 'No locations match. Try removing a filter.', 'groundwork-common-location-finder' ) } )
 			);
 			return;
 		}
@@ -1419,7 +1419,7 @@
 			var more = el( 'button', {
 				type: 'button',
 				class: 'lfndr__more',
-				text: __( 'Show all results', 'location-finder' )
+				text: __( 'Show all results', 'groundwork-common-location-finder' )
 			} );
 			more.addEventListener( 'click', function () {
 				self.config.pageSize = 0;
@@ -1527,9 +1527,9 @@
 
 	Finder.prototype.badge = function ( status ) {
 		var labels = {
-			now: __( 'Open now', 'location-finder' ),
-			today: __( 'Open today', 'location-finder' ),
-			closed: __( 'Temporarily closed', 'location-finder' )
+			now: __( 'Open now', 'groundwork-common-location-finder' ),
+			today: __( 'Open today', 'groundwork-common-location-finder' ),
+			closed: __( 'Temporarily closed', 'groundwork-common-location-finder' )
 		};
 		return el( 'p', {
 			class: 'lfndr-badge lfndr-badge--' + status,
@@ -1556,7 +1556,7 @@
 				return null;
 			}
 			return this.row(
-				__( 'Coordinates', 'location-finder' ),
+				__( 'Coordinates', 'groundwork-common-location-finder' ),
 				document.createTextNode( location.lat.toFixed( 5 ) + ', ' + location.lng.toFixed( 5 ) ),
 				'card' === surface
 			);
@@ -1567,8 +1567,8 @@
 				return null;
 			}
 			return this.row(
-				__( 'Directions', 'location-finder' ),
-				link( url, __( 'Get directions', 'location-finder' ), 'lfndr-action' ),
+				__( 'Directions', 'groundwork-common-location-finder' ),
+				link( url, __( 'Get directions', 'groundwork-common-location-finder' ), 'lfndr-action' ),
 				'card' === surface
 			);
 		}
@@ -1758,7 +1758,7 @@
 			 * when it says something the heading did not. */
 			var restates = yes.toLowerCase() === String( field.label ).toLowerCase();
 			return document.createTextNode(
-				! yes || restates ? __( 'Yes', 'location-finder' ) : yes
+				! yes || restates ? __( 'Yes', 'groundwork-common-location-finder' ) : yes
 			);
 		},
 
@@ -1822,7 +1822,7 @@
 				table.appendChild(
 					el( 'p', {
 						class: 'lfndr-hours__more',
-						text: __( 'More hours in the details', 'location-finder' )
+						text: __( 'More hours in the details', 'groundwork-common-location-finder' )
 					} )
 				);
 			}
@@ -1862,8 +1862,8 @@
 			 * fact is worse than either alone. See showsClosureBanner(): the pill is
 			 * suppressed exactly where this renders, and kept where it does not. */
 			var text = active
-				? __( 'Temporarily closed', 'location-finder' ) + ': ' + range
-				: __( 'Closing soon', 'location-finder' ) + ': ' + range;
+				? __( 'Temporarily closed', 'groundwork-common-location-finder' ) + ': ' + range
+				: __( 'Closing soon', 'groundwork-common-location-finder' ) + ': ' + range;
 
 			if ( closure.reason ) {
 				text += ' (' + closure.reason + ')';
@@ -1945,7 +1945,7 @@
 		var back = el(
 			'button',
 			{ type: 'button', class: 'lfndr-detail__back' },
-			[ icon( 'back' ), el( 'span', { text: __( 'Back to all results', 'location-finder' ) } ) ]
+			[ icon( 'back' ), el( 'span', { text: __( 'Back to all results', 'groundwork-common-location-finder' ) } ) ]
 		);
 		back.addEventListener( 'click', function () {
 			self.deselect();
@@ -2102,8 +2102,8 @@
 				var button = el( 'button', {
 					type: 'button',
 					class: 'lfndr__locate-btn',
-					'aria-label': __( 'Show my location', 'location-finder' ),
-					title: __( 'Show my location', 'location-finder' )
+					'aria-label': __( 'Show my location', 'groundwork-common-location-finder' ),
+					title: __( 'Show my location', 'groundwork-common-location-finder' )
 				}, [ icon( 'locate' ) ] );
 
 				button.addEventListener( 'click', function () {
@@ -2130,13 +2130,13 @@
 		/* Named explicitly. "A third party" is not something a person can weigh;
 		 * "tile.openstreetmap.org" is. */
 		var explain = host
-			? __( 'The map is loaded from %s. Showing it will share your IP address with them.', 'location-finder' ).replace( '%s', host )
-			: __( 'The map is loaded from another website. Showing it will share your IP address with them.', 'location-finder' );
+			? __( 'The map is loaded from %s. Showing it will share your IP address with them.', 'groundwork-common-location-finder' ).replace( '%s', host )
+			: __( 'The map is loaded from another website. Showing it will share your IP address with them.', 'groundwork-common-location-finder' );
 
 		var button = el( 'button', {
 			type: 'button',
 			class: 'lfndr__tilegate-btn',
-			text: __( 'Show map', 'location-finder' )
+			text: __( 'Show map', 'groundwork-common-location-finder' )
 		} );
 
 		var gate = el( 'div', { class: 'lfndr__tilegate' }, [
@@ -2144,7 +2144,7 @@
 			button,
 			el( 'p', {
 				class: 'lfndr__tilegate-note',
-				text: __( 'The list, search and filters work without it.', 'location-finder' )
+				text: __( 'The list, search and filters work without it.', 'groundwork-common-location-finder' )
 			} )
 		] );
 

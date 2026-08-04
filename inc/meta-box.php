@@ -16,7 +16,7 @@ add_action( 'save_post_' . LFNDR_POST_TYPE, 'lfndr_save_location', 10, 1 );
 function lfndr_add_meta_boxes(): void {
 	add_meta_box(
 		'lfndr_location_details',
-		__( 'Location Details', 'location-finder' ),
+		__( 'Location Details', 'groundwork-common-location-finder' ),
 		'lfndr_render_meta_box',
 		LFNDR_POST_TYPE,
 		'normal',
@@ -56,7 +56,7 @@ function lfndr_render_meta_box( WP_Post $post ): void {
 			printf(
 				'<details class="lfndr-section"%s><summary>%s</summary>',
 				$first ? ' open' : '',
-				esc_html( '' !== $section ? $section : __( 'Details', 'location-finder' ) )
+				esc_html( '' !== $section ? $section : __( 'Details', 'groundwork-common-location-finder' ) )
 			);
 		}
 
@@ -78,7 +78,7 @@ function lfndr_render_meta_box( WP_Post $post ): void {
 			wp_kses(
 				sprintf(
 					/* translators: %s: URL of the Fields screen. */
-					__( 'No fields are defined yet. <a href="%s">Add some on the Fields screen</a> and they will appear here.', 'location-finder' ),
+					__( 'No fields are defined yet. <a href="%s">Add some on the Fields screen</a> and they will appear here.', 'groundwork-common-location-finder' ),
 					esc_url( admin_url( 'edit.php?post_type=' . LFNDR_POST_TYPE . '&page=lfndr-fields' ) )
 				),
 				array( 'a' => array( 'href' => array() ) )
@@ -111,11 +111,11 @@ function lfndr_render_coordinate_fields( WP_Post $post ): void {
 		?>
 		<div class="lfndr-address" data-lfndr-geocode-target="1">
 			<p class="lfndr-address__search">
-				<label for="lfndr-geo-coords"><?php esc_html_e( 'Find coordinates', 'location-finder' ); ?></label><br />
+				<label for="lfndr-geo-coords"><?php esc_html_e( 'Find coordinates', 'groundwork-common-location-finder' ); ?></label><br />
 				<input type="search" class="regular-text" id="lfndr-geo-coords" autocomplete="off"
 					role="combobox" aria-expanded="false" aria-autocomplete="list"
 					aria-controls="lfndr-geo-results-coords" data-lfndr-geocode="1"
-					placeholder="<?php esc_attr_e( 'Search for a place or address…', 'location-finder' ); ?>" />
+					placeholder="<?php esc_attr_e( 'Search for a place or address…', 'groundwork-common-location-finder' ); ?>" />
 				<span class="lfndr-address__status" role="status"></span>
 			</p>
 			<ul class="lfndr-address__results" id="lfndr-geo-results-coords" role="listbox" hidden></ul>
@@ -126,21 +126,21 @@ function lfndr_render_coordinate_fields( WP_Post $post ): void {
 	<table class="form-table" role="presentation">
 		<tbody>
 			<tr>
-				<th scope="row"><label for="lfndr-lat"><?php esc_html_e( 'Latitude', 'location-finder' ); ?></label></th>
+				<th scope="row"><label for="lfndr-lat"><?php esc_html_e( 'Latitude', 'groundwork-common-location-finder' ); ?></label></th>
 				<td>
 					<input type="text" class="regular-text code" id="lfndr-lat" name="lfndr_lat"
 						value="<?php echo esc_attr( (string) $lat ); ?>" inputmode="decimal"
-						placeholder="<?php esc_attr_e( 'e.g. 33.518600', 'location-finder' ); ?>" />
+						placeholder="<?php esc_attr_e( 'e.g. 33.518600', 'groundwork-common-location-finder' ); ?>" />
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><label for="lfndr-lng"><?php esc_html_e( 'Longitude', 'location-finder' ); ?></label></th>
+				<th scope="row"><label for="lfndr-lng"><?php esc_html_e( 'Longitude', 'groundwork-common-location-finder' ); ?></label></th>
 				<td>
 					<input type="text" class="regular-text code" id="lfndr-lng" name="lfndr_lng"
 						value="<?php echo esc_attr( (string) $lng ); ?>" inputmode="decimal"
-						placeholder="<?php esc_attr_e( 'e.g. -86.810400', 'location-finder' ); ?>" />
+						placeholder="<?php esc_attr_e( 'e.g. -86.810400', 'groundwork-common-location-finder' ); ?>" />
 					<p class="description">
-						<?php esc_html_e( 'Without coordinates a location is searchable but never appears on the map.', 'location-finder' ); ?>
+						<?php esc_html_e( 'Without coordinates a location is searchable but never appears on the map.', 'groundwork-common-location-finder' ); ?>
 					</p>
 				</td>
 			</tr>

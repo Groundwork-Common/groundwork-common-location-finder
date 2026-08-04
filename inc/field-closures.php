@@ -17,7 +17,7 @@ add_filter( 'lfndr_field_types', 'lfndr_register_closures_type' );
  */
 function lfndr_register_closures_type( array $types ): array {
 	$types['closures'] = array(
-		'label'             => __( 'Temporary closures', 'location-finder' ),
+		'label'             => __( 'Temporary closures', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
 		'render_admin'      => 'lfndr_admin_closures',
@@ -192,8 +192,8 @@ function lfndr_admin_closures( array $field, $value, string $name ): void {
 	printf(
 		'<p><button type="button" class="button lfndr-repeater__add">%s</button>
 		<span class="description">%s</span></p>',
-		esc_html__( 'Add a closure', 'location-finder' ),
-		esc_html__( 'Closures that have already ended are removed when you save.', 'location-finder' )
+		esc_html__( 'Add a closure', 'groundwork-common-location-finder' ),
+		esc_html__( 'Closures that have already ended are removed when you save.', 'groundwork-common-location-finder' )
 	);
 
 	echo '</div>';
@@ -222,17 +222,17 @@ function lfndr_render_closure_row( string $name, string $index, array $row, arra
 		<label class="lfndr-repeater__grow"><span class="screen-reader-text">%7$s</span>
 			<input type="text" name="%2$s[reason]" value="%8$s" maxlength="%9$d" placeholder="%10$s" /></label>
 		<button type="button" class="button-link lfndr-repeater__remove">%11$s</button>',
-		esc_html__( 'Closed from', 'location-finder' ),
+		esc_html__( 'Closed from', 'groundwork-common-location-finder' ),
 		esc_attr( $base ),
 		esc_attr( (string) ( $row['start'] ?? '' ) ),
-		esc_html_x( 'to', 'between two dates', 'location-finder' ),
-		esc_html__( 'Closed through', 'location-finder' ),
+		esc_html_x( 'to', 'between two dates', 'groundwork-common-location-finder' ),
+		esc_html__( 'Closed through', 'groundwork-common-location-finder' ),
 		esc_attr( (string) ( $row['end'] ?? '' ) ),
-		esc_html__( 'Reason', 'location-finder' ),
+		esc_html__( 'Reason', 'groundwork-common-location-finder' ),
 		esc_attr( (string) ( $row['reason'] ?? '' ) ),
 		(int) $max,
-		esc_attr__( 'Reason (optional, shown to visitors)', 'location-finder' ),
-		esc_html__( 'Remove', 'location-finder' )
+		esc_attr__( 'Reason (optional, shown to visitors)', 'groundwork-common-location-finder' ),
+		esc_html__( 'Remove', 'groundwork-common-location-finder' )
 	);
 
 	echo '</div>';
@@ -267,9 +267,9 @@ function lfndr_schema_form_closures( array $field ): void {
 	lfndr_schema_number_control(
 		$field,
 		'lookahead_days',
-		__( 'Warn this many days ahead', 'location-finder' ),
-		__( 'Shows "Closing on the 24th" before it happens. 0 turns the warning off.', 'location-finder' )
+		__( 'Warn this many days ahead', 'groundwork-common-location-finder' ),
+		__( 'Shows "Closing on the 24th" before it happens. 0 turns the warning off.', 'groundwork-common-location-finder' )
 	);
-	lfndr_schema_number_control( $field, 'reason_max', __( 'Longest reason', 'location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'max_rows', __( 'Most closures at once', 'location-finder' ), __( '0 for no limit.', 'location-finder' ) );
+	lfndr_schema_number_control( $field, 'reason_max', __( 'Longest reason', 'groundwork-common-location-finder' ), '' );
+	lfndr_schema_number_control( $field, 'max_rows', __( 'Most closures at once', 'groundwork-common-location-finder' ), __( '0 for no limit.', 'groundwork-common-location-finder' ) );
 }

@@ -47,7 +47,7 @@ class CompatTest extends PHPUnit\Framework\TestCase {
 		 * it in a bare process with the plugin unloaded, so a fatal there is
 		 * both likelier to go unnoticed and worse when it happens: the cleanup
 		 * simply does not occur. */
-		$files = array( $root . '/location-finder.php', $root . '/uninstall.php' );
+		$files = array( $root . '/groundwork-common-location-finder.php', $root . '/uninstall.php' );
 
 		foreach ( array( '/inc', '/blocks' ) as $dir ) {
 			$iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $root . $dir ) );
@@ -85,7 +85,7 @@ class CompatTest extends PHPUnit\Framework\TestCase {
 	public function test_the_header_still_declares_the_floor_this_test_enforces(): void {
 		// If the floor is raised deliberately, this is the reminder to raise it
 		// in too_new() as well rather than leaving the scan checking nothing.
-		$header = (string) file_get_contents( dirname( __DIR__ ) . '/location-finder.php' );
+		$header = (string) file_get_contents( dirname( __DIR__ ) . '/groundwork-common-location-finder.php' );
 		$this->assertMatchesRegularExpression( '/Requires PHP:\s*7\.4/', $header );
 	}
 }

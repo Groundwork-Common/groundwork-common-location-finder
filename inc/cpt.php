@@ -33,18 +33,18 @@ add_action( 'init', 'lfndr_register_post_type', 10 );
  */
 function lfndr_register_post_type(): void {
 	$labels = array(
-		'name'               => _x( 'Locations', 'post type general name', 'location-finder' ),
-		'singular_name'      => _x( 'Location', 'post type singular name', 'location-finder' ),
-		'menu_name'          => _x( 'Locations', 'admin menu', 'location-finder' ),
-		'add_new'            => __( 'Add New', 'location-finder' ),
-		'add_new_item'       => __( 'Add New Location', 'location-finder' ),
-		'edit_item'          => __( 'Edit Location', 'location-finder' ),
-		'new_item'           => __( 'New Location', 'location-finder' ),
-		'view_item'          => __( 'View Location', 'location-finder' ),
-		'search_items'       => __( 'Search Locations', 'location-finder' ),
-		'not_found'          => __( 'No locations found.', 'location-finder' ),
-		'not_found_in_trash' => __( 'No locations found in Trash.', 'location-finder' ),
-		'all_items'          => __( 'All Locations', 'location-finder' ),
+		'name'               => _x( 'Locations', 'post type general name', 'groundwork-common-location-finder' ),
+		'singular_name'      => _x( 'Location', 'post type singular name', 'groundwork-common-location-finder' ),
+		'menu_name'          => _x( 'Locations', 'admin menu', 'groundwork-common-location-finder' ),
+		'add_new'            => __( 'Add New', 'groundwork-common-location-finder' ),
+		'add_new_item'       => __( 'Add New Location', 'groundwork-common-location-finder' ),
+		'edit_item'          => __( 'Edit Location', 'groundwork-common-location-finder' ),
+		'new_item'           => __( 'New Location', 'groundwork-common-location-finder' ),
+		'view_item'          => __( 'View Location', 'groundwork-common-location-finder' ),
+		'search_items'       => __( 'Search Locations', 'groundwork-common-location-finder' ),
+		'not_found'          => __( 'No locations found.', 'groundwork-common-location-finder' ),
+		'not_found_in_trash' => __( 'No locations found in Trash.', 'groundwork-common-location-finder' ),
+		'all_items'          => __( 'All Locations', 'groundwork-common-location-finder' ),
 	);
 
 	$args = array(
@@ -106,7 +106,7 @@ function lfndr_admin_columns( array $columns ): array {
 		++$shown;
 	}
 
-	$columns['lfndr_coords'] = __( 'Coordinates', 'location-finder' );
+	$columns['lfndr_coords'] = __( 'Coordinates', 'groundwork-common-location-finder' );
 
 	if ( null !== $date ) {
 		$columns['date'] = $date;
@@ -130,8 +130,8 @@ function lfndr_admin_column_content( string $column, int $post_id ): void {
 			 * the single most confusing way for this plugin to look broken. */
 			printf(
 				'<span class="lfndr-warn" aria-label="%s">%s</span>',
-				esc_attr__( 'This location has no coordinates and will not appear on the map.', 'location-finder' ),
-				esc_html__( 'Not on the map', 'location-finder' )
+				esc_attr__( 'This location has no coordinates and will not appear on the map.', 'groundwork-common-location-finder' ),
+				esc_html__( 'Not on the map', 'groundwork-common-location-finder' )
 			);
 			return;
 		}
@@ -169,7 +169,7 @@ function lfndr_field_plain_text( int $post_id, array $field ): string {
 	}
 
 	if ( 'boolean' === $field['type'] ) {
-		return __( 'Yes', 'location-finder' );
+		return __( 'Yes', 'groundwork-common-location-finder' );
 	}
 
 	if ( in_array( $field['type'], array( 'select', 'multiselect' ), true ) ) {
@@ -188,7 +188,7 @@ function lfndr_field_plain_text( int $post_id, array $field ): string {
 		 * printing "Array". */
 		return sprintf(
 			/* translators: %d: number of entries. */
-			_n( '%d entry', '%d entries', count( $value ), 'location-finder' ),
+			_n( '%d entry', '%d entries', count( $value ), 'groundwork-common-location-finder' ),
 			count( $value )
 		);
 	}

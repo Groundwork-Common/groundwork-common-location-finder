@@ -34,7 +34,7 @@ function lfndr_handle_geocode(): void {
 	check_ajax_referer( 'lfndr_geocode', 'nonce' );
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Not allowed.', 'location-finder' ) ), 403 );
+		wp_send_json_error( array( 'message' => __( 'Not allowed.', 'groundwork-common-location-finder' ) ), 403 );
 	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- verified by check_ajax_referer above.
@@ -102,14 +102,14 @@ function lfndr_handle_geocode(): void {
 
 	if ( is_wp_error( $response ) ) {
 		wp_send_json_error(
-			array( 'message' => __( 'Could not reach the address lookup service.', 'location-finder' ) ),
+			array( 'message' => __( 'Could not reach the address lookup service.', 'groundwork-common-location-finder' ) ),
 			502
 		);
 	}
 
 	if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
 		wp_send_json_error(
-			array( 'message' => __( 'The address lookup service refused the request.', 'location-finder' ) ),
+			array( 'message' => __( 'The address lookup service refused the request.', 'groundwork-common-location-finder' ) ),
 			502
 		);
 	}
