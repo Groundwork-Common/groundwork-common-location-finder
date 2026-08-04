@@ -43,6 +43,19 @@ defined( 'ABSPATH' ) || exit;
 const LFNDR_VERSION        = '1.0.0';
 const LFNDR_SCHEMA_VERSION = 2;
 
+/*
+ * Where "Support this work" points. Every reference is guarded, so setting this
+ * to '' removes the link and the paragraph asking for one together — a support
+ * ask with nowhere to go is worse than none.
+ */
+const LFNDR_SPONSOR_URL = 'https://www.groundworkcommon.com/support/';
+
+/* The company site. Named once because the colophon links it from three
+ * places — the wordmark, the company name in the opening line, and the
+ * "See what we do" link — and two of those agreeing while the third drifts
+ * is the kind of thing nobody notices for a year. */
+const LFNDR_GWC_URL = 'https://www.groundworkcommon.com/';
+
 define( 'LFNDR_FILE', __FILE__ );
 define( 'LFNDR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LFNDR_URL', plugin_dir_url( __FILE__ ) );

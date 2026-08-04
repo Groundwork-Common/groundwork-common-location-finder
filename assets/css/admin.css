@@ -460,3 +460,119 @@
 		background: rgb( 219 166 23 / .12 );
 	}
 }
+
+/* ─── Colophon ──────────────────────────────────────────────────────────────
+   Sits between the page title and the tab bar, so it has to introduce the
+   screen without competing with it. Left rule and a flat tint rather than a
+   full card: enough to read as a distinct voice, not so much that it looks
+   like a notice demanding action. */
+.lfndr-colophon {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 20em);
+	gap: 8px 32px;
+	align-items: start;
+	margin: 12px 0 4px;
+	padding: 12px 16px;
+	border-left: 4px solid #2271b1;
+	background: #f6f7f7;
+}
+
+/* One column below roughly a tablet. The aside is an aside on a wide screen and
+   simply the end of the passage on a narrow one — there is no arrangement in
+   which a 20em column beside a 20em column reads as two columns. */
+@media ( max-width: 960px ) {
+	.lfndr-colophon {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* A rule between the columns rather than a box around the aside: it separates
+   without making the support ask look like a second, competing notice. */
+.lfndr-colophon__aside {
+	padding-left: 32px;
+	border-left: 1px solid #dcdcde;
+}
+
+@media ( max-width: 960px ) {
+	.lfndr-colophon__aside {
+		padding: 12px 0 0;
+		border-left: 0;
+		border-top: 1px solid #dcdcde;
+	}
+}
+
+.lfndr-colophon__aside p:last-child {
+	margin-bottom: 0;
+}
+
+/* Three levels, on purpose, rather than three buttons.
+   Primary is the sponsorship ask — the one thing this panel most wants acted
+   on. Secondary is "See what we do", which follows the referral paragraph and
+   should look pressable without competing. "Report a problem" stays a plain
+   link: it is useful and should be easy to find, but giving it the same weight
+   as the other two would put a bug report on equal footing with the ask, and
+   three controls of identical weight is the same as no hierarchy at all. */
+.lfndr-colophon .button {
+	margin-top: 2px;
+}
+
+.lfndr-colophon h2 {
+	margin: 0 0 10px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+/* The wordmark. Sized by height with width following the 958 x 173 viewBox,
+   so it scales with the box rather than being pinned to a pixel width. */
+.lfndr-colophon__logo {
+	display: block;
+	width: 156px;
+	height: 28px;
+	background-image: url( '../img/gwc-logo-horizontal-light.svg' );
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: contain;
+}
+
+/* Falls back to the heading text alone if the file is ever missing — the
+   screen-reader span is real text, not a replacement trick, so nothing is lost
+   beyond the picture. */
+@media ( prefers-color-scheme: dark ) {
+	.lfndr-colophon__logo {
+		background-image: url( '../img/gwc-logo-horizontal-dark.svg' );
+	}
+}
+
+/* The measure is capped on the paragraphs, not the panel. A 46em box floating
+   in a full-width screen reads as something that failed to lay out; a
+   full-width panel whose text stops at a readable line length reads as
+   deliberate — and prose past roughly 80 characters a line is measurably
+   harder to track back to the next one. */
+.lfndr-colophon__main p {
+	max-width: 68ch;
+}
+
+.lfndr-colophon p {
+	margin: 0 0 8px;
+	font-size: 13px;
+	line-height: 1.6;
+	color: #50575e;
+}
+
+.lfndr-colophon p:last-child {
+	margin-bottom: 0;
+	color: inherit;
+}
+
+@media ( prefers-color-scheme: dark ) {
+	/* wp-admin is light by default, but plugins and extensions darken it and
+	   #f6f7f7 becomes a white slab under one. */
+	.lfndr-colophon {
+		background: rgb( 34 113 177 / .08 );
+	}
+
+	.lfndr-colophon p {
+		color: inherit;
+		opacity: .85;
+	}
+}
