@@ -871,6 +871,10 @@ function lfndr_handle_save_orders(): void {
  * Retire a field: out of `fields`, into `retired`, post meta untouched.
  */
 function lfndr_handle_retire_field(): void {
+	/* Read before the guard on purpose: the nonce action is per-field, so the
+	 * key is needed to know which nonce to demand. Tampering with it therefore
+	 * fails the check on the next line rather than bypassing it — and the value
+	 * is reduced to a field key before it is used for anything at all. */
 	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
 	lfndr_guard_admin_post( 'lfndr_retire_' . $key );
 
