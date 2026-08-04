@@ -626,6 +626,23 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 								<?php if ( ! $can_search ) : ?>
 									<span class="description"><?php esc_html_e( '— not available for this type', 'groundwork-common-location-finder' ); ?></span>
 								<?php endif; ?>
+								<?php
+								/*
+								 * Said out loud because the data flow is not
+								 * guessable from the checkbox. Searching happens
+								 * in the browser, so the text has to be in the
+								 * page for it to be searched — a field hidden
+								 * from both the card and the detail pane is still
+								 * published in the source once this is ticked.
+								 * That is fine for an internal reference code
+								 * and wrong for a case note, and the difference
+								 * is one nobody can see from a label reading
+								 * "Include in the search box".
+								 */
+								?>
+								<p class="description">
+									<?php esc_html_e( 'Search runs in the visitor’s browser, so ticking this publishes the value in the page source — including for fields hidden from the card and detail pane. Leave it off for anything private.', 'groundwork-common-location-finder' ); ?>
+								</p>
 								<br />
 								<label>
 									<input type="checkbox" name="filterable" value="1"<?php checked( ! empty( $field['filterable'] ) ); ?><?php disabled( ! $can_filter ); ?> />
