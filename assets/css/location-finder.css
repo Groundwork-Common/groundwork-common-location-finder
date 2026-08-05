@@ -2027,3 +2027,62 @@ html.lfndr-scroll-lock {
 .lfndr .lfndr__map--gated .leaflet-control-container {
 	display: none;
 }
+
+/* ── Locate, in the controls row ──────────────────────────────────────────
+   Only built when there is no map to carry the usual corner control. Shaped
+   like its neighbours in that row — Filters and Full screen — because it is
+   one of them here, rather than a map control that has wandered off. */
+.lfndr .lfndr__locate-inline {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lfndr-space-2);
+	min-height: var(--lfndr-control-height);
+	padding: var(--lfndr-space-2) var(--lfndr-space-4);
+	border: 1px solid var(--lfndr-line);
+	border-radius: var(--lfndr-radius);
+	background: var(--lfndr-control-bg, transparent);
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.lfndr .lfndr__locate-inline:hover {
+	border-color: currentColor;
+}
+
+.lfndr .lfndr__locate-inline[aria-busy='true'] {
+	opacity: .6;
+	cursor: progress;
+}
+
+/* Below the breakpoint the row is search + buttons on one line and there is no
+   room for three text labels, so this drops to its icon like its neighbours.
+   The label stays in the DOM for assistive tech rather than being swapped for
+   an aria-label, which would leave a keyboard user with an unlabelled square. */
+@container (max-width: 859.98px) {
+	.lfndr .lfndr__locate-inline .lfndr__button-label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.lfndr .lfndr__locate-inline {
+		padding-inline: var(--lfndr-space-2);
+	}
+}
+
+@supports not (container-type: inline-size) {
+	@media (max-width: 859.98px) {
+		.lfndr .lfndr__locate-inline .lfndr__button-label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+		}
+	}
+}

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T23:33:39+00:00\n"
+"POT-Creation-Date: 2026-08-04T23:59:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -214,7 +214,7 @@ msgstr ""
 
 #: inc/admin-fields.php:444
 #: inc/cpt.php:109
-#: assets/js/location-finder.js:1559
+#: assets/js/location-finder.js:1617
 msgid "Coordinates"
 msgstr ""
 
@@ -829,7 +829,7 @@ msgid "Where the map opens"
 msgstr ""
 
 #: inc/admin-screen.php:620
-#: assets/js/location-finder.js:1570
+#: assets/js/location-finder.js:1628
 msgid "Directions"
 msgstr ""
 
@@ -1385,7 +1385,7 @@ msgstr ""
 
 #: inc/cpt.php:172
 #: inc/render.php:406
-#: assets/js/location-finder.js:1761
+#: assets/js/location-finder.js:1819
 msgid "Yes"
 msgstr ""
 
@@ -1434,7 +1434,7 @@ msgid "%s is no longer shown here."
 msgstr ""
 
 #: inc/facets.php:140
-#: assets/js/location-finder.js:1531
+#: assets/js/location-finder.js:1589
 msgid "Open today"
 msgstr ""
 
@@ -2096,111 +2096,116 @@ msgstr ""
 msgid "Hours"
 msgstr ""
 
-#: assets/js/location-finder.js:396
+#: assets/js/location-finder.js:397
 msgid "Apply filters"
 msgstr ""
 
-#: assets/js/location-finder.js:522
-#: assets/js/location-finder.js:589
-msgid "Full screen"
-msgstr ""
-
-#: assets/js/location-finder.js:588
-msgid "Exit full screen"
-msgstr ""
-
-#: assets/js/location-finder.js:626
-msgid "Location finder"
-msgstr ""
-
-#: assets/js/location-finder.js:769
-msgid "Location needs a secure (https) connection."
-msgstr ""
-
-#: assets/js/location-finder.js:773
-msgid "Finding your location…"
-msgstr ""
-
-#: assets/js/location-finder.js:782
-msgid "your location"
-msgstr ""
-
-#: assets/js/location-finder.js:795
-msgid "Location access was blocked. You can still search by name."
-msgstr ""
-
-#: assets/js/location-finder.js:798
-msgid "Your location could not be determined right now."
-msgstr ""
-
-#: assets/js/location-finder.js:801
-msgid "Finding your location took too long. Try again."
-msgstr ""
-
-#: assets/js/location-finder.js:804
-msgid "Your location is unavailable."
-msgstr ""
-
-#: assets/js/location-finder.js:816
-msgid "Sorted by distance from you."
-msgstr ""
-
-#: assets/js/location-finder.js:971
-msgid "Location"
-msgstr ""
-
-#: assets/js/location-finder.js:1408
-msgid "No locations match. Try removing a filter."
-msgstr ""
-
-#: assets/js/location-finder.js:1422
-msgid "Show all results"
-msgstr ""
-
-#: assets/js/location-finder.js:1530
-msgid "Open now"
-msgstr ""
-
-#: assets/js/location-finder.js:1532
-#: assets/js/location-finder.js:1865
-msgid "Temporarily closed"
-msgstr ""
-
-#: assets/js/location-finder.js:1571
-msgid "Get directions"
-msgstr ""
-
-#: assets/js/location-finder.js:1825
-msgid "More hours in the details"
-msgstr ""
-
-#: assets/js/location-finder.js:1866
-msgid "Closing soon"
-msgstr ""
-
-#: assets/js/location-finder.js:1948
-msgid "Back to all results"
-msgstr ""
-
-#: assets/js/location-finder.js:2105
-#: assets/js/location-finder.js:2106
+#: assets/js/location-finder.js:544
+#: assets/js/location-finder.js:2163
+#: assets/js/location-finder.js:2164
 msgid "Show my location"
 msgstr ""
 
-#: assets/js/location-finder.js:2133
+#: assets/js/location-finder.js:550
+msgid "Near me"
+msgstr ""
+
+#: assets/js/location-finder.js:580
+#: assets/js/location-finder.js:647
+msgid "Full screen"
+msgstr ""
+
+#: assets/js/location-finder.js:646
+msgid "Exit full screen"
+msgstr ""
+
+#: assets/js/location-finder.js:684
+msgid "Location finder"
+msgstr ""
+
+#: assets/js/location-finder.js:827
+msgid "Location needs a secure (https) connection."
+msgstr ""
+
+#: assets/js/location-finder.js:831
+msgid "Finding your location…"
+msgstr ""
+
+#: assets/js/location-finder.js:840
+msgid "your location"
+msgstr ""
+
+#: assets/js/location-finder.js:853
+msgid "Location access was blocked. You can still search by name."
+msgstr ""
+
+#: assets/js/location-finder.js:856
+msgid "Your location could not be determined right now."
+msgstr ""
+
+#: assets/js/location-finder.js:859
+msgid "Finding your location took too long. Try again."
+msgstr ""
+
+#: assets/js/location-finder.js:862
+msgid "Your location is unavailable."
+msgstr ""
+
+#: assets/js/location-finder.js:874
+msgid "Sorted by distance from you."
+msgstr ""
+
+#: assets/js/location-finder.js:1029
+msgid "Location"
+msgstr ""
+
+#: assets/js/location-finder.js:1466
+msgid "No locations match. Try removing a filter."
+msgstr ""
+
+#: assets/js/location-finder.js:1480
+msgid "Show all results"
+msgstr ""
+
+#: assets/js/location-finder.js:1588
+msgid "Open now"
+msgstr ""
+
+#: assets/js/location-finder.js:1590
+#: assets/js/location-finder.js:1923
+msgid "Temporarily closed"
+msgstr ""
+
+#: assets/js/location-finder.js:1629
+msgid "Get directions"
+msgstr ""
+
+#: assets/js/location-finder.js:1883
+msgid "More hours in the details"
+msgstr ""
+
+#: assets/js/location-finder.js:1924
+msgid "Closing soon"
+msgstr ""
+
+#: assets/js/location-finder.js:2006
+msgid "Back to all results"
+msgstr ""
+
+#: assets/js/location-finder.js:2191
 #, js-format
 msgid "The map is loaded from %s. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2134
+#: assets/js/location-finder.js:2192
 msgid "The map is loaded from another website. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2139
+#: assets/js/location-finder.js:2197
 msgid "Show map"
 msgstr ""
 
-#: assets/js/location-finder.js:2147
+#: assets/js/location-finder.js:2205
 msgid "The list, search and filters work without it."
 msgstr ""
 
