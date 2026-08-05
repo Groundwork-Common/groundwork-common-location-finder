@@ -34,9 +34,18 @@ final class FacetsTest extends TestCase {
 			'label'      => 'Services',
 			'filterable' => true,
 			'options'    => array(
-				array( 'value' => 'diapers', 'label' => 'Diapers' ),
-				array( 'value' => 'formula', 'label' => 'Formula' ),
-				array( 'value' => 'wipes', 'label' => 'Wipes' ),
+				array(
+					'value' => 'diapers',
+					'label' => 'Diapers',
+				),
+				array(
+					'value' => 'formula',
+					'label' => 'Formula',
+				),
+				array(
+					'value' => 'wipes',
+					'label' => 'Wipes',
+				),
 			),
 		);
 	}
@@ -48,8 +57,14 @@ final class FacetsTest extends TestCase {
 			'label'      => 'Access',
 			'filterable' => true,
 			'options'    => array(
-				array( 'value' => 'open', 'label' => 'Open' ),
-				array( 'value' => 'appointment', 'label' => 'By appointment' ),
+				array(
+					'value' => 'open',
+					'label' => 'Open',
+				),
+				array(
+					'value' => 'appointment',
+					'label' => 'By appointment',
+				),
 			),
 		);
 	}
@@ -196,7 +211,10 @@ final class FacetsTest extends TestCase {
 	public function test_many_values_switch_from_chips_to_a_select(): void {
 		$options = array();
 		for ( $i = 1; $i <= 7; $i++ ) {
-			$options[] = array( 'value' => 'v' . $i, 'label' => 'Value ' . $i );
+			$options[] = array(
+				'value' => 'v' . $i,
+				'label' => 'Value ' . $i,
+			);
 		}
 		$field = array(
 			'key'        => 'kind',

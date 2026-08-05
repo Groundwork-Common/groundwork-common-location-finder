@@ -61,7 +61,12 @@ final class ClosuresTest extends TestCase {
 
 	public function test_a_missing_end_date_makes_it_a_single_day(): void {
 		$rows = lfndr_sanitize_closures(
-			array( array( 'start' => $this->day( 3 ), 'reason' => 'Holiday' ) ),
+			array(
+				array(
+					'start'  => $this->day( 3 ),
+					'reason' => 'Holiday',
+				),
+			),
 			$this->field()
 		);
 		$this->assertCount( 1, $rows );
@@ -70,7 +75,12 @@ final class ClosuresTest extends TestCase {
 
 	public function test_an_end_before_the_start_is_dropped(): void {
 		$rows = lfndr_sanitize_closures(
-			array( array( 'start' => $this->day( 10 ), 'end' => $this->day( 5 ) ) ),
+			array(
+				array(
+					'start' => $this->day( 10 ),
+					'end'   => $this->day( 5 ),
+				),
+			),
 			$this->field()
 		);
 		$this->assertSame( array(), $rows );
@@ -81,8 +91,14 @@ final class ClosuresTest extends TestCase {
 		// a row the browser re-checks on every render.
 		$rows = lfndr_sanitize_closures(
 			array(
-				array( 'start' => $this->day( -30 ), 'end' => $this->day( -20 ) ),
-				array( 'start' => $this->day( 1 ), 'end' => $this->day( 2 ) ),
+				array(
+					'start' => $this->day( -30 ),
+					'end'   => $this->day( -20 ),
+				),
+				array(
+					'start' => $this->day( 1 ),
+					'end'   => $this->day( 2 ),
+				),
 			),
 			$this->field()
 		);
@@ -93,7 +109,12 @@ final class ClosuresTest extends TestCase {
 	public function test_a_closure_ending_today_is_kept(): void {
 		// It is still in force for the rest of the day.
 		$rows = lfndr_sanitize_closures(
-			array( array( 'start' => $this->day( -3 ), 'end' => $this->day( 0 ) ) ),
+			array(
+				array(
+					'start' => $this->day( -3 ),
+					'end'   => $this->day( 0 ),
+				),
+			),
 			$this->field()
 		);
 		$this->assertCount( 1, $rows );
@@ -101,7 +122,13 @@ final class ClosuresTest extends TestCase {
 
 	public function test_rows_without_a_start_are_dropped(): void {
 		$rows = lfndr_sanitize_closures(
-			array( array( 'end' => $this->day( 5 ), 'reason' => 'Orphan' ), 'not an array' ),
+			array(
+				array(
+					'end'    => $this->day( 5 ),
+					'reason' => 'Orphan',
+				),
+				'not an array',
+			),
 			$this->field()
 		);
 		$this->assertSame( array(), $rows );
@@ -124,7 +151,12 @@ final class ClosuresTest extends TestCase {
 
 	public function test_the_reason_is_truncated_to_the_configured_length(): void {
 		$rows = lfndr_sanitize_closures(
-			array( array( 'start' => $this->day( 1 ), 'reason' => str_repeat( 'x', 500 ) ) ),
+			array(
+				array(
+					'start'  => $this->day( 1 ),
+					'reason' => str_repeat( 'x', 500 ),
+				),
+			),
 			$this->field( array( 'reason_max' => 40 ) )
 		);
 		$this->assertSame( 40, mb_strlen( $rows[0]['reason'] ) );
@@ -147,7 +179,13 @@ final class ClosuresTest extends TestCase {
 	/* ── Payload ────────────────────────────────────────────────────────── */
 
 	public function test_the_payload_precomputes_nothing_time_dependent(): void {
-		$rows    = array( array( 'start' => $this->day( 0 ), 'end' => $this->day( 1 ), 'reason' => 'Pipes' ) );
+		$rows    = array(
+			array(
+				'start'  => $this->day( 0 ),
+				'end'    => $this->day( 1 ),
+				'reason' => 'Pipes',
+			),
+		);
 		$payload = lfndr_payload_closures( $rows );
 
 		$this->assertSame( $rows, $payload );
@@ -161,7 +199,11 @@ final class ClosuresTest extends TestCase {
 
 	public function test_settings_are_clamped_to_sane_ranges(): void {
 		$settings = lfndr_settings_closures(
-			array( 'reason_max' => 5, 'lookahead_days' => 9999, 'max_rows' => -3 )
+			array(
+				'reason_max'     => 5,
+				'lookahead_days' => 9999,
+				'max_rows'       => -3,
+			)
 		);
 		$this->assertSame( 20, $settings['reason_max'] );
 		$this->assertSame( 365, $settings['lookahead_days'] );
@@ -179,7 +221,11 @@ final class ClosuresTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
-					array( 'key' => 'closures', 'type' => 'closures', 'label' => 'Closures' ),
+					array(
+						'key'   => 'closures',
+						'type'  => 'closures',
+						'label' => 'Closures',
+					),
 				),
 				'primary' => array( 'closures' => 'closures' ),
 			)
@@ -191,10 +237,21 @@ final class ClosuresTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
-					array( 'key' => 'hours', 'type' => 'hours', 'label' => 'Hours' ),
-					array( 'key' => 'closures', 'type' => 'closures', 'label' => 'Closures' ),
+					array(
+						'key'   => 'hours',
+						'type'  => 'hours',
+						'label' => 'Hours',
+					),
+					array(
+						'key'   => 'closures',
+						'type'  => 'closures',
+						'label' => 'Closures',
+					),
 				),
-				'primary' => array( 'hours' => 'hours', 'closures' => 'closures' ),
+				'primary' => array(
+					'hours'    => 'hours',
+					'closures' => 'closures',
+				),
 			)
 		);
 		$this->assertSame( 'hours', $schema['primary']['hours'] );
@@ -207,7 +264,11 @@ final class ClosuresTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
-					array( 'key' => 'closures', 'type' => 'closures', 'label' => 'Closures' ),
+					array(
+						'key'   => 'closures',
+						'type'  => 'closures',
+						'label' => 'Closures',
+					),
 				),
 				'primary' => array( 'hours' => 'hours' ),
 			)
@@ -219,7 +280,11 @@ final class ClosuresTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
-					array( 'key' => 'hours', 'type' => 'text', 'label' => 'Hours, as text' ),
+					array(
+						'key'   => 'hours',
+						'type'  => 'text',
+						'label' => 'Hours, as text',
+					),
 				),
 				'primary' => array( 'hours' => 'hours' ),
 			)
@@ -230,7 +295,12 @@ final class ClosuresTest extends TestCase {
 	public function test_closures_settings_no_longer_carry_suspends(): void {
 		// The pairing moved to the schema's roles; a stale stored value must not
 		// travel back in through the settings sanitizer.
-		$settings = lfndr_settings_closures( array( 'suspends' => 'hours', 'primary' => true ) );
+		$settings = lfndr_settings_closures(
+			array(
+				'suspends' => 'hours',
+				'primary'  => true,
+			)
+		);
 		$this->assertArrayNotHasKey( 'suspends', $settings );
 		$this->assertArrayNotHasKey( 'primary', $settings );
 	}

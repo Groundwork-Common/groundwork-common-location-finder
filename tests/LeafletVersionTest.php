@@ -2,7 +2,7 @@
 /**
  * The vendored Leaflet and the version WordPress is told about must agree.
  *
- * inc/enqueue.php passes a literal version string to wp_register_script() and
+ * The file inc/enqueue.php passes a literal version string to wp_register_script() and
  * wp_register_style(). That string is the cache buster: it is what appends
  * ?ver=1.9.4 to the URL, and it is the only thing that makes a browser holding
  * the previous bundle go and fetch the new one.

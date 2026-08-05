@@ -1,0 +1,31 @@
+{
+	"name": "groundwork-common/groundwork-common-location-finder",
+	"description": "A schema-driven WordPress location finder. Only name and coordinates are built in; every other field is defined in wp-admin.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://github.com/Groundwork-Common/groundwork-common-location-finder",
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.13",
+		"wp-coding-standards/wpcs": "^3.2",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"lint": "phpcs",
+		"lint:fix": "phpcbf",
+		"test": "php phpunit.phar"
+	},
+	"scripts-descriptions": {
+		"lint": "Check the plugin against WordPress Coding Standards.",
+		"lint:fix": "Fix what WPCS can fix automatically.",
+		"test": "Run the PHPUnit suite (fetch the phar first — see phpunit.xml.dist)."
+	}
+}

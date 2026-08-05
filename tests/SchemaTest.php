@@ -75,7 +75,14 @@ final class SchemaTest extends TestCase {
 
 	public function test_missing_label_falls_back_to_the_key(): void {
 		$schema = lfndr_sanitize_schema(
-			array( 'fields' => array( array( 'key' => 'contact_email', 'type' => 'email' ) ) )
+			array(
+				'fields' => array(
+					array(
+						'key'  => 'contact_email',
+						'type' => 'email',
+					),
+				),
+			)
 		);
 		$this->assertSame( 'Contact email', $schema['fields'][0]['label'] );
 	}
@@ -103,7 +110,7 @@ final class SchemaTest extends TestCase {
 	/* ── Options ────────────────────────────────────────────────────────── */
 
 	public function test_options_are_deduped_by_value_and_slugged(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema  = lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					$this->field(
@@ -111,9 +118,18 @@ final class SchemaTest extends TestCase {
 						'multiselect',
 						array(
 							'options' => array(
-								array( 'value' => 'Period Supplies', 'label' => 'Period supplies' ),
-								array( 'value' => 'period-supplies', 'label' => 'Duplicate' ),
-								array( 'value' => '', 'label' => 'Empty' ),
+								array(
+									'value' => 'Period Supplies',
+									'label' => 'Period supplies',
+								),
+								array(
+									'value' => 'period-supplies',
+									'label' => 'Duplicate',
+								),
+								array(
+									'value' => '',
+									'label' => 'Empty',
+								),
 							),
 						)
 					),
@@ -146,11 +162,26 @@ final class SchemaTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
-					array( 'key' => 'a', 'type' => 'address', 'label' => 'A' ),
-					array( 'key' => 'b', 'type' => 'address', 'label' => 'B' ),
-					array( 'key' => 'c', 'type' => 'hours', 'label' => 'C' ),
+					array(
+						'key'   => 'a',
+						'type'  => 'address',
+						'label' => 'A',
+					),
+					array(
+						'key'   => 'b',
+						'type'  => 'address',
+						'label' => 'B',
+					),
+					array(
+						'key'   => 'c',
+						'type'  => 'hours',
+						'label' => 'C',
+					),
 				),
-				'primary' => array( 'address' => 'b', 'hours' => 'c' ),
+				'primary' => array(
+					'address' => 'b',
+					'hours'   => 'c',
+				),
 			)
 		);
 		$this->assertSame( 'b', $schema['primary']['address'], 'Any instance may hold the role, not just the first.' );
@@ -163,11 +194,29 @@ final class SchemaTest extends TestCase {
 		 * second field to claim the role lost silently, so it could never be
 		 * moved in one save. */
 		$fields = array(
-			array( 'key' => 'a', 'type' => 'address', 'label' => 'A' ),
-			array( 'key' => 'b', 'type' => 'address', 'label' => 'B' ),
+			array(
+				'key'   => 'a',
+				'type'  => 'address',
+				'label' => 'A',
+			),
+			array(
+				'key'   => 'b',
+				'type'  => 'address',
+				'label' => 'B',
+			),
 		);
-		$first  = lfndr_sanitize_schema( array( 'fields' => $fields, 'primary' => array( 'address' => 'a' ) ) );
-		$moved  = lfndr_sanitize_schema( array( 'fields' => $fields, 'primary' => array( 'address' => 'b' ) ) );
+		$first  = lfndr_sanitize_schema(
+			array(
+				'fields'  => $fields,
+				'primary' => array( 'address' => 'a' ),
+			)
+		);
+		$moved  = lfndr_sanitize_schema(
+			array(
+				'fields'  => $fields,
+				'primary' => array( 'address' => 'b' ),
+			)
+		);
 		$this->assertSame( 'a', $first['primary']['address'] );
 		$this->assertSame( 'b', $moved['primary']['address'] );
 	}
@@ -176,7 +225,15 @@ final class SchemaTest extends TestCase {
 		// An admin who defines one address and never opens the panel still
 		// expects Directions to work.
 		$schema = lfndr_sanitize_schema(
-			array( 'fields' => array( array( 'key' => 'a', 'type' => 'address', 'label' => 'A' ) ) )
+			array(
+				'fields' => array(
+					array(
+						'key'   => 'a',
+						'type'  => 'address',
+						'label' => 'A',
+					),
+				),
+			)
 		);
 		$this->assertSame( '', $schema['primary']['address'] );
 		$this->assertSame( 'a', lfndr_primary_field( 'address', $schema )['key'] );
@@ -186,9 +243,24 @@ final class SchemaTest extends TestCase {
 		$migrated = lfndr_migrate_schema_2(
 			array(
 				'fields' => array(
-					array( 'key' => 'pantry', 'type' => 'hours', 'settings' => array( 'primary' => false ) ),
-					array( 'key' => 'office', 'type' => 'hours', 'settings' => array( 'primary' => true ) ),
-					array( 'key' => 'cl', 'type' => 'closures', 'settings' => array( 'primary' => true, 'suspends' => 'pantry' ) ),
+					array(
+						'key'      => 'pantry',
+						'type'     => 'hours',
+						'settings' => array( 'primary' => false ),
+					),
+					array(
+						'key'      => 'office',
+						'type'     => 'hours',
+						'settings' => array( 'primary' => true ),
+					),
+					array(
+						'key'      => 'cl',
+						'type'     => 'closures',
+						'settings' => array(
+							'primary'  => true,
+							'suspends' => 'pantry',
+						),
+					),
 				),
 			)
 		);
@@ -201,16 +273,36 @@ final class SchemaTest extends TestCase {
 		$from_suspends = lfndr_migrate_schema_2(
 			array(
 				'fields' => array(
-					array( 'key' => 'h1', 'type' => 'hours', 'settings' => array() ),
-					array( 'key' => 'h2', 'type' => 'hours', 'settings' => array() ),
-					array( 'key' => 'cl', 'type' => 'closures', 'settings' => array( 'suspends' => 'h2' ) ),
+					array(
+						'key'      => 'h1',
+						'type'     => 'hours',
+						'settings' => array(),
+					),
+					array(
+						'key'      => 'h2',
+						'type'     => 'hours',
+						'settings' => array(),
+					),
+					array(
+						'key'      => 'cl',
+						'type'     => 'closures',
+						'settings' => array( 'suspends' => 'h2' ),
+					),
 				),
 			)
 		);
 		$this->assertSame( 'h2', $from_suspends['primary']['hours'], 'suspends is better evidence of intent than field order.' );
 
 		$from_order = lfndr_migrate_schema_2(
-			array( 'fields' => array( array( 'key' => 'h1', 'type' => 'hours', 'settings' => array() ) ) )
+			array(
+				'fields' => array(
+					array(
+						'key'      => 'h1',
+						'type'     => 'hours',
+						'settings' => array(),
+					),
+				),
+			)
 		);
 		$this->assertSame( 'h1', $from_order['primary']['hours'] );
 	}
@@ -253,8 +345,22 @@ final class SchemaTest extends TestCase {
 		$schema = lfndr_sanitize_schema(
 			array(
 				'fields'     => array(
-					$this->field( 'phone', 'phone', array( 'show_card' => false, 'show_detail' => true ) ),
-					$this->field( 'city', 'text', array( 'show_card' => true, 'show_detail' => false ) ),
+					$this->field(
+						'phone',
+						'phone',
+						array(
+							'show_card'   => false,
+							'show_detail' => true,
+						)
+					),
+					$this->field(
+						'city',
+						'text',
+						array(
+							'show_card'   => true,
+							'show_detail' => false,
+						)
+					),
 				),
 				'card_order' => array( '__name', 'phone', 'city' ),
 			)

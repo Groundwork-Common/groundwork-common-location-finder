@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<ruleset name="Groundwork Common Location Finder">
+	<description>WordPress Coding Standards for the plugin's own PHP.</description>
+
+	<!--
+	  Run it:
+
+	    composer install
+	    composer lint          # or: vendor/bin/phpcs
+	    composer lint:fix      # or: vendor/bin/phpcbf
+
+	  Plugin Check already runs a subset of these sniffs, but only when somebody
+	  remembers to open that screen, and only against a built copy. This is the
+	  same standard, pinned to a version, runnable in one command, and enforced
+	  on every push by .github/workflows/ci.yml.
+	-->
+
+	<!-- Everything below the plugin root, minus what the exclusions below drop. -->
+	<file>.</file>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="parallel" value="8"/>
+	<arg value="sp"/>
+
+	<!-- Written to .phpcs.cache, which .gitignore and .distignore both drop. -->
+	<arg name="cache" value=".phpcs.cache"/>
+
+	<!-- Third-party and generated. Leaflet is vendored deliberately (see the
+	     Leaflet version-check workflow); it is not ours to reformat. -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/assets/leaflet/*</exclude-pattern>
+	<exclude-pattern>/.phpunit.cache/*</exclude-pattern>
+
+	<!-- ── The standard itself ────────────────────────────────────────────── -->
+
+	<rule ref="WordPress"/>
+
+	<!-- The plugin header says "Requires PHP: 7.4", so that is what gets
+	     checked. A sniff failure here means the header is a lie. -->
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Likewise "Requires at least: 6.3" — this is what tells the deprecation
+	     and new-function sniffs which core APIs we may assume. -->
+	<config name="minimum_wp_version" value="6.3"/>
+
+	<!-- ── Project facts the sniffs cannot infer ──────────────────────────── -->
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="lfndr"/>
+				<element value="LFNDR"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="groundwork-common-location-finder"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- ── The one sniff this codebase overrules ──────────────────────────── -->
+
+	<!--
+	  Squiz.Commenting.BlockComment.NoNewLine wants the text of a block comment
+	  to start on the line after the opener. This codebase heads its long
+	  explanatory comments with a rule:
+
+	      /* ── Why this post type is not public ─────────────────────────────
+	       * public => false, has_archive => false, rewrite => false.
+	       ...
+
+	  The heading has to sit on the opening line for that to read as a heading.
+	  Enforcing the sniff would rewrite 121 of them and leave a bare `/*` above
+	  every one, which is a real loss — these comments are how the plugin
+	  explains itself, and the headings are what make them skimmable. The rest
+	  of Squiz.Commenting.BlockComment still applies: indentation, capitals,
+	  punctuation, the closer on its own line.
+	-->
+	<rule ref="Squiz.Commenting.BlockComment.NoNewLine">
+		<severity>0</severity>
+	</rule>
+
+	<!-- ── Tests ──────────────────────────────────────────────────────────── -->
+
+	<!--
+	  The suite is PHPUnit's, not WordPress's, so it follows PHPUnit's
+	  conventions rather than core's: one PascalCase class per PascalCase file.
+	  Renaming them to hyphenated-lowercase would break the only convention
+	  that actually matters here — the one PHPUnit uses to find them.
+	-->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Test helpers are not part of the plugin's public surface and need no
+	     prefix; they never load alongside another plugin. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Stubs in tests/bootstrap.php deliberately redeclare core functions and
+	     shadow globals; that is the whole point of the file. -->
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!--
+	  A test name is its documentation: testHoursCollapseAdjacentDays() has
+	  nothing to say that a @param tag would add. Requiring a docblock on all
+	  158 of them would be 158 restatements of the method name, and the noise
+	  would bury the handful of comments that do explain something.
+	-->
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FileComment.Missing">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.ClassComment">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!--
+	  These two guard against untrusted data reaching a browser or the network
+	  at runtime. The integration scripts print to a terminal and read files
+	  from the checkout — there is no request, no response and no user. Applying
+	  the runtime rules here would mean wrapping test diagnostics in esc_html()
+	  and routing file reads through wp_remote_get(), which makes the tests
+	  worse at being tests and no safer at anything.
+	-->
+	<rule ref="WordPress.Security.EscapeOutput">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!--
+	  tests/bootstrap.php stubs core functions, and a stub is only useful if it
+	  has the signature of the thing it stands in for. checked( $checked,
+	  $current, $echo ), wp_list_pluck( $list, ... ) and wp_kses( $string, ... )
+	  take those parameter names from core, reserved words and all; shortcode_atts()
+	  takes a third argument it has no use for. Renaming them to satisfy the
+	  sniff would make the stubs disagree with what they are standing in for,
+	  which is the one thing a stub must not do.
+	-->
+	<rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+		<exclude-pattern>/tests/bootstrap.php</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<exclude-pattern>/tests/bootstrap.php</exclude-pattern>
+	</rule>
+
+	<!-- ── One generated-by-convention filename ───────────────────────────── -->
+
+	<!--
+	  blocks/finder/edit.asset.php is not ours to rename. WordPress looks for
+	  <script>.asset.php beside the script it describes, so
+	  register_block_type_from_metadata() finds this file precisely because it
+	  is called edit.asset.php. Renaming it to edit-asset.php, as the sniff
+	  asks, would stop the block registering.
+	-->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>*.asset.php</exclude-pattern>
+	</rule>
+</ruleset>

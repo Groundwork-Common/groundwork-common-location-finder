@@ -17,6 +17,8 @@
 class TileConsentTest extends PHPUnit\Framework\TestCase {
 
 	/**
+	 * Apply settings for the duration of one assertion.
+	 *
 	 * @param array<string, mixed> $settings Settings to apply.
 	 */
 	private function with_settings( array $settings ): void {

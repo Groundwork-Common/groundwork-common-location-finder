@@ -134,12 +134,12 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 	 */
 	public function test_every_registered_option_field_round_trips(): void {
 		$samples = array(
-			'int'    => '7',
-			'float'  => '1.5',
-			'bool'   => '1',
-			'text'   => 'probe',
-			'url'    => 'https://example.org/probe',
-			'email'  => 'probe@example.org',
+			'int'   => '7',
+			'float' => '1.5',
+			'bool'  => '1',
+			'text'  => 'probe',
+			'url'   => 'https://example.org/probe',
+			'email' => 'probe@example.org',
 		);
 
 		$checked = 0;
@@ -152,7 +152,12 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 			}
 
 			$value = $samples[ $field['type'] ];
-			$out   = lfndr_sanitize_settings( array( '_tab_' . $field['tab'] => '1', $key => $value ) );
+			$out   = lfndr_sanitize_settings(
+				array(
+					'_tab_' . $field['tab'] => '1',
+					$key                    => $value,
+				)
+			);
 
 			$this->assertArrayHasKey(
 				$key,

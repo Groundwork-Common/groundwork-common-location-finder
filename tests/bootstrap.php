@@ -208,7 +208,7 @@ function do_action() {}
 /**
  * A deliberately thin stand-in for wp_kses().
  *
- * strip_tags() with an allow-list is not what WordPress does — the real one
+ * Using strip_tags() with an allow-list is not what WordPress does — the real one
  * also filters attributes, which is most of its value. It is enough to prove
  * the one thing the caller cares about here: that a tile attribution keeps its
  * link and loses anything that can execute. Anything relying on attribute

@@ -299,7 +299,7 @@ final class SettingsTest extends TestCase {
 				'badge_bg'     => '#eee',
 			)
 		);
-		$css = lfndr_appearance_css();
+		$css    = lfndr_appearance_css();
 		$fields = lfndr_appearance_fields();
 		$this->assertStringStartsWith( '.lfndr{--lfndr-accent:#000}', $css );
 		$this->assertStringEndsWith(
@@ -312,9 +312,16 @@ final class SettingsTest extends TestCase {
 
 	public function test_every_rule_mode_field_sanitizes_as_a_colour(): void {
 		$rule_mode_keys = array(
-			'control_bg', 'control_text', 'control_active_bg', 'control_active_text',
-			'card_bg', 'card_text', 'card_selected_bg', 'card_selected_text',
-			'badge_bg', 'badge_text',
+			'control_bg',
+			'control_text',
+			'control_active_bg',
+			'control_active_text',
+			'card_bg',
+			'card_text',
+			'card_selected_bg',
+			'card_selected_text',
+			'badge_bg',
+			'badge_text',
 		);
 		foreach ( lfndr_appearance_fields() as $key => $field ) {
 			if ( 'rule' === ( $field['mode'] ?? 'var' ) ) {
@@ -334,7 +341,7 @@ final class SettingsTest extends TestCase {
 	/* ── Presets ──────────────────────────────────────────────────────────── */
 
 	public function test_applying_a_preset_writes_its_values(): void {
-		$out = lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
+		$out      = lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
 		$expected = lfndr_style_presets()['night']['values'];
 		foreach ( $expected as $key => $value ) {
 			$this->assertSame( $value, $out[ $key ], "preset key {$key}" );
@@ -514,7 +521,12 @@ final class SettingsTest extends TestCase {
 
 	public function test_numbers_are_clamped_to_their_range(): void {
 		$out = lfndr_sanitize_settings(
-			array( '_tab_behavior' => '1', 'zoom' => '999', 'center_lat' => '500', 'page_size' => '-4' )
+			array(
+				'_tab_behavior' => '1',
+				'zoom'          => '999',
+				'center_lat'    => '500',
+				'page_size'     => '-4',
+			)
 		);
 		$this->assertSame( 19, $out['zoom'] );
 		$this->assertSame( 90.0, $out['center_lat'] );
@@ -522,7 +534,12 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_a_select_never_accepts_a_value_off_its_list(): void {
-		$out = lfndr_sanitize_settings( array( '_tab_behavior' => '1', 'units' => 'parsecs' ) );
+		$out = lfndr_sanitize_settings(
+			array(
+				'_tab_behavior' => '1',
+				'units'         => 'parsecs',
+			)
+		);
 		$this->assertSame( '', $out['units'] );
 	}
 
@@ -552,7 +569,15 @@ final class SettingsTest extends TestCase {
 		// General must not quietly change who the lookup service is told is
 		// asking.
 		update_option( 'admin_email', 'admin@charity.org' );
-		update_option( LFNDR_SETTINGS_OPTION, lfndr_sanitize_settings( array( '_tab_advanced' => '1', 'geo_email' => 'locations@charity.org' ) ) );
+		update_option(
+			LFNDR_SETTINGS_OPTION,
+			lfndr_sanitize_settings(
+				array(
+					'_tab_advanced' => '1',
+					'geo_email'     => 'locations@charity.org',
+				)
+			)
+		);
 		lfndr_settings_cache( null, true );
 
 		update_option( 'admin_email', 'somebody-else@charity.org' );
@@ -562,8 +587,19 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_saving_one_tab_leaves_another_tabs_values_alone(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'near_me' => true, 'geo_email' => 'a@example.com' ) );
-		$out = lfndr_sanitize_settings( array( '_tab_advanced' => '1', 'geo_email' => 'b@example.com' ) );
+		update_option(
+			LFNDR_SETTINGS_OPTION,
+			array(
+				'near_me'   => true,
+				'geo_email' => 'a@example.com',
+			)
+		);
+		$out = lfndr_sanitize_settings(
+			array(
+				'_tab_advanced' => '1',
+				'geo_email'     => 'b@example.com',
+			)
+		);
 		$this->assertSame( 'b@example.com', $out['geo_email'] );
 		$this->assertTrue( $out['near_me'], 'Behavior was not on screen, so its checkbox must not be cleared.' );
 	}
@@ -572,14 +608,22 @@ final class SettingsTest extends TestCase {
 		// Attribution is a license term and is nearly always a link, so it
 		// cannot be stripped — but it is still author input.
 		$out = lfndr_sanitize_settings(
-			array( '_tab_advanced' => '1', 'tile_attr' => '<a href="https://x.test">Tiles</a><script>alert(1)</script>' )
+			array(
+				'_tab_advanced' => '1',
+				'tile_attr'     => '<a href="https://x.test">Tiles</a><script>alert(1)</script>',
+			)
 		);
 		$this->assertStringContainsString( '<a href="https://x.test">Tiles</a>', $out['tile_attr'] );
 		$this->assertStringNotContainsString( '<script', $out['tile_attr'] );
 	}
 
 	public function test_the_tab_markers_are_never_stored(): void {
-		$out = lfndr_sanitize_settings( array( '_tab_behavior' => '1', 'page_size' => '10' ) );
+		$out = lfndr_sanitize_settings(
+			array(
+				'_tab_behavior' => '1',
+				'page_size'     => '10',
+			)
+		);
 		foreach ( array_keys( lfndr_admin_tabs() ) as $tab ) {
 			$this->assertArrayNotHasKey( '_tab_' . $tab, $out );
 		}

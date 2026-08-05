@@ -21,7 +21,7 @@ class MapStyleTermsTest extends PHPUnit\Framework\TestCase {
 	 */
 	private function restricted_hosts(): array {
 		return array(
-			'cartocdn.com'         => 'CARTO free basemaps are non-commercial',
+			'cartocdn.com'           => 'CARTO free basemaps are non-commercial',
 			'tile.openstreetmap.org' => 'OSMF tile usage policy limits heavy use',
 		);
 	}

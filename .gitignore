@@ -7,6 +7,9 @@ phpunit-*.phar
 # wp-env writes this when a developer overrides ports or mounts locally.
 .wp-env.override.json
 
+# PHPCS's incremental cache — see the `cache` arg in phpcs.xml.dist.
+.phpcs.cache
+
 node_modules/
 vendor/
 .DS_Store

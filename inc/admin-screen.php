@@ -675,8 +675,6 @@ function lfndr_render_option_tab( string $tab ): void {
 		}
 	);
 	?>
-	<?php
-	?>
 
 	<form method="post" action="options.php">
 		<?php settings_fields( 'lfndr_settings_group' ); ?>
@@ -697,8 +695,10 @@ function lfndr_render_option_tab( string $tab ): void {
 			unset( $sections['roles'] );
 		endif;
 		?>
-		<?php /* Marks the tab as submitted — the only way to tell an unchecked
-		         box from a field that was never on screen. */ ?>
+		<?php
+		/* Marks the tab as submitted — the only way to tell an unchecked
+				box from a field that was never on screen. */
+		?>
 		<input type="hidden" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_tab_<?php echo esc_attr( $tab ); ?>]" value="1" />
 
 		<?php foreach ( $sections as $section_key => $section ) : ?>
@@ -707,21 +707,23 @@ function lfndr_render_option_tab( string $tab ): void {
 				<p class="description" style="max-width:44em"><?php echo esc_html( $section['intro'] ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( true ) : ?>
-				<table class="form-table" role="presentation">
-					<tbody>
-					<?php foreach ( $fields as $key => $field ) : ?>
-						<?php if ( $section_key !== $field['section'] ) { continue; } ?>
-						<tr>
-							<th scope="row">
-								<label for="lfndr-opt-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
-							</th>
-							<td><?php lfndr_render_option_field( $key, $field ); ?></td>
-						</tr>
-					<?php endforeach; ?>
-					</tbody>
-				</table>
-			<?php endif; ?>
+			<table class="form-table" role="presentation">
+				<tbody>
+				<?php foreach ( $fields as $key => $field ) : ?>
+					<?php
+					if ( $section_key !== $field['section'] ) {
+						continue;
+					}
+					?>
+					<tr>
+						<th scope="row">
+							<label for="lfndr-opt-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+						</th>
+						<td><?php lfndr_render_option_field( $key, $field ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
 		<?php endforeach; ?>
 
 		<?php submit_button(); ?>
@@ -855,7 +857,17 @@ function lfndr_sanitize_option_fields( array $raw, array $out ): array {
 				 * stripping it would put the site in breach of the terms it
 				 * exists to satisfy. Anchors only, nothing that can act. */
 				$out[ $key ] = 'tile_attr' === $key
-					? (string) wp_kses( $value, array( 'a' => array( 'href' => array(), 'rel' => array(), 'target' => array(), 'title' => array() ) ) )
+					? (string) wp_kses(
+						$value,
+						array(
+							'a' => array(
+								'href'   => array(),
+								'rel'    => array(),
+								'target' => array(),
+								'title'  => array(),
+							),
+						)
+					)
 					: sanitize_text_field( $value );
 		}
 	}

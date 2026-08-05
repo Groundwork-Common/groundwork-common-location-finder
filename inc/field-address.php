@@ -88,7 +88,7 @@ function lfndr_admin_address( array $field, $value, string $name ): void {
 	$parts = lfndr_address_parts( $field );
 
 	/* The geocoder fills one address, and which one is a schema-level role
-	   now rather than a flag on this field. */
+		now rather than a flag on this field. */
 	$role    = lfndr_primary_field( 'address' );
 	$primary = null !== $role && $role['key'] === $field['key'];
 
@@ -381,4 +381,3 @@ function lfndr_schema_form_address( array $field ): void {
 	);
 	lfndr_schema_checkbox_control( $field, 'directions', __( 'Offer a Directions link', 'groundwork-common-location-finder' ), true );
 }
-

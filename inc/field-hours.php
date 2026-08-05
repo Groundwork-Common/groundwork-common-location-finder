@@ -209,10 +209,10 @@ function lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
 		$key = $slot['day'] . '|' . $slot['start'] . '|' . $slot['end'];
 		if ( ! isset( $by_day_window[ $key ] ) ) {
 			$by_day_window[ $key ] = array(
-				'day'    => $slot['day'],
-				'start'  => $slot['start'],
-				'end'    => $slot['end'],
-				'freqs'  => array(),
+				'day'   => $slot['day'],
+				'start' => $slot['start'],
+				'end'   => $slot['end'],
+				'freqs' => array(),
 			);
 		}
 		if ( ! in_array( $slot['freq'], $by_day_window[ $key ]['freqs'], true ) ) {
@@ -417,7 +417,7 @@ function lfndr_consecutive_runs( array $values ): array {
 	$current = array();
 
 	foreach ( $values as $value ) {
-		if ( $current && $value === end( $current ) + 1 ) {
+		if ( $current && end( $current ) + 1 === $value ) {
 			$current[] = $value;
 			continue;
 		}

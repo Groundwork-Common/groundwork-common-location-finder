@@ -111,15 +111,26 @@ function lfndr_fields_list_screen( array $schema ): void {
 					</tr>
 				</thead>
 				<tbody>
-				<?php foreach ( $schema['fields'] as $field ) : ?>
+				<?php
+				foreach ( $schema['fields'] as $field ) :
+					/* Built once per row rather than inline in the href twice.
+						Inline, the multi-line array the standard wants would sit
+						inside the attribute and put newlines in the URL. */
+					$edit_url = lfndr_fields_url(
+						array(
+							'action' => 'edit',
+							'field'  => $field['key'],
+						)
+					);
+					?>
 					<tr>
 						<td>
-							<strong><a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'edit', 'field' => $field['key'] ) ) ); ?>"><?php echo esc_html( $field['label'] ); ?></a></strong>
+							<strong><a href="<?php echo esc_url( $edit_url ); ?>"><?php echo esc_html( $field['label'] ); ?></a></strong>
 							<?php if ( ! empty( $field['settings']['primary'] ) ) : ?>
 								<span class="lfndr-pill"><?php esc_html_e( 'primary', 'groundwork-common-location-finder' ); ?></span>
 							<?php endif; ?>
 							<div class="row-actions">
-								<span class="edit"><a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'edit', 'field' => $field['key'] ) ) ); ?>"><?php esc_html_e( 'Edit', 'groundwork-common-location-finder' ); ?></a> | </span>
+								<span class="edit"><a href="<?php echo esc_url( $edit_url ); ?>"><?php esc_html_e( 'Edit', 'groundwork-common-location-finder' ); ?></a> | </span>
 								<span class="trash">
 									<?php
 									$retire = wp_nonce_url(
@@ -206,7 +217,7 @@ function lfndr_describe_usage( array $field ): string {
  */
 function lfndr_render_roles_fields( array $schema = array() ): void {
 	$schema = $schema ? $schema : lfndr_get_schema();
-	$roles = array(
+	$roles  = array(
 		'address'  => array(
 			'label' => __( 'Address used for Directions', 'groundwork-common-location-finder' ),
 			'help'  => __( 'Also the address the editor\'s lookup fills in when you search for a place.', 'groundwork-common-location-finder' ),
@@ -716,7 +727,16 @@ function lfndr_options_to_text( array $options ): string {
  */
 function lfndr_options_from_text( string $text ): array {
 	$out = array();
-	foreach ( preg_split( '/\R/', $text ) ?: array() as $line ) {
+
+	/* preg_split() returns false only on a malformed pattern; this one is a
+		literal. The check is here because the alternative is a short ternary,
+		and false would otherwise reach foreach() as a fatal. */
+	$lines = preg_split( '/\R/', $text );
+	if ( false === $lines ) {
+		$lines = array();
+	}
+
+	foreach ( $lines as $line ) {
 		$line = trim( $line );
 		if ( '' === $line ) {
 			continue;
@@ -784,14 +804,20 @@ function lfndr_handle_save_field(): void {
 	lfndr_require_admin_caps();
 	check_admin_referer( 'lfndr_save_field' );
 
-	$schema   = lfndr_get_schema();
+	$schema = lfndr_get_schema();
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
 	$original = isset( $_POST['original_key'] ) ? lfndr_sanitize_field_key( wp_unslash( $_POST['original_key'] ) ) : '';
 	$editing  = '' !== $original && null !== lfndr_get_field( $original, $schema );
 
 	$label = isset( $_POST['label'] ) ? sanitize_text_field( wp_unslash( $_POST['label'] ) ) : '';
 	if ( '' === $label ) {
-		lfndr_fields_redirect( 'label_required', $editing ? array( 'action' => 'edit', 'field' => $original ) : array( 'action' => 'add' ) );
+		lfndr_fields_redirect(
+			'label_required',
+			$editing ? array(
+				'action' => 'edit',
+				'field'  => $original,
+			) : array( 'action' => 'add' )
+		);
 	}
 
 	if ( $editing ) {
@@ -859,7 +885,13 @@ function lfndr_handle_save_field(): void {
 	 * always a deactivated plugin that registered it. Say so rather than
 	 * redirecting to a list that silently lacks the field just saved. */
 	if ( null === lfndr_get_field( $key, $sanitized ) ) {
-		lfndr_fields_redirect( 'bad_type', array( 'action' => $editing ? 'edit' : 'add', 'field' => $key ) );
+		lfndr_fields_redirect(
+			'bad_type',
+			array(
+				'action' => $editing ? 'edit' : 'add',
+				'field'  => $key,
+			)
+		);
 	}
 
 	lfndr_save_schema( $sanitized );
@@ -918,7 +950,7 @@ function lfndr_handle_retire_field(): void {
 	$field['retired_at'] = gmdate( 'Y-m-d' );
 	$field['retired_by'] = get_current_user_id();
 
-	$schema['fields']  = array_values(
+	$schema['fields']    = array_values(
 		array_filter(
 			$schema['fields'],
 			static fn( array $candidate ): bool => $candidate['key'] !== $key
@@ -952,8 +984,8 @@ function lfndr_handle_restore_field(): void {
 	}
 
 	unset( $restore['retired_at'], $restore['retired_by'] );
-	$schema['fields'][]  = $restore;
-	$schema['retired']   = array_values(
+	$schema['fields'][] = $restore;
+	$schema['retired']  = array_values(
 		array_filter(
 			$schema['retired'],
 			static fn( array $candidate ): bool => $candidate['key'] !== $key
