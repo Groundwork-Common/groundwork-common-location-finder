@@ -317,6 +317,7 @@
 		this.buildFilterActions();
 		this.bindResults();
 		this.buildLocateStatus();
+		this.buildLocateButton();
 		this.buildMaximizeControl();
 
 		if ( this.config.map ) {
@@ -511,6 +512,63 @@
 
 	Finder.prototype.isNarrow = function () {
 		return this.root.getBoundingClientRect().width < BREAKPOINT;
+	};
+
+	/* ── Locate, when there is no map to put it on ────────────────────────────
+	 * The locate control normally lives in the map's top-right corner, which is
+	 * where people look for it. With show_map="no" there is no map, so near-me
+	 * could be switched on and have no affordance anywhere — the setting said
+	 * yes, the finder offered nothing, and the only clue was a sentence in the
+	 * help text.
+	 *
+	 * So the control falls back to the controls row, beside Filters and Full
+	 * screen. Sorting by distance is if anything more useful without a map: a
+	 * plain list has no other way to show what is closest.
+	 *
+	 * Only one is ever built. addLocateControl() is called from initMap(), which
+	 * does not run without a map, and this returns early when there is one.
+	 * ─────────────────────────────────────────────────────────────────────── */
+
+	Finder.prototype.buildLocateButton = function () {
+		var self = this;
+
+		if ( this.config.map || ! this.config.nearMe || ! navigator.geolocation ) {
+			return;
+		}
+
+		var button = el(
+			'button',
+			{
+				type: 'button',
+				class: 'lfndr__locate-inline',
+				'aria-label': __( 'Show my location', 'groundwork-common-location-finder' )
+			},
+			[
+				icon( 'locate' ),
+				el( 'span', {
+					class: 'lfndr__button-label',
+					text: __( 'Near me', 'groundwork-common-location-finder' )
+				} )
+			]
+		);
+
+		button.addEventListener( 'click', function () {
+			self.locate();
+		} );
+
+		/* Same element setLocateBusy() disables while a fix is awaited, so a
+		 * second press cannot start a second request. */
+		this.locateButton = button;
+
+		var controls = this.root.querySelector( '.lfndr__controls' );
+		if ( controls ) {
+			controls.appendChild( button );
+		} else {
+			this.root.insertBefore(
+				el( 'div', { class: 'lfndr__controls lfndr__controls--bare' }, [ button ] ),
+				this.root.firstChild
+			);
+		}
 	};
 
 	Finder.prototype.buildMaximizeControl = function () {
