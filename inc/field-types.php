@@ -867,13 +867,13 @@ function lfndr_schema_number_control( array $field, string $key, string $label, 
 /**
  * A checkbox control bound to one key of a field's settings bag.
  *
- * @param array  $field   Field definition.
- * @param string $key     Settings key.
- * @param string $label   Label.
- * @param bool   $default Default when unset.
+ * @param array  $field    Field definition.
+ * @param string $key      Settings key.
+ * @param string $label    Label.
+ * @param bool   $fallback Default when unset.
  */
-function lfndr_schema_checkbox_control( array $field, string $key, string $label, bool $default ): void {
-	$value = array_key_exists( $key, $field['settings'] ) ? ! empty( $field['settings'][ $key ] ) : $default;
+function lfndr_schema_checkbox_control( array $field, string $key, string $label, bool $fallback ): void {
+	$value = array_key_exists( $key, $field['settings'] ) ? ! empty( $field['settings'][ $key ] ) : $fallback;
 	printf(
 		'<p class="lfndr-setting"><label><input type="checkbox" name="settings[%1$s]" value="1"%2$s /> %3$s</label></p>',
 		esc_attr( $key ),

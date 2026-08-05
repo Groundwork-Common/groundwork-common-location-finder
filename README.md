@@ -221,6 +221,30 @@ Those three cover the things stubs would only prove about themselves: how
 `update_post_meta` serializes a bool, what an emptied checkbox actually posts,
 and that the query count stays flat as locations are added.
 
+## Coding standards
+
+The plugin is checked against WordPress Coding Standards, and against the PHP
+7.4 floor its header advertises:
+
+```bash
+composer install
+composer lint        # phpcs
+composer lint:fix    # phpcbf, for the whitespace half
+```
+
+Composer is a development dependency only — the plugin itself has no runtime
+dependencies and ships no `vendor/`, which is why `.distignore` drops all of it
+from the release zip.
+
+`phpcs.xml.dist` documents the three places this codebase overrules the
+standard: the long explanatory comments keep their headings on the opening
+line, `blocks/finder/edit.asset.php` keeps the filename WordPress looks for,
+and the core-function stubs in `tests/bootstrap.php` keep the parameter names
+of the functions they stand in for. Everything else is the standard as
+published.
+
+`.github/workflows/ci.yml` runs the linter and the suite on every push.
+
 ## Still to come
 
 CSV export, schema import/export, an optional opinionated skin, `readme.txt`

@@ -76,16 +76,16 @@ function lfndr_default_schema(): array {
 	 * ─────────────────────────────────────────────────────────────────────── */
 	$fields = array(
 		array(
-			'key'         => 'address',
-			'type'        => 'address',
-			'label'       => __( 'Address', 'groundwork-common-location-finder' ),
-			'icon'        => 'pin',
-			'show_card'   => true,
-			'searchable'  => true,
-			'settings'    => array(
-				'subfields'   => array( 'line1', 'line2', 'city', 'region', 'postal' ),
-				'card_parts'  => array( 'city', 'region' ),
-				'directions'  => true,
+			'key'        => 'address',
+			'type'       => 'address',
+			'label'      => __( 'Address', 'groundwork-common-location-finder' ),
+			'icon'       => 'pin',
+			'show_card'  => true,
+			'searchable' => true,
+			'settings'   => array(
+				'subfields'  => array( 'line1', 'line2', 'city', 'region', 'postal' ),
+				'card_parts' => array( 'city', 'region' ),
+				'directions' => true,
 			),
 		),
 		array(
@@ -217,7 +217,7 @@ function lfndr_schema_migrations(): array {
 }
 
 /**
- * v2: lift the per-field `primary` flags and `suspends` into one wiring block.
+ * Version 2: lift the per-field `primary` flags and `suspends` into one block.
  *
  * Before this, each address/hours/closures field carried its own `primary`
  * checkbox and a closures field carried `suspends`, naming the hours it
@@ -582,7 +582,7 @@ function lfndr_sanitize_schema( $raw ): array {
 	$out['primary'] = lfndr_sanitize_primary_roles( $raw['primary'] ?? array(), $fields );
 	$out['retired'] = lfndr_sanitize_retired( $raw['retired'] ?? array(), $types, $keys );
 
-	$valid = array_merge( array_keys( $keys ), LFNDR_SYNTHETIC_KEYS );
+	$valid               = array_merge( array_keys( $keys ), LFNDR_SYNTHETIC_KEYS );
 	$out['detail_order'] = lfndr_sanitize_order( $raw['detail_order'] ?? array(), $valid );
 	$out['card_order']   = lfndr_sanitize_order( $raw['card_order'] ?? array(), $valid );
 
@@ -815,10 +815,10 @@ function lfndr_sanitize_retired( $raw, array $types, array $live ): array {
 		if ( null === $field || isset( $live[ $field['key'] ] ) || isset( $seen[ $field['key'] ] ) ) {
 			continue;
 		}
-		$seen[ $field['key'] ]  = true;
-		$field['retired_at']    = sanitize_text_field( (string) ( $candidate['retired_at'] ?? '' ) );
-		$field['retired_by']    = absint( $candidate['retired_by'] ?? 0 );
-		$out[]                  = $field;
+		$seen[ $field['key'] ] = true;
+		$field['retired_at']   = sanitize_text_field( (string) ( $candidate['retired_at'] ?? '' ) );
+		$field['retired_by']   = absint( $candidate['retired_by'] ?? 0 );
+		$out[]                 = $field;
 	}
 	return $out;
 }

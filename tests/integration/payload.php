@@ -2,6 +2,8 @@
 /**
  * Payload shape, caching, and the N+1 guarantee.
  *
+ * Run it under wp-env:
+ *
  *     npx @wordpress/env run cli -- \
  *         wp eval-file wp-content/plugins/location-finder/tests/integration/payload.php
  *
@@ -35,7 +37,12 @@ $pre_existing = get_posts(
 	)
 );
 foreach ( $pre_existing as $id ) {
-	wp_update_post( array( 'ID' => $id, 'post_status' => 'draft' ) );
+	wp_update_post(
+		array(
+			'ID'          => $id,
+			'post_status' => 'draft',
+		)
+	);
 }
 $saved_schema = get_option( 'lfndr_schema' );
 
@@ -44,9 +51,28 @@ lfndr_save_schema(
 	lfndr_sanitize_schema(
 		array(
 			'fields'       => array(
-				array( 'key' => 'org', 'type' => 'text', 'label' => 'Org', 'show_card' => true, 'searchable' => true ),
-				array( 'key' => 'secret_code', 'type' => 'text', 'label' => 'Code', 'show_card' => false, 'show_detail' => false, 'searchable' => true ),
-				array( 'key' => 'internal_note', 'type' => 'text', 'label' => 'Note', 'show_card' => false, 'show_detail' => false ),
+				array(
+					'key'        => 'org',
+					'type'       => 'text',
+					'label'      => 'Org',
+					'show_card'  => true,
+					'searchable' => true,
+				),
+				array(
+					'key'         => 'secret_code',
+					'type'        => 'text',
+					'label'       => 'Code',
+					'show_card'   => false,
+					'show_detail' => false,
+					'searchable'  => true,
+				),
+				array(
+					'key'         => 'internal_note',
+					'type'        => 'text',
+					'label'       => 'Note',
+					'show_card'   => false,
+					'show_detail' => false,
+				),
 				array(
 					'key'        => 'services',
 					'type'       => 'multiselect',
@@ -55,12 +81,27 @@ lfndr_save_schema(
 					'filterable' => true,
 					'searchable' => true,
 					'options'    => array(
-						array( 'value' => 'diapers', 'label' => 'Diapers' ),
-						array( 'value' => 'formula', 'label' => 'Formula' ),
-						array( 'value' => 'wipes', 'label' => 'Wipes' ),
+						array(
+							'value' => 'diapers',
+							'label' => 'Diapers',
+						),
+						array(
+							'value' => 'formula',
+							'label' => 'Formula',
+						),
+						array(
+							'value' => 'wipes',
+							'label' => 'Wipes',
+						),
 					),
 				),
-				array( 'key' => 'wheelchair', 'type' => 'boolean', 'label' => 'Step-free', 'show_card' => true, 'filterable' => true ),
+				array(
+					'key'        => 'wheelchair',
+					'type'       => 'boolean',
+					'label'      => 'Step-free',
+					'show_card'  => true,
+					'filterable' => true,
+				),
 			),
 			'detail_order' => array( '__name', 'org', 'services' ),
 			'card_order'   => array( '__name', 'org', '__distance' ),
@@ -95,7 +136,10 @@ foreach ( array(
 			'services'      => $row[4],
 			'wheelchair'    => $row[5] ? '1' : '',
 		),
-		'lfndr_present' => array( 'services' => '1', 'wheelchair' => '1' ),
+		'lfndr_present' => array(
+			'services'   => '1',
+			'wheelchair' => '1',
+		),
 	);
 	lfndr_save_location( $id );
 	$_POST = array();
@@ -127,7 +171,7 @@ vok(
 vok( 'empty fields are omitted rather than sent as null', ! isset( $by_name['Gamma Center']['f']['services'] ) );
 
 // ── Search blob ──────────────────────────────────────────────────────────────
-vok( 'the blob is lowercased', $by_name['Alpha Center']['search'] === strtolower( $by_name['Alpha Center']['search'] ) );
+vok( 'the blob is lowercased', strtolower( $by_name['Alpha Center']['search'] ) === $by_name['Alpha Center']['search'] );
 vok( 'the blob includes the title', false !== strpos( $by_name['Alpha Center']['search'], 'alpha center' ) );
 vok( 'choice fields contribute their labels, not just slugs', false !== strpos( $by_name['Alpha Center']['search'], 'diapers' ) );
 
@@ -148,7 +192,12 @@ vok( 'the mixed boolean renders a toggle', isset( $by_key['wheelchair'] ) );
 vok( 'the payload is cached', false !== get_transient( 'lfndr_locations' ) );
 
 $before = get_transient( 'lfndr_locations' );
-wp_update_post( array( 'ID' => $made[0], 'post_title' => 'Alpha Center Renamed' ) );
+wp_update_post(
+	array(
+		'ID'         => $made[0],
+		'post_title' => 'Alpha Center Renamed',
+	)
+);
 vok( 'saving a location busts the cache', false === get_transient( 'lfndr_locations' ) );
 
 lfndr_get_locations();
@@ -229,7 +278,12 @@ if ( false !== $saved_schema ) {
 	delete_option( 'lfndr_schema' );
 }
 foreach ( $pre_existing as $id ) {
-	wp_update_post( array( 'ID' => $id, 'post_status' => 'publish' ) );
+	wp_update_post(
+		array(
+			'ID'          => $id,
+			'post_status' => 'publish',
+		)
+	);
 }
 lfndr_flush_locations();
 

@@ -173,11 +173,11 @@ function lfndr_map_geocode_results( array $results ): array {
 		}
 
 		$out[] = array(
-			'label'   => sanitize_text_field( (string) ( $result['display_name'] ?? '' ) ),
-			'lat'     => (string) lfndr_sanitize_coordinate( $result['lat'], 90.0 ),
-			'lng'     => (string) lfndr_sanitize_coordinate( $result['lon'], 180.0 ),
-			'line1'   => sanitize_text_field( $line1 ),
-			'city'    => sanitize_text_field( $city ),
+			'label'      => sanitize_text_field( (string) ( $result['display_name'] ?? '' ) ),
+			'lat'        => (string) lfndr_sanitize_coordinate( $result['lat'], 90.0 ),
+			'lng'        => (string) lfndr_sanitize_coordinate( $result['lon'], 180.0 ),
+			'line1'      => sanitize_text_field( $line1 ),
+			'city'       => sanitize_text_field( $city ),
 			'region'     => sanitize_text_field( (string) ( $address['state'] ?? $address['province'] ?? '' ) ),
 			'regionCode' => $region_code,
 			'postal'     => sanitize_text_field( (string) ( $address['postcode'] ?? '' ) ),

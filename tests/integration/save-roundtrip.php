@@ -33,20 +33,61 @@ wp_set_current_user( 1 );
 $schema = lfndr_sanitize_schema(
 	array(
 		'fields'       => array(
-			array( 'key' => 'org', 'type' => 'text', 'label' => 'Organization', 'searchable' => true, 'show_card' => true ),
-			array( 'key' => 'notes', 'type' => 'textarea', 'label' => 'Notes' ),
-			array( 'key' => 'website', 'type' => 'url', 'label' => 'Website' ),
-			array( 'key' => 'contact', 'type' => 'email', 'label' => 'Email' ),
-			array( 'key' => 'phone', 'type' => 'phone', 'label' => 'Phone' ),
-			array( 'key' => 'capacity', 'type' => 'number', 'label' => 'Capacity', 'settings' => array( 'min' => 0, 'max' => 500 ) ),
-			array( 'key' => 'wheelchair', 'type' => 'boolean', 'label' => 'Wheelchair accessible', 'filterable' => true ),
+			array(
+				'key'        => 'org',
+				'type'       => 'text',
+				'label'      => 'Organization',
+				'searchable' => true,
+				'show_card'  => true,
+			),
+			array(
+				'key'   => 'notes',
+				'type'  => 'textarea',
+				'label' => 'Notes',
+			),
+			array(
+				'key'   => 'website',
+				'type'  => 'url',
+				'label' => 'Website',
+			),
+			array(
+				'key'   => 'contact',
+				'type'  => 'email',
+				'label' => 'Email',
+			),
+			array(
+				'key'   => 'phone',
+				'type'  => 'phone',
+				'label' => 'Phone',
+			),
+			array(
+				'key'      => 'capacity',
+				'type'     => 'number',
+				'label'    => 'Capacity',
+				'settings' => array(
+					'min' => 0,
+					'max' => 500,
+				),
+			),
+			array(
+				'key'        => 'wheelchair',
+				'type'       => 'boolean',
+				'label'      => 'Wheelchair accessible',
+				'filterable' => true,
+			),
 			array(
 				'key'     => 'access',
 				'type'    => 'select',
 				'label'   => 'Access',
 				'options' => array(
-					array( 'value' => 'open', 'label' => 'Open to the public' ),
-					array( 'value' => 'appointment', 'label' => 'By appointment' ),
+					array(
+						'value' => 'open',
+						'label' => 'Open to the public',
+					),
+					array(
+						'value' => 'appointment',
+						'label' => 'By appointment',
+					),
 				),
 			),
 			array(
@@ -54,8 +95,14 @@ $schema = lfndr_sanitize_schema(
 				'type'    => 'multiselect',
 				'label'   => 'Services',
 				'options' => array(
-					array( 'value' => 'diapers', 'label' => 'Diapers' ),
-					array( 'value' => 'period-supplies', 'label' => 'Period supplies' ),
+					array(
+						'value' => 'diapers',
+						'label' => 'Diapers',
+					),
+					array(
+						'value' => 'period-supplies',
+						'label' => 'Period supplies',
+					),
 				),
 			),
 		),
@@ -106,7 +153,10 @@ lfndr_post(
 		'services'   => array( 'period-supplies', 'diapers', 'bogus' ),
 	),
 	array( 'wheelchair', 'services' ),
-	array( 'lfndr_lat' => '33.5186', 'lfndr_lng' => '-86.810400' )
+	array(
+		'lfndr_lat' => '33.5186',
+		'lfndr_lng' => '-86.810400',
+	)
 );
 
 $get = fn( string $key ) => get_post_meta( $post_id, '_lfndr_f_' . $key, true );
@@ -131,13 +181,21 @@ vok( 'latitude trimmed to significant digits', '33.5186' === get_post_meta( $pos
 vok( 'longitude trimmed to significant digits', '-86.8104' === get_post_meta( $post_id, '_lfndr_lng', true ) );
 
 // ── Out-of-range coordinates are blanked, not clamped ────────────────────────
-lfndr_post( $post_id, array(), array(), array( 'lfndr_lat' => '91.2', 'lfndr_lng' => '-86.8104' ) );
+lfndr_post(
+	$post_id,
+	array(),
+	array(),
+	array(
+		'lfndr_lat' => '91.2',
+		'lfndr_lng' => '-86.8104',
+	)
+);
 vok( 'out-of-range latitude is blanked, not clamped', '' === get_post_meta( $post_id, '_lfndr_lat', true ) );
 
 // ── THE ABSENT-KEY TRAP, both directions ─────────────────────────────────────
 
 // 1. Unchecking every box must clear the meta. The controls post nothing, so
-//    only the presence marker distinguishes this from "not on the form".
+// only the presence marker distinguishes this from "not on the form".
 lfndr_post( $post_id, array(), array( 'wheelchair', 'services' ) );
 vok( 'unchecked boolean clears its meta', '' === $get( 'wheelchair' ) );
 vok( 'emptied multiselect clears its meta', '' === $get( 'services' ) );
@@ -151,7 +209,7 @@ vok( 'partial submit leaves notes alone', "Line one\nLine two" === $get( 'notes'
 
 // ── Empty values delete rather than store '' ─────────────────────────────────
 lfndr_post( $post_id, array( 'org' => '' ) );
-$rows = get_post_meta( $post_id, '_lfndr_f_org' );
+$rows = get_post_meta( $post_id, '_lfndr_f_org', false );
 vok( 'emptying a text field deletes the row', array() === $rows );
 
 // ── A save with no nonce does nothing ────────────────────────────────────────

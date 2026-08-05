@@ -123,19 +123,19 @@ function lfndr_build_location( WP_Post $post, array $schema, array $types ): arr
 	$lng = get_post_meta( $post->ID, '_lfndr_lng', true );
 
 	return array(
-		'id'   => (int) $post->ID,
-		'name' => $post->post_title,
+		'id'     => (int) $post->ID,
+		'name'   => $post->post_title,
 		/* Null rather than 0 when a location has never been geocoded. 0,0 is a
 		 * real place in the Gulf of Guinea, and a location that quietly sorts
 		 * as "4,000 miles away" is much harder to notice than one the map
 		 * simply does not draw. */
-		'lat'  => '' !== $lat ? (float) $lat : null,
-		'lng'  => '' !== $lng ? (float) $lng : null,
+		'lat'    => '' !== $lat ? (float) $lat : null,
+		'lng'    => '' !== $lng ? (float) $lng : null,
 
 		/* Namespaced under `f` so a field keyed `name`, `id` or `lat` cannot
 		 * shadow a built-in. With admin-defined keys that is not hypothetical —
 		 * `name` is the first thing somebody types. */
-		'f'    => $fields,
+		'f'      => $fields,
 
 		/* One lowercased blob, precomputed. The alternative is walking the
 		 * schema for every location on every keystroke; this makes searching a

@@ -116,10 +116,12 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 	<div class="lfndr__controls">
 		<?php if ( $searchable ) : ?>
 			<div class="lfndr__search">
-				<?php /* The label still names the field for assistive tech — it just no
-				         longer takes up a visible line. The placeholder below says the same
-				         thing to a sighted user, and keeping both around would only ever say
-				         it twice. */ ?>
+				<?php
+				/* The label still names the field for assistive tech — it just no
+						longer takes up a visible line. The placeholder below says the same
+						thing to a sighted user, and keeping both around would only ever say
+						it twice. */
+				?>
 				<label class="lfndr__search-label lfndr__visually-hidden" for="<?php echo esc_attr( $id ); ?>-q">
 					<?php echo esc_html( lfndr_searchable_summary() ); ?>
 				</label>
@@ -132,13 +134,15 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 		<?php endif; ?>
 
 		<?php if ( $facets ) : ?>
-			<?php /* A real button rather than <details>/<summary>: the panel it opens
-			         needs to span the full width of the row below rather than being
-			         squeezed into the button's own column, which a disclosure element's
-			         box cannot do without its content escaping it. Rendered open — no
-			         `hidden` attribute — because that is correct with no JavaScript and
-			         on a wide screen; the script closes it below the breakpoint at boot,
-			         same as the old <details> did. */ ?>
+			<?php
+			/* A real button rather than <details>/<summary>: the panel it opens
+					needs to span the full width of the row below rather than being
+					squeezed into the button's own column, which a disclosure element's
+					box cannot do without its content escaping it. Rendered open — no
+					`hidden` attribute — because that is correct with no JavaScript and
+					on a wide screen; the script closes it below the breakpoint at boot,
+					same as the old <details> did. */
+			?>
 			<button type="button" class="lfndr__filters-toggle" aria-expanded="true"
 				aria-controls="<?php echo esc_attr( $id ); ?>-filters">
 				<?php echo lfndr_icon( 'filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, literal markup; see lfndr_icon(). ?>
@@ -202,11 +206,11 @@ function lfndr_chip_box(): string {
  * without further escaping — the same exception the front-end script
  * documents for its own icon set.
  *
- * @param string $name  Icon key.
- * @param string $class CSS class for the <svg>.
+ * @param string $name      Icon key.
+ * @param string $css_class CSS class for the <svg>.
  * @return string
  */
-function lfndr_icon( string $name, string $class = 'lfndr__icon' ): string {
+function lfndr_icon( string $name, string $css_class = 'lfndr__icon' ): string {
 	$paths = array(
 		'filter' => 'M3 5h18l-7 8.5V19l-4 2v-7.5L3 5z',
 	);
@@ -215,7 +219,7 @@ function lfndr_icon( string $name, string $class = 'lfndr__icon' ): string {
 	}
 	return sprintf(
 		'<svg class="%1$s" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="%2$s"></path></svg>',
-		esc_attr( $class ),
+		esc_attr( $css_class ),
 		esc_attr( $paths[ $name ] )
 	);
 }
@@ -588,9 +592,9 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 	}
 
 	return array(
-		'map'         => $show_map,
-		'center'      => array( (float) lfndr_setting( 'center_lat' ), (float) lfndr_setting( 'center_lng' ) ),
-		'zoom'        => (int) lfndr_setting( 'zoom' ),
+		'map'          => $show_map,
+		'center'       => array( (float) lfndr_setting( 'center_lat' ), (float) lfndr_setting( 'center_lng' ) ),
+		'zoom'         => (int) lfndr_setting( 'zoom' ),
 		'fitToMarkers' => (bool) lfndr_setting( 'fit_to_markers' ),
 		/**
 		 * Filter the map tile URL template.
@@ -601,23 +605,23 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 		 *
 		 * @param string $url Tile URL with {z}/{x}/{y} placeholders.
 		 */
-		'tileUrl'     => (string) apply_filters( 'lfndr_tile_url', $tiles['url'] ),
+		'tileUrl'      => (string) apply_filters( 'lfndr_tile_url', $tiles['url'] ),
 		/**
 		 * Filter the map attribution. Removing it is a license violation for
 		 * OpenStreetMap tiles and for most commercial providers.
 		 *
 		 * @param string $attribution Attribution HTML.
 		 */
-		'attribution' => (string) apply_filters( 'lfndr_tile_attribution', $tiles['attribution'] ),
-		'maxZoom'     => (int) $tiles['max_zoom'],
+		'attribution'  => (string) apply_filters( 'lfndr_tile_attribution', $tiles['attribution'] ),
+		'maxZoom'      => (int) $tiles['max_zoom'],
 
 		/* The gate is only meaningful against a third party, so the setting alone
 		 * does not turn it on — a site serving its own tiles gets no placeholder
 		 * however this is configured. Resolved here rather than in JS because the
 		 * browser cannot compare the tile host to the site host without being told
 		 * what the site host is. */
-		'tileConsent' => (bool) lfndr_setting( 'tile_consent' ) && lfndr_tiles_are_third_party(),
-		'tileHost'    => lfndr_tile_host(),
+		'tileConsent'  => (bool) lfndr_setting( 'tile_consent' ) && lfndr_tiles_are_third_party(),
+		'tileHost'     => lfndr_tile_host(),
 
 		/* Both forms of the timezone, because neither alone is enough. An IANA
 		 * name is what Intl needs, but WordPress lets a site record its
@@ -627,17 +631,17 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 		 * It lives here, in the per-request config, and never in the cached
 		 * payload — baked in there it would survive a DST transition and shift
 		 * every "open now" answer by an hour until the cache expired. */
-		'tz'          => $timezone->getName(),
-		'tzOffset'    => (int) ( ( new DateTimeImmutable( 'now', $timezone ) )->getOffset() / 60 ),
+		'tz'           => $timezone->getName(),
+		'tzOffset'     => (int) ( ( new DateTimeImmutable( 'now', $timezone ) )->getOffset() / 60 ),
 
-		'units'       => $units,
-		'nearMe'      => (bool) lfndr_setting( 'near_me' ),
-		'autoLocate'  => (bool) lfndr_setting( 'auto_locate' ),
-		'pageSize'    => (int) lfndr_setting( 'page_size' ),
-		'primary'     => $primary,
-		'openGate'    => $gate,
-		'total'       => $count,
-		'strings'     => lfndr_front_strings(),
+		'units'        => $units,
+		'nearMe'       => (bool) lfndr_setting( 'near_me' ),
+		'autoLocate'   => (bool) lfndr_setting( 'auto_locate' ),
+		'pageSize'     => (int) lfndr_setting( 'page_size' ),
+		'primary'      => $primary,
+		'openGate'     => $gate,
+		'total'        => $count,
+		'strings'      => lfndr_front_strings(),
 	);
 }
 

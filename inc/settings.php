@@ -22,38 +22,38 @@ const LFNDR_SETTINGS_OPTION = 'lfndr_settings';
 function lfndr_setting_defaults(): array {
 	return array(
 		// Map.
-		'center_lat'         => 0.0,
-		'center_lng'         => 0.0,
-		'zoom'               => 4,
-		'fit_to_markers'     => true,
+		'center_lat'          => 0.0,
+		'center_lng'          => 0.0,
+		'zoom'                => 4,
+		'fit_to_markers'      => true,
 		/* Chosen from a named list on the Settings screen; the three below are
-		   the fallback for 'custom' and for sites predating that list. */
-		'map_style'          => 'osm',
-		'tile_url'           => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-		'tile_attr'          => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		'tile_maxzoom'       => 19,
+			the fallback for 'custom' and for sites predating that list. */
+		'map_style'           => 'osm',
+		'tile_url'            => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+		'tile_attr'           => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		'tile_maxzoom'        => 19,
 
 		// Time.
-		'timezone'           => '',
+		'timezone'            => '',
 
 		// Results.
-		'units'              => '',
-		'page_size'          => 0,
+		'units'               => '',
+		'page_size'           => 0,
 
 		// Near me.
-		'near_me'            => true,
-		'tile_consent'       => true,
-		'auto_locate'        => false,
+		'near_me'             => true,
+		'tile_consent'        => true,
+		'auto_locate'         => false,
 
 		// Links.
-		'directions'         => 'google',
-		'directions_pattern' => '',
+		'directions'          => 'google',
+		'directions_pattern'  => '',
 
 		// Geocoding, admin-side only.
-		'geo_endpoint'       => 'https://nominatim.openstreetmap.org/search',
-		'geo_countries'      => '',
-		'geo_viewbox'        => '',
-		'geo_bounded'        => false,
+		'geo_endpoint'        => 'https://nominatim.openstreetmap.org/search',
+		'geo_countries'       => '',
+		'geo_viewbox'         => '',
+		'geo_bounded'         => false,
 		/* Pre-filled with the site's admin email rather than left blank, so the
 		 * field shows the address that will be sent instead of making somebody
 		 * work out that an empty box still identifies them.
@@ -64,7 +64,7 @@ function lfndr_setting_defaults(): array {
 		 * decides it should, not because an unrelated field moved. Clearing it
 		 * falls back to the admin email again, so there is no way to end up
 		 * sending nothing. */
-		'geo_email'          => (string) get_option( 'admin_email' ),
+		'geo_email'           => (string) get_option( 'admin_email' ),
 
 		/* Appearance, set from Locations → Settings (see inc/admin-settings.php
 		 * for how each is used — some are CSS custom-property overrides, some

@@ -1,0 +1,109 @@
+name: CI
+
+# Two things, on every push and every pull request: the code matches WordPress
+# Coding Standards, and the test suite passes.
+#
+# ── Why the two jobs run on different PHP versions ───────────────────────────
+# The plugin header says "Requires PHP: 7.4", and that floor is real — people
+# run WordPress on old hosts. But PHPUnit 11 needs PHP 8.2, and phpunit.xml.dist
+# uses PHPUnit 10+ configuration (failOnDeprecation, cacheDirectory) that older
+# PHPUnit will not parse.
+#
+# So the floor is checked the way a static analyser can check it: the standards
+# job runs PHPCompatibilityWP with testVersion 7.4-, which reads every file and
+# reports syntax or functions that would break on 7.4. The tests then run on the
+# PHP versions PHPUnit itself supports. A `php -l` pass on 7.4 is included
+# alongside, so a parse error on the floor version cannot slip through either.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  # A second push to the same branch makes the first run's answer irrelevant.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  standards:
+    name: Coding standards
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: cs2pr
+
+      # composer.lock is committed, so this installs the exact PHPCS and WPCS
+      # the standard was last verified against. Without it a new WPCS release
+      # could turn the build red on a commit that changed nothing.
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      # cs2pr turns the checkstyle report into inline annotations on the diff,
+      # so a reviewer sees the violation on the line rather than in a log.
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --report-full --report-checkstyle=phpcs-report.xml
+        continue-on-error: true
+
+      - name: Annotate the diff
+        run: cs2pr phpcs-report.xml
+
+  syntax:
+    name: Parses on PHP 7.4
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      # The plugin's stated floor. PHPCompatibilityWP catches the semantic side
+      # of this in the standards job; the point here is that the actual 7.4
+      # parser accepts every file we ship.
+      - name: Lint every shipped file
+        run: |
+          find . -name '*.php' \
+            -not -path './vendor/*' \
+            -not -path './node_modules/*' \
+            -print0 \
+          | xargs -0 -n1 -P4 php -l
+
+  tests:
+    name: Tests on PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.2', '8.3', '8.4' ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      # Fetched rather than committed, matching the note in phpunit.xml.dist:
+      # the suite stubs the WordPress functions it needs, so this is the only
+      # thing it takes to run — no database, no WordPress checkout.
+      - name: Fetch PHPUnit
+        run: curl -sSLO https://phar.phpunit.de/phpunit-11.phar
+
+      - name: Run the suite
+        run: php phpunit-11.phar
