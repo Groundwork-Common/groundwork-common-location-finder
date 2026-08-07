@@ -83,25 +83,44 @@ jobs:
             exit 0
           fi
 
-          gh issue create --title "$title" --label dependencies --body "$(cat <<EOF
-\`assets/leaflet/\` has **$VENDORED**; npm's \`latest\` dist-tag is now **$UPSTREAM**.
+          # Two things about the heredoc below, both of which have broken this
+          # workflow before or would have:
+          #
+          # It is indented to match the rest of this `run:` block, not written
+          # flush left. A YAML block scalar ends at the first line indented less
+          # than the block, so a column-0 heredoc is parsed as top-level YAML and
+          # the whole file fails to load. That is not a quiet failure but it is
+          # an obscure-looking one: the workflow runs zero jobs and `gh run list`
+          # shows it by filename instead of by the `name:` above. YAML strips
+          # this indent before the shell sees it, so `EOF` still lands at column
+          # 0 for `cat`.
+          #
+          # It writes a file rather than feeding `--body "$(cat <<EOF …)"`. A
+          # heredoc nested inside command substitution is mis-parsed by bash 3.2
+          # — still the /bin/bash on macOS — which chokes on the apostrophe in
+          # "npm's". The runner has bash 5 and would be fine, but this way the
+          # step can be run and checked locally instead of only in CI.
+          body="${RUNNER_TEMP:-/tmp}/leaflet-issue.md"
+          cat > "$body" <<EOF
+          \`assets/leaflet/\` has **$VENDORED**; npm's \`latest\` dist-tag is now **$UPSTREAM**.
 
-Updating means replacing the vendored files by hand — there is no build step:
+          Updating means replacing the vendored files by hand — there is no build step:
 
-1. Download the release from https://github.com/Leaflet/Leaflet/releases
-2. Replace \`leaflet.js\`, \`leaflet.css\` and \`assets/leaflet/images/\`
-3. Check the files against the published SRI hashes on https://leafletjs.com/download.html
-4. Update the version string in \`inc/enqueue.php\` — it is the cache buster, and
-   \`LeafletVersionTest\` fails if it disagrees with the bundle
-5. Update the version and the release link in \`readme.txt\`
-6. Run the test suite
+          1. Download the release from https://github.com/Leaflet/Leaflet/releases
+          2. Replace \`leaflet.js\`, \`leaflet.css\` and \`assets/leaflet/images/\`
+          3. Check the files against the published SRI hashes on https://leafletjs.com/download.html
+          4. Update the version string in \`inc/enqueue.php\` — it is the cache buster, and
+             \`LeafletVersionTest\` fails if it disagrees with the bundle
+          5. Update the version and the release link in \`readme.txt\`
+          6. Run the test suite
 
-**If \$UPSTREAM is a 2.x release, stop and read this first.** Leaflet 2 is
-ESM-only and drops the UMD build. This plugin registers Leaflet as a classic
-script and uses \`window.L\` throughout, so 2.x is a migration, not an update —
-it needs \`wp_enqueue_script_module()\` (raising the WordPress floor to 6.5) or
-an import-map shim. Do not treat it as a routine bump.
+          **If \$UPSTREAM is a 2.x release, stop and read this first.** Leaflet 2 is
+          ESM-only and drops the UMD build. This plugin registers Leaflet as a classic
+          script and uses \`window.L\` throughout, so 2.x is a migration, not an update —
+          it needs \`wp_enqueue_script_module()\` (raising the WordPress floor to 6.5) or
+          an import-map shim. Do not treat it as a routine bump.
 
-_Opened automatically by \`.github/workflows/leaflet-version-check.yml\`._
-EOF
-)"
+          _Opened automatically by \`.github/workflows/leaflet-version-check.yml\`._
+          EOF
+
+          gh issue create --title "$title" --label dependencies --body-file "$body"
