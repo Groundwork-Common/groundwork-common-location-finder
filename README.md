@@ -245,6 +245,50 @@ published.
 
 `.github/workflows/ci.yml` runs the linter and the suite on every push.
 
+## Demo data
+
+```bash
+npx @wordpress/env run cli -- wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/seed.php
+```
+
+Six of Riverbend Food Bank's sites across the Birmingham, Alabama metro, plus a **Find a pantry** page carrying the block. They are chosen to put every branch of the card and the detail pane on screen at once: a weekday pantry that closes early on Friday, a Saturday-only one with a second address line, a fridge open every day and with *no phone number*, a mobile round that runs the 1st and 3rd Tuesday only, an evening site with an open-ended closing time, and a lunch service on Mon/Wed/Fri.
+
+The values go through `lfndr_sanitize_address()` and `lfndr_sanitize_hours()` rather than being written as literal arrays. An address and an hours schedule are both stored in a shape that is the sanitizer's business, and a hand-written fixture is correct only until that shape changes — after which it produces a demo site that is subtly wrong in a way no test catches.
+
+Re-runnable, and it removes only what it made: everything is tagged, so a location you added by hand survives. It reads the schema and never writes it — `lfndr_get_schema()` installs the three-field default on a site that has none and leaves an existing configuration alone, and on a demo site the fields somebody just built by hand are the work you least want thrown away. It refuses to run unless `WP_ENVIRONMENT_TYPE` is `local` or `development`.
+
+Every address in it is invented and every number is in the reserved 555 exchange. The metro matches the sibling plugins' fixtures on purpose — all three are demonstrated on one beta site, and a food bank whose volunteers are in Birmingham but whose pantries are in Portland reads as three unrelated demos rather than one organisation.
+
+## The beta site
+
+<https://wp.beta.poo6op.com> is a shared demo and beta install carrying **all three** Groundwork Common plugins — this one, the volunteer tracker and the post portal — seeded as one organisation. It is where a change is looked at in a browser on real hosting before it is merged.
+
+```bash
+bin/deploy-staging.sh              # deploy the working tree, then activate
+bin/deploy-staging.sh --dry-run    # show what would change, send nothing
+```
+
+It deploys **whatever is checked out right now**, branch and uncommitted edits included; waiting for `main` would defeat the purpose. What gets sent is `.distignore`, the same file `wp dist-archive` reads, so there is no second exclusion list to keep in step. `tests/` is therefore not deployed — to reseed, copy `tests/seed.php` up and run it by absolute path with `wp eval-file`.
+
+Once per machine, tell it where the site is. The target is **not** in the repository and is not going into it: an SSH user and host are not a credential, but together they name a valid account on a specific public host — the half of a break-in that is normally the work. These repos are private, and "private today" is a weaker promise than "never committed", because the setting reverses in one click and history outlives it. Note too that `.distignore` keeps this script out of the release *zip* and does nothing about the *repository* — two different exposures. So the target lives in one file outside every repo, shared by all three plugins because it is one beta site:
+
+```bash
+mkdir -p ~/.config/groundwork-common && cat > ~/.config/groundwork-common/beta.env <<'CONF'
+SSH_HOST=user@host.dreamhost.com
+DEST_ROOT=wp.beta.example.com
+SITE_URL=https://wp.beta.example.com
+CONF
+```
+
+Without it the script stops and prints exactly that, rather than falling back to a default. Set `GWC_BETA_ENV` to keep the file elsewhere.
+
+Two things about that host are worth knowing before working on it:
+
+- **Production shares the login.** `groundworkcommon.com` — a live nonprofit site — is in the same home directory on the same SSH user. A wrong destination path does not fail, it succeeds against production. The script refuses to run unless it finds a beta-only mu-plugin at the target, so a typo stops the run rather than redecorating a live site.
+- **`WP_ENVIRONMENT_TYPE` is `development`, not `staging`,** because the seed scripts refuse anything else. Every other guard keying off `wp_get_environment_type()` relaxes there too, which is exactly why no real record may live on it. Mail is intercepted and stored rather than sent; read it under Tools → Trapped mail.
+
+WP-CLI on that shared host costs roughly thirty seconds per invocation, because it bootstraps WordPress each time. Batch work into one `wp eval-file` rather than chaining several `wp` calls.
+
 ## Still to come
 
 CSV export, schema import/export, an optional opinionated skin, `readme.txt`

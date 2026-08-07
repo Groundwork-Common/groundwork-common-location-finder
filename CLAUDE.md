@@ -75,6 +75,46 @@ There is no phpcs ruleset in the repo, but the code is written against WordPress
 Coding Standards and carries 25-plus `phpcs:ignore` annotations. **Never add one
 without a `--` reason after it**; every existing one explains itself.
 
+## The beta site
+
+<https://wp.beta.poo6op.com> is a shared demo install carrying **all three**
+Groundwork Common plugins, seeded as one organisation in the Birmingham, Alabama
+metro. Keep new fixtures in that metro — the coherence is the point.
+`bin/deploy-staging.sh` rsyncs the working tree there, current branch and
+uncommitted edits included by design, using `.distignore` as the manifest, then
+activates. `--dry-run` first if in doubt. README.md has the full account.
+
+- **The target is not in the repo, and must not be put there.** The script reads
+  `SSH_HOST`, `DEST_ROOT` and `SITE_URL` from
+  `~/.config/groundwork-common/beta.env` (override with `GWC_BETA_ENV`) and stops
+  with instructions if that file is missing. An SSH user and host are not a
+  credential, but together they name a valid account on a public host — the half
+  of a break-in that is usually the work. Do not "simplify" this back to a
+  literal: these repos being private is a setting that reverses in one click, and
+  `.distignore` covers the release zip, not the repository.
+
+- **Production shares the SSH login.** `groundworkcommon.com`, a live nonprofit
+  site, sits in the same home directory on the same user. A wrong destination
+  path does not fail, it succeeds against production. The script refuses to run
+  unless it finds a beta-only mu-plugin at the target — do not remove that check
+  to make a one-off deploy easier.
+- **`WP_ENVIRONMENT_TYPE` is `development`, not `staging`,** because the seed
+  scripts refuse anything else. Every other `wp_get_environment_type()` guard
+  relaxes there too, so no real record may live on that host. Mail is trapped and
+  stored rather than sent; read it under Tools → Trapped mail.
+- WP-CLI there costs ~30s per invocation. Batch into one `wp eval-file` rather
+  than chaining `wp` calls, or a routine step blows a two-minute timeout.
+
+`tests/` is in `.distignore`, so `tests/seed.php` is **not** deployed with the
+plugin. Copy it up and run it by absolute path.
+
+**A trap the seed already hit:** `wp eval-file` runs the whole script body inside
+a function, so a top-level `$field = …` is a *local*, and a `global $field` in a
+helper reaches an unset variable of the same name — silently storing every
+address against an empty field definition. `tests/seed.php` looks the schema up
+inside the helper instead; `lfndr_get_schema()` memoises per request, so asking
+repeatedly costs one read. Do not "tidy" that into a global.
+
 ## The rules that are load-bearing
 
 - **Renderers build DOM with `createElement`/`textContent`, never `innerHTML`.**
