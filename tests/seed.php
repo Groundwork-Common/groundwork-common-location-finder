@@ -2,6 +2,8 @@
 /**
  * A demo set of locations, for working on the plugin and taking screenshots.
  *
+ * Run it under wp-env:
+ *
  *   npx @wordpress/env run cli -- wp eval-file \
  *     wp-content/plugins/groundwork-common-location-finder/tests/seed.php
  *
@@ -166,11 +168,36 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35203',
 	),
 	array(
-		array( 'day' => 1, 'start' => '09:00', 'end' => '16:00', 'freq' => 'weekly' ),
-		array( 'day' => 2, 'start' => '09:00', 'end' => '16:00', 'freq' => 'weekly' ),
-		array( 'day' => 3, 'start' => '09:00', 'end' => '16:00', 'freq' => 'weekly' ),
-		array( 'day' => 4, 'start' => '09:00', 'end' => '16:00', 'freq' => 'weekly' ),
-		array( 'day' => 5, 'start' => '09:00', 'end' => '13:00', 'freq' => 'weekly' ),
+		array(
+			'day'   => 1,
+			'start' => '09:00',
+			'end'   => '16:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 2,
+			'start' => '09:00',
+			'end'   => '16:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 3,
+			'start' => '09:00',
+			'end'   => '16:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 4,
+			'start' => '09:00',
+			'end'   => '16:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 5,
+			'start' => '09:00',
+			'end'   => '13:00',
+			'freq'  => 'weekly',
+		),
 	),
 	'(205) 555-0118',
 	33.5186,
@@ -188,7 +215,12 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35020',
 	),
 	array(
-		array( 'day' => 6, 'start' => '08:00', 'end' => '12:00', 'freq' => 'weekly' ),
+		array(
+			'day'   => 6,
+			'start' => '08:00',
+			'end'   => '12:00',
+			'freq'  => 'weekly',
+		),
 	),
 	'(205) 555-0143',
 	33.4018,
@@ -207,13 +239,48 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35064',
 	),
 	array(
-		array( 'day' => 1, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 2, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 3, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 4, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 5, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 6, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
-		array( 'day' => 7, 'start' => '07:00', 'end' => '19:00', 'freq' => 'weekly' ),
+		array(
+			'day'   => 1,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 2,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 3,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 4,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 5,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 6,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 7,
+			'start' => '07:00',
+			'end'   => '19:00',
+			'freq'  => 'weekly',
+		),
 	),
 	'',
 	33.4712,
@@ -232,8 +299,18 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35210',
 	),
 	array(
-		array( 'day' => 2, 'start' => '10:00', 'end' => '13:00', 'freq' => '1st' ),
-		array( 'day' => 2, 'start' => '10:00', 'end' => '13:00', 'freq' => '3rd' ),
+		array(
+			'day'   => 2,
+			'start' => '10:00',
+			'end'   => '13:00',
+			'freq'  => '1st',
+		),
+		array(
+			'day'   => 2,
+			'start' => '10:00',
+			'end'   => '13:00',
+			'freq'  => '3rd',
+		),
 	),
 	'(205) 555-0177',
 	33.5379,
@@ -251,7 +328,12 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35218',
 	),
 	array(
-		array( 'day' => 4, 'start' => '17:30', 'end' => '', 'freq' => 'weekly' ),
+		array(
+			'day'   => 4,
+			'start' => '17:30',
+			'end'   => '',
+			'freq'  => 'weekly',
+		),
 	),
 	'(205) 555-0192',
 	33.4884,
@@ -268,9 +350,24 @@ $lfndr_made[] = lfndr_seed_location(
 		'postal' => '35209',
 	),
 	array(
-		array( 'day' => 1, 'start' => '11:30', 'end' => '13:30', 'freq' => 'weekly' ),
-		array( 'day' => 3, 'start' => '11:30', 'end' => '13:30', 'freq' => 'weekly' ),
-		array( 'day' => 5, 'start' => '11:30', 'end' => '13:30', 'freq' => 'weekly' ),
+		array(
+			'day'   => 1,
+			'start' => '11:30',
+			'end'   => '13:30',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 3,
+			'start' => '11:30',
+			'end'   => '13:30',
+			'freq'  => 'weekly',
+		),
+		array(
+			'day'   => 5,
+			'start' => '11:30',
+			'end'   => '13:30',
+			'freq'  => 'weekly',
+		),
 	),
 	'(205) 555-0164',
 	33.4718,
