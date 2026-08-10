@@ -211,8 +211,8 @@ function lfndr_geocode_contact_email(): string {
  *
  * What it deliberately does NOT contain is an email address. Nominatim's
  * front-end filter returns a bare 403 for a User-Agent with an email in it —
- * verified against the live service, where `LocationFinderWP/0.1.0
- * (admin@example.org)` is refused while the same string with a URL instead is
+ * verified against the live service, where a product token followed by
+ * `(admin@example.org)` is refused while the same string with a URL instead is
  * served. Their documented place for a contact address is the `email` query
  * parameter, which lfndr_handle_geocode() sends. Putting it here instead looks
  * like following the policy and silently breaks every lookup.
@@ -223,8 +223,8 @@ function lfndr_geocode_user_agent(): string {
 	$host = wp_parse_url( home_url(), PHP_URL_HOST );
 
 	return sprintf(
-		'LocationFinderWP/%s (+%s)',
+		'GroundworkCommonLocationFinder/%s (+%s)',
 		LFNDR_VERSION,
-		$host ? 'https://' . $host : 'https://wordpress.org/plugins/location-finder/'
+		$host ? 'https://' . $host : 'https://wordpress.org/plugins/groundwork-common-location-finder/'
 	);
 }

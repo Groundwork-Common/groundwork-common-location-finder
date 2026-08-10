@@ -27,7 +27,7 @@ define( 'LFNDR_VERSION', 'test' );
 define( 'LFNDR_SCHEMA_VERSION', 1 );
 define( 'LFNDR_FILE', dirname( __DIR__ ) . '/groundwork-common-location-finder.php' );
 define( 'LFNDR_DIR', dirname( __DIR__ ) . '/' );
-define( 'LFNDR_URL', 'https://example.test/wp-content/plugins/location-finder/' );
+define( 'LFNDR_URL', 'https://example.test/wp-content/plugins/groundwork-common-location-finder/' );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
 defined( 'YEAR_IN_SECONDS' ) || define( 'YEAR_IN_SECONDS', 31536000 );

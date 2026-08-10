@@ -5,7 +5,7 @@
  * Run against a live WordPress:
  *
  *     npx @wordpress/env run cli -- \
- *         wp eval-file wp-content/plugins/location-finder/tests/integration/save-roundtrip.php
+ *         wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/save-roundtrip.php
  *
  * This lives outside PHPUnit on purpose. The unit suite stubs WordPress so it
  * can run in a second with no stack, which is right for pure logic — but the

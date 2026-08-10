@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:       Groundwork Common Location Finder
- * Plugin URI:        https://groundworkcommon.com
+ * Plugin URI:        https://github.com/Groundwork-Common/groundwork-common-location-finder
  * Description:       A map-and-list location finder whose fields you define yourself. Only the name and coordinates are built in; everything else is configured in wp-admin.
  * Version:           1.0.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            Groundwork Common LLC
- * Author URI:        https://groundworkcommon.com
+ * Author URI:        https://www.groundworkcommon.com/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       groundwork-common-location-finder

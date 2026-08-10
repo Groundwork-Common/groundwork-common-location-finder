@@ -5,7 +5,7 @@
  * Run it under wp-env:
  *
  *     npx @wordpress/env run cli -- \
- *         wp eval-file wp-content/plugins/location-finder/tests/integration/payload.php
+ *         wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/payload.php
  *
  * The query-count assertion is the one that matters here and the one that
  * cannot be unit tested: it is the difference between a finder that serves 200

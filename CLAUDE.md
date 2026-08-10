@@ -62,14 +62,15 @@ npx @wordpress/env run cli -- wp eval-file \
 
 Also `address.php` and `payload.php` in the same directory.
 
-> The docblocks inside `tests/integration/*.php` and the commands in `README.md`
-> still say `wp-content/plugins/location-finder/`. That path is stale — the
-> directory was renamed to match the plugin name and `.wp-env.json` mounts `["."]`,
-> so it resolves under the repo's own basename. Use the path above.
+> The path is `wp-content/plugins/groundwork-common-location-finder/` everywhere —
+> `.wp-env.json` mounts `["."]`, so it resolves under the repo's own basename.
+> Anything still saying `wp-content/plugins/location-finder/` predates the rename.
 
-**Nothing runs any of this in CI.** `.github/workflows/` holds only `deploy.yml`
-and the Leaflet version check. No workflow runs PHPUnit, phpcs or Plugin Check.
-If you do not run the suite yourself, nothing will.
+**CI runs the suite, but not everything.** `.github/workflows/ci.yml` runs PHPCS
+on 8.3, a parse check on 7.4, and PHPUnit on 8.2/8.3/8.4 on every push. **The
+PHPCS step is `continue-on-error: true`** — it annotates the diff and never turns
+the build red, so a standards regression lands silently. Run `composer lint`
+yourself. No workflow runs Plugin Check or the integration scripts.
 
 There is no phpcs ruleset in the repo, but the code is written against WordPress
 Coding Standards and carries 25-plus `phpcs:ignore` annotations. **Never add one

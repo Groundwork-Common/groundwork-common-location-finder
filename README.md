@@ -23,7 +23,7 @@ that describes them.
 
 ## Requirements
 
-WordPress 6.2+, PHP 7.4+. No build step, no Composer, no npm for anything that
+WordPress 6.3+, PHP 7.4+. No build step, no Composer, no npm for anything that
 ships. Leaflet 1.9.4 is vendored in `assets/leaflet/`.
 
 ## Adding it to a page
@@ -212,9 +212,9 @@ runs under wp-env:
 
 ```bash
 npx @wordpress/env start
-npx @wordpress/env run cli -- wp eval-file wp-content/plugins/location-finder/tests/integration/save-roundtrip.php
-npx @wordpress/env run cli -- wp eval-file wp-content/plugins/location-finder/tests/integration/address.php
-npx @wordpress/env run cli -- wp eval-file wp-content/plugins/location-finder/tests/integration/payload.php
+npx @wordpress/env run cli -- wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/save-roundtrip.php
+npx @wordpress/env run cli -- wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/address.php
+npx @wordpress/env run cli -- wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/payload.php
 ```
 
 Those three cover the things stubs would only prove about themselves: how

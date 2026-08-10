@@ -5,7 +5,7 @@
  * Run it under wp-env:
  *
  *     npx @wordpress/env run cli -- \
- *         wp eval-file wp-content/plugins/location-finder/tests/integration/address.php
+ *         wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/address.php
  *
  * @package LocationFinder
  */
@@ -118,7 +118,7 @@ vok( 'mapper drops unknown upstream keys', ! isset( $mapped[0]['extra'] ) && 9 =
 vok( 'mapper skips results with no coordinates', array() === lfndr_map_geocode_results( array( array( 'display_name' => 'x' ) ) ) );
 // Nominatim's front-end returns a bare 403 for any User-Agent containing an
 // email address; the contact goes in the `email` query parameter instead.
-vok( 'user agent identifies the app and the site', (bool) preg_match( '/^LocationFinderWP\/\S+ \(\+https:\/\/\S+\)$/', lfndr_geocode_user_agent() ) );
+vok( 'user agent identifies the app and the site', (bool) preg_match( '/^GroundworkCommonLocationFinder\/\S+ \(\+https:\/\/\S+\)$/', lfndr_geocode_user_agent() ) );
 vok( 'user agent carries no email address', false === strpos( lfndr_geocode_user_agent(), '@' ) );
 vok( 'contact email is available for the query parameter', is_email( lfndr_geocode_contact_email() ) );
 vok( 'mapper extracts an ISO subdivision code', 'AL' === $mapped[0]['regionCode'] );
