@@ -17,11 +17,19 @@ the plugin exists.
 ## The shape of the code
 
 Procedural PHP, prefix `gwc_lfndr_`, no classes, no namespaces, no autoloader.
-Eighteen files in `inc/`, required from the bootstrap with
-`if ( ! function_exists( … ) )` guards.
+Eighteen files in `inc/`, required from the bootstrap.
 
-Two ordering constraints, both documented in the main file:
+Three constraints, all documented in the main file:
 
+- **The whole file returns early if `GWC_LFNDR_VERSION` is already defined.**
+  Two directories can hold this plugin at once — an old slug beside a new one —
+  and WordPress identifies plugins by path, so it sees two. The second to load
+  would redeclare every function the first declared: fatal on every request,
+  wp-admin included. `plugin_sandbox_scrape()` catches that when activating
+  through the admin screen; `wp plugin activate` does not. **The check must stay
+  above the constants.** They redeclare first, and PHP already warns that it
+  "will be an error in PHP 9" — which would put the fatal back ahead of anything
+  placed lower down.
 - `schema.php` must precede everything that reads a schema, and
   `field-types.php` must precede `meta-box.php`. **The require list is not
   alphabetical. Do not sort it.**

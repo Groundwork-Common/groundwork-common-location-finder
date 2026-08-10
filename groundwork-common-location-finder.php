@@ -18,6 +18,25 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/* ── One copy only ───────────────────────────────────────────────────────────
+ * Two directories can hold this plugin at once — an old slug sitting beside the
+ * new one after a rename, or a manual install beside the directory one. Both are
+ * activatable, and WordPress identifies plugins by path, so it sees two. The
+ * second one to load then redeclares every function the first declared, which is
+ * a fatal on every request, wp-admin included, with no way back in through the
+ * browser. Activating through the admin screen would be caught by
+ * plugin_sandbox_scrape(); `wp plugin activate` is not.
+ *
+ * So: whoever gets here first wins, and the second copy returns having done
+ * nothing. This check has to sit above the constants, not below them. The
+ * constants are the first thing that redeclares, and while PHP currently only
+ * warns about that, the warning says "this will be an error in PHP 9" — which
+ * would put the fatal back, ahead of anything placed further down.
+ * ─────────────────────────────────────────────────────────────────────────── */
+if ( defined( 'GWC_LFNDR_VERSION' ) ) {
+	return;
+}
+
 /* ── Why only three fields are built in ──────────────────────────────────────
  * name, latitude, longitude. Nothing else.
  *
@@ -60,14 +79,16 @@ define( 'GWC_LFNDR_FILE', __FILE__ );
 define( 'GWC_LFNDR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GWC_LFNDR_URL', plugin_dir_url( __FILE__ ) );
 
-/* ── Guarded requires ────────────────────────────────────────────────────────
- * Each guard names a function the file declares. This costs one function_exists
- * per file and buys immunity to the double-load that happens when a plugin is
- * activated while an older copy is still on the include path — during the
- * activation request WordPress has already loaded the old file, and a bare
- * require then fatals on redeclaration before the admin can do anything about
- * it. The order below is not alphabetical: schema.php must precede everything
- * that reads a schema, and field-types.php must precede meta-box.php.
+/* ── The requires ────────────────────────────────────────────────────────────
+ * The order is not alphabetical and must not be sorted: schema.php precedes
+ * everything that reads a schema, and field-types.php precedes meta-box.php.
+ *
+ * These used to carry one `if ( ! function_exists( … ) )` guard apiece against
+ * a double-load. The single `defined()` check at the top of this file does that
+ * job instead, and better: it stops before the constants rather than after them,
+ * and it does not couple seventeen guard conditions to seventeen function names
+ * — a coupling where getting one name wrong skipped a whole file silently, and
+ * where the guard below covered three files at once.
  *
  * Nothing here is wrapped in is_admin(). It is tempting — the Fields screen and
  * the geocode proxy are admin-only features — but is_admin() answers "is this a
@@ -77,65 +98,31 @@ define( 'GWC_LFNDR_URL', plugin_dir_url( __FILE__ ) );
  * where a function exists on the screen you tested and is fatally undefined
  * under `wp eval`. That trade is not close.
  * ─────────────────────────────────────────────────────────────────────────── */
-if ( ! function_exists( 'gwc_lfndr_hour_days' ) ) {
-	require GWC_LFNDR_DIR . 'inc/i18n.php';
-}
-if ( ! function_exists( 'gwc_lfndr_setting' ) ) {
-	require GWC_LFNDR_DIR . 'inc/settings.php';
-}
-if ( ! function_exists( 'gwc_lfndr_field_types' ) ) {
-	require GWC_LFNDR_DIR . 'inc/field-types.php';
-}
-if ( ! function_exists( 'gwc_lfndr_register_address_type' ) ) {
-	require GWC_LFNDR_DIR . 'inc/field-address.php';
-}
-if ( ! function_exists( 'gwc_lfndr_register_hours_type' ) ) {
-	require GWC_LFNDR_DIR . 'inc/field-hours.php';
-}
-if ( ! function_exists( 'gwc_lfndr_register_closures_type' ) ) {
-	require GWC_LFNDR_DIR . 'inc/field-closures.php';
-}
-if ( ! function_exists( 'gwc_lfndr_get_schema' ) ) {
-	require GWC_LFNDR_DIR . 'inc/schema.php';
-}
-if ( ! function_exists( 'gwc_lfndr_register_post_type' ) ) {
-	require GWC_LFNDR_DIR . 'inc/cpt.php';
-}
-if ( ! function_exists( 'gwc_lfndr_render_meta_box' ) ) {
-	require GWC_LFNDR_DIR . 'inc/meta-box.php';
-}
-if ( ! function_exists( 'gwc_lfndr_get_locations' ) ) {
-	require GWC_LFNDR_DIR . 'inc/locations.php';
-}
-if ( ! function_exists( 'gwc_lfndr_available_facets' ) ) {
-	require GWC_LFNDR_DIR . 'inc/facets.php';
-}
-if ( ! function_exists( 'gwc_lfndr_render_finder' ) ) {
-	require GWC_LFNDR_DIR . 'inc/render.php';
-}
-if ( ! function_exists( 'gwc_lfndr_appearance_css' ) ) {
-	require GWC_LFNDR_DIR . 'inc/admin-settings.php';
-}
-if ( ! function_exists( 'gwc_lfndr_admin_assets' ) ) {
-	require GWC_LFNDR_DIR . 'inc/enqueue.php';
-}
-if ( ! function_exists( 'gwc_lfndr_register_block' ) ) {
-	require GWC_LFNDR_DIR . 'inc/block.php';
-}
-if ( ! function_exists( 'gwc_lfndr_handle_geocode' ) ) {
-	require GWC_LFNDR_DIR . 'inc/geocode.php';
-}
-if ( ! function_exists( 'gwc_lfndr_fields_screen' ) ) {
-	require GWC_LFNDR_DIR . 'inc/admin-fields.php';
+require GWC_LFNDR_DIR . 'inc/i18n.php';
+require GWC_LFNDR_DIR . 'inc/settings.php';
+require GWC_LFNDR_DIR . 'inc/field-types.php';
+require GWC_LFNDR_DIR . 'inc/field-address.php';
+require GWC_LFNDR_DIR . 'inc/field-hours.php';
+require GWC_LFNDR_DIR . 'inc/field-closures.php';
+require GWC_LFNDR_DIR . 'inc/schema.php';
+require GWC_LFNDR_DIR . 'inc/cpt.php';
+require GWC_LFNDR_DIR . 'inc/meta-box.php';
+require GWC_LFNDR_DIR . 'inc/locations.php';
+require GWC_LFNDR_DIR . 'inc/facets.php';
+require GWC_LFNDR_DIR . 'inc/render.php';
+require GWC_LFNDR_DIR . 'inc/admin-settings.php';
+require GWC_LFNDR_DIR . 'inc/enqueue.php';
+require GWC_LFNDR_DIR . 'inc/block.php';
+require GWC_LFNDR_DIR . 'inc/geocode.php';
+require GWC_LFNDR_DIR . 'inc/admin-fields.php';
 
-	// The tab shell and the settings that were not reachable before it.
-	require GWC_LFNDR_DIR . 'inc/admin-screen.php';
+// The tab shell and the settings that were not reachable before it.
+require GWC_LFNDR_DIR . 'inc/admin-screen.php';
 
-	/* Contextual help for the settings screen. Loaded after admin-screen.php
-	 * because it is that screen's help, and after admin-fields.php because it
-	 * describes what those screens do. */
-	require GWC_LFNDR_DIR . 'inc/admin-help.php';
-}
+/* Contextual help for the settings screen. Loaded after admin-screen.php
+ * because it is that screen's help, and after admin-fields.php because it
+ * describes what those screens do. */
+require GWC_LFNDR_DIR . 'inc/admin-help.php';
 
 /* ── Activation ──────────────────────────────────────────────────────────────
  * Deliberately not flush_rewrite_rules(). On the activating request the post
