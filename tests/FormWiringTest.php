@@ -308,7 +308,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 		preg_match( "/register_setting\(\s*'[^']+',\s*([^,\s]+)/", $settings, $m );
 
 		$this->assertSame(
-			'LFNDR_SETTINGS_OPTION',
+			'GWC_LFNDR_SETTINGS_OPTION',
 			$m[1] ?? '',
 			'register_setting() must register the same option constant the form inputs are namespaced under.'
 		);
