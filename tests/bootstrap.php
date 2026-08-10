@@ -2,7 +2,7 @@
 /**
  * Test bootstrap: enough of WordPress to run the plugin's pure logic.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 /* ── Why stubs and not the WordPress test suite ──────────────────────────────

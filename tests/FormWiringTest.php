@@ -18,7 +18,7 @@
  * side only now fails here, immediately, instead of looking correct until
  * somebody notices their settings do not stick.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class FormWiringTest extends PHPUnit\Framework\TestCase {

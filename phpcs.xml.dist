@@ -52,8 +52,8 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="lfndr"/>
-				<element value="LFNDR"/>
+				<element value="gwc_lfndr"/>
+				<element value="GWC_LFNDR"/>
 			</property>
 		</properties>
 	</rule>

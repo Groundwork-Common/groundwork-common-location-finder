@@ -11,7 +11,7 @@
  * a timestamp — would look identical in the admin on the day it was set and
  * only be wrong a month later, which is exactly the kind of bug nobody reports.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class ColophonSnoozeTest extends PHPUnit\Framework\TestCase {

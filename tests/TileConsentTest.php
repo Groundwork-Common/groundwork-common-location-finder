@@ -11,7 +11,7 @@
  * self-hosted tiles. It protects nobody, and it teaches people to click through
  * the gate that does matter.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class TileConsentTest extends PHPUnit\Framework\TestCase {

@@ -2,7 +2,7 @@
 /**
  * Building the location payload the browser receives.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -2,7 +2,7 @@
 /**
  * The location post type and its admin list table.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

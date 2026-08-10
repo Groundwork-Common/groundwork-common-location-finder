@@ -29,7 +29,7 @@
  * catches. Calling gwc_lfndr_sanitize_address() and gwc_lfndr_sanitize_hours() means the
  * fixture is shaped by the same code the meta box uses, so it cannot drift.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -403,7 +403,7 @@ echo "  Ensley Evening         Thursdays from 17:30, no closing time\n";
 echo "  Homewood Senior Meals  Mon, Wed, Fri over lunch\n";
 
 printf( "\n  Admin   %s\n", admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE ) );
-printf( "  Fields  %s\n", admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=lfndr-fields' ) );
+printf( "  Fields  %s\n", admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=' . GWC_LFNDR_FIELDS_PAGE ) );
 printf( "  Finder  %s\n", get_permalink( $gwc_lfndr_page ) );
 
 echo "\n  Every address here is invented. See the note at the top of this file.\n";

@@ -2,13 +2,13 @@
 /**
  * The block, and the shortcode that will always exist alongside it.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'init', 'gwc_lfndr_register_block' );
-add_shortcode( 'location_finder', 'gwc_lfndr_shortcode' );
+add_shortcode( 'gwc_lfndr_finder', 'gwc_lfndr_shortcode' );
 
 /**
  * Register the finder block.

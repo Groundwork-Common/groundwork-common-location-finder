@@ -1700,7 +1700,7 @@
 	/* ── The renderer table ──────────────────────────────────────────────────
 	 * Keyed by the type's `js` value. A third-party field type registers here:
 	 *
-	 *   window.LocationFinder.renderers.mytype = function (value, field, ctx) {
+	 *   window.GwcLocationFinder.renderers.mytype = function (value, field, ctx) {
 	 *       return document.createTextNode(String(value)); // Node or null
 	 *   };
 	 *
@@ -2343,7 +2343,7 @@
 		} );
 	}
 
-	window.LocationFinder = {
+	window.GwcLocationFinder = {
 		Finder: Finder,
 		renderers: Finder.renderers,
 		boot: boot,

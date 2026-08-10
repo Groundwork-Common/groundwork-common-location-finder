@@ -3,7 +3,7 @@
  * Front-end rendering: the shell, the filter rail, the payload, and the
  * no-JavaScript list.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -33,7 +33,7 @@ function gwc_lfndr_render_finder( array $atts = array() ): string {
 			'label'    => '',
 		),
 		$atts,
-		'location_finder'
+		'gwc_lfndr_finder'
 	);
 
 	$locations = gwc_lfndr_get_locations();

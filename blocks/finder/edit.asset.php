@@ -12,7 +12,7 @@
  * is a block that fails to register with a console error about an undefined
  * property.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 return array(

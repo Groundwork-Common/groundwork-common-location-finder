@@ -2,7 +2,7 @@
 /**
  * Plugin settings: defaults and the single accessor.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

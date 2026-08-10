@@ -2,7 +2,7 @@
 /**
  * Which filters are worth showing, given the data that actually exists.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

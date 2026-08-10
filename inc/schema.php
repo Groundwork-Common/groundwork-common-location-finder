@@ -2,7 +2,7 @@
 /**
  * The field schema: storage, sanitization, versioning, and retirement.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

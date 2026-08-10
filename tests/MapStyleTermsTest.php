@@ -9,7 +9,7 @@
  * and features that live only in a registry entry get dropped the next time
  * somebody adds a style by copying the one above it.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class MapStyleTermsTest extends PHPUnit\Framework\TestCase {

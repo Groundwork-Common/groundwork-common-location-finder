@@ -2,7 +2,7 @@
 /**
  * Text domain loading and the lazy translated label tables.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

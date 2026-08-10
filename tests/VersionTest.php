@@ -19,7 +19,7 @@
  * A release touches all four by hand, so this exists to make forgetting one
  * fail loudly instead of shipping.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class VersionTest extends PHPUnit\Framework\TestCase {

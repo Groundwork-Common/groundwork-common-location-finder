@@ -2,7 +2,7 @@
 /**
  * Hour slot sanitization and the three-pass schedule formatter.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 use PHPUnit\Framework\TestCase;

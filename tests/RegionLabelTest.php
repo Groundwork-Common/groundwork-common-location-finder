@@ -9,7 +9,7 @@
  * leaving it a plain div. So the role and the label are one decision and must
  * never be able to drift apart.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class RegionLabelTest extends PHPUnit\Framework\TestCase {

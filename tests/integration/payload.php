@@ -13,7 +13,7 @@
  * regresses silently the moment somebody adds a get_post_meta() outside the
  * primed set.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 function vok( string $label, bool $pass, string $detail = '' ): void {

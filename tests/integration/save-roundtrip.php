@@ -17,7 +17,7 @@
  * It leaves no data behind: the schema option and the test location are both
  * removed at the end.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 function vok( string $label, bool $pass ): void {

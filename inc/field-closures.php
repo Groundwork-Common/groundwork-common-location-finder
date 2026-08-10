@@ -2,7 +2,7 @@
 /**
  * The temporary-closures field type.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

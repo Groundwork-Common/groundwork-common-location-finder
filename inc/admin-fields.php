@@ -2,12 +2,12 @@
 /**
  * Locations → Fields: the schema builder.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const GWC_LFNDR_FIELDS_PAGE = 'lfndr-fields';
+const GWC_LFNDR_FIELDS_PAGE = 'gwc-lfndr-fields';
 
 add_action( 'admin_post_gwc_lfndr_save_field', 'gwc_lfndr_handle_save_field' );
 add_action( 'admin_post_gwc_lfndr_save_orders', 'gwc_lfndr_handle_save_orders' );

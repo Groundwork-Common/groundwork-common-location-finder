@@ -2,7 +2,7 @@
 /**
  * Block render callback.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  *
  * @var array $attributes Block attributes.
  */

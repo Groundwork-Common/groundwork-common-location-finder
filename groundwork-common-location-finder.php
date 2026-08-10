@@ -13,7 +13,7 @@
  * Text Domain:       groundwork-common-location-finder
  * Domain Path:       /languages
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

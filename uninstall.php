@@ -31,7 +31,7 @@
  * of them goes. That asymmetry is on purpose: a schema can be rebuilt from the
  * Fields screen in an afternoon; two hundred locations' opening hours cannot.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;

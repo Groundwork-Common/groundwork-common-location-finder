@@ -22,7 +22,7 @@
  * only way to learn something is to lose data or file a bug, it belongs here;
  * if it is already legible from the form, it does not.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

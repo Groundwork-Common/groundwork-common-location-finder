@@ -2,7 +2,7 @@
 /**
  * The recurring-hours field type, and its schedule formatter.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

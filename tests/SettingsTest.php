@@ -8,7 +8,7 @@
  * "sanitize a CSS custom-property value". So this is hand-rolled, and it is
  * exactly the kind of hand-rolled security logic that most needs a test.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 use PHPUnit\Framework\TestCase;

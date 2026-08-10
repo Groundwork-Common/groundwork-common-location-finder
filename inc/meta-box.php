@@ -2,7 +2,7 @@
 /**
  * The schema-driven location meta box, and the save handler.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -79,7 +79,7 @@ function gwc_lfndr_render_meta_box( WP_Post $post ): void {
 				sprintf(
 					/* translators: %s: URL of the Fields screen. */
 					__( 'No fields are defined yet. <a href="%s">Add some on the Fields screen</a> and they will appear here.', 'groundwork-common-location-finder' ),
-					esc_url( admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=lfndr-fields' ) )
+					esc_url( admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=' . GWC_LFNDR_FIELDS_PAGE ) )
 				),
 				array( 'a' => array( 'href' => array() ) )
 			)

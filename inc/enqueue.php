@@ -2,7 +2,7 @@
 /**
  * Asset registration and the gates that decide when to enqueue.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -36,19 +36,19 @@ add_action( 'admin_enqueue_scripts', 'gwc_lfndr_admin_assets' );
  * Register the front-end handles, and run layer one of the gate.
  */
 function gwc_lfndr_register_front_assets(): void {
-	wp_register_style( 'leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.css', array(), '1.9.4' );
-	wp_register_script( 'leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.js', array(), '1.9.4', true );
+	wp_register_style( 'gwc-lfndr-leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.css', array(), '1.9.4' );
+	wp_register_script( 'gwc-lfndr-leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.js', array(), '1.9.4', true );
 
-	wp_register_style( 'lfndr-finder', GWC_LFNDR_URL . 'assets/css/location-finder.css', array( 'leaflet' ), GWC_LFNDR_VERSION );
+	wp_register_style( 'gwc-lfndr-finder', GWC_LFNDR_URL . 'assets/css/location-finder.css', array( 'gwc-lfndr-leaflet' ), GWC_LFNDR_VERSION );
 	wp_register_script(
-		'lfndr-finder',
+		'gwc-lfndr-finder',
 		GWC_LFNDR_URL . 'assets/js/location-finder.js',
-		array( 'leaflet', 'wp-i18n' ),
+		array( 'gwc-lfndr-leaflet', 'wp-i18n' ),
 		GWC_LFNDR_VERSION,
 		true
 	);
 
-	wp_set_script_translations( 'lfndr-finder', 'groundwork-common-location-finder', GWC_LFNDR_DIR . 'languages' );
+	wp_set_script_translations( 'gwc-lfndr-finder', 'groundwork-common-location-finder', GWC_LFNDR_DIR . 'languages' );
 
 	/* Attached to the handle, not printed directly: wp_add_inline_style() only
 	 * ever outputs alongside a style that actually gets enqueued, so a site
@@ -57,7 +57,7 @@ function gwc_lfndr_register_front_assets(): void {
 	 * protects this override without any extra code here. */
 	$overrides = gwc_lfndr_appearance_css();
 	if ( '' !== $overrides ) {
-		wp_add_inline_style( 'lfndr-finder', $overrides );
+		wp_add_inline_style( 'gwc-lfndr-finder', $overrides );
 	}
 
 	if ( gwc_lfndr_page_may_have_finder() ) {
@@ -69,10 +69,10 @@ function gwc_lfndr_register_front_assets(): void {
  * Enqueue everything a finder needs. Idempotent, and safe to call twice.
  */
 function gwc_lfndr_enqueue_finder(): void {
-	wp_enqueue_style( 'leaflet' );
-	wp_enqueue_script( 'leaflet' );
-	wp_enqueue_style( 'lfndr-finder' );
-	wp_enqueue_script( 'lfndr-finder' );
+	wp_enqueue_style( 'gwc-lfndr-leaflet' );
+	wp_enqueue_script( 'gwc-lfndr-leaflet' );
+	wp_enqueue_style( 'gwc-lfndr-finder' );
+	wp_enqueue_script( 'gwc-lfndr-finder' );
 }
 
 /**
@@ -87,13 +87,13 @@ function gwc_lfndr_page_may_have_finder(): bool {
 	$post = get_post();
 
 	if ( $post instanceof WP_Post ) {
-		if ( has_shortcode( $post->post_content, 'location_finder' ) ) {
+		if ( has_shortcode( $post->post_content, 'gwc_lfndr_finder' ) ) {
 			return true;
 		}
 		if ( has_block( 'groundwork-common-location-finder/finder', $post ) ) {
 			return true;
 		}
-		if ( has_block( 'core/shortcode', $post ) && false !== strpos( $post->post_content, 'location_finder' ) ) {
+		if ( has_block( 'core/shortcode', $post ) && false !== strpos( $post->post_content, 'gwc_lfndr_finder' ) ) {
 			return true;
 		}
 		/* A synced pattern keeps its content in a different post entirely, so
@@ -137,20 +137,20 @@ function gwc_lfndr_admin_assets( string $hook ): void {
 		return;
 	}
 
-	wp_enqueue_style( 'lfndr-admin', GWC_LFNDR_URL . 'assets/css/admin.css', array(), GWC_LFNDR_VERSION );
+	wp_enqueue_style( 'gwc-lfndr-admin', GWC_LFNDR_URL . 'assets/css/admin.css', array(), GWC_LFNDR_VERSION );
 
 	if ( $is_settings ) {
 		/* Not wp-color-picker: these fields accept currentColor and var(), which
 		 * it cannot represent and would overwrite. See the note in
 		 * gwc_lfndr_render_appearance_field(). */
-		wp_enqueue_script( 'lfndr-admin-color', GWC_LFNDR_URL . 'assets/js/admin-color.js', array(), GWC_LFNDR_VERSION, true );
+		wp_enqueue_script( 'gwc-lfndr-admin-color', GWC_LFNDR_URL . 'assets/js/admin-color.js', array(), GWC_LFNDR_VERSION, true );
 		return;
 	}
 
 	if ( $is_editor ) {
-		wp_enqueue_script( 'lfndr-admin-repeater', GWC_LFNDR_URL . 'assets/js/admin-repeater.js', array(), GWC_LFNDR_VERSION, true );
+		wp_enqueue_script( 'gwc-lfndr-admin-repeater', GWC_LFNDR_URL . 'assets/js/admin-repeater.js', array(), GWC_LFNDR_VERSION, true );
 		wp_localize_script(
-			'lfndr-admin-repeater',
+			'gwc-lfndr-admin-repeater',
 			'GWC_LFNDR_REPEATER',
 			array(
 				'added'   => __( 'Row added.', 'groundwork-common-location-finder' ),
@@ -158,9 +158,9 @@ function gwc_lfndr_admin_assets( string $hook ): void {
 			)
 		);
 
-		wp_enqueue_script( 'lfndr-admin-geocode', GWC_LFNDR_URL . 'assets/js/admin-geocode.js', array(), GWC_LFNDR_VERSION, true );
+		wp_enqueue_script( 'gwc-lfndr-admin-geocode', GWC_LFNDR_URL . 'assets/js/admin-geocode.js', array(), GWC_LFNDR_VERSION, true );
 		wp_localize_script(
-			'lfndr-admin-geocode',
+			'gwc-lfndr-admin-geocode',
 			'GWC_LFNDR_GEOCODE',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -180,7 +180,7 @@ function gwc_lfndr_admin_assets( string $hook ): void {
 		return;
 	}
 
-	wp_enqueue_script( 'lfndr-admin-fields', GWC_LFNDR_URL . 'assets/js/admin-fields.js', array(), GWC_LFNDR_VERSION, true );
+	wp_enqueue_script( 'gwc-lfndr-admin-fields', GWC_LFNDR_URL . 'assets/js/admin-fields.js', array(), GWC_LFNDR_VERSION, true );
 
 	$with_options = array();
 	foreach ( gwc_lfndr_field_types() as $slug => $meta ) {
@@ -193,7 +193,7 @@ function gwc_lfndr_admin_assets( string $hook ): void {
 	 * because they are positional-placeholder sentences that translators need
 	 * to reorder. Everything else in the admin JS is structural. */
 	wp_localize_script(
-		'lfndr-admin-fields',
+		'gwc-lfndr-admin-fields',
 		'GWC_LFNDR_ADMIN',
 		array(
 			'typesWithOptions' => $with_options,

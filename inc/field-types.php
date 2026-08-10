@@ -2,7 +2,7 @@
 /**
  * The field type registry, and the nine simple types.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Two optional extras: sanitize_settings for types with a settings bag worth
  * validating, and `js`, the key of the renderer in
- * window.LocationFinder.renderers.
+ * window.GwcLocationFinder.renderers.
  * ─────────────────────────────────────────────────────────────────────────── */
 
 /**
@@ -148,7 +148,7 @@ function gwc_lfndr_field_types(): array {
 	 *
 	 * A third party registering a type must also register a front-end renderer:
 	 *
-	 *     window.LocationFinder.renderers.mytype = function (value, field, ctx) {
+	 *     window.GwcLocationFinder.renderers.mytype = function (value, field, ctx) {
 	 *         return document.createTextNode(String(value)); // Node or null
 	 *     };
 	 *

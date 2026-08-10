@@ -2,7 +2,7 @@
 /**
  * Temporary-closure date validation and sanitization.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 use PHPUnit\Framework\TestCase;

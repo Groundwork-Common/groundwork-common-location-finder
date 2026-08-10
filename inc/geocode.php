@@ -2,7 +2,7 @@
 /**
  * The admin-side geocoding proxy.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

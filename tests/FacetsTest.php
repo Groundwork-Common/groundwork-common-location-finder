@@ -2,7 +2,7 @@
 /**
  * Which filters get rendered, given the data that exists.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 use PHPUnit\Framework\TestCase;

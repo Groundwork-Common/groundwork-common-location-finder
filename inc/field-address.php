@@ -2,7 +2,7 @@
 /**
  * The address field type: a composite of named subfields.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -7,7 +7,7 @@
  *     npx @wordpress/env run cli -- \
  *         wp eval-file wp-content/plugins/groundwork-common-location-finder/tests/integration/address.php
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 function vok( string $l, bool $p ): void {

@@ -2,7 +2,7 @@
 /**
  * Locations → Settings: appearance overrides, and the CSS they produce.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * page — the Appearance tab of the one real screen renders these — and the
  * submenu that used to carry this slug was removed once the tabs landed.
  */
-const GWC_LFNDR_SETTINGS_PAGE = 'lfndr-settings';
+const GWC_LFNDR_SETTINGS_PAGE = 'gwc-lfndr-settings';
 
 add_action( 'admin_init', 'gwc_lfndr_register_settings' );
 

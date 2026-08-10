@@ -31,9 +31,9 @@ ships. Leaflet 1.9.4 is vendored in `assets/leaflet/`.
 A block (**Location Finder**) or a shortcode:
 
 ```
-[location_finder]
-[location_finder show_map="no"]
-[location_finder height="600"]
+[gwc_lfndr_finder]
+[gwc_lfndr_finder show_map="no"]
+[gwc_lfndr_finder height="600"]
 ```
 
 The shortcode is permanent, not a deprecation path — page builders, widget areas
@@ -167,10 +167,10 @@ add_filter( 'gwc_lfndr_field_types', function ( array $types ): array {
 screen — the UI is derived from the registry, so a new type gets correct
 controls for free.
 
-Then a front-end renderer, in a script that depends on `lfndr-finder`:
+Then a front-end renderer, in a script that depends on `gwc-lfndr-finder`:
 
 ```js
-window.LocationFinder.renderers.rating = function ( value, field, ctx ) {
+window.GwcLocationFinder.renderers.rating = function ( value, field, ctx ) {
     return document.createTextNode( '★'.repeat( Number( value ) ) ); // Node or null
 };
 ```

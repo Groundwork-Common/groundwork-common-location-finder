@@ -13,7 +13,7 @@
  * did nothing for everyone else. That is the failure this test exists for, and
  * it is the step most easily forgotten in a hand update with no build step.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class LeafletVersionTest extends PHPUnit\Framework\TestCase {
@@ -39,7 +39,7 @@ class LeafletVersionTest extends PHPUnit\Framework\TestCase {
 		$bundled = $this->bundled_version();
 		$enqueue = (string) file_get_contents( dirname( __DIR__ ) . '/inc/enqueue.php' );
 
-		preg_match_all( "/'leaflet',\s*GWC_LFNDR_URL \. 'assets\/leaflet\/leaflet\.(?:css|js)',\s*array\([^)]*\),\s*'([^']+)'/", $enqueue, $m );
+		preg_match_all( "/'gwc-lfndr-leaflet',\s*GWC_LFNDR_URL \. 'assets\/leaflet\/leaflet\.(?:css|js)',\s*array\([^)]*\),\s*'([^']+)'/", $enqueue, $m );
 
 		$this->assertCount( 2, $m[1], 'Expected both the style and the script to register a version.' );
 

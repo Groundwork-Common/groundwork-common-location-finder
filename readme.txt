@@ -186,7 +186,7 @@ files.
 3. Add a location under **Locations → Add New**. Type an address and the
    coordinates fill in for you.
 4. Put the finder on a page with the **Location Finder** block, or the
-   `[location_finder]` shortcode.
+   `[gwc_lfndr_finder]` shortcode.
 
 == Frequently Asked Questions ==
 

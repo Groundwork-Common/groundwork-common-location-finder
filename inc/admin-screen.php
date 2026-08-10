@@ -23,7 +23,7 @@
  * rendered, on the same registry-drives-everything pattern the appearance
  * fields already use.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -2,7 +2,7 @@
 /**
  * Schema sanitization, ordering and retirement.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 use PHPUnit\Framework\TestCase;

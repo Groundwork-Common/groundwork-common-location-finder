@@ -12,7 +12,7 @@
  * So every test here submits what the form actually posts. A test that hand-
  * builds a tidier payload is testing a form that does not exist.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class PresetSaveTest extends PHPUnit\Framework\TestCase {

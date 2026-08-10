@@ -13,7 +13,7 @@
  * exact bug shipped in inc/enqueue.php and was found by reading, not by tooling,
  * so this scans for it instead.
  *
- * @package LocationFinder
+ * @package GroundworkCommonLocationFinder
  */
 
 class CompatTest extends PHPUnit\Framework\TestCase {
