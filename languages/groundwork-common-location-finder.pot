@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T23:59:20+00:00\n"
+"POT-Creation-Date: 2026-08-10T12:16:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: groundwork-common-location-finder\n"
@@ -36,11 +36,11 @@ msgstr ""
 
 #. Author URI of the plugin
 #: groundwork-common-location-finder.php
-msgid "https://groundworkcommon.com"
+msgid "https://www.groundworkcommon.com/"
 msgstr ""
 
 #: inc/admin-fields.php:42
-#: inc/admin-fields.php:763
+#: inc/admin-fields.php:783
 msgid "You do not have permission to configure location fields."
 msgstr ""
 
@@ -55,8 +55,8 @@ msgid "Fields"
 msgstr ""
 
 #: inc/admin-fields.php:88
-#: inc/admin-fields.php:539
-#: inc/admin-fields.php:686
+#: inc/admin-fields.php:550
+#: inc/admin-fields.php:697
 msgid "Add Field"
 msgstr ""
 
@@ -69,18 +69,18 @@ msgid "No fields yet. Add one to start describing your locations — an address 
 msgstr ""
 
 #: inc/admin-fields.php:106
-#: inc/admin-fields.php:553
+#: inc/admin-fields.php:564
 #: inc/field-address.php:325
 msgid "Label"
 msgstr ""
 
 #: inc/admin-fields.php:107
-#: inc/admin-fields.php:561
+#: inc/admin-fields.php:572
 msgid "Key"
 msgstr ""
 
 #: inc/admin-fields.php:108
-#: inc/admin-fields.php:576
+#: inc/admin-fields.php:587
 msgid "Type"
 msgstr ""
 
@@ -92,331 +92,331 @@ msgstr ""
 msgid "Used for"
 msgstr ""
 
-#: inc/admin-fields.php:119
+#: inc/admin-fields.php:130
 msgid "primary"
 msgstr ""
 
-#: inc/admin-fields.php:122
+#: inc/admin-fields.php:133
 msgid "Edit"
 msgstr ""
 
-#: inc/admin-fields.php:130
+#: inc/admin-fields.php:141
 msgid "Retire"
 msgstr ""
 
-#: inc/admin-fields.php:159
+#: inc/admin-fields.php:170
 msgid "Card and detail"
 msgstr ""
 
-#: inc/admin-fields.php:162
+#: inc/admin-fields.php:173
 msgid "Card only"
 msgstr ""
 
-#: inc/admin-fields.php:165
+#: inc/admin-fields.php:176
 msgid "Detail only"
 msgstr ""
 
-#: inc/admin-fields.php:167
+#: inc/admin-fields.php:178
 msgid "Hidden"
 msgstr ""
 
-#: inc/admin-fields.php:179
+#: inc/admin-fields.php:190
 msgid "Search"
 msgstr ""
 
-#: inc/admin-fields.php:182
-#: inc/render.php:145
+#: inc/admin-fields.php:193
+#: inc/render.php:149
 msgid "Filters"
 msgstr ""
 
-#: inc/admin-fields.php:211
+#: inc/admin-fields.php:222
 msgid "Address used for Directions"
 msgstr ""
 
-#: inc/admin-fields.php:212
+#: inc/admin-fields.php:223
 msgid "Also the address the editor's lookup fills in when you search for a place."
 msgstr ""
 
-#: inc/admin-fields.php:215
+#: inc/admin-fields.php:226
 msgid "Hours used for \"Open now\""
 msgstr ""
 
-#: inc/admin-fields.php:216
+#: inc/admin-fields.php:227
 msgid "The schedule the open/closed badge and the \"Open today\" filter are worked out from."
 msgstr ""
 
-#: inc/admin-fields.php:219
+#: inc/admin-fields.php:230
 msgid "Closures that suspend those hours"
 msgstr ""
 
-#: inc/admin-fields.php:220
+#: inc/admin-fields.php:231
 msgid "While one of these is active the location never reads as open, and the hours above are shown struck through."
 msgstr ""
 
-#: inc/admin-fields.php:253
+#: inc/admin-fields.php:264
 #: inc/field-types.php:673
 #: inc/field-types.php:737
 msgid "— none —"
 msgstr ""
 
-#: inc/admin-fields.php:315
+#: inc/admin-fields.php:326
 msgid "Display order"
 msgstr ""
 
-#: inc/admin-fields.php:317
+#: inc/admin-fields.php:328
 msgid "Use the arrow buttons to set the order. Move a field below the divider to hide it from that view — it stays defined, and stays searchable if you marked it so."
 msgstr ""
 
-#: inc/admin-fields.php:326
+#: inc/admin-fields.php:337
 msgid "Detail pane"
 msgstr ""
 
-#: inc/admin-fields.php:327
+#: inc/admin-fields.php:338
 msgid "Result card"
 msgstr ""
 
-#: inc/admin-fields.php:331
-#: inc/admin-fields.php:686
+#: inc/admin-fields.php:342
+#: inc/admin-fields.php:697
 msgid "Save Changes"
 msgstr ""
 
-#: inc/admin-fields.php:385
+#: inc/admin-fields.php:396
 msgid "Not shown here"
 msgstr ""
 
-#: inc/admin-fields.php:394
+#: inc/admin-fields.php:405
 msgid "Order, as a comma-separated list of keys:"
 msgstr ""
 
-#: inc/admin-fields.php:416
+#: inc/admin-fields.php:427
 msgid "built in"
 msgstr ""
 
 #. translators: %s: field label.
-#: inc/admin-fields.php:422
+#: inc/admin-fields.php:433
 #, php-format
 msgid "Move %s up"
 msgstr ""
 
 #. translators: %s: field label.
-#: inc/admin-fields.php:424
+#: inc/admin-fields.php:435
 #, php-format
 msgid "Move %s down"
 msgstr ""
 
-#: inc/admin-fields.php:427
+#: inc/admin-fields.php:438
 msgid "(not shown)"
 msgstr ""
 
-#: inc/admin-fields.php:442
+#: inc/admin-fields.php:453
 msgid "Location name"
 msgstr ""
 
-#: inc/admin-fields.php:444
+#: inc/admin-fields.php:455
 #: inc/cpt.php:109
 #: assets/js/location-finder.js:1617
 msgid "Coordinates"
 msgstr ""
 
-#: inc/admin-fields.php:446
+#: inc/admin-fields.php:457
 msgid "Distance from the visitor"
 msgstr ""
 
-#: inc/admin-fields.php:448
+#: inc/admin-fields.php:459
 msgid "Directions link"
 msgstr ""
 
-#: inc/admin-fields.php:466
+#: inc/admin-fields.php:477
 msgid "Retired fields"
 msgstr ""
 
-#: inc/admin-fields.php:468
+#: inc/admin-fields.php:479
 msgid "Retiring a field removes it from the editor and the front end but keeps everything already recorded. Restore it and the data comes back exactly as it was."
 msgstr ""
 
 #. translators: %s: date.
-#: inc/admin-fields.php:483
+#: inc/admin-fields.php:494
 #, php-format
 msgid "retired %s"
 msgstr ""
 
 #. translators: %d: number of locations.
-#: inc/admin-fields.php:495
+#: inc/admin-fields.php:506
 #, php-format
 msgid "Holds data on %d location"
 msgid_plural "Holds data on %d locations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/admin-fields.php:503
+#: inc/admin-fields.php:514
 msgid "Restore"
 msgstr ""
 
-#: inc/admin-fields.php:510
+#: inc/admin-fields.php:521
 msgid "Type DELETE to confirm"
 msgstr ""
 
-#: inc/admin-fields.php:513
+#: inc/admin-fields.php:524
 msgid "Type DELETE"
 msgstr ""
 
-#: inc/admin-fields.php:514
+#: inc/admin-fields.php:525
 msgid "Erase data"
 msgstr ""
 
-#: inc/admin-fields.php:539
+#: inc/admin-fields.php:550
 msgid "Edit Field"
 msgstr ""
 
-#: inc/admin-fields.php:557
+#: inc/admin-fields.php:568
 msgid "What editors and visitors see. Safe to change at any time."
 msgstr ""
 
-#: inc/admin-fields.php:566
+#: inc/admin-fields.php:577
 msgid "Keys cannot be changed. This is what already-saved locations use to find their data — renaming it would orphan every value. To change it, retire this field and add a new one."
 msgstr ""
 
-#: inc/admin-fields.php:570
+#: inc/admin-fields.php:581
 msgid "auto-generated from the label"
 msgstr ""
 
-#: inc/admin-fields.php:571
+#: inc/admin-fields.php:582
 msgid "Lowercase letters, numbers and underscores. Permanent once saved — leave it blank to generate one from the label."
 msgstr ""
 
-#: inc/admin-fields.php:587
+#: inc/admin-fields.php:598
 msgid "Types cannot be changed either — the stored values would no longer make sense."
 msgstr ""
 
-#: inc/admin-fields.php:592
+#: inc/admin-fields.php:603
 msgid "Editor hint"
 msgstr ""
 
-#: inc/admin-fields.php:596
+#: inc/admin-fields.php:607
 msgid "Group"
 msgstr ""
 
-#: inc/admin-fields.php:599
+#: inc/admin-fields.php:610
 msgid "Fields sharing a group name are collapsed together in the location editor."
 msgstr ""
 
-#: inc/admin-fields.php:605
+#: inc/admin-fields.php:616
 msgid "Choices"
 msgstr ""
 
-#: inc/admin-fields.php:609
+#: inc/admin-fields.php:620
 msgid "One per line. Write \"Diapers\" for a simple choice, or \"diapers | Diapers\" to set the stored value separately from the label. Stored values are permanent; labels can change."
 msgstr ""
 
-#: inc/admin-fields.php:616
+#: inc/admin-fields.php:627
 msgid "Where it appears"
 msgstr ""
 
-#: inc/admin-fields.php:619
+#: inc/admin-fields.php:630
 msgid "In the detail pane"
 msgstr ""
 
-#: inc/admin-fields.php:620
+#: inc/admin-fields.php:631
 msgid "On result cards"
 msgstr ""
 
-#: inc/admin-fields.php:625
+#: inc/admin-fields.php:636
 msgid "How visitors find it"
 msgstr ""
 
-#: inc/admin-fields.php:632
+#: inc/admin-fields.php:643
 msgid "Include in the search box"
 msgstr ""
 
-#: inc/admin-fields.php:635
+#: inc/admin-fields.php:646
 msgid "— not available for this type"
 msgstr ""
 
-#: inc/admin-fields.php:652
+#: inc/admin-fields.php:663
 msgid "Search runs in the visitor’s browser, so ticking this publishes the value in the page source — including for fields hidden from the card and detail pane. Leave it off for anything private."
 msgstr ""
 
-#: inc/admin-fields.php:657
+#: inc/admin-fields.php:668
 msgid "Offer as a filter"
 msgstr ""
 
-#: inc/admin-fields.php:660
+#: inc/admin-fields.php:671
 msgid "— only choice and yes/no fields can be filtered"
 msgstr ""
 
-#: inc/admin-fields.php:663
+#: inc/admin-fields.php:674
 msgid "A field can be searchable without being displayed — useful for an internal code visitors type but never see."
 msgstr ""
 
-#: inc/admin-fields.php:669
+#: inc/admin-fields.php:680
 msgid "Filter heading"
 msgstr ""
 
-#: inc/admin-fields.php:672
+#: inc/admin-fields.php:683
 msgid "Shown above this field's filters. Defaults to the label."
 msgstr ""
 
-#: inc/admin-fields.php:678
+#: inc/admin-fields.php:689
 msgid "Options for this type"
 msgstr ""
 
-#: inc/admin-fields.php:687
+#: inc/admin-fields.php:698
 msgid "Cancel"
 msgstr ""
 
-#: inc/admin-fields.php:1017
+#: inc/admin-fields.php:1049
 msgid "Field added."
 msgstr ""
 
-#: inc/admin-fields.php:1018
+#: inc/admin-fields.php:1050
 msgid "Field saved."
 msgstr ""
 
-#: inc/admin-fields.php:1019
+#: inc/admin-fields.php:1051
 msgid "Field retired. Its data is still there — restore it any time."
 msgstr ""
 
-#: inc/admin-fields.php:1020
+#: inc/admin-fields.php:1052
 msgid "Field restored, with everything it had recorded."
 msgstr ""
 
-#: inc/admin-fields.php:1021
+#: inc/admin-fields.php:1053
 msgid "Field and all of its data permanently deleted."
 msgstr ""
 
-#: inc/admin-fields.php:1022
+#: inc/admin-fields.php:1054
 msgid "Display order saved."
 msgstr ""
 
-#: inc/admin-fields.php:1023
+#: inc/admin-fields.php:1055
 msgid "Behavior saved."
 msgstr ""
 
-#: inc/admin-fields.php:1024
+#: inc/admin-fields.php:1056
 msgid "A field needs a label."
 msgstr ""
 
-#: inc/admin-fields.php:1025
+#: inc/admin-fields.php:1057
 msgid "That key cannot be used. Keys start with a letter and contain only lowercase letters, numbers and underscores."
 msgstr ""
 
-#: inc/admin-fields.php:1026
+#: inc/admin-fields.php:1058
 msgid "A field with that key already exists."
 msgstr ""
 
-#: inc/admin-fields.php:1027
+#: inc/admin-fields.php:1059
 msgid "A retired field already uses that key. Restore it instead — creating a new one would silently pick up the old data."
 msgstr ""
 
-#: inc/admin-fields.php:1028
+#: inc/admin-fields.php:1060
 msgid "That field type is not available. If it came from another plugin, that plugin may be deactivated."
 msgstr ""
 
-#: inc/admin-fields.php:1029
+#: inc/admin-fields.php:1061
 msgid "Nothing was deleted: type DELETE in the box to confirm."
 msgstr ""
 
-#: inc/admin-fields.php:1030
+#: inc/admin-fields.php:1062
 msgid "That field no longer exists."
 msgstr ""
 
@@ -588,7 +588,7 @@ msgid "Behavior"
 msgstr ""
 
 #: inc/admin-screen.php:42
-#: inc/admin-settings.php:1163
+#: inc/admin-settings.php:1169
 msgid "Appearance"
 msgstr ""
 
@@ -607,7 +607,7 @@ msgid "Settings"
 msgstr ""
 
 #: inc/admin-screen.php:88
-#: inc/admin-settings.php:1226
+#: inc/admin-settings.php:1232
 msgid "You do not have permission to change these settings."
 msgstr ""
 
@@ -1049,281 +1049,281 @@ msgstr ""
 msgid "Custom — set by a filter"
 msgstr ""
 
-#: inc/admin-settings.php:577
-msgid "Use the gwc_lfndr_tile_url and gwc_lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles."
+#: inc/admin-settings.php:581
+msgid "Set the tile URL and attribution with the plugin's tile filters. Choose this for a paid provider or self-hosted tiles."
 msgstr ""
 
-#: inc/admin-settings.php:619
+#: inc/admin-settings.php:623
 msgid "Map style"
 msgstr ""
 
-#: inc/admin-settings.php:621
+#: inc/admin-settings.php:625
 msgid "The basemap the pins sit on. Each option brings the attribution its provider requires."
 msgstr ""
 
-#: inc/admin-settings.php:627
+#: inc/admin-settings.php:631
 msgid "Accent color"
 msgstr ""
 
-#: inc/admin-settings.php:629
+#: inc/admin-settings.php:633
 msgid "Map pins and focus rings. Leave blank to match the surrounding text color — the right default in almost every theme. Accepts a hex code, a named color, or a theme variable such as var(--wp--preset--color--accent-1)."
 msgstr ""
 
-#: inc/admin-settings.php:635
+#: inc/admin-settings.php:639
 msgid "Map pin color"
 msgstr ""
 
-#: inc/admin-settings.php:636
+#: inc/admin-settings.php:640
 msgid "the accent color above"
 msgstr ""
 
-#: inc/admin-settings.php:637
+#: inc/admin-settings.php:641
 msgid "Set this when the pins want a different color from focus rings and chip borders — a brand color that reads well on a map is often not the one that reads well as text."
 msgstr ""
 
-#: inc/admin-settings.php:643
+#: inc/admin-settings.php:647
 msgid "Corner radius"
 msgstr ""
 
-#: inc/admin-settings.php:645
+#: inc/admin-settings.php:649
 msgid "Rounding on the map, the search suggestions and the detail pane. Filter chips, badges and buttons are always fully rounded regardless of this setting. A number with a unit, such as 8px or 0.5rem."
 msgstr ""
 
-#: inc/admin-settings.php:651
+#: inc/admin-settings.php:655
 msgid "Spacing"
 msgstr ""
 
-#: inc/admin-settings.php:653
+#: inc/admin-settings.php:657
 msgid "The base gap between the search box, filters, results and map."
 msgstr ""
 
-#: inc/admin-settings.php:659
+#: inc/admin-settings.php:663
 msgid "Map height"
 msgstr ""
 
-#: inc/admin-settings.php:661
+#: inc/admin-settings.php:665
 msgid "Map height where the map sits above the results — a phone, or a finder in a narrow column. The map is never taller than this, and never taller than a third of the screen. On a wide screen the map fills the finder instead, so use Panel height there. A single finder can still override this from its own block settings."
 msgstr ""
 
-#: inc/admin-settings.php:667
+#: inc/admin-settings.php:671
 msgid "Panel height"
 msgstr ""
 
-#: inc/admin-settings.php:669
+#: inc/admin-settings.php:673
 msgid "How tall the finder is on a wide screen, where the results and the map sit side by side inside one bordered frame. Both columns are this height; the result list scrolls within it."
 msgstr ""
 
-#: inc/admin-settings.php:677
+#: inc/admin-settings.php:681
 msgid "Finder background"
 msgstr ""
 
-#: inc/admin-settings.php:678
+#: inc/admin-settings.php:682
 msgid "the page background"
 msgstr ""
 
-#: inc/admin-settings.php:679
+#: inc/admin-settings.php:683
 msgid "The ground the whole finder sits on. Left blank it shows the page through, which is right for a finder embedded in a normal layout. Set it when the other colors here have moved away from the page — dark cards on a light page read as a light finder with dark parts rather than a dark finder."
 msgstr ""
 
-#: inc/admin-settings.php:685
+#: inc/admin-settings.php:689
 msgid "Finder text"
 msgstr ""
 
-#: inc/admin-settings.php:686
+#: inc/admin-settings.php:690
 msgid "inherited from the page"
 msgstr ""
 
-#: inc/admin-settings.php:687
+#: inc/admin-settings.php:691
 msgid "Set this whenever you set a finder background. Text inside the finder otherwise keeps the color the page gives it, which on a background that has moved away from the page means dark on dark."
 msgstr ""
 
-#: inc/admin-settings.php:693
+#: inc/admin-settings.php:697
 msgid "Finder padding"
 msgstr ""
 
-#: inc/admin-settings.php:695
+#: inc/admin-settings.php:699
 msgid "Space between the finder background and what sits on it. Set it whenever you set a background — without it the search box and cards run flat into the edge of the color. Leave blank when there is no background, so the finder stays aligned with the rest of the page."
 msgstr ""
 
-#: inc/admin-settings.php:701
+#: inc/admin-settings.php:705
 msgid "Surface color"
 msgstr ""
 
-#: inc/admin-settings.php:703
+#: inc/admin-settings.php:707
 msgid "Background of the search suggestions and the detail pane, and the ring drawn around each map pin. Leave blank to use the system background color, which already adapts to dark mode."
 msgstr ""
 
-#: inc/admin-settings.php:709
+#: inc/admin-settings.php:713
 msgid "Text on surface"
 msgstr ""
 
-#: inc/admin-settings.php:711
+#: inc/admin-settings.php:715
 msgid "Text color inside the detail pane and search suggestions. Leave blank to use the system text color."
 msgstr ""
 
-#: inc/admin-settings.php:717
+#: inc/admin-settings.php:721
 msgid "Open indicator"
 msgstr ""
 
-#: inc/admin-settings.php:719
+#: inc/admin-settings.php:723
 msgid "The lamp beside \"Open now\" and \"Open today\". Green by default, and one of only two places this plugin ships a color of its own — on a status light the color is the information rather than decoration."
 msgstr ""
 
-#: inc/admin-settings.php:725
+#: inc/admin-settings.php:729
 msgid "Closure notice color"
 msgstr ""
 
-#: inc/admin-settings.php:726
+#: inc/admin-settings.php:730
 msgid "the surrounding text color"
 msgstr ""
 
-#: inc/admin-settings.php:727
+#: inc/admin-settings.php:731
 msgid "The rule, tint, icon and text of the \"Temporarily closed\" notice, together. The plugin ships it in the text color rather than red, so that it cannot clash with a theme it has never seen — set a color here if you would rather it shouted."
 msgstr ""
 
-#: inc/admin-settings.php:733
+#: inc/admin-settings.php:737
 msgid "Border color"
 msgstr ""
 
-#: inc/admin-settings.php:734
+#: inc/admin-settings.php:738
 msgid "a soft tint of the text color"
 msgstr ""
 
-#: inc/admin-settings.php:735
+#: inc/admin-settings.php:739
 msgid "Badge outlines and dividers."
 msgstr ""
 
-#: inc/admin-settings.php:747
+#: inc/admin-settings.php:751
 msgid "Button & chip background"
 msgstr ""
 
-#: inc/admin-settings.php:748
+#: inc/admin-settings.php:752
 msgid "the theme's own button color"
 msgstr ""
 
-#: inc/admin-settings.php:749
+#: inc/admin-settings.php:753
 msgid "The search box, the filter chips, and every button — Filters, Full screen, Apply, Clear filters, Show all results. Leave blank to use the theme's own button styling."
 msgstr ""
 
-#: inc/admin-settings.php:757
+#: inc/admin-settings.php:761
 msgid "Button & chip text"
 msgstr ""
 
-#: inc/admin-settings.php:758
+#: inc/admin-settings.php:762
 msgid "the theme's own button text color"
 msgstr ""
 
-#: inc/admin-settings.php:759
+#: inc/admin-settings.php:763
 msgid "Set alongside the background above — a background with no matching text color can end up unreadable."
 msgstr ""
 
-#: inc/admin-settings.php:767
+#: inc/admin-settings.php:771
 msgid "Pressed button & chip background"
 msgstr ""
 
-#: inc/admin-settings.php:769
+#: inc/admin-settings.php:773
 msgid "A selected filter chip, the Filters button while its panel is open, or Full screen while it is open."
 msgstr ""
 
-#: inc/admin-settings.php:777
+#: inc/admin-settings.php:781
 msgid "Pressed button & chip text"
 msgstr ""
 
-#: inc/admin-settings.php:787
+#: inc/admin-settings.php:791
 msgid "Card background"
 msgstr ""
 
-#: inc/admin-settings.php:788
+#: inc/admin-settings.php:792
 msgid "a neutral system background"
 msgstr ""
 
-#: inc/admin-settings.php:789
+#: inc/admin-settings.php:793
 msgid "Each location in the result list. A card is a native button for keyboard and screen-reader purposes, but reads as content, not as an action — left blank it uses a neutral panel background rather than the theme's button color."
 msgstr ""
 
-#: inc/admin-settings.php:797
+#: inc/admin-settings.php:801
 msgid "Card text"
 msgstr ""
 
-#: inc/admin-settings.php:798
+#: inc/admin-settings.php:802
 msgid "a neutral system text color"
 msgstr ""
 
-#: inc/admin-settings.php:807
+#: inc/admin-settings.php:811
 msgid "Selected card background"
 msgstr ""
 
-#: inc/admin-settings.php:809
+#: inc/admin-settings.php:813
 msgid "The card currently open in the detail pane."
 msgstr ""
 
-#: inc/admin-settings.php:817
+#: inc/admin-settings.php:821
 msgid "Selected card text"
 msgstr ""
 
-#: inc/admin-settings.php:827
+#: inc/admin-settings.php:831
 msgid "Tag background"
 msgstr ""
 
-#: inc/admin-settings.php:829
+#: inc/admin-settings.php:833
 msgid "The small service, access and status pills shown on cards and in the detail pane."
 msgstr ""
 
-#: inc/admin-settings.php:837
+#: inc/admin-settings.php:841
 msgid "Tag text"
 msgstr ""
 
-#: inc/admin-settings.php:889
+#: inc/admin-settings.php:893
 msgid "Leave any field blank to keep the theme-matched default. Nothing on this screen is required — these exist for the times a theme's own colors or sizing are not quite right, without needing to edit CSS."
 msgstr ""
 
-#: inc/admin-settings.php:899
+#: inc/admin-settings.php:903
 msgid "Backgrounds and text for the parts of the finder that sit above the map or the result list, rather than inside them."
 msgstr ""
 
-#: inc/admin-settings.php:909
+#: inc/admin-settings.php:913
 msgid "Every clickable control in the finder is a native button, colored by your theme by default — the same principle as the rest of this plugin. Setting one of these overrides that styling just for the finder, and takes priority over the theme so the color you pick is the one you get."
 msgstr ""
 
 #. translators: %s: field label.
-#: inc/admin-settings.php:961
+#: inc/admin-settings.php:967
 #, php-format
 msgid "Pick a color for %s"
 msgstr ""
 
-#: inc/admin-settings.php:1009
+#: inc/admin-settings.php:1015
 msgid "Terms of use:"
 msgstr ""
 
-#: inc/admin-settings.php:1014
+#: inc/admin-settings.php:1020
 msgid "Read the terms"
 msgstr ""
 
-#: inc/admin-settings.php:1165
+#: inc/admin-settings.php:1171
 msgid "Pick a set and save. Every one clears WCAG AA for text contrast, and every value it writes stays editable underneath."
 msgstr ""
 
-#: inc/admin-settings.php:1169
+#: inc/admin-settings.php:1175
 msgid "Appearance preset"
 msgstr ""
 
-#: inc/admin-settings.php:1192
+#: inc/admin-settings.php:1198
 msgid "Custom"
 msgstr ""
 
-#: inc/admin-settings.php:1196
+#: inc/admin-settings.php:1202
 msgid "Your own values, set below. Selected because they match no preset."
 msgstr ""
 
-#: inc/admin-settings.php:1197
+#: inc/admin-settings.php:1203
 msgid "Edit any value below and it becomes Custom."
 msgstr ""
 
-#: inc/admin-settings.php:1230
+#: inc/admin-settings.php:1236
 msgid "Location Finder Settings"
 msgstr ""
 
-#: inc/admin-settings.php:1248
+#: inc/admin-settings.php:1254
 msgid "Fine-tune individual values"
 msgstr ""
 
@@ -1384,7 +1384,7 @@ msgid "Not on the map"
 msgstr ""
 
 #: inc/cpt.php:172
-#: inc/render.php:406
+#: inc/render.php:410
 #: assets/js/location-finder.js:1819
 msgid "Yes"
 msgstr ""
@@ -2039,7 +2039,7 @@ msgstr ""
 
 #. translators: %s: number of locations.
 #: inc/render.php:81
-#: inc/render.php:657
+#: inc/render.php:661
 #, php-format
 msgid "%s location"
 msgid_plural "%s locations"
@@ -2050,44 +2050,44 @@ msgstr[1] ""
 msgid "Map of locations"
 msgstr ""
 
-#: inc/render.php:129
+#: inc/render.php:131
 msgid "Search…"
 msgstr ""
 
-#: inc/render.php:152
+#: inc/render.php:156
 msgid "Clear filters"
 msgstr ""
 
-#: inc/render.php:241
+#: inc/render.php:245
 msgid "Any"
 msgstr ""
 
-#: inc/render.php:305
+#: inc/render.php:309
 msgid "Search by name"
 msgstr ""
 
 #. translators: %s: comma-separated list of field labels.
-#: inc/render.php:310
+#: inc/render.php:314
 #, php-format
 msgid "Search by name, %s"
 msgstr ""
 
-#: inc/render.php:334
+#: inc/render.php:338
 msgid "No locations have been added yet."
 msgstr ""
 
 #. translators: %s: number of locations.
-#: inc/render.php:659
+#: inc/render.php:663
 #, php-format
 msgid "%s locations"
 msgstr ""
 
-#: inc/render.php:661
+#: inc/render.php:665
 msgctxt "miles, abbreviated"
 msgid "mi"
 msgstr ""
 
-#: inc/render.php:662
+#: inc/render.php:666
 msgctxt "kilometers, abbreviated"
 msgid "km"
 msgstr ""
@@ -2192,20 +2192,21 @@ msgstr ""
 msgid "Back to all results"
 msgstr ""
 
-#: assets/js/location-finder.js:2191
+#. translators: %s: hostname of the map tile provider, e.g. tile.openstreetmap.org.
+#: assets/js/location-finder.js:2196
 #, js-format
 msgid "The map is loaded from %s. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2192
+#: assets/js/location-finder.js:2198
 msgid "The map is loaded from another website. Showing it will share your IP address with them."
 msgstr ""
 
-#: assets/js/location-finder.js:2197
+#: assets/js/location-finder.js:2204
 msgid "Show map"
 msgstr ""
 
-#: assets/js/location-finder.js:2205
+#: assets/js/location-finder.js:2212
 msgid "The list, search and filters work without it."
 msgstr ""
 

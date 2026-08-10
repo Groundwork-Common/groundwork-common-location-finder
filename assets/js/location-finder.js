@@ -2187,9 +2187,16 @@
 
 		/* Named explicitly. "A third party" is not something a person can weigh;
 		 * "tile.openstreetmap.org" is. */
-		var explain = host
-			? __( 'The map is loaded from %s. Showing it will share your IP address with them.', 'groundwork-common-location-finder' ).replace( '%s', host )
-			: __( 'The map is loaded from another website. Showing it will share your IP address with them.', 'groundwork-common-location-finder' );
+		/* Written as a statement rather than a ternary so the translators comment
+		 * is a leading comment of the call. Attached to a ternary branch, the
+		 * extractor does not associate it and make-pot warns. */
+		var explain;
+		if ( host ) {
+			/* translators: %s: hostname of the map tile provider, e.g. tile.openstreetmap.org. */
+			explain = __( 'The map is loaded from %s. Showing it will share your IP address with them.', 'groundwork-common-location-finder' ).replace( '%s', host );
+		} else {
+			explain = __( 'The map is loaded from another website. Showing it will share your IP address with them.', 'groundwork-common-location-finder' );
+		}
 
 		var button = el( 'button', {
 			type: 'button',

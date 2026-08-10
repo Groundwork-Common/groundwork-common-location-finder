@@ -574,7 +574,11 @@ function gwc_lfndr_map_styles(): array {
 			'url'         => '',
 			'attribution' => '',
 			'max_zoom'    => 19,
-			'note'        => __( 'Use the gwc_lfndr_tile_url and gwc_lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles.', 'groundwork-common-location-finder' ),
+			/* The two filter names are deliberately not in the string. A translator
+			 * cannot translate an identifier, and burying one in a sentence invites
+			 * a well-meaning translation that breaks the copy-paste. They are
+			 * documented in README.md under Hooks. */
+			'note'        => __( 'Set the tile URL and attribution with the plugin\'s tile filters. Choose this for a paid provider or self-hosted tiles.', 'groundwork-common-location-finder' ),
 		),
 	);
 }

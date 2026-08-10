@@ -124,9 +124,10 @@ they only load on a page that actually has a finder, and a theme's own CSS,
 loaded after, can still override them if it wants the final say.
 
 One honest limitation: custom properties cannot be used in `@media` width
-queries. The 860px breakpoint is a literal, changed with
-`add_filter( 'gwc_lfndr_breakpoint', … )` rather than a variable that would look
-adjustable and do nothing.
+queries, so the 860px breakpoint is a literal in the stylesheet. There is
+deliberately no `--lfndr-breakpoint` variable and no filter for it, because
+either would look adjustable and silently do nothing. Moving it means overriding
+the media queries in your own CSS.
 
 ## Hooks
 
