@@ -7,18 +7,18 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'add_meta_boxes', 'lfndr_add_meta_boxes' );
-add_action( 'save_post_' . LFNDR_POST_TYPE, 'lfndr_save_location', 10, 1 );
+add_action( 'add_meta_boxes', 'gwc_lfndr_add_meta_boxes' );
+add_action( 'save_post_' . GWC_LFNDR_POST_TYPE, 'gwc_lfndr_save_location', 10, 1 );
 
 /**
  * Register the single Location Details meta box.
  */
-function lfndr_add_meta_boxes(): void {
+function gwc_lfndr_add_meta_boxes(): void {
 	add_meta_box(
-		'lfndr_location_details',
+		'gwc_lfndr_location_details',
 		__( 'Location Details', 'groundwork-common-location-finder' ),
-		'lfndr_render_meta_box',
-		LFNDR_POST_TYPE,
+		'gwc_lfndr_render_meta_box',
+		GWC_LFNDR_POST_TYPE,
 		'normal',
 		'high'
 	);
@@ -29,15 +29,15 @@ function lfndr_add_meta_boxes(): void {
  *
  * @param WP_Post $post Post being edited.
  */
-function lfndr_render_meta_box( WP_Post $post ): void {
-	$schema = lfndr_get_schema();
-	$types  = lfndr_field_types();
+function gwc_lfndr_render_meta_box( WP_Post $post ): void {
+	$schema = gwc_lfndr_get_schema();
+	$types  = gwc_lfndr_field_types();
 
-	wp_nonce_field( 'lfndr_location_save', 'lfndr_nonce' );
+	wp_nonce_field( 'gwc_lfndr_location_save', 'gwc_lfndr_nonce' );
 
 	echo '<div class="lfndr-metabox">';
 
-	lfndr_render_coordinate_fields( $post );
+	gwc_lfndr_render_coordinate_fields( $post );
 
 	/* Fields are grouped into <details> by their `section`. A twenty-field
 	 * schema is otherwise an undifferentiated wall of inputs, and <details> gets
@@ -62,7 +62,7 @@ function lfndr_render_meta_box( WP_Post $post ): void {
 
 		echo '<table class="form-table" role="presentation"><tbody>';
 		foreach ( $fields as $field ) {
-			lfndr_render_meta_field( $post->ID, $field, $types );
+			gwc_lfndr_render_meta_field( $post->ID, $field, $types );
 		}
 		echo '</tbody></table>';
 
@@ -79,7 +79,7 @@ function lfndr_render_meta_box( WP_Post $post ): void {
 				sprintf(
 					/* translators: %s: URL of the Fields screen. */
 					__( 'No fields are defined yet. <a href="%s">Add some on the Fields screen</a> and they will appear here.', 'groundwork-common-location-finder' ),
-					esc_url( admin_url( 'edit.php?post_type=' . LFNDR_POST_TYPE . '&page=lfndr-fields' ) )
+					esc_url( admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=lfndr-fields' ) )
 				),
 				array( 'a' => array( 'href' => array() ) )
 			)
@@ -98,15 +98,15 @@ function lfndr_render_meta_box( WP_Post $post ): void {
  *
  * @param WP_Post $post Post being edited.
  */
-function lfndr_render_coordinate_fields( WP_Post $post ): void {
-	$lat = get_post_meta( $post->ID, '_lfndr_lat', true );
-	$lng = get_post_meta( $post->ID, '_lfndr_lng', true );
+function gwc_lfndr_render_coordinate_fields( WP_Post $post ): void {
+	$lat = get_post_meta( $post->ID, '_gwc_lfndr_lat', true );
+	$lng = get_post_meta( $post->ID, '_gwc_lfndr_lng', true );
 
 	/* When an address field exists, its own search box fills the coordinates as
 	 * a side effect and a second one here would be two controls doing one job.
 	 * When there is no address field at all — a schema that records only names
 	 * and points — this is the only way to avoid typing coordinates by hand. */
-	$has_address = null !== lfndr_primary_field( 'address' );
+	$has_address = null !== gwc_lfndr_primary_field( 'address' );
 	if ( ! $has_address ) {
 		?>
 		<div class="lfndr-address" data-lfndr-geocode-target="1">
@@ -128,7 +128,7 @@ function lfndr_render_coordinate_fields( WP_Post $post ): void {
 			<tr>
 				<th scope="row"><label for="lfndr-lat"><?php esc_html_e( 'Latitude', 'groundwork-common-location-finder' ); ?></label></th>
 				<td>
-					<input type="text" class="regular-text code" id="lfndr-lat" name="lfndr_lat"
+					<input type="text" class="regular-text code" id="lfndr-lat" name="gwc_lfndr_lat"
 						value="<?php echo esc_attr( (string) $lat ); ?>" inputmode="decimal"
 						placeholder="<?php esc_attr_e( 'e.g. 33.518600', 'groundwork-common-location-finder' ); ?>" />
 				</td>
@@ -136,7 +136,7 @@ function lfndr_render_coordinate_fields( WP_Post $post ): void {
 			<tr>
 				<th scope="row"><label for="lfndr-lng"><?php esc_html_e( 'Longitude', 'groundwork-common-location-finder' ); ?></label></th>
 				<td>
-					<input type="text" class="regular-text code" id="lfndr-lng" name="lfndr_lng"
+					<input type="text" class="regular-text code" id="lfndr-lng" name="gwc_lfndr_lng"
 						value="<?php echo esc_attr( (string) $lng ); ?>" inputmode="decimal"
 						placeholder="<?php esc_attr_e( 'e.g. -86.810400', 'groundwork-common-location-finder' ); ?>" />
 					<p class="description">
@@ -156,14 +156,14 @@ function lfndr_render_coordinate_fields( WP_Post $post ): void {
  * @param array $field   Field definition.
  * @param array $types   Type registry.
  */
-function lfndr_render_meta_field( int $post_id, array $field, array $types ): void {
+function gwc_lfndr_render_meta_field( int $post_id, array $field, array $types ): void {
 	$type = $types[ $field['type'] ] ?? null;
 	if ( null === $type || ! is_callable( $type['render_admin'] ) ) {
 		return;
 	}
 
-	$value = get_post_meta( $post_id, lfndr_field_meta_key( $field['key'] ), true );
-	$name  = 'lfndr_f[' . $field['key'] . ']';
+	$value = get_post_meta( $post_id, gwc_lfndr_field_meta_key( $field['key'] ), true );
+	$name  = 'gwc_lfndr_f[' . $field['key'] . ']';
 
 	echo '<tr>';
 	printf(
@@ -174,9 +174,9 @@ function lfndr_render_meta_field( int $post_id, array $field, array $types ): vo
 	);
 	echo '<td>';
 
-	/* The presence marker. See the note on lfndr_save_location(). */
+	/* The presence marker. See the note on gwc_lfndr_save_location(). */
 	if ( ! empty( $type['needs_present'] ) ) {
-		printf( '<input type="hidden" name="lfndr_present[%s]" value="1" />', esc_attr( $field['key'] ) );
+		printf( '<input type="hidden" name="gwc_lfndr_present[%s]" value="1" />', esc_attr( $field['key'] ) );
 	}
 
 	call_user_func( $type['render_admin'], $field, $value, $name );
@@ -195,11 +195,11 @@ function lfndr_render_meta_field( int $post_id, array $field, array $types ): vo
  *
  * @param int $post_id Post ID.
  */
-function lfndr_save_location( int $post_id ): void {
-	if ( ! isset( $_POST['lfndr_nonce'] ) ) {
+function gwc_lfndr_save_location( int $post_id ): void {
+	if ( ! isset( $_POST['gwc_lfndr_nonce'] ) ) {
 		return;
 	}
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lfndr_nonce'] ) ), 'lfndr_location_save' ) ) {
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwc_lfndr_nonce'] ) ), 'gwc_lfndr_location_save' ) ) {
 		return;
 	}
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -212,26 +212,26 @@ function lfndr_save_location( int $post_id ): void {
 		return;
 	}
 
-	if ( isset( $_POST['lfndr_lat'] ) ) {
-		update_post_meta( $post_id, '_lfndr_lat', lfndr_sanitize_coordinate( wp_unslash( $_POST['lfndr_lat'] ), 90.0 ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by lfndr_sanitize_coordinate().
+	if ( isset( $_POST['gwc_lfndr_lat'] ) ) {
+		update_post_meta( $post_id, '_gwc_lfndr_lat', gwc_lfndr_sanitize_coordinate( wp_unslash( $_POST['gwc_lfndr_lat'] ), 90.0 ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by gwc_lfndr_sanitize_coordinate().
 	}
-	if ( isset( $_POST['lfndr_lng'] ) ) {
-		update_post_meta( $post_id, '_lfndr_lng', lfndr_sanitize_coordinate( wp_unslash( $_POST['lfndr_lng'] ), 180.0 ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by lfndr_sanitize_coordinate().
+	if ( isset( $_POST['gwc_lfndr_lng'] ) ) {
+		update_post_meta( $post_id, '_gwc_lfndr_lng', gwc_lfndr_sanitize_coordinate( wp_unslash( $_POST['gwc_lfndr_lng'] ), 180.0 ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by gwc_lfndr_sanitize_coordinate().
 	}
 
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each value is sanitized by its type's registered sanitizer below.
-	$raw     = isset( $_POST['lfndr_f'] ) && is_array( $_POST['lfndr_f'] ) ? wp_unslash( $_POST['lfndr_f'] ) : array();
+	$raw     = isset( $_POST['gwc_lfndr_f'] ) && is_array( $_POST['gwc_lfndr_f'] ) ? wp_unslash( $_POST['gwc_lfndr_f'] ) : array();
 	$present = array();
-	if ( isset( $_POST['lfndr_present'] ) && is_array( $_POST['lfndr_present'] ) ) {
+	if ( isset( $_POST['gwc_lfndr_present'] ) && is_array( $_POST['gwc_lfndr_present'] ) ) {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- keys only, sanitized on the next line.
-		foreach ( array_keys( wp_unslash( $_POST['lfndr_present'] ) ) as $key ) {
+		foreach ( array_keys( wp_unslash( $_POST['gwc_lfndr_present'] ) ) as $key ) {
 			$present[ sanitize_key( $key ) ] = true;
 		}
 	}
 
-	$types = lfndr_field_types();
+	$types = gwc_lfndr_field_types();
 
-	foreach ( lfndr_get_schema()['fields'] as $field ) {
+	foreach ( gwc_lfndr_get_schema()['fields'] as $field ) {
 		$key  = $field['key'];
 		$type = $types[ $field['type'] ] ?? null;
 		if ( null === $type ) {
@@ -253,7 +253,7 @@ function lfndr_save_location( int $post_id ): void {
 		 * absent-because-not-rendered are the same bytes on the wire — so the
 		 * field could never be cleared once set.
 		 *
-		 * Hence the hidden lfndr_present[<key>] marker those controls emit. It
+		 * Hence the hidden gwc_lfndr_present[<key>] marker those controls emit. It
 		 * says "this field was on the form", which is exactly the fact the two
 		 * cases differ on.
 		 * ─────────────────────────────────────────────────────────────────── */
@@ -265,9 +265,9 @@ function lfndr_save_location( int $post_id ): void {
 		$value = call_user_func( $type['sanitize'], $raw[ $key ] ?? null, $field );
 
 		if ( call_user_func( $type['is_empty'], $value, $field ) ) {
-			delete_post_meta( $post_id, lfndr_field_meta_key( $key ) );
+			delete_post_meta( $post_id, gwc_lfndr_field_meta_key( $key ) );
 		} else {
-			update_post_meta( $post_id, lfndr_field_meta_key( $key ), $value );
+			update_post_meta( $post_id, gwc_lfndr_field_meta_key( $key ), $value );
 		}
 	}
 }
@@ -284,7 +284,7 @@ function lfndr_save_location( int $post_id ): void {
  * @param float $limit Absolute bound (90 or 180).
  * @return string
  */
-function lfndr_sanitize_coordinate( $raw, float $limit ): string {
+function gwc_lfndr_sanitize_coordinate( $raw, float $limit ): string {
 	$raw = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 	if ( '' === $raw || ! is_numeric( $raw ) ) {
 		return '';

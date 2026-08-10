@@ -78,7 +78,7 @@ up to an hour after the date changed.
 
 **Locations have no permalinks.** `public => false`. Giving every location a URL
 means shipping hundreds of thin pages that compete with the finder in search
-results and that nobody designed. `lfndr_post_type_args` is there for sites that
+results and that nobody designed. `gwc_lfndr_post_type_args` is there for sites that
 want them and will provide the templates.
 
 ## Theming
@@ -125,35 +125,35 @@ loaded after, can still override them if it wants the final say.
 
 One honest limitation: custom properties cannot be used in `@media` width
 queries. The 860px breakpoint is a literal, changed with
-`add_filter( 'lfndr_breakpoint', … )` rather than a variable that would look
+`add_filter( 'gwc_lfndr_breakpoint', … )` rather than a variable that would look
 adjustable and do nothing.
 
 ## Hooks
 
 | Hook | Purpose |
 |---|---|
-| `lfndr_field_types` | Register a field type (see below) |
-| `lfndr_field_label` | Translate an admin-entered label (WPML/Polylang) |
-| `lfndr_available_facets` | Adjust which filters render |
-| `lfndr_post_type_args` | Change the post type registration |
-| `lfndr_load_assets` | Force assets onto a page the gate cannot detect |
-| `lfndr_cache_ttl` | Payload cache lifetime, default one hour |
-| `lfndr_tile_url`, `lfndr_tile_attribution` | Map tiles |
-| `lfndr_schema_migrations` | Migrate a schema between versions |
-| `lfndr_schema_saved` | React to a schema change |
+| `gwc_lfndr_field_types` | Register a field type (see below) |
+| `gwc_lfndr_field_label` | Translate an admin-entered label (WPML/Polylang) |
+| `gwc_lfndr_available_facets` | Adjust which filters render |
+| `gwc_lfndr_post_type_args` | Change the post type registration |
+| `gwc_lfndr_load_assets` | Force assets onto a page the gate cannot detect |
+| `gwc_lfndr_cache_ttl` | Payload cache lifetime, default one hour |
+| `gwc_lfndr_tile_url`, `gwc_lfndr_tile_attribution` | Map tiles |
+| `gwc_lfndr_schema_migrations` | Migrate a schema between versions |
+| `gwc_lfndr_schema_saved` | React to a schema change |
 
 ### A custom field type
 
 Seven callables, all pure except the renderer:
 
 ```php
-add_filter( 'lfndr_field_types', function ( array $types ): array {
+add_filter( 'gwc_lfndr_field_types', function ( array $types ): array {
     $types['rating'] = array(
         'label'        => 'Rating',
         'render_admin' => 'my_render_rating',  // (array $field, $value, string $name): void
         'sanitize'     => 'my_sanitize_rating',// ($raw, array $field): mixed
         'is_empty'     => 'my_rating_is_empty',// ($value, array $field): bool
-        'to_payload'   => 'lfndr_payload_scalar',
+        'to_payload'   => 'gwc_lfndr_payload_scalar',
         'search_text'  => null,                // null = cannot be searched
         'facet_tokens' => null,                // null = cannot be filtered
         'schema_form'  => 'my_rating_settings',
@@ -187,7 +187,7 @@ Two, both disclosed because they must be:
 - **OpenStreetMap tiles** (`tile.openstreetmap.org`), requested by visitors'
   browsers. Donated infrastructure with a
   [usage policy](https://operations.osmfoundation.org/policies/tiles/). A busy
-  site should point `lfndr_tile_url` at a paid provider or self-host.
+  site should point `gwc_lfndr_tile_url` at a paid provider or self-host.
 - **Nominatim** (`nominatim.openstreetmap.org`), requested by the *server*, only
   when an editor uses the address lookup. Rate limited to one request per second
   per user, and the response is whitelist-mapped rather than forwarded.
@@ -253,9 +253,9 @@ npx @wordpress/env run cli -- wp eval-file wp-content/plugins/groundwork-common-
 
 Six of Riverbend Food Bank's sites across the Birmingham, Alabama metro, plus a **Find a pantry** page carrying the block. They are chosen to put every branch of the card and the detail pane on screen at once: a weekday pantry that closes early on Friday, a Saturday-only one with a second address line, a fridge open every day and with *no phone number*, a mobile round that runs the 1st and 3rd Tuesday only, an evening site with an open-ended closing time, and a lunch service on Mon/Wed/Fri.
 
-The values go through `lfndr_sanitize_address()` and `lfndr_sanitize_hours()` rather than being written as literal arrays. An address and an hours schedule are both stored in a shape that is the sanitizer's business, and a hand-written fixture is correct only until that shape changes — after which it produces a demo site that is subtly wrong in a way no test catches.
+The values go through `gwc_lfndr_sanitize_address()` and `gwc_lfndr_sanitize_hours()` rather than being written as literal arrays. An address and an hours schedule are both stored in a shape that is the sanitizer's business, and a hand-written fixture is correct only until that shape changes — after which it produces a demo site that is subtly wrong in a way no test catches.
 
-Re-runnable, and it removes only what it made: everything is tagged, so a location you added by hand survives. It reads the schema and never writes it — `lfndr_get_schema()` installs the three-field default on a site that has none and leaves an existing configuration alone, and on a demo site the fields somebody just built by hand are the work you least want thrown away. It refuses to run unless `WP_ENVIRONMENT_TYPE` is `local` or `development`.
+Re-runnable, and it removes only what it made: everything is tagged, so a location you added by hand survives. It reads the schema and never writes it — `gwc_lfndr_get_schema()` installs the three-field default on a site that has none and leaves an existing configuration alone, and on a demo site the fields somebody just built by hand are the work you least want thrown away. It refuses to run unless `WP_ENVIRONMENT_TYPE` is `local` or `development`.
 
 Every address in it is invented and every number is in the reserved 555 exchange. The metro matches the sibling plugins' fixtures on purpose — all three are demonstrated on one beta site, and a food bank whose volunteers are in Birmingham but whose pantries are in Portland reads as three unrelated demos rather than one organisation.
 

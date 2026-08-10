@@ -22,24 +22,24 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 	 * @param array<string, mixed> $settings Settings to apply.
 	 */
 	private function with_settings( array $settings ): void {
-		update_option( 'lfndr_settings', $settings );
-		lfndr_settings_cache( null, true );
+		update_option( 'gwc_lfndr_settings', $settings );
+		gwc_lfndr_settings_cache( null, true );
 	}
 
 	public function test_the_shipped_default_is_a_third_party(): void {
 		// If this ever flips, the gate silently stops applying to a fresh install.
 		$this->with_settings( array( 'map_style' => 'osm' ) );
-		$this->assertTrue( lfndr_tiles_are_third_party() );
+		$this->assertTrue( gwc_lfndr_tiles_are_third_party() );
 	}
 
 	public function test_every_bundled_remote_style_counts_as_third_party(): void {
-		foreach ( lfndr_map_styles() as $key => $style ) {
+		foreach ( gwc_lfndr_map_styles() as $key => $style ) {
 			if ( '' === $style['url'] ) {
 				continue; // 'custom' resolves from settings, covered separately.
 			}
 			$this->with_settings( array( 'map_style' => $key ) );
 			$this->assertTrue(
-				lfndr_tiles_are_third_party(),
+				gwc_lfndr_tiles_are_third_party(),
 				sprintf( 'Style "%s" points off-site but is not treated as a third party.', $key )
 			);
 		}
@@ -52,7 +52,7 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 				'tile_url'  => 'https://example.test/wp-content/uploads/tiles/{z}/{x}/{y}.png',
 			)
 		);
-		$this->assertFalse( lfndr_tiles_are_third_party() );
+		$this->assertFalse( gwc_lfndr_tiles_are_third_party() );
 	}
 
 	public function test_a_relative_tile_path_is_not_a_third_party(): void {
@@ -62,7 +62,7 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 				'tile_url'  => '/wp-content/uploads/tiles/{z}/{x}/{y}.png',
 			)
 		);
-		$this->assertFalse( lfndr_tiles_are_third_party() );
+		$this->assertFalse( gwc_lfndr_tiles_are_third_party() );
 	}
 
 	public function test_another_vendor_is_a_third_party_even_when_custom(): void {
@@ -72,7 +72,7 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 				'tile_url'  => 'https://tiles.vendor.io/{z}/{x}/{y}.png',
 			)
 		);
-		$this->assertTrue( lfndr_tiles_are_third_party() );
+		$this->assertTrue( gwc_lfndr_tiles_are_third_party() );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 	 */
 	public function test_the_named_host_is_a_real_hostname(): void {
 		$this->with_settings( array( 'map_style' => 'dark' ) );
-		$host = lfndr_tile_host();
+		$host = gwc_lfndr_tile_host();
 
 		$this->assertSame( 'basemaps.cartocdn.com', $host );
 		$this->assertStringNotContainsString( '{', $host );
@@ -90,6 +90,6 @@ class TileConsentTest extends PHPUnit\Framework\TestCase {
 
 	public function test_the_setting_defaults_to_on(): void {
 		$this->with_settings( array() );
-		$this->assertTrue( (bool) lfndr_setting( 'tile_consent' ) );
+		$this->assertTrue( (bool) gwc_lfndr_setting( 'tile_consent' ) );
 	}
 }

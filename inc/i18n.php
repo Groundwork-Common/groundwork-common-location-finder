@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /* ── Why these are functions and not constants ───────────────────────────────
  * The obvious way to write a weekday table is:
  *
- *     const LFNDR_HOUR_DAYS = [ 1 => [ 'Monday', 'Mon' ], … ];
+ *     const GWC_LFNDR_HOUR_DAYS = [ 1 => [ 'Monday', 'Mon' ], … ];
  *
  * which is what the plugin this one descends from did, and which is wrong twice
  * over. A const cannot hold the result of __(), so the table is permanently
@@ -55,7 +55,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array<int, array{0: string, 1: string}> [ full, abbreviated ]
  */
-function lfndr_hour_days(): array {
+function gwc_lfndr_hour_days(): array {
 	static $days = null;
 	if ( null !== $days ) {
 		return $days;
@@ -81,7 +81,7 @@ function lfndr_hour_days(): array {
  *
  * @return array<string, string>
  */
-function lfndr_hour_freqs(): array {
+function gwc_lfndr_hour_freqs(): array {
 	static $freqs = null;
 	if ( null !== $freqs ) {
 		return $freqs;
@@ -98,7 +98,7 @@ function lfndr_hour_freqs(): array {
 }
 
 /** Sort order for frequencies: weekly first, then through the month. */
-const LFNDR_HOUR_FREQ_ORDER = array(
+const GWC_LFNDR_HOUR_FREQ_ORDER = array(
 	'weekly' => 0,
 	'1st'    => 1,
 	'2nd'    => 2,
@@ -116,7 +116,7 @@ const LFNDR_HOUR_FREQ_ORDER = array(
  *
  * @return array<string, string>
  */
-function lfndr_address_subfields(): array {
+function gwc_lfndr_address_subfields(): array {
 	static $subfields = null;
 	if ( null !== $subfields ) {
 		return $subfields;

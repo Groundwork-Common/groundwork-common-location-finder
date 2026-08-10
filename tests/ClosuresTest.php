@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 final class ClosuresTest extends TestCase {
 
 	protected function setUp(): void {
-		lfndr_test_reset();
+		gwc_lfndr_test_reset();
 	}
 
 	/** A closures field with the given settings. */
@@ -19,13 +19,13 @@ final class ClosuresTest extends TestCase {
 			'key'      => 'closures',
 			'type'     => 'closures',
 			'label'    => 'Closures',
-			'settings' => lfndr_settings_closures( $settings ),
+			'settings' => gwc_lfndr_settings_closures( $settings ),
 		);
 	}
 
 	/** A date offset from today, in the finder's timezone. */
 	private function day( int $offset ): string {
-		return ( new DateTimeImmutable( 'now', lfndr_timezone() ) )
+		return ( new DateTimeImmutable( 'now', gwc_lfndr_timezone() ) )
 			->modify( sprintf( '%+d days', $offset ) )
 			->format( 'Y-m-d' );
 	}
@@ -33,34 +33,34 @@ final class ClosuresTest extends TestCase {
 	/* ── Date validation ────────────────────────────────────────────────── */
 
 	public function test_a_real_date_survives(): void {
-		$this->assertSame( '2026-12-24', lfndr_sanitize_closure_date( '2026-12-24' ) );
+		$this->assertSame( '2026-12-24', gwc_lfndr_sanitize_closure_date( '2026-12-24' ) );
 	}
 
 	public function test_a_date_that_does_not_exist_is_rejected(): void {
 		// The whole reason for the round-trip check: DateTime accepts
 		// 2026-02-30 and rolls it forward to March 2nd, so a typo would become
 		// a real closure on days nobody chose, with nothing to show for it.
-		$this->assertSame( '', lfndr_sanitize_closure_date( '2026-02-30' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( '2026-13-01' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( '2026-04-31' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '2026-02-30' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '2026-13-01' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '2026-04-31' ) );
 	}
 
 	public function test_a_leap_day_is_accepted_only_in_a_leap_year(): void {
-		$this->assertSame( '2028-02-29', lfndr_sanitize_closure_date( '2028-02-29' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( '2027-02-29' ) );
+		$this->assertSame( '2028-02-29', gwc_lfndr_sanitize_closure_date( '2028-02-29' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '2027-02-29' ) );
 	}
 
 	public function test_other_date_formats_are_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_closure_date( '12/24/2026' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( '2026-12-24T10:00:00Z' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( 'tomorrow' ) );
-		$this->assertSame( '', lfndr_sanitize_closure_date( '' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '12/24/2026' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '2026-12-24T10:00:00Z' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( 'tomorrow' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_closure_date( '' ) );
 	}
 
 	/* ── Row sanitization ───────────────────────────────────────────────── */
 
 	public function test_a_missing_end_date_makes_it_a_single_day(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'start'  => $this->day( 3 ),
@@ -74,7 +74,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_an_end_before_the_start_is_dropped(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'start' => $this->day( 10 ),
@@ -89,7 +89,7 @@ final class ClosuresTest extends TestCase {
 	public function test_a_closure_that_has_already_ended_is_dropped(): void {
 		// They cannot affect anything, they accumulate forever, and each one is
 		// a row the browser re-checks on every render.
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'start' => $this->day( -30 ),
@@ -108,7 +108,7 @@ final class ClosuresTest extends TestCase {
 
 	public function test_a_closure_ending_today_is_kept(): void {
 		// It is still in force for the rest of the day.
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'start' => $this->day( -3 ),
@@ -121,7 +121,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_rows_without_a_start_are_dropped(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'end'    => $this->day( 5 ),
@@ -135,7 +135,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_rows_are_sorted_by_date(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array( 'start' => $this->day( 20 ) ),
 				array( 'start' => $this->day( 5 ) ),
@@ -150,7 +150,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_the_reason_is_truncated_to_the_configured_length(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array(
 					'start'  => $this->day( 1 ),
@@ -163,7 +163,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_max_rows_caps_the_list(): void {
-		$rows = lfndr_sanitize_closures(
+		$rows = gwc_lfndr_sanitize_closures(
 			array(
 				array( 'start' => $this->day( 1 ) ),
 				array( 'start' => $this->day( 2 ) ),
@@ -186,7 +186,7 @@ final class ClosuresTest extends TestCase {
 				'reason' => 'Pipes',
 			),
 		);
-		$payload = lfndr_payload_closures( $rows );
+		$payload = gwc_lfndr_payload_closures( $rows );
 
 		$this->assertSame( $rows, $payload );
 		// An "active" flag baked in here would still be asserting yesterday's
@@ -198,7 +198,7 @@ final class ClosuresTest extends TestCase {
 	/* ── Settings ───────────────────────────────────────────────────────── */
 
 	public function test_settings_are_clamped_to_sane_ranges(): void {
-		$settings = lfndr_settings_closures(
+		$settings = gwc_lfndr_settings_closures(
 			array(
 				'reason_max'     => 5,
 				'lookahead_days' => 9999,
@@ -218,7 +218,7 @@ final class ClosuresTest extends TestCase {
 	 * ─────────────────────────────────────────────────────────────────────── */
 
 	public function test_the_closures_role_holds_a_field_key(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
 					array(
@@ -234,7 +234,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_a_role_survives_when_it_names_a_field_of_the_right_type(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
 					array(
@@ -261,7 +261,7 @@ final class ClosuresTest extends TestCase {
 	public function test_a_role_is_cleared_when_its_field_is_gone(): void {
 		// Retire the hours field and the role has to go with it, or behavior
 		// is driven off a field the Fields screen no longer lists.
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
 					array(
@@ -277,7 +277,7 @@ final class ClosuresTest extends TestCase {
 	}
 
 	public function test_a_role_will_not_point_at_a_field_of_the_wrong_type(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
 					array(
@@ -295,7 +295,7 @@ final class ClosuresTest extends TestCase {
 	public function test_closures_settings_no_longer_carry_suspends(): void {
 		// The pairing moved to the schema's roles; a stale stored value must not
 		// travel back in through the settings sanitizer.
-		$settings = lfndr_settings_closures(
+		$settings = gwc_lfndr_settings_closures(
 			array(
 				'suspends' => 'hours',
 				'primary'  => true,

@@ -1050,7 +1050,7 @@ msgid "Custom — set by a filter"
 msgstr ""
 
 #: inc/admin-settings.php:577
-msgid "Use the lfndr_tile_url and lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles."
+msgid "Use the gwc_lfndr_tile_url and gwc_lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles."
 msgstr ""
 
 #: inc/admin-settings.php:619

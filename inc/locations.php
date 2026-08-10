@@ -7,22 +7,22 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const LFNDR_LOCATIONS_TRANSIENT = 'lfndr_locations';
+const GWC_LFNDR_LOCATIONS_TRANSIENT = 'gwc_lfndr_locations';
 
 /**
  * Every published location, shaped for the front end.
  *
  * @return array
  */
-function lfndr_get_locations(): array {
-	$cached = get_transient( LFNDR_LOCATIONS_TRANSIENT );
+function gwc_lfndr_get_locations(): array {
+	$cached = get_transient( GWC_LFNDR_LOCATIONS_TRANSIENT );
 	if ( false !== $cached && is_array( $cached ) ) {
 		return $cached;
 	}
 
 	$posts = get_posts(
 		array(
-			'post_type'        => LFNDR_POST_TYPE,
+			'post_type'        => GWC_LFNDR_POST_TYPE,
 			'post_status'      => 'publish',
 			'numberposts'      => -1,
 			'orderby'          => 'title',
@@ -36,7 +36,7 @@ function lfndr_get_locations(): array {
 		/* Cache the empty answer too. A site mid-setup would otherwise run the
 		 * full query on every page view of the finder, which is the one moment
 		 * somebody is reloading it repeatedly. */
-		set_transient( LFNDR_LOCATIONS_TRANSIENT, array(), lfndr_cache_ttl() );
+		set_transient( GWC_LFNDR_LOCATIONS_TRANSIENT, array(), gwc_lfndr_cache_ttl() );
 		return array();
 	}
 
@@ -46,15 +46,15 @@ function lfndr_get_locations(): array {
 	 * This is the single line standing between this function and an N+1. */
 	update_postmeta_cache( wp_list_pluck( $posts, 'ID' ) );
 
-	$schema = lfndr_get_schema();
-	$types  = lfndr_field_types();
+	$schema = gwc_lfndr_get_schema();
+	$types  = gwc_lfndr_field_types();
 	$out    = array();
 
 	foreach ( $posts as $post ) {
-		$out[] = lfndr_build_location( $post, $schema, $types );
+		$out[] = gwc_lfndr_build_location( $post, $schema, $types );
 	}
 
-	set_transient( LFNDR_LOCATIONS_TRANSIENT, $out, lfndr_cache_ttl() );
+	set_transient( GWC_LFNDR_LOCATIONS_TRANSIENT, $out, gwc_lfndr_cache_ttl() );
 
 	return $out;
 }
@@ -64,13 +64,13 @@ function lfndr_get_locations(): array {
  *
  * @return int
  */
-function lfndr_cache_ttl(): int {
+function gwc_lfndr_cache_ttl(): int {
 	/**
 	 * Filter the location payload cache lifetime, in seconds.
 	 *
 	 * @param int $ttl Seconds.
 	 */
-	return (int) apply_filters( 'lfndr_cache_ttl', HOUR_IN_SECONDS );
+	return (int) apply_filters( 'gwc_lfndr_cache_ttl', HOUR_IN_SECONDS );
 }
 
 /**
@@ -81,7 +81,7 @@ function lfndr_cache_ttl(): int {
  * @param array   $types  Type registry.
  * @return array
  */
-function lfndr_build_location( WP_Post $post, array $schema, array $types ): array {
+function gwc_lfndr_build_location( WP_Post $post, array $schema, array $types ): array {
 	$fields = array();
 	$facets = array();
 	$search = array( $post->post_title );
@@ -92,7 +92,7 @@ function lfndr_build_location( WP_Post $post, array $schema, array $types ): arr
 			continue;
 		}
 
-		$value = get_post_meta( $post->ID, lfndr_field_meta_key( $field['key'] ), true );
+		$value = get_post_meta( $post->ID, gwc_lfndr_field_meta_key( $field['key'] ), true );
 		if ( call_user_func( $type['is_empty'], $value, $field ) ) {
 			continue;
 		}
@@ -119,8 +119,8 @@ function lfndr_build_location( WP_Post $post, array $schema, array $types ): arr
 		}
 	}
 
-	$lat = get_post_meta( $post->ID, '_lfndr_lat', true );
-	$lng = get_post_meta( $post->ID, '_lfndr_lng', true );
+	$lat = get_post_meta( $post->ID, '_gwc_lfndr_lat', true );
+	$lng = get_post_meta( $post->ID, '_gwc_lfndr_lng', true );
 
 	return array(
 		'id'     => (int) $post->ID,
@@ -140,7 +140,7 @@ function lfndr_build_location( WP_Post $post, array $schema, array $types ): arr
 		/* One lowercased blob, precomputed. The alternative is walking the
 		 * schema for every location on every keystroke; this makes searching a
 		 * single indexOf per location and costs about twenty lines here. */
-		'search' => lfndr_search_blob( $search ),
+		'search' => gwc_lfndr_search_blob( $search ),
 		'facets' => $facets,
 	);
 }
@@ -151,7 +151,7 @@ function lfndr_build_location( WP_Post $post, array $schema, array $types ): arr
  * @param array $parts Text fragments.
  * @return string
  */
-function lfndr_search_blob( array $parts ): string {
+function gwc_lfndr_search_blob( array $parts ): string {
 	$text = implode( ' ', array_filter( array_map( 'strval', $parts ) ) );
 	$text = wp_strip_all_tags( $text );
 	$text = preg_replace( '/\s+/u', ' ', mb_strtolower( $text ) );
@@ -161,9 +161,9 @@ function lfndr_search_blob( array $parts ): string {
 
 /* ── Invalidation ───────────────────────────────────────────────────────── */
 
-add_action( 'save_post_' . LFNDR_POST_TYPE, 'lfndr_flush_locations', 20 );
-add_action( 'deleted_post', 'lfndr_flush_locations_for_post', 20, 2 );
-add_action( 'lfndr_schema_saved', 'lfndr_flush_locations' );
+add_action( 'save_post_' . GWC_LFNDR_POST_TYPE, 'gwc_lfndr_flush_locations', 20 );
+add_action( 'deleted_post', 'gwc_lfndr_flush_locations_for_post', 20, 2 );
+add_action( 'gwc_lfndr_schema_saved', 'gwc_lfndr_flush_locations' );
 
 /* Both hooks, not just update_option_*. WordPress fires add_option_{$name} the
  * first time an option is written and update_option_{$name} every time after —
@@ -171,14 +171,14 @@ add_action( 'lfndr_schema_saved', 'lfndr_flush_locations' );
  * site that has never opened the settings screen, silently leaves an hour of
  * stale payload behind. That is the save most likely to be followed by someone
  * reloading the front end to see whether it worked. */
-add_action( 'update_option_' . LFNDR_SETTINGS_OPTION, 'lfndr_flush_locations' );
-add_action( 'add_option_' . LFNDR_SETTINGS_OPTION, 'lfndr_flush_locations' );
+add_action( 'update_option_' . GWC_LFNDR_SETTINGS_OPTION, 'gwc_lfndr_flush_locations' );
+add_action( 'add_option_' . GWC_LFNDR_SETTINGS_OPTION, 'gwc_lfndr_flush_locations' );
 
 /**
  * Drop the cached payload.
  */
-function lfndr_flush_locations(): void {
-	delete_transient( LFNDR_LOCATIONS_TRANSIENT );
+function gwc_lfndr_flush_locations(): void {
+	delete_transient( GWC_LFNDR_LOCATIONS_TRANSIENT );
 }
 
 /**
@@ -191,8 +191,8 @@ function lfndr_flush_locations(): void {
  * @param int     $post_id Post ID.
  * @param WP_Post $post    Post object.
  */
-function lfndr_flush_locations_for_post( int $post_id, $post = null ): void {
-	if ( $post instanceof WP_Post && LFNDR_POST_TYPE === $post->post_type ) {
-		lfndr_flush_locations();
+function gwc_lfndr_flush_locations_for_post( int $post_id, $post = null ): void {
+	if ( $post instanceof WP_Post && GWC_LFNDR_POST_TYPE === $post->post_type ) {
+		gwc_lfndr_flush_locations();
 	}
 }

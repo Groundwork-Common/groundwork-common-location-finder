@@ -19,7 +19,7 @@
 function vok( string $label, bool $pass, string $detail = '' ): void {
 	printf( "%s %s%s\n", $pass ? 'PASS' : 'FAIL', $label, '' !== $detail ? "\n   $detail" : '' );
 	if ( ! $pass ) {
-		$GLOBALS['lfndr_failed'] = true;
+		$GLOBALS['gwc_lfndr_failed'] = true;
 	}
 }
 
@@ -30,7 +30,7 @@ wp_set_current_user( 1 );
  * those assertions for reasons that have nothing to do with the code. */
 $pre_existing = get_posts(
 	array(
-		'post_type'   => 'lfndr_location',
+		'post_type'   => 'gwc_lfndr_location',
 		'post_status' => 'any',
 		'numberposts' => -1,
 		'fields'      => 'ids',
@@ -44,11 +44,11 @@ foreach ( $pre_existing as $id ) {
 		)
 	);
 }
-$saved_schema = get_option( 'lfndr_schema' );
+$saved_schema = get_option( 'gwc_lfndr_schema' );
 
 // ── A schema exercising every shipping decision ──────────────────────────────
-lfndr_save_schema(
-	lfndr_sanitize_schema(
+gwc_lfndr_save_schema(
+	gwc_lfndr_sanitize_schema(
 		array(
 			'fields'       => array(
 				array(
@@ -118,7 +118,7 @@ foreach ( array(
 ) as $row ) {
 	$id     = wp_insert_post(
 		array(
-			'post_type'   => 'lfndr_location',
+			'post_type'   => 'gwc_lfndr_location',
 			'post_title'  => $row[0],
 			'post_status' => 'publish',
 		)
@@ -126,27 +126,27 @@ foreach ( array(
 	$made[] = $id;
 
 	$_POST = array(
-		'lfndr_nonce'   => wp_create_nonce( 'lfndr_location_save' ),
-		'lfndr_lat'     => $row[1],
-		'lfndr_lng'     => $row[2],
-		'lfndr_f'       => array(
+		'gwc_lfndr_nonce'   => wp_create_nonce( 'gwc_lfndr_location_save' ),
+		'gwc_lfndr_lat'     => $row[1],
+		'gwc_lfndr_lng'     => $row[2],
+		'gwc_lfndr_f'       => array(
 			'org'           => $row[3],
 			'secret_code'   => 'CODE-' . $row[0],
 			'internal_note' => 'never shipped',
 			'services'      => $row[4],
 			'wheelchair'    => $row[5] ? '1' : '',
 		),
-		'lfndr_present' => array(
+		'gwc_lfndr_present' => array(
 			'services'   => '1',
 			'wheelchair' => '1',
 		),
 	);
-	lfndr_save_location( $id );
+	gwc_lfndr_save_location( $id );
 	$_POST = array();
 }
 
-lfndr_flush_locations();
-$payload = lfndr_get_locations();
+gwc_lfndr_flush_locations();
+$payload = gwc_lfndr_get_locations();
 $by_name = array_column( $payload, null, 'name' );
 
 // ── Shape ────────────────────────────────────────────────────────────────────
@@ -182,40 +182,40 @@ vok( 'facet tokens are recorded', array( 'diapers', 'formula' ) === ( $by_name['
 vok( 'a false boolean records no token', ! isset( $by_name['Beta Center']['facets']['wheelchair'] ) );
 vok( 'a true boolean records one', array( '1' ) === ( $by_name['Alpha Center']['facets']['wheelchair'] ?? null ) );
 
-$groups = lfndr_available_facets( $payload, lfndr_get_schema() );
+$groups = gwc_lfndr_available_facets( $payload, gwc_lfndr_get_schema() );
 $by_key = array_column( $groups, null, 'key' );
 vok( 'services renders a filter group', isset( $by_key['services'] ) );
 vok( 'only present values get chips', array( 'diapers', 'formula' ) === array_column( $by_key['services']['values'], 'value' ), 'wipes is defined but unused' );
 vok( 'the mixed boolean renders a toggle', isset( $by_key['wheelchair'] ) );
 
 // ── Caching ──────────────────────────────────────────────────────────────────
-vok( 'the payload is cached', false !== get_transient( 'lfndr_locations' ) );
+vok( 'the payload is cached', false !== get_transient( 'gwc_lfndr_locations' ) );
 
-$before = get_transient( 'lfndr_locations' );
+$before = get_transient( 'gwc_lfndr_locations' );
 wp_update_post(
 	array(
 		'ID'         => $made[0],
 		'post_title' => 'Alpha Center Renamed',
 	)
 );
-vok( 'saving a location busts the cache', false === get_transient( 'lfndr_locations' ) );
+vok( 'saving a location busts the cache', false === get_transient( 'gwc_lfndr_locations' ) );
 
-lfndr_get_locations();
-lfndr_save_schema( lfndr_get_schema() );
-vok( 'saving the schema busts the cache', false === get_transient( 'lfndr_locations' ) );
+gwc_lfndr_get_locations();
+gwc_lfndr_save_schema( gwc_lfndr_get_schema() );
+vok( 'saving the schema busts the cache', false === get_transient( 'gwc_lfndr_locations' ) );
 
 // Both the first write and later ones. WordPress fires add_option_* for the
 // former and update_option_* for the latter, and hooking only one leaves an
 // hour of stale payload after exactly the save someone is watching for.
-delete_option( 'lfndr_settings' );
-lfndr_get_locations();
-add_option( 'lfndr_settings', array( 'zoom' => 7 ) );
-vok( 'creating the settings option busts the cache', false === get_transient( 'lfndr_locations' ) );
+delete_option( 'gwc_lfndr_settings' );
+gwc_lfndr_get_locations();
+add_option( 'gwc_lfndr_settings', array( 'zoom' => 7 ) );
+vok( 'creating the settings option busts the cache', false === get_transient( 'gwc_lfndr_locations' ) );
 
-lfndr_get_locations();
-update_option( 'lfndr_settings', array( 'zoom' => 9 ) );
-vok( 'updating the settings option busts the cache', false === get_transient( 'lfndr_locations' ) );
-delete_option( 'lfndr_settings' );
+gwc_lfndr_get_locations();
+update_option( 'gwc_lfndr_settings', array( 'zoom' => 9 ) );
+vok( 'updating the settings option busts the cache', false === get_transient( 'gwc_lfndr_locations' ) );
+delete_option( 'gwc_lfndr_settings' );
 
 // ── The N+1 guarantee ────────────────────────────────────────────────────────
 // Query count must not grow with the number of locations. Measured on a cold
@@ -229,15 +229,15 @@ add_filter(
 	}
 );
 
-/** Count the queries one cold call to lfndr_get_locations() costs. */
+/** Count the queries one cold call to gwc_lfndr_get_locations() costs. */
 $measure = static function () use ( &$queries ): int {
-	lfndr_flush_locations();
+	gwc_lfndr_flush_locations();
 	// Without this the second measurement runs against options and posts the
 	// first one already warmed, and the comparison measures cache state rather
 	// than query count.
 	wp_cache_flush();
 	$queries = array();
-	lfndr_get_locations();
+	gwc_lfndr_get_locations();
 	return count( $queries );
 };
 
@@ -246,20 +246,20 @@ $queries_for_3 = $measure();
 for ( $i = 0; $i < 27; $i++ ) {
 	$id     = wp_insert_post(
 		array(
-			'post_type'   => 'lfndr_location',
+			'post_type'   => 'gwc_lfndr_location',
 			'post_title'  => sprintf( 'Bulk %02d', $i ),
 			'post_status' => 'publish',
 		)
 	);
 	$made[] = $id;
-	update_post_meta( $id, '_lfndr_lat', '33.5' );
-	update_post_meta( $id, '_lfndr_lng', '-86.8' );
-	update_post_meta( $id, '_lfndr_f_org', 'Bulk Org ' . $i );
-	update_post_meta( $id, '_lfndr_f_services', array( 'diapers' ) );
+	update_post_meta( $id, '_gwc_lfndr_lat', '33.5' );
+	update_post_meta( $id, '_gwc_lfndr_lng', '-86.8' );
+	update_post_meta( $id, '_gwc_lfndr_f_org', 'Bulk Org ' . $i );
+	update_post_meta( $id, '_gwc_lfndr_f_services', array( 'diapers' ) );
 }
 
 $queries_for_30 = $measure();
-$all            = lfndr_get_locations();
+$all            = gwc_lfndr_get_locations();
 
 vok( '30 locations are all returned', 30 === count( $all ) );
 vok(
@@ -273,9 +273,9 @@ foreach ( $made as $id ) {
 	wp_delete_post( $id, true );
 }
 if ( false !== $saved_schema ) {
-	update_option( 'lfndr_schema', $saved_schema );
+	update_option( 'gwc_lfndr_schema', $saved_schema );
 } else {
-	delete_option( 'lfndr_schema' );
+	delete_option( 'gwc_lfndr_schema' );
 }
 foreach ( $pre_existing as $id ) {
 	wp_update_post(
@@ -285,6 +285,6 @@ foreach ( $pre_existing as $id ) {
 		)
 	);
 }
-lfndr_flush_locations();
+gwc_lfndr_flush_locations();
 
-echo empty( $GLOBALS['lfndr_failed'] ) ? "\nALL PASSED\n" : "\nFAILURES\n";
+echo empty( $GLOBALS['gwc_lfndr_failed'] ) ? "\nALL PASSED\n" : "\nFAILURES\n";

@@ -17,12 +17,12 @@
 class ColophonSnoozeTest extends PHPUnit\Framework\TestCase {
 
 	public function test_never_collapsed_shows_the_panel(): void {
-		$this->assertFalse( lfndr_colophon_snoozed( 0, 1_800_000_000 ) );
+		$this->assertFalse( gwc_lfndr_colophon_snoozed( 0, 1_800_000_000 ) );
 	}
 
 	public function test_collapsing_hides_it_immediately(): void {
 		$now = 1_800_000_000;
-		$this->assertTrue( lfndr_colophon_snoozed( $now, $now ) );
+		$this->assertTrue( gwc_lfndr_colophon_snoozed( $now, $now ) );
 	}
 
 	public function test_it_stays_hidden_for_the_month(): void {
@@ -30,7 +30,7 @@ class ColophonSnoozeTest extends PHPUnit\Framework\TestCase {
 
 		foreach ( array( 1, 7, 29 ) as $days ) {
 			$this->assertTrue(
-				lfndr_colophon_snoozed( $now, $now + ( $days * DAY_IN_SECONDS ) ),
+				gwc_lfndr_colophon_snoozed( $now, $now + ( $days * DAY_IN_SECONDS ) ),
 				sprintf( 'Should still be collapsed %d days in.', $days )
 			);
 		}
@@ -42,9 +42,9 @@ class ColophonSnoozeTest extends PHPUnit\Framework\TestCase {
 		// The boundary itself: exactly 30 days is expired, not the last moment
 		// of hidden. Worth pinning, because "< 30 days" and "<= 30 days" both
 		// look right and differ by a day of visibility.
-		$this->assertFalse( lfndr_colophon_snoozed( $now, $now + ( 30 * DAY_IN_SECONDS ) ) );
-		$this->assertFalse( lfndr_colophon_snoozed( $now, $now + ( 31 * DAY_IN_SECONDS ) ) );
-		$this->assertFalse( lfndr_colophon_snoozed( $now, $now + YEAR_IN_SECONDS ) );
+		$this->assertFalse( gwc_lfndr_colophon_snoozed( $now, $now + ( 30 * DAY_IN_SECONDS ) ) );
+		$this->assertFalse( gwc_lfndr_colophon_snoozed( $now, $now + ( 31 * DAY_IN_SECONDS ) ) );
+		$this->assertFalse( gwc_lfndr_colophon_snoozed( $now, $now + YEAR_IN_SECONDS ) );
 	}
 
 	/**
@@ -55,12 +55,12 @@ class ColophonSnoozeTest extends PHPUnit\Framework\TestCase {
 	 */
 	public function test_a_future_timestamp_does_not_misbehave(): void {
 		$now = 1_800_000_000;
-		$this->assertTrue( lfndr_colophon_snoozed( $now + DAY_IN_SECONDS, $now ) );
+		$this->assertTrue( gwc_lfndr_colophon_snoozed( $now + DAY_IN_SECONDS, $now ) );
 	}
 
 	public function test_the_window_is_actually_thirty_days(): void {
 		// Guards the constant itself: the tests above would all still pass if
 		// the window were changed to a year.
-		$this->assertSame( 30 * DAY_IN_SECONDS, LFNDR_COLOPHON_SNOOZE );
+		$this->assertSame( 30 * DAY_IN_SECONDS, GWC_LFNDR_COLOPHON_SNOOZE );
 	}
 }

@@ -29,7 +29,7 @@ class MapStyleTermsTest extends PHPUnit\Framework\TestCase {
 	public function test_every_third_party_tile_style_states_its_terms(): void {
 		$missing = array();
 
-		foreach ( lfndr_map_styles() as $key => $style ) {
+		foreach ( gwc_lfndr_map_styles() as $key => $style ) {
 			foreach ( $this->restricted_hosts() as $host => $why ) {
 				if ( false === strpos( $style['url'], $host ) ) {
 					continue;
@@ -52,7 +52,7 @@ class MapStyleTermsTest extends PHPUnit\Framework\TestCase {
 	 * reader nothing they could act on.
 	 */
 	public function test_the_carto_notice_actually_says_non_commercial(): void {
-		foreach ( lfndr_map_styles() as $key => $style ) {
+		foreach ( gwc_lfndr_map_styles() as $key => $style ) {
 			if ( false === strpos( $style['url'], 'cartocdn.com' ) ) {
 				continue;
 			}
@@ -70,7 +70,7 @@ class MapStyleTermsTest extends PHPUnit\Framework\TestCase {
 	 * reading.
 	 */
 	public function test_custom_carries_no_third_party_terms(): void {
-		$styles = lfndr_map_styles();
+		$styles = gwc_lfndr_map_styles();
 		$this->assertSame( '', (string) ( $styles['custom']['terms'] ?? '' ) );
 	}
 }

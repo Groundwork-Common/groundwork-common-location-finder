@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'wp_ajax_lfndr_geocode', 'lfndr_handle_geocode' );
+add_action( 'wp_ajax_gwc_lfndr_geocode', 'gwc_lfndr_handle_geocode' );
 
 /* ── Why this goes through the server ────────────────────────────────────────
  * The browser could call Nominatim directly. It should not:
@@ -30,8 +30,8 @@ add_action( 'wp_ajax_lfndr_geocode', 'lfndr_handle_geocode' );
 /**
  * Proxy an address lookup to the configured geocoder.
  */
-function lfndr_handle_geocode(): void {
-	check_ajax_referer( 'lfndr_geocode', 'nonce' );
+function gwc_lfndr_handle_geocode(): void {
+	check_ajax_referer( 'gwc_lfndr_geocode', 'nonce' );
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Not allowed.', 'groundwork-common-location-finder' ) ), 403 );
@@ -49,7 +49,7 @@ function lfndr_handle_geocode(): void {
 	}
 	$query = mb_substr( $query, 0, 200 );
 
-	$throttle_key = 'lfndr_geo_' . get_current_user_id();
+	$throttle_key = 'gwc_lfndr_geo_' . get_current_user_id();
 	if ( get_transient( $throttle_key ) ) {
 		/* Nominatim allows one request per second. Answering an over-quota
 		 * request with an empty list rather than an error keeps the typeahead
@@ -67,14 +67,14 @@ function lfndr_handle_geocode(): void {
 	);
 
 	/* Nominatim's documented channel for a contact address is this parameter,
-	 * not the User-Agent — see lfndr_geocode_user_agent() for what happens when
+	 * not the User-Agent — see gwc_lfndr_geocode_user_agent() for what happens when
 	 * you put it there instead. */
-	$email = lfndr_geocode_contact_email();
+	$email = gwc_lfndr_geocode_contact_email();
 	if ( '' !== $email ) {
 		$args['email'] = $email;
 	}
 
-	$countries = trim( (string) lfndr_setting( 'geo_countries' ) );
+	$countries = trim( (string) gwc_lfndr_setting( 'geo_countries' ) );
 	if ( '' !== $countries ) {
 		$args['countrycodes'] = $countries;
 	}
@@ -84,18 +84,18 @@ function lfndr_handle_geocode(): void {
 	 * finding the one in Illinois. `bounded` turns the bias into a hard
 	 * restriction; it is off by default because a hard restriction silently
 	 * returns nothing for the one location that sits outside the box. */
-	$viewbox = trim( (string) lfndr_setting( 'geo_viewbox' ) );
+	$viewbox = trim( (string) gwc_lfndr_setting( 'geo_viewbox' ) );
 	if ( '' !== $viewbox ) {
 		$args['viewbox'] = $viewbox;
-		$args['bounded'] = lfndr_setting( 'geo_bounded' ) ? '1' : '0';
+		$args['bounded'] = gwc_lfndr_setting( 'geo_bounded' ) ? '1' : '0';
 	}
 
-	$endpoint = (string) lfndr_setting( 'geo_endpoint' );
+	$endpoint = (string) gwc_lfndr_setting( 'geo_endpoint' );
 	$response = wp_remote_get(
 		add_query_arg( $args, $endpoint ),
 		array(
 			'timeout'    => 8,
-			'user-agent' => lfndr_geocode_user_agent(),
+			'user-agent' => gwc_lfndr_geocode_user_agent(),
 			'headers'    => array( 'Accept' => 'application/json' ),
 		)
 	);
@@ -116,7 +116,7 @@ function lfndr_handle_geocode(): void {
 
 	$decoded = json_decode( wp_remote_retrieve_body( $response ), true );
 
-	wp_send_json_success( lfndr_map_geocode_results( is_array( $decoded ) ? $decoded : array() ) );
+	wp_send_json_success( gwc_lfndr_map_geocode_results( is_array( $decoded ) ? $decoded : array() ) );
 }
 
 /**
@@ -131,7 +131,7 @@ function lfndr_handle_geocode(): void {
  * @param array $results Raw decoded response.
  * @return array
  */
-function lfndr_map_geocode_results( array $results ): array {
+function gwc_lfndr_map_geocode_results( array $results ): array {
 	$out = array();
 
 	foreach ( $results as $result ) {
@@ -174,8 +174,8 @@ function lfndr_map_geocode_results( array $results ): array {
 
 		$out[] = array(
 			'label'      => sanitize_text_field( (string) ( $result['display_name'] ?? '' ) ),
-			'lat'        => (string) lfndr_sanitize_coordinate( $result['lat'], 90.0 ),
-			'lng'        => (string) lfndr_sanitize_coordinate( $result['lon'], 180.0 ),
+			'lat'        => (string) gwc_lfndr_sanitize_coordinate( $result['lat'], 90.0 ),
+			'lng'        => (string) gwc_lfndr_sanitize_coordinate( $result['lon'], 180.0 ),
 			'line1'      => sanitize_text_field( $line1 ),
 			'city'       => sanitize_text_field( $city ),
 			'region'     => sanitize_text_field( (string) ( $address['state'] ?? $address['province'] ?? '' ) ),
@@ -193,8 +193,8 @@ function lfndr_map_geocode_results( array $results ): array {
  *
  * @return string
  */
-function lfndr_geocode_contact_email(): string {
-	$email = (string) lfndr_setting( 'geo_email' );
+function gwc_lfndr_geocode_contact_email(): string {
+	$email = (string) gwc_lfndr_setting( 'geo_email' );
 	if ( ! is_email( $email ) ) {
 		$email = (string) get_option( 'admin_email' );
 	}
@@ -214,17 +214,17 @@ function lfndr_geocode_contact_email(): string {
  * verified against the live service, where a product token followed by
  * `(admin@example.org)` is refused while the same string with a URL instead is
  * served. Their documented place for a contact address is the `email` query
- * parameter, which lfndr_handle_geocode() sends. Putting it here instead looks
+ * parameter, which gwc_lfndr_handle_geocode() sends. Putting it here instead looks
  * like following the policy and silently breaks every lookup.
  *
  * @return string
  */
-function lfndr_geocode_user_agent(): string {
+function gwc_lfndr_geocode_user_agent(): string {
 	$host = wp_parse_url( home_url(), PHP_URL_HOST );
 
 	return sprintf(
 		'GroundworkCommonLocationFinder/%s (+%s)',
-		LFNDR_VERSION,
+		GWC_LFNDR_VERSION,
 		$host ? 'https://' . $host : 'https://wordpress.org/plugins/groundwork-common-location-finder/'
 	);
 }

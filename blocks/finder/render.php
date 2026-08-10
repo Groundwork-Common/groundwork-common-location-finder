@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 printf(
 	'<div %s>%s</div>',
 	get_block_wrapper_attributes(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core escapes this.
-	lfndr_render_finder( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaping happens per value inside.
+	gwc_lfndr_render_finder( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaping happens per value inside.
 		array(
 			'show_map' => empty( $attributes['showMap'] ) ? 'no' : 'yes',
 			'height'   => (string) ( $attributes['height'] ?? 0 ),

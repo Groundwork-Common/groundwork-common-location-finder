@@ -13,9 +13,9 @@ defined( 'ABSPATH' ) || exit;
  * page — the Appearance tab of the one real screen renders these — and the
  * submenu that used to carry this slug was removed once the tabs landed.
  */
-const LFNDR_SETTINGS_PAGE = 'lfndr-settings';
+const GWC_LFNDR_SETTINGS_PAGE = 'lfndr-settings';
 
-add_action( 'admin_init', 'lfndr_register_settings' );
+add_action( 'admin_init', 'gwc_lfndr_register_settings' );
 
 /* ── Why this is a plain settings screen and Fields is not ───────────────────
  * The Fields screen hand-rolls its own admin_post_ handlers because it is
@@ -27,7 +27,7 @@ add_action( 'admin_init', 'lfndr_register_settings' );
  *
  * Leaving a field blank is not "unset" in some separate sense — it is the
  * value that reproduces the plugin's shipped default, because
- * lfndr_appearance_css() only ever emits something for a field that has
+ * gwc_lfndr_appearance_css() only ever emits something for a field that has
  * content in it. A site that never opens this screen is byte-for-byte the
  * site before this screen existed.
  *
@@ -55,11 +55,11 @@ add_action( 'admin_init', 'lfndr_register_settings' );
  *
  * @return array<string, string>
  */
-function lfndr_appearance_sections(): array {
+function gwc_lfndr_appearance_sections(): array {
 	return array(
-		'lfndr_section_map'      => __( 'Map & spacing', 'groundwork-common-location-finder' ),
-		'lfndr_section_surfaces' => __( 'Panels & surfaces', 'groundwork-common-location-finder' ),
-		'lfndr_section_controls' => __( 'Buttons, chips & cards', 'groundwork-common-location-finder' ),
+		'gwc_lfndr_section_map'      => __( 'Map & spacing', 'groundwork-common-location-finder' ),
+		'gwc_lfndr_section_surfaces' => __( 'Panels & surfaces', 'groundwork-common-location-finder' ),
+		'gwc_lfndr_section_controls' => __( 'Buttons, chips & cards', 'groundwork-common-location-finder' ),
 	);
 }
 
@@ -86,7 +86,7 @@ function lfndr_appearance_sections(): array {
  *
  * @return array<string, array>
  */
-function lfndr_style_presets(): array {
+function gwc_lfndr_style_presets(): array {
 	return array(
 		'ink'       => array(
 			'label'  => __( 'Ink', 'groundwork-common-location-finder' ),
@@ -521,7 +521,7 @@ function lfndr_style_presets(): array {
  *
  * @return array<string, array>
  */
-function lfndr_map_styles(): array {
+function gwc_lfndr_map_styles(): array {
 	$osm   = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 	$carto = $osm . ' &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
@@ -574,7 +574,7 @@ function lfndr_map_styles(): array {
 			'url'         => '',
 			'attribution' => '',
 			'max_zoom'    => 19,
-			'note'        => __( 'Use the lfndr_tile_url and lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles.', 'groundwork-common-location-finder' ),
+			'note'        => __( 'Use the gwc_lfndr_tile_url and gwc_lfndr_tile_attribution filters. Choose this for a paid provider or self-hosted tiles.', 'groundwork-common-location-finder' ),
 		),
 	);
 }
@@ -598,7 +598,7 @@ function lfndr_map_styles(): array {
  *
  * @return array<string, array>
  */
-function lfndr_appearance_fields(): array {
+function gwc_lfndr_appearance_fields(): array {
 	$chips  = '.lfndr__chip, .lfndr__maximize, .lfndr__reset, .lfndr__more, .lfndr__filters-toggle, .lfndr__apply, .lfndr__search-input, .lfndr__facet-select';
 	$active = ".lfndr__chip[aria-pressed='true'], .lfndr__maximize[aria-pressed='true'], .lfndr__filters-toggle[aria-expanded='true']";
 	$card   = '.lfndr-card__button';
@@ -612,16 +612,16 @@ function lfndr_appearance_fields(): array {
 	return array(
 		// ── Map & spacing ────────────────────────────────────────────────
 		'map_style'           => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'mode'        => 'choice',
 			'type'        => 'choice',
-			'choices'     => 'lfndr_map_styles',
+			'choices'     => 'gwc_lfndr_map_styles',
 			'label'       => __( 'Map style', 'groundwork-common-location-finder' ),
 			'placeholder' => '',
 			'help'        => __( 'The basemap the pins sit on. Each option brings the attribution its provider requires.', 'groundwork-common-location-finder' ),
 		),
 		'accent_color'        => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-accent',
 			'type'        => 'color',
 			'label'       => __( 'Accent color', 'groundwork-common-location-finder' ),
@@ -629,7 +629,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Map pins and focus rings. Leave blank to match the surrounding text color — the right default in almost every theme. Accepts a hex code, a named color, or a theme variable such as var(--wp--preset--color--accent-1).', 'groundwork-common-location-finder' ),
 		),
 		'pin_color'           => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-pin',
 			'type'        => 'color',
 			'label'       => __( 'Map pin color', 'groundwork-common-location-finder' ),
@@ -637,7 +637,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Set this when the pins want a different color from focus rings and chip borders — a brand color that reads well on a map is often not the one that reads well as text.', 'groundwork-common-location-finder' ),
 		),
 		'radius'              => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-radius',
 			'type'        => 'length',
 			'label'       => __( 'Corner radius', 'groundwork-common-location-finder' ),
@@ -645,7 +645,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Rounding on the map, the search suggestions and the detail pane. Filter chips, badges and buttons are always fully rounded regardless of this setting. A number with a unit, such as 8px or 0.5rem.', 'groundwork-common-location-finder' ),
 		),
 		'gap'                 => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-gap',
 			'type'        => 'length',
 			'label'       => __( 'Spacing', 'groundwork-common-location-finder' ),
@@ -653,7 +653,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The base gap between the search box, filters, results and map.', 'groundwork-common-location-finder' ),
 		),
 		'map_height'          => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-map-height',
 			'type'        => 'length',
 			'label'       => __( 'Map height', 'groundwork-common-location-finder' ),
@@ -661,7 +661,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Map height where the map sits above the results — a phone, or a finder in a narrow column. The map is never taller than this, and never taller than a third of the screen. On a wide screen the map fills the finder instead, so use Panel height there. A single finder can still override this from its own block settings.', 'groundwork-common-location-finder' ),
 		),
 		'panel_height'        => array(
-			'section'     => 'lfndr_section_map',
+			'section'     => 'gwc_lfndr_section_map',
 			'css_var'     => '--lfndr-panel-height',
 			'type'        => 'length',
 			'label'       => __( 'Panel height', 'groundwork-common-location-finder' ),
@@ -671,7 +671,7 @@ function lfndr_appearance_fields(): array {
 
 		// ── Panels & surfaces ────────────────────────────────────────────
 		'finder_bg'           => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-bg',
 			'type'        => 'color',
 			'label'       => __( 'Finder background', 'groundwork-common-location-finder' ),
@@ -679,7 +679,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The ground the whole finder sits on. Left blank it shows the page through, which is right for a finder embedded in a normal layout. Set it when the other colors here have moved away from the page — dark cards on a light page read as a light finder with dark parts rather than a dark finder.', 'groundwork-common-location-finder' ),
 		),
 		'finder_text'         => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-fg',
 			'type'        => 'color',
 			'label'       => __( 'Finder text', 'groundwork-common-location-finder' ),
@@ -687,7 +687,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Set this whenever you set a finder background. Text inside the finder otherwise keeps the color the page gives it, which on a background that has moved away from the page means dark on dark.', 'groundwork-common-location-finder' ),
 		),
 		'finder_padding'      => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-pad',
 			'type'        => 'length',
 			'label'       => __( 'Finder padding', 'groundwork-common-location-finder' ),
@@ -695,7 +695,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Space between the finder background and what sits on it. Set it whenever you set a background — without it the search box and cards run flat into the edge of the color. Leave blank when there is no background, so the finder stays aligned with the rest of the page.', 'groundwork-common-location-finder' ),
 		),
 		'surface_color'       => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-surface',
 			'type'        => 'color',
 			'label'       => __( 'Surface color', 'groundwork-common-location-finder' ),
@@ -703,7 +703,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Background of the search suggestions and the detail pane, and the ring drawn around each map pin. Leave blank to use the system background color, which already adapts to dark mode.', 'groundwork-common-location-finder' ),
 		),
 		'on_surface_color'    => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-on-surface',
 			'type'        => 'color',
 			'label'       => __( 'Text on surface', 'groundwork-common-location-finder' ),
@@ -711,7 +711,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Text color inside the detail pane and search suggestions. Leave blank to use the system text color.', 'groundwork-common-location-finder' ),
 		),
 		'open_color'          => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-open',
 			'type'        => 'color',
 			'label'       => __( 'Open indicator', 'groundwork-common-location-finder' ),
@@ -719,7 +719,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The lamp beside "Open now" and "Open today". Green by default, and one of only two places this plugin ships a color of its own — on a status light the color is the information rather than decoration.', 'groundwork-common-location-finder' ),
 		),
 		'closure_color'       => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-closure',
 			'type'        => 'color',
 			'label'       => __( 'Closure notice color', 'groundwork-common-location-finder' ),
@@ -727,7 +727,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The rule, tint, icon and text of the "Temporarily closed" notice, together. The plugin ships it in the text color rather than red, so that it cannot clash with a theme it has never seen — set a color here if you would rather it shouted.', 'groundwork-common-location-finder' ),
 		),
 		'line_color'          => array(
-			'section'     => 'lfndr_section_surfaces',
+			'section'     => 'gwc_lfndr_section_surfaces',
 			'css_var'     => '--lfndr-line',
 			'type'        => 'color',
 			'label'       => __( 'Border color', 'groundwork-common-location-finder' ),
@@ -739,7 +739,7 @@ function lfndr_appearance_fields(): array {
 		// These are native <button>s the plugin never colors itself, so
 		// there is no var() fallback to lean on — see the file header.
 		'control_bg'          => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $chips,
 			'property'    => 'background-color',
@@ -749,7 +749,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The search box, the filter chips, and every button — Filters, Full screen, Apply, Clear filters, Show all results. Leave blank to use the theme\'s own button styling.', 'groundwork-common-location-finder' ),
 		),
 		'control_text'        => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $chips,
 			'property'    => 'color',
@@ -759,7 +759,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Set alongside the background above — a background with no matching text color can end up unreadable.', 'groundwork-common-location-finder' ),
 		),
 		'control_active_bg'   => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $active,
 			'property'    => 'background-color',
@@ -769,7 +769,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'A selected filter chip, the Filters button while its panel is open, or Full screen while it is open.', 'groundwork-common-location-finder' ),
 		),
 		'control_active_text' => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $active,
 			'property'    => 'color',
@@ -779,7 +779,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => '',
 		),
 		'card_bg'             => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $card,
 			'property'    => 'background-color',
@@ -789,7 +789,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'Each location in the result list. A card is a native button for keyboard and screen-reader purposes, but reads as content, not as an action — left blank it uses a neutral panel background rather than the theme\'s button color.', 'groundwork-common-location-finder' ),
 		),
 		'card_text'           => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $card,
 			'property'    => 'color',
@@ -799,7 +799,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => '',
 		),
 		'card_selected_bg'    => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $card_s,
 			'property'    => 'background-color',
@@ -809,7 +809,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The card currently open in the detail pane.', 'groundwork-common-location-finder' ),
 		),
 		'card_selected_text'  => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $card_s,
 			'property'    => 'color',
@@ -819,7 +819,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => '',
 		),
 		'badge_bg'            => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $badge,
 			'property'    => 'background-color',
@@ -829,7 +829,7 @@ function lfndr_appearance_fields(): array {
 			'help'        => __( 'The small service, access and status pills shown on cards and in the detail pane.', 'groundwork-common-location-finder' ),
 		),
 		'badge_text'          => array(
-			'section'     => 'lfndr_section_controls',
+			'section'     => 'gwc_lfndr_section_controls',
 			'mode'        => 'rule',
 			'selector'    => $badge,
 			'property'    => 'color',
@@ -844,33 +844,33 @@ function lfndr_appearance_fields(): array {
 /**
  * Register the settings option, sections and fields.
  */
-function lfndr_register_settings(): void {
+function gwc_lfndr_register_settings(): void {
 	register_setting(
-		'lfndr_settings_group',
-		LFNDR_SETTINGS_OPTION,
+		'gwc_lfndr_settings_group',
+		GWC_LFNDR_SETTINGS_OPTION,
 		array(
 			'type'              => 'array',
-			'sanitize_callback' => 'lfndr_sanitize_settings',
-			'default'           => lfndr_setting_defaults(),
+			'sanitize_callback' => 'gwc_lfndr_sanitize_settings',
+			'default'           => gwc_lfndr_setting_defaults(),
 		)
 	);
 
 	$intros = array(
-		'lfndr_section_map'      => 'lfndr_section_intro_map',
-		'lfndr_section_surfaces' => 'lfndr_section_intro_surfaces',
-		'lfndr_section_controls' => 'lfndr_section_intro_controls',
+		'gwc_lfndr_section_map'      => 'gwc_lfndr_section_intro_map',
+		'gwc_lfndr_section_surfaces' => 'gwc_lfndr_section_intro_surfaces',
+		'gwc_lfndr_section_controls' => 'gwc_lfndr_section_intro_controls',
 	);
 
-	foreach ( lfndr_appearance_sections() as $section_id => $title ) {
-		add_settings_section( $section_id, $title, $intros[ $section_id ] ?? '__return_null', LFNDR_SETTINGS_PAGE );
+	foreach ( gwc_lfndr_appearance_sections() as $section_id => $title ) {
+		add_settings_section( $section_id, $title, $intros[ $section_id ] ?? '__return_null', GWC_LFNDR_SETTINGS_PAGE );
 	}
 
-	foreach ( lfndr_appearance_fields() as $key => $field ) {
+	foreach ( gwc_lfndr_appearance_fields() as $key => $field ) {
 		add_settings_field(
-			'lfndr_' . $key,
+			'gwc_lfndr_' . $key,
 			$field['label'],
-			'lfndr_render_appearance_field',
-			LFNDR_SETTINGS_PAGE,
+			'gwc_lfndr_render_appearance_field',
+			GWC_LFNDR_SETTINGS_PAGE,
 			$field['section'],
 			array(
 				'key'   => $key,
@@ -883,7 +883,7 @@ function lfndr_register_settings(): void {
 /**
  * "Map & spacing" section intro.
  */
-function lfndr_section_intro_map(): void {
+function gwc_lfndr_section_intro_map(): void {
 	printf(
 		'<p class="description">%s</p>',
 		esc_html__( 'Leave any field blank to keep the theme-matched default. Nothing on this screen is required — these exist for the times a theme\'s own colors or sizing are not quite right, without needing to edit CSS.', 'groundwork-common-location-finder' )
@@ -893,7 +893,7 @@ function lfndr_section_intro_map(): void {
 /**
  * "Panels & surfaces" section intro.
  */
-function lfndr_section_intro_surfaces(): void {
+function gwc_lfndr_section_intro_surfaces(): void {
 	printf(
 		'<p class="description">%s</p>',
 		esc_html__( 'Backgrounds and text for the parts of the finder that sit above the map or the result list, rather than inside them.', 'groundwork-common-location-finder' )
@@ -903,7 +903,7 @@ function lfndr_section_intro_surfaces(): void {
 /**
  * "Buttons, chips & cards" section intro.
  */
-function lfndr_section_intro_controls(): void {
+function gwc_lfndr_section_intro_controls(): void {
 	printf(
 		'<p class="description">%s</p>',
 		esc_html__( 'Every clickable control in the finder is a native button, colored by your theme by default — the same principle as the rest of this plugin. Setting one of these overrides that styling just for the finder, and takes priority over the theme so the color you pick is the one you get.', 'groundwork-common-location-finder' )
@@ -922,16 +922,16 @@ function lfndr_section_intro_controls(): void {
  *     The field to render.
  *
  *     @type string $key   Setting key.
- *     @type array  $field Field definition from lfndr_appearance_fields().
+ *     @type array  $field Field definition from gwc_lfndr_appearance_fields().
  * }
  */
-function lfndr_render_appearance_field( array $args ): void {
+function gwc_lfndr_render_appearance_field( array $args ): void {
 	$key   = $args['key'];
 	$field = $args['field'];
-	$value = (string) lfndr_setting( $key );
+	$value = (string) gwc_lfndr_setting( $key );
 
 	if ( 'choice' === $field['type'] ) {
-		lfndr_render_choice_field( $key, $field, $value );
+		gwc_lfndr_render_choice_field( $key, $field, $value );
 		return;
 	}
 
@@ -952,7 +952,7 @@ function lfndr_render_appearance_field( array $args ): void {
 			<input type="text" class="regular-text code" id="lfndr-setting-%1$s" name="%2$s[%1$s]" value="%3$s" placeholder="%4$s" />%5$s
 		</span>',
 		esc_attr( $key ),
-		esc_attr( LFNDR_SETTINGS_OPTION ),
+		esc_attr( GWC_LFNDR_SETTINGS_OPTION ),
 		esc_attr( $value ),
 		esc_attr( $field['placeholder'] ),
 		'color' === $field['type']
@@ -977,13 +977,13 @@ function lfndr_render_appearance_field( array $args ): void {
  * @param array  $field Field definition.
  * @param string $value Stored value.
  */
-function lfndr_render_choice_field( string $key, array $field, string $value ): void {
+function gwc_lfndr_render_choice_field( string $key, array $field, string $value ): void {
 	$choices = call_user_func( $field['choices'] );
 
 	printf(
 		'<select id="lfndr-setting-%1$s" name="%2$s[%1$s]">',
 		esc_attr( $key ),
-		esc_attr( LFNDR_SETTINGS_OPTION )
+		esc_attr( GWC_LFNDR_SETTINGS_OPTION )
 	);
 	foreach ( $choices as $choice_key => $choice ) {
 		printf(
@@ -1055,14 +1055,14 @@ function lfndr_render_choice_field( string $key, array $field, string $value ): 
  *
  * @return string Preset key, or '' when the values match none of them.
  */
-function lfndr_current_preset(): string {
-	$fields = array_keys( lfndr_appearance_fields() );
+function gwc_lfndr_current_preset(): string {
+	$fields = array_keys( gwc_lfndr_appearance_fields() );
 
-	foreach ( lfndr_style_presets() as $key => $preset ) {
+	foreach ( gwc_lfndr_style_presets() as $key => $preset ) {
 		$matches = true;
 		foreach ( $fields as $field ) {
 			$expected = (string) ( $preset['values'][ $field ] ?? '' );
-			if ( (string) lfndr_setting( $field ) !== $expected ) {
+			if ( (string) gwc_lfndr_setting( $field ) !== $expected ) {
 				$matches = false;
 				break;
 			}
@@ -1089,12 +1089,12 @@ function lfndr_current_preset(): string {
  * the sets apart at a glance, which is the only job a thumbnail has.
  *
  * Inline styles because each one is unique to its preset and every value came
- * out of lfndr_sanitize_css_color() before it was stored.
+ * out of gwc_lfndr_sanitize_css_color() before it was stored.
  *
  * @param array $values The preset's field values.
  * @return string
  */
-function lfndr_preset_thumbnail( array $values ): string {
+function gwc_lfndr_preset_thumbnail( array $values ): string {
 	$canvas  = $values['finder_bg'] ?? '';
 	$canvas  = '' !== $canvas ? $canvas : '#ffffff';
 	$surface = $values['surface_color'] ?? '#ffffff';
@@ -1158,9 +1158,9 @@ function lfndr_preset_thumbnail( array $values ): string {
  *
  * It is also why the select resets to "no change" on every load: it is a verb.
  */
-function lfndr_render_preset_picker(): void {
-	$presets = lfndr_style_presets();
-	$current = lfndr_current_preset();
+function gwc_lfndr_render_preset_picker(): void {
+	$presets = gwc_lfndr_style_presets();
+	$current = gwc_lfndr_current_preset();
 	?>
 	<h2><?php esc_html_e( 'Appearance', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description" style="max-width:44em">
@@ -1172,11 +1172,11 @@ function lfndr_render_preset_picker(): void {
 
 		<?php foreach ( $presets as $key => $preset ) : ?>
 			<label class="lfndr-preset">
-				<input type="radio" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_apply_preset]"
+				<input type="radio" name="<?php echo esc_attr( GWC_LFNDR_SETTINGS_OPTION ); ?>[_apply_preset]"
 					value="<?php echo esc_attr( $key ); ?>" <?php checked( $current, $key ); ?> />
 				<?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized colors; see lfndr_preset_thumbnail().
-				echo lfndr_preset_thumbnail( $preset['values'] );
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized colors; see gwc_lfndr_preset_thumbnail().
+				echo gwc_lfndr_preset_thumbnail( $preset['values'] );
 				?>
 				<span class="lfndr-preset__name"><?php echo esc_html( $preset['label'] ); ?></span>
 				<span class="lfndr-preset__note"><?php echo esc_html( $preset['note'] ); ?></span>
@@ -1185,11 +1185,11 @@ function lfndr_render_preset_picker(): void {
 
 		<?php /* Last, because it is where you end up rather than something you set out to choose. */ ?>
 		<label class="lfndr-preset">
-			<input type="radio" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_apply_preset]"
+			<input type="radio" name="<?php echo esc_attr( GWC_LFNDR_SETTINGS_OPTION ); ?>[_apply_preset]"
 				value="" <?php checked( $current, '' ); ?> />
 			<?php
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized colors; see lfndr_preset_thumbnail().
-			echo lfndr_preset_thumbnail( lfndr_current_values() );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized colors; see gwc_lfndr_preset_thumbnail().
+			echo gwc_lfndr_preset_thumbnail( gwc_lfndr_current_values() );
 			?>
 			<span class="lfndr-preset__name"><?php esc_html_e( 'Custom', 'groundwork-common-location-finder' ); ?></span>
 			<span class="lfndr-preset__note">
@@ -1209,10 +1209,10 @@ function lfndr_render_preset_picker(): void {
  *
  * @return array<string, string>
  */
-function lfndr_current_values(): array {
+function gwc_lfndr_current_values(): array {
 	$out = array();
-	foreach ( array_keys( lfndr_appearance_fields() ) as $field ) {
-		$value = (string) lfndr_setting( $field );
+	foreach ( array_keys( gwc_lfndr_appearance_fields() ) as $field ) {
+		$value = (string) gwc_lfndr_setting( $field );
 		if ( '' !== $value ) {
 			$out[ $field ] = $value;
 		}
@@ -1223,7 +1223,7 @@ function lfndr_current_values(): array {
 /**
  * Render the Settings screen.
  */
-function lfndr_settings_screen(): void {
+function gwc_lfndr_settings_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to change these settings.', 'groundwork-common-location-finder' ) );
 	}
@@ -1232,8 +1232,8 @@ function lfndr_settings_screen(): void {
 		<h1><?php esc_html_e( 'Location Finder Settings', 'groundwork-common-location-finder' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php
-			settings_fields( 'lfndr_settings_group' );
-			lfndr_render_preset_picker();
+			settings_fields( 'gwc_lfndr_settings_group' );
+			gwc_lfndr_render_preset_picker();
 
 			/* The individual fields are the exception, not the route in: almost
 			 * everyone wants a set, and twenty-five text boxes above the Save
@@ -1242,9 +1242,9 @@ function lfndr_settings_screen(): void {
 			 * are custom, because then they are the answer to "what is this
 			 * site actually set to". */
 			ob_start();
-			do_settings_sections( LFNDR_SETTINGS_PAGE );
+			do_settings_sections( GWC_LFNDR_SETTINGS_PAGE );
 			$sections = ob_get_clean();
-			$custom   = '' === lfndr_current_preset();
+			$custom   = '' === gwc_lfndr_current_preset();
 			?>
 			<details class="lfndr-fine-tune"<?php echo $custom ? ' open' : ''; ?>>
 				<summary><?php esc_html_e( 'Fine-tune individual values', 'groundwork-common-location-finder' ); ?></summary>
@@ -1264,7 +1264,7 @@ function lfndr_settings_screen(): void {
 /**
  * Sanitize the settings option.
  *
- * Merges onto whatever is already stored, not onto lfndr_setting_defaults(),
+ * Merges onto whatever is already stored, not onto gwc_lfndr_setting_defaults(),
  * and only overwrites a key this form actually submitted — the same
  * only-write-what-was-submitted rule the location save handler uses, and for
  * the same reason. This screen currently owns only the appearance fields; a
@@ -1276,9 +1276,9 @@ function lfndr_settings_screen(): void {
  * @param mixed $raw Raw POSTed value.
  * @return array
  */
-function lfndr_sanitize_settings( $raw ): array {
+function gwc_lfndr_sanitize_settings( $raw ): array {
 	$raw    = is_array( $raw ) ? $raw : array();
-	$stored = get_option( LFNDR_SETTINGS_OPTION );
+	$stored = get_option( GWC_LFNDR_SETTINGS_OPTION );
 	$out    = is_array( $stored ) ? $stored : array();
 
 	/* ── Preset, or edited values? ────────────────────────────────────────────
@@ -1297,7 +1297,7 @@ function lfndr_sanitize_settings( $raw ): array {
 	 *   chose a different preset  → they want that set; the boxes are stale, ignore them
 	 *   same preset, edited a box → they are tuning it; the edit wins and it becomes Custom
 	 *
-	 * lfndr_current_preset() has to be read here, before anything is written,
+	 * gwc_lfndr_current_preset() has to be read here, before anything is written,
 	 * because it derives from the stored values this save is about to replace.
 	 *
 	 * Every appearance field is cleared before applying rather than merged over.
@@ -1306,12 +1306,12 @@ function lfndr_sanitize_settings( $raw ): array {
 	 * a previous set's dark canvas underneath them. Reset then apply is the only
 	 * version where the result depends on the preset alone. */
 	$preset_key = isset( $raw['_apply_preset'] ) ? sanitize_key( (string) $raw['_apply_preset'] ) : '';
-	$presets    = lfndr_style_presets();
+	$presets    = gwc_lfndr_style_presets();
 
-	$applying_preset = isset( $presets[ $preset_key ] ) && lfndr_current_preset() !== $preset_key;
+	$applying_preset = isset( $presets[ $preset_key ] ) && gwc_lfndr_current_preset() !== $preset_key;
 
 	if ( $applying_preset ) {
-		foreach ( array_keys( lfndr_appearance_fields() ) as $field_key ) {
+		foreach ( array_keys( gwc_lfndr_appearance_fields() ) as $field_key ) {
 			$out[ $field_key ] = '';
 		}
 		foreach ( $presets[ $preset_key ]['values'] as $field_key => $value ) {
@@ -1326,19 +1326,19 @@ function lfndr_sanitize_settings( $raw ): array {
 	 * Behavior tab has one Save rather than two, and are written to their real
 	 * home before the key is dropped. */
 	if ( isset( $raw['_roles'] ) ) {
-		lfndr_save_primary_roles( $raw['_roles'] );
+		gwc_lfndr_save_primary_roles( $raw['_roles'] );
 	}
 	unset( $out['_roles'] );
 
 	/* Everything that is not about appearance — see inc/admin-screen.php. */
-	$out = lfndr_sanitize_option_fields( $raw, $out );
+	$out = gwc_lfndr_sanitize_option_fields( $raw, $out );
 
 	/* The per-tab markers are transport, not settings. */
-	foreach ( array_keys( lfndr_admin_tabs() ) as $tab ) {
+	foreach ( array_keys( gwc_lfndr_admin_tabs() ) as $tab ) {
 		unset( $out[ '_tab_' . $tab ] );
 	}
 
-	foreach ( lfndr_appearance_fields() as $key => $field ) {
+	foreach ( gwc_lfndr_appearance_fields() as $key => $field ) {
 		/* A preset was just applied, so every box in this submission holds a
 		 * value from the set being replaced. Reading them back would undo the
 		 * apply field by field. */
@@ -1360,8 +1360,8 @@ function lfndr_sanitize_settings( $raw ): array {
 		}
 
 		$out[ $key ] = 'length' === $field['type']
-			? lfndr_sanitize_css_length( $value )
-			: lfndr_sanitize_css_color( $value );
+			? gwc_lfndr_sanitize_css_length( $value )
+			: gwc_lfndr_sanitize_css_color( $value );
 	}
 
 	return $out;
@@ -1382,7 +1382,7 @@ function lfndr_sanitize_settings( $raw ): array {
  * @param string $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_css_color( string $raw ): string {
+function gwc_lfndr_sanitize_css_color( string $raw ): string {
 	$value = trim( $raw );
 	if ( '' === $value || mb_strlen( $value ) > 200 ) {
 		return '';
@@ -1407,7 +1407,7 @@ function lfndr_sanitize_css_color( string $raw ): string {
  * @param string $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_css_length( string $raw ): string {
+function gwc_lfndr_sanitize_css_length( string $raw ): string {
 	$value = trim( $raw );
 	if ( '' === $value ) {
 		return '';
@@ -1431,21 +1431,21 @@ function lfndr_sanitize_css_length( string $raw ): string {
  *
  * @return string
  */
-function lfndr_appearance_css(): string {
+function gwc_lfndr_appearance_css(): string {
 	$declarations = array();
 	$rules        = array();
 
-	foreach ( lfndr_appearance_fields() as $key => $field ) {
-		$value = (string) lfndr_setting( $key );
+	foreach ( gwc_lfndr_appearance_fields() as $key => $field ) {
+		$value = (string) gwc_lfndr_setting( $key );
 
 		/* Re-validated here, not only on save: this is printed into a <style>
 		 * tag on every front-end page a finder appears on, and a value could
 		 * have reached the option without passing through
-		 * lfndr_sanitize_settings() at all — a direct update_option() call from
+		 * gwc_lfndr_sanitize_settings() at all — a direct update_option() call from
 		 * WP-CLI, a migration, another plugin. */
 		$value = 'length' === $field['type']
-			? lfndr_sanitize_css_length( $value )
-			: lfndr_sanitize_css_color( $value );
+			? gwc_lfndr_sanitize_css_length( $value )
+			: gwc_lfndr_sanitize_css_color( $value );
 
 		if ( '' === $value ) {
 			continue;

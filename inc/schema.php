@@ -34,14 +34,14 @@ defined( 'ABSPATH' ) || exit;
  *
  * Keys beginning with __ are synthetic: __name, __distance, __directions,
  * __coords. They sit in the order lists beside real field keys so the reorder UI
- * is one list rather than two with different rules. lfndr_sanitize_field_key()
+ * is one list rather than two with different rules. gwc_lfndr_sanitize_field_key()
  * forbids a leading underscore on a real key, so they cannot collide.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_SCHEMA_OPTION = 'lfndr_schema';
+const GWC_LFNDR_SCHEMA_OPTION = 'gwc_lfndr_schema';
 
 /** Synthetic order entries that are rendered by the plugin, not by a field. */
-const LFNDR_SYNTHETIC_KEYS = array( '__name', '__coords', '__distance', '__directions' );
+const GWC_LFNDR_SYNTHETIC_KEYS = array( '__name', '__coords', '__distance', '__directions' );
 
 /**
  * The schema a fresh install starts with: empty, but structurally valid.
@@ -52,7 +52,7 @@ const LFNDR_SYNTHETIC_KEYS = array( '__name', '__coords', '__distance', '__direc
  *
  * @return array
  */
-function lfndr_default_schema(): array {
+function gwc_lfndr_default_schema(): array {
 	/* ── Why a fresh install is not empty ────────────────────────────────────
 	 * An empty schema is defensible and was wrong. It makes the first run of a
 	 * plugin whose entire idea is "you define the fields" a blank screen with
@@ -111,14 +111,14 @@ function lfndr_default_schema(): array {
 	);
 
 	foreach ( $fields as $i => $field ) {
-		$fields[ $i ] = array_merge( lfndr_field_defaults(), $field );
+		$fields[ $i ] = array_merge( gwc_lfndr_field_defaults(), $field );
 	}
 
 	return array(
-		'version'      => LFNDR_SCHEMA_VERSION,
+		'version'      => GWC_LFNDR_SCHEMA_VERSION,
 		'fields'       => $fields,
 		'primary'      => array_merge(
-			lfndr_empty_primary_roles(),
+			gwc_lfndr_empty_primary_roles(),
 			array(
 				'address' => 'address',
 				'hours'   => 'hours',
@@ -134,7 +134,7 @@ function lfndr_default_schema(): array {
  * The per-request schema memo.
  *
  * The cache lives in its own function rather than as a static inside
- * lfndr_get_schema() because PHP gives no way to reach another function's
+ * gwc_lfndr_get_schema() because PHP gives no way to reach another function's
  * static, and a writer that cannot invalidate the reader's cache is a stale-read
  * bug waiting for the first caller that saves and then reads in one request —
  * WP-CLI, an importer, a test. Admin screens hide it behind a redirect, which is
@@ -144,7 +144,7 @@ function lfndr_default_schema(): array {
  * @param bool       $clear Forget the cached value.
  * @return array|null
  */
-function lfndr_schema_cache( ?array $set = null, bool $clear = false ): ?array {
+function gwc_lfndr_schema_cache( ?array $set = null, bool $clear = false ): ?array {
 	static $cache = null;
 	if ( $clear ) {
 		$cache = null;
@@ -161,39 +161,39 @@ function lfndr_schema_cache( ?array $set = null, bool $clear = false ): ?array {
  *
  * @return array
  */
-function lfndr_get_schema(): array {
-	$cached = lfndr_schema_cache();
+function gwc_lfndr_get_schema(): array {
+	$cached = gwc_lfndr_schema_cache();
 	if ( null !== $cached ) {
 		return $cached;
 	}
 
-	$stored = get_option( LFNDR_SCHEMA_OPTION );
+	$stored = get_option( GWC_LFNDR_SCHEMA_OPTION );
 	if ( ! is_array( $stored ) ) {
-		return (array) lfndr_schema_cache( lfndr_default_schema() );
+		return (array) gwc_lfndr_schema_cache( gwc_lfndr_default_schema() );
 	}
 
-	$stored = array_merge( lfndr_default_schema(), $stored );
+	$stored = array_merge( gwc_lfndr_default_schema(), $stored );
 	$from   = isset( $stored['version'] ) ? (int) $stored['version'] : 1;
 
 	/* A schema written by a NEWER version of the plugin is left exactly as it
 	 * is. Running our older migrations over it, or "normalizing" it against a
 	 * schema we do not understand, is how a downgrade turns into data loss. The
 	 * Fields screen shows a banner instead. */
-	if ( $from > LFNDR_SCHEMA_VERSION ) {
-		return (array) lfndr_schema_cache( $stored );
+	if ( $from > GWC_LFNDR_SCHEMA_VERSION ) {
+		return (array) gwc_lfndr_schema_cache( $stored );
 	}
 
-	if ( $from < LFNDR_SCHEMA_VERSION ) {
-		foreach ( lfndr_schema_migrations() as $target => $callback ) {
-			if ( $target > $from && $target <= LFNDR_SCHEMA_VERSION && is_callable( $callback ) ) {
+	if ( $from < GWC_LFNDR_SCHEMA_VERSION ) {
+		foreach ( gwc_lfndr_schema_migrations() as $target => $callback ) {
+			if ( $target > $from && $target <= GWC_LFNDR_SCHEMA_VERSION && is_callable( $callback ) ) {
 				$stored = call_user_func( $callback, $stored );
 			}
 		}
-		$stored['version'] = LFNDR_SCHEMA_VERSION;
-		update_option( LFNDR_SCHEMA_OPTION, $stored );
+		$stored['version'] = GWC_LFNDR_SCHEMA_VERSION;
+		update_option( GWC_LFNDR_SCHEMA_OPTION, $stored );
 	}
 
-	return (array) lfndr_schema_cache( $stored );
+	return (array) gwc_lfndr_schema_cache( $stored );
 }
 
 /**
@@ -207,11 +207,11 @@ function lfndr_get_schema(): array {
  *
  * @return array<int, callable-string>
  */
-function lfndr_schema_migrations(): array {
+function gwc_lfndr_schema_migrations(): array {
 	return apply_filters(
-		'lfndr_schema_migrations',
+		'gwc_lfndr_schema_migrations',
 		array(
-			2 => 'lfndr_migrate_schema_2',
+			2 => 'gwc_lfndr_migrate_schema_2',
 		)
 	);
 }
@@ -240,11 +240,11 @@ function lfndr_schema_migrations(): array {
  * @param array $schema Stored schema.
  * @return array
  */
-function lfndr_migrate_schema_2( array $schema ): array {
+function gwc_lfndr_migrate_schema_2( array $schema ): array {
 	$fields  = isset( $schema['fields'] ) && is_array( $schema['fields'] ) ? $schema['fields'] : array();
 	$primary = is_array( $schema['primary'] ?? null ) ? $schema['primary'] : array();
 
-	foreach ( lfndr_primary_roles() as $type ) {
+	foreach ( gwc_lfndr_primary_roles() as $type ) {
 		if ( ! empty( $primary[ $type ] ) ) {
 			continue; // Already migrated.
 		}
@@ -266,7 +266,7 @@ function lfndr_migrate_schema_2( array $schema ): array {
 
 	/* An explicit `suspends` outranks "first hours field we found", but never a
 	 * field the admin actually flagged. */
-	if ( '' === ( $primary['hours'] ?? '' ) || ! lfndr_role_was_flagged( $fields, 'hours' ) ) {
+	if ( '' === ( $primary['hours'] ?? '' ) || ! gwc_lfndr_role_was_flagged( $fields, 'hours' ) ) {
 		foreach ( $fields as $field ) {
 			if ( 'closures' === ( $field['type'] ?? '' ) && ! empty( $field['settings']['suspends'] ) ) {
 				$primary['hours'] = (string) $field['settings']['suspends'];
@@ -286,7 +286,7 @@ function lfndr_migrate_schema_2( array $schema ): array {
  * @param string $type   Field type.
  * @return bool
  */
-function lfndr_role_was_flagged( array $fields, string $type ): bool {
+function gwc_lfndr_role_was_flagged( array $fields, string $type ): bool {
 	foreach ( $fields as $field ) {
 		if ( ( $field['type'] ?? '' ) === $type && ! empty( $field['settings']['primary'] ) ) {
 			return true;
@@ -301,17 +301,17 @@ function lfndr_role_was_flagged( array $fields, string $type ): bool {
  * @param array $schema Already sanitized.
  * @return bool
  */
-function lfndr_save_schema( array $schema ): bool {
-	$schema['version'] = LFNDR_SCHEMA_VERSION;
-	$saved             = update_option( LFNDR_SCHEMA_OPTION, $schema );
+function gwc_lfndr_save_schema( array $schema ): bool {
+	$schema['version'] = GWC_LFNDR_SCHEMA_VERSION;
+	$saved             = update_option( GWC_LFNDR_SCHEMA_OPTION, $schema );
 
 	/* Update the memo rather than clearing it: every caller that saves is about
 	 * to read, and re-reading the option would only re-run the merge we just
-	 * did. Subscribers to lfndr_schema_saved therefore see the new schema, which
+	 * did. Subscribers to gwc_lfndr_schema_saved therefore see the new schema, which
 	 * is what the payload cache invalidation depends on. */
-	lfndr_schema_cache( $schema );
+	gwc_lfndr_schema_cache( $schema );
 
-	do_action( 'lfndr_schema_saved', $schema );
+	do_action( 'gwc_lfndr_schema_saved', $schema );
 
 	return $saved;
 }
@@ -321,15 +321,15 @@ function lfndr_save_schema( array $schema ): bool {
 /**
  * The post meta key a field's value is stored under.
  *
- * Prefixed with _lfndr_f_ so that (a) it is hidden from the Custom Fields box,
+ * Prefixed with _gwc_lfndr_f_ so that (a) it is hidden from the Custom Fields box,
  * and (b) an uninstall can find every field value with one
  * delete_post_meta_by_key() pattern without knowing the schema.
  *
  * @param string $key Field key.
  * @return string
  */
-function lfndr_field_meta_key( string $key ): string {
-	return '_lfndr_f_' . $key;
+function gwc_lfndr_field_meta_key( string $key ): string {
+	return '_gwc_lfndr_f_' . $key;
 }
 
 /**
@@ -339,8 +339,8 @@ function lfndr_field_meta_key( string $key ): string {
  * @param array|null $schema Optional schema; read if omitted.
  * @return array|null
  */
-function lfndr_get_field( string $key, ?array $schema = null ): ?array {
-	$schema = $schema ?? lfndr_get_schema();
+function gwc_lfndr_get_field( string $key, ?array $schema = null ): ?array {
+	$schema = $schema ?? gwc_lfndr_get_schema();
 	foreach ( $schema['fields'] as $field ) {
 		if ( $field['key'] === $key ) {
 			return $field;
@@ -360,7 +360,7 @@ function lfndr_get_field( string $key, ?array $schema = null ): ?array {
  *
  * @return array<int, string>
  */
-function lfndr_primary_roles(): array {
+function gwc_lfndr_primary_roles(): array {
 	return array( 'address', 'hours', 'closures' );
 }
 
@@ -369,15 +369,15 @@ function lfndr_primary_roles(): array {
  *
  * @return array<string, string>
  */
-function lfndr_empty_primary_roles(): array {
-	return array_fill_keys( lfndr_primary_roles(), '' );
+function gwc_lfndr_empty_primary_roles(): array {
+	return array_fill_keys( gwc_lfndr_primary_roles(), '' );
 }
 
 /**
  * Sanitize the wiring block: each role names a field of its own type, or ''.
  *
  * A name that does not resolve is cleared rather than kept, for the same reason
- * lfndr_resolve_field_references() clears a dangling setting — a role pointing
+ * gwc_lfndr_resolve_field_references() clears a dangling setting — a role pointing
  * at a retired field would drive behavior off a field the Fields screen no
  * longer lists, which is a worse thing to debug than an unassigned role.
  *
@@ -385,19 +385,19 @@ function lfndr_empty_primary_roles(): array {
  * @param array $fields Sanitized fields.
  * @return array<string, string>
  */
-function lfndr_sanitize_primary_roles( $raw, array $fields ): array {
+function gwc_lfndr_sanitize_primary_roles( $raw, array $fields ): array {
 	$by_type = array();
 	foreach ( $fields as $field ) {
 		$by_type[ $field['type'] ][] = $field['key'];
 	}
 
-	$out = lfndr_empty_primary_roles();
+	$out = gwc_lfndr_empty_primary_roles();
 	if ( ! is_array( $raw ) ) {
 		return $out;
 	}
 
 	foreach ( array_keys( $out ) as $type ) {
-		$key = lfndr_sanitize_field_key( (string) ( $raw[ $type ] ?? '' ) );
+		$key = gwc_lfndr_sanitize_field_key( (string) ( $raw[ $type ] ?? '' ) );
 		if ( '' !== $key && in_array( $key, $by_type[ $type ] ?? array(), true ) ) {
 			$out[ $type ] = $key;
 		}
@@ -418,12 +418,12 @@ function lfndr_sanitize_primary_roles( $raw, array $fields ): array {
  * @param array|null $schema Optional schema.
  * @return array|null
  */
-function lfndr_primary_field( string $type, ?array $schema = null ): ?array {
-	$schema = $schema ?? lfndr_get_schema();
+function gwc_lfndr_primary_field( string $type, ?array $schema = null ): ?array {
+	$schema = $schema ?? gwc_lfndr_get_schema();
 
 	$assigned = $schema['primary'][ $type ] ?? '';
 	if ( '' !== $assigned ) {
-		$field = lfndr_get_field( $assigned, $schema );
+		$field = gwc_lfndr_get_field( $assigned, $schema );
 		if ( null !== $field && $field['type'] === $type ) {
 			return $field;
 		}
@@ -453,7 +453,7 @@ function lfndr_primary_field( string $type, ?array $schema = null ): ?array {
  * @param array  $schema  Schema.
  * @return array<int, array{key: string, field: array|null}>
  */
-function lfndr_resolve_order( string $surface, array $schema ): array {
+function gwc_lfndr_resolve_order( string $surface, array $schema ): array {
 	$flag  = 'card' === $surface ? 'show_card' : 'show_detail';
 	$order = 'card' === $surface ? $schema['card_order'] : $schema['detail_order'];
 
@@ -465,7 +465,7 @@ function lfndr_resolve_order( string $surface, array $schema ): array {
 	$out  = array();
 	$seen = array();
 	foreach ( $order as $key ) {
-		if ( in_array( $key, LFNDR_SYNTHETIC_KEYS, true ) ) {
+		if ( in_array( $key, GWC_LFNDR_SYNTHETIC_KEYS, true ) ) {
 			$out[]        = array(
 				'key'   => $key,
 				'field' => null,
@@ -506,7 +506,7 @@ function lfndr_resolve_order( string $surface, array $schema ): array {
  * @param string $raw Raw key.
  * @return string
  */
-function lfndr_sanitize_field_key( string $raw ): string {
+function gwc_lfndr_sanitize_field_key( string $raw ): string {
 	$key = strtolower( trim( $raw ) );
 	$key = preg_replace( '/[^a-z0-9_]/', '_', $key );
 	$key = preg_replace( '/_+/', '_', (string) $key );
@@ -523,7 +523,7 @@ function lfndr_sanitize_field_key( string $raw ): string {
  *
  * @return array
  */
-function lfndr_field_defaults(): array {
+function gwc_lfndr_field_defaults(): array {
 	return array(
 		'key'           => '',
 		'type'          => 'text',
@@ -551,19 +551,19 @@ function lfndr_field_defaults(): array {
  * @param mixed $raw Candidate schema.
  * @return array
  */
-function lfndr_sanitize_schema( $raw ): array {
-	$out = lfndr_default_schema();
+function gwc_lfndr_sanitize_schema( $raw ): array {
+	$out = gwc_lfndr_default_schema();
 	if ( ! is_array( $raw ) ) {
 		return $out;
 	}
 
-	$types = function_exists( 'lfndr_field_types' ) ? lfndr_field_types() : array();
+	$types = function_exists( 'gwc_lfndr_field_types' ) ? gwc_lfndr_field_types() : array();
 
 	$fields = array();
 	$keys   = array();
 	if ( isset( $raw['fields'] ) && is_array( $raw['fields'] ) ) {
 		foreach ( $raw['fields'] as $candidate ) {
-			$field = lfndr_sanitize_field( $candidate, $types );
+			$field = gwc_lfndr_sanitize_field( $candidate, $types );
 			if ( null === $field ) {
 				continue;
 			}
@@ -577,14 +577,14 @@ function lfndr_sanitize_schema( $raw ): array {
 		}
 	}
 
-	$fields         = lfndr_resolve_field_references( $fields );
+	$fields         = gwc_lfndr_resolve_field_references( $fields );
 	$out['fields']  = $fields;
-	$out['primary'] = lfndr_sanitize_primary_roles( $raw['primary'] ?? array(), $fields );
-	$out['retired'] = lfndr_sanitize_retired( $raw['retired'] ?? array(), $types, $keys );
+	$out['primary'] = gwc_lfndr_sanitize_primary_roles( $raw['primary'] ?? array(), $fields );
+	$out['retired'] = gwc_lfndr_sanitize_retired( $raw['retired'] ?? array(), $types, $keys );
 
-	$valid               = array_merge( array_keys( $keys ), LFNDR_SYNTHETIC_KEYS );
-	$out['detail_order'] = lfndr_sanitize_order( $raw['detail_order'] ?? array(), $valid );
-	$out['card_order']   = lfndr_sanitize_order( $raw['card_order'] ?? array(), $valid );
+	$valid               = array_merge( array_keys( $keys ), GWC_LFNDR_SYNTHETIC_KEYS );
+	$out['detail_order'] = gwc_lfndr_sanitize_order( $raw['detail_order'] ?? array(), $valid );
+	$out['card_order']   = gwc_lfndr_sanitize_order( $raw['card_order'] ?? array(), $valid );
 
 	return $out;
 }
@@ -596,14 +596,14 @@ function lfndr_sanitize_schema( $raw ): array {
  * @param array $types Type registry.
  * @return array|null
  */
-function lfndr_sanitize_field( $raw, array $types ): ?array {
+function gwc_lfndr_sanitize_field( $raw, array $types ): ?array {
 	if ( ! is_array( $raw ) ) {
 		return null;
 	}
 
-	$field = array_merge( lfndr_field_defaults(), array_intersect_key( $raw, lfndr_field_defaults() ) );
+	$field = array_merge( gwc_lfndr_field_defaults(), array_intersect_key( $raw, gwc_lfndr_field_defaults() ) );
 
-	$field['key'] = lfndr_sanitize_field_key( (string) ( $raw['key'] ?? '' ) );
+	$field['key'] = gwc_lfndr_sanitize_field_key( (string) ( $raw['key'] ?? '' ) );
 	if ( '' === $field['key'] ) {
 		return null;
 	}
@@ -646,8 +646,8 @@ function lfndr_sanitize_field( $raw, array $types ): ?array {
 	$field['filter_widget'] = in_array( $widget, array( 'chips', 'select', 'toggle' ), true ) ? $widget : '';
 	$field['filter_label']  = sanitize_text_field( (string) ( $raw['filter_label'] ?? '' ) );
 
-	$field['options']  = lfndr_sanitize_field_options( $raw['options'] ?? array() );
-	$field['settings'] = lfndr_sanitize_field_settings( $raw['settings'] ?? array(), $field, $types );
+	$field['options']  = gwc_lfndr_sanitize_field_options( $raw['options'] ?? array() );
+	$field['settings'] = gwc_lfndr_sanitize_field_settings( $raw['settings'] ?? array(), $field, $types );
 
 	return $field;
 }
@@ -658,7 +658,7 @@ function lfndr_sanitize_field( $raw, array $types ): ?array {
  * @param mixed $raw Options.
  * @return array<int, array{value: string, label: string}>
  */
-function lfndr_sanitize_field_options( $raw ): array {
+function gwc_lfndr_sanitize_field_options( $raw ): array {
 	if ( ! is_array( $raw ) ) {
 		return array();
 	}
@@ -696,7 +696,7 @@ function lfndr_sanitize_field_options( $raw ): array {
  * @param array $types Type registry.
  * @return array
  */
-function lfndr_sanitize_field_settings( $raw, array $field, array $types ): array {
+function gwc_lfndr_sanitize_field_settings( $raw, array $field, array $types ): array {
 	$raw      = is_array( $raw ) ? $raw : array();
 	$callback = $types[ $field['type'] ]['sanitize_settings'] ?? null;
 	if ( $callback && is_callable( $callback ) ) {
@@ -730,13 +730,13 @@ function lfndr_sanitize_field_settings( $raw, array $field, array $types ): arra
  * A reference that does not resolve is cleared rather than kept. Keeping it
  * means a setting quietly does nothing while the Fields screen shows a field
  * name that is no longer in the list, which is a worse thing to debug than an
- * empty setting. lfndr_sanitize_primary_roles() does the same for the roles,
+ * empty setting. gwc_lfndr_sanitize_primary_roles() does the same for the roles,
  * which are references of the same kind held at the top of the schema.
  *
  * @param array $fields Sanitized fields.
  * @return array
  */
-function lfndr_resolve_field_references( array $fields ): array {
+function gwc_lfndr_resolve_field_references( array $fields ): array {
 	$by_type = array();
 	foreach ( $fields as $field ) {
 		$by_type[ $field['type'] ][] = $field['key'];
@@ -769,7 +769,7 @@ function lfndr_resolve_field_references( array $fields ): array {
  * @param array $valid Allowed keys.
  * @return array<int, string>
  */
-function lfndr_sanitize_order( $raw, array $valid ): array {
+function gwc_lfndr_sanitize_order( $raw, array $valid ): array {
 	if ( is_string( $raw ) ) {
 		$raw = explode( ',', $raw );
 	}
@@ -801,7 +801,7 @@ function lfndr_sanitize_order( $raw, array $valid ): array {
  * @param array $live  Map of live keys.
  * @return array
  */
-function lfndr_sanitize_retired( $raw, array $types, array $live ): array {
+function gwc_lfndr_sanitize_retired( $raw, array $types, array $live ): array {
 	if ( ! is_array( $raw ) ) {
 		return array();
 	}
@@ -811,7 +811,7 @@ function lfndr_sanitize_retired( $raw, array $types, array $live ): array {
 		if ( ! is_array( $candidate ) ) {
 			continue;
 		}
-		$field = lfndr_sanitize_field( $candidate, $types );
+		$field = gwc_lfndr_sanitize_field( $candidate, $types );
 		if ( null === $field || isset( $live[ $field['key'] ] ) || isset( $seen[ $field['key'] ] ) ) {
 			continue;
 		}
@@ -833,13 +833,13 @@ function lfndr_sanitize_retired( $raw, array $types, array $live ): array {
  * @param string $key Field key.
  * @return int
  */
-function lfndr_field_usage_count( string $key ): int {
+function gwc_lfndr_field_usage_count( string $key ): int {
 	global $wpdb;
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- admin-screen-only count; no core API exposes it.
 	return (int) $wpdb->get_var(
 		$wpdb->prepare(
 			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value <> ''",
-			lfndr_field_meta_key( $key )
+			gwc_lfndr_field_meta_key( $key )
 		)
 	);
 }

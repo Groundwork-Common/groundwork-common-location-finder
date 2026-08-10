@@ -218,7 +218,7 @@ Never. Uninstalling removes the plugin, not your records — locations and their
 field values survive, and reinstalling picks up where you left off. If you also
 want the field schema and settings removed, that has to be armed deliberately:
 
-`update_option( 'lfndr_allow_destructive_uninstall', true );`
+`update_option( 'gwc_lfndr_allow_destructive_uninstall', true );`
 
 Even then, the locations themselves stay.
 

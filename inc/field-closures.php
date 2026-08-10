@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_filter( 'lfndr_field_types', 'lfndr_register_closures_type' );
+add_filter( 'gwc_lfndr_field_types', 'gwc_lfndr_register_closures_type' );
 
 /**
  * Register the closures type.
@@ -15,19 +15,19 @@ add_filter( 'lfndr_field_types', 'lfndr_register_closures_type' );
  * @param array $types Registry.
  * @return array
  */
-function lfndr_register_closures_type( array $types ): array {
+function gwc_lfndr_register_closures_type( array $types ): array {
 	$types['closures'] = array(
 		'label'             => __( 'Temporary closures', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
-		'render_admin'      => 'lfndr_admin_closures',
-		'sanitize'          => 'lfndr_sanitize_closures',
-		'is_empty'          => 'lfndr_empty_array',
-		'to_payload'        => 'lfndr_payload_closures',
+		'render_admin'      => 'gwc_lfndr_admin_closures',
+		'sanitize'          => 'gwc_lfndr_sanitize_closures',
+		'is_empty'          => 'gwc_lfndr_empty_array',
+		'to_payload'        => 'gwc_lfndr_payload_closures',
 		'search_text'       => null,
 		'facet_tokens'      => null,
-		'schema_form'       => 'lfndr_schema_form_closures',
-		'sanitize_settings' => 'lfndr_settings_closures',
+		'schema_form'       => 'gwc_lfndr_schema_form_closures',
+		'sanitize_settings' => 'gwc_lfndr_settings_closures',
 		'needs_present'     => true,
 		'can_be_primary'    => true,
 		'js'                => 'closures',
@@ -47,7 +47,7 @@ function lfndr_register_closures_type( array $types ): array {
  * that starts, in which timezone, that nobody making the statement intended.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_CLOSURE_REASON_MAX = 140;
+const GWC_LFNDR_CLOSURE_REASON_MAX = 140;
 
 /**
  * Validate a Y-m-d date, rejecting ones that do not exist.
@@ -60,7 +60,7 @@ const LFNDR_CLOSURE_REASON_MAX = 140;
  * @param mixed $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_closure_date( $raw ): string {
+function gwc_lfndr_sanitize_closure_date( $raw ): string {
 	$raw = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 	if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
 		return '';
@@ -79,14 +79,14 @@ function lfndr_sanitize_closure_date( $raw ): string {
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_sanitize_closures( $raw, array $field ): array {
+function gwc_lfndr_sanitize_closures( $raw, array $field ): array {
 	if ( ! is_array( $raw ) ) {
 		return array();
 	}
 
-	$max_reason = max( 20, (int) ( $field['settings']['reason_max'] ?? LFNDR_CLOSURE_REASON_MAX ) );
+	$max_reason = max( 20, (int) ( $field['settings']['reason_max'] ?? GWC_LFNDR_CLOSURE_REASON_MAX ) );
 	$max_rows   = max( 0, (int) ( $field['settings']['max_rows'] ?? 0 ) );
-	$today      = lfndr_today();
+	$today      = gwc_lfndr_today();
 
 	$out = array();
 	foreach ( $raw as $row ) {
@@ -94,14 +94,14 @@ function lfndr_sanitize_closures( $raw, array $field ): array {
 			continue;
 		}
 
-		$start = lfndr_sanitize_closure_date( $row['start'] ?? '' );
+		$start = gwc_lfndr_sanitize_closure_date( $row['start'] ?? '' );
 		if ( '' === $start ) {
 			continue;
 		}
 
 		// A closure with no end date is a single day, which is the common case
 		// and worth not making people type twice.
-		$end = lfndr_sanitize_closure_date( $row['end'] ?? '' );
+		$end = gwc_lfndr_sanitize_closure_date( $row['end'] ?? '' );
 		if ( '' === $end ) {
 			$end = $start;
 		}
@@ -142,8 +142,8 @@ function lfndr_sanitize_closures( $raw, array $field ): array {
  *
  * @return string
  */
-function lfndr_today(): string {
-	return ( new DateTimeImmutable( 'now', lfndr_timezone() ) )->format( 'Y-m-d' );
+function gwc_lfndr_today(): string {
+	return ( new DateTimeImmutable( 'now', gwc_lfndr_timezone() ) )->format( 'Y-m-d' );
 }
 
 /**
@@ -152,9 +152,9 @@ function lfndr_today(): string {
  * @param mixed $value Stored value.
  * @return array
  */
-function lfndr_payload_closures( $value ): array {
+function gwc_lfndr_payload_closures( $value ): array {
 	/* Shipped raw, with no "is this active" flag computed here — see the note in
-	 * lfndr_payload_hours(). The payload is cached for an hour on a boundary
+	 * gwc_lfndr_payload_hours(). The payload is cached for an hour on a boundary
 	 * unrelated to midnight, so a flag baked in at 11:40pm would still be
 	 * asserting yesterday's answer at 12:30am. */
 	return is_array( $value ) ? array_values( $value ) : array();
@@ -169,7 +169,7 @@ function lfndr_payload_closures( $value ): array {
  * @param mixed  $value Stored value.
  * @param string $name  Input name prefix.
  */
-function lfndr_admin_closures( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_closures( array $field, $value, string $name ): void {
 	$rows     = is_array( $value ) ? $value : array();
 	$max_rows = max( 0, (int) ( $field['settings']['max_rows'] ?? 0 ) );
 
@@ -181,12 +181,12 @@ function lfndr_admin_closures( array $field, $value, string $name ): void {
 
 	echo '<div class="lfndr-repeater__rows">';
 	foreach ( $rows as $index => $row ) {
-		lfndr_render_closure_row( $name, (string) $index, $row, $field );
+		gwc_lfndr_render_closure_row( $name, (string) $index, $row, $field );
 	}
 	echo '</div>';
 
 	echo '<template class="lfndr-repeater__template">';
-	lfndr_render_closure_row( $name, '__i__', array(), $field );
+	gwc_lfndr_render_closure_row( $name, '__i__', array(), $field );
 	echo '</template>';
 
 	printf(
@@ -207,9 +207,9 @@ function lfndr_admin_closures( array $field, $value, string $name ): void {
  * @param array  $row   Row values.
  * @param array  $field Field definition.
  */
-function lfndr_render_closure_row( string $name, string $index, array $row, array $field ): void {
+function gwc_lfndr_render_closure_row( string $name, string $index, array $row, array $field ): void {
 	$base = $name . '[' . $index . ']';
-	$max  = max( 20, (int) ( $field['settings']['reason_max'] ?? LFNDR_CLOSURE_REASON_MAX ) );
+	$max  = max( 20, (int) ( $field['settings']['reason_max'] ?? GWC_LFNDR_CLOSURE_REASON_MAX ) );
 
 	echo '<div class="lfndr-repeater__row">';
 
@@ -244,9 +244,9 @@ function lfndr_render_closure_row( string $name, string $index, array $row, arra
  * @param array $raw Raw settings.
  * @return array
  */
-function lfndr_settings_closures( array $raw ): array {
+function gwc_lfndr_settings_closures( array $raw ): array {
 	return array(
-		'reason_max'     => max( 20, min( 500, (int) ( $raw['reason_max'] ?? LFNDR_CLOSURE_REASON_MAX ) ) ),
+		'reason_max'     => max( 20, min( 500, (int) ( $raw['reason_max'] ?? GWC_LFNDR_CLOSURE_REASON_MAX ) ) ),
 		'lookahead_days' => max( 0, min( 365, (int) ( $raw['lookahead_days'] ?? 7 ) ) ),
 		'max_rows'       => max( 0, (int) ( $raw['max_rows'] ?? 0 ) ),
 	);
@@ -257,19 +257,19 @@ function lfndr_settings_closures( array $raw ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_closures( array $field ): void {
+function gwc_lfndr_schema_form_closures( array $field ): void {
 	/* Which hours a closure overrides is no longer asked here. The closures
 	 * field holding the site's closures role suspends the hours field holding
 	 * the hours role, which is the only pairing that was ever coherent — a
 	 * closure pointing at some other schedule struck it through while the badge
 	 * kept reading from a schedule nothing had closed. Both roles are assigned
-	 * together on the Fields screen; see lfndr_render_roles_panel(). */
-	lfndr_schema_number_control(
+	 * together on the Fields screen; see gwc_lfndr_render_roles_panel(). */
+	gwc_lfndr_schema_number_control(
 		$field,
 		'lookahead_days',
 		__( 'Warn this many days ahead', 'groundwork-common-location-finder' ),
 		__( 'Shows "Closing on the 24th" before it happens. 0 turns the warning off.', 'groundwork-common-location-finder' )
 	);
-	lfndr_schema_number_control( $field, 'reason_max', __( 'Longest reason', 'groundwork-common-location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'max_rows', __( 'Most closures at once', 'groundwork-common-location-finder' ), __( '0 for no limit.', 'groundwork-common-location-finder' ) );
+	gwc_lfndr_schema_number_control( $field, 'reason_max', __( 'Longest reason', 'groundwork-common-location-finder' ), '' );
+	gwc_lfndr_schema_number_control( $field, 'max_rows', __( 'Most closures at once', 'groundwork-common-location-finder' ), __( '0 for no limit.', 'groundwork-common-location-finder' ) );
 }

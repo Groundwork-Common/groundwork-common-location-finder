@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 final class SchemaTest extends TestCase {
 
 	protected function setUp(): void {
-		lfndr_test_reset();
+		gwc_lfndr_test_reset();
 	}
 
 	/** A minimal valid field definition of the given type. */
@@ -28,39 +28,39 @@ final class SchemaTest extends TestCase {
 	/* ── Keys ───────────────────────────────────────────────────────────── */
 
 	public function test_field_key_normalisation(): void {
-		$this->assertSame( 'phone_number', lfndr_sanitize_field_key( 'Phone Number' ) );
-		$this->assertSame( 'phone_number', lfndr_sanitize_field_key( '  phone--number  ' ) );
-		$this->assertSame( 'a', lfndr_sanitize_field_key( 'a' ) );
+		$this->assertSame( 'phone_number', gwc_lfndr_sanitize_field_key( 'Phone Number' ) );
+		$this->assertSame( 'phone_number', gwc_lfndr_sanitize_field_key( '  phone--number  ' ) );
+		$this->assertSame( 'a', gwc_lfndr_sanitize_field_key( 'a' ) );
 	}
 
 	public function test_field_key_rejects_leading_underscore(): void {
 		// This is what keeps a real key from ever colliding with a synthetic
 		// __name / __distance entry in an order list.
-		$this->assertSame( 'name', lfndr_sanitize_field_key( '__name' ) );
-		$this->assertSame( '', lfndr_sanitize_field_key( '___' ) );
+		$this->assertSame( 'name', gwc_lfndr_sanitize_field_key( '__name' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_field_key( '___' ) );
 	}
 
 	public function test_field_key_rejects_leading_digit_and_overlong(): void {
-		$this->assertSame( '', lfndr_sanitize_field_key( '2nd_address' ) );
-		$this->assertSame( '', lfndr_sanitize_field_key( 'a' . str_repeat( 'b', 60 ) ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_field_key( '2nd_address' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_field_key( 'a' . str_repeat( 'b', 60 ) ) );
 	}
 
 	/* ── Whole-schema sanitization ──────────────────────────────────────── */
 
 	public function test_non_array_yields_the_default_schema(): void {
-		$this->assertSame( lfndr_default_schema(), lfndr_sanitize_schema( 'nonsense' ) );
-		$this->assertSame( lfndr_default_schema(), lfndr_sanitize_schema( null ) );
+		$this->assertSame( gwc_lfndr_default_schema(), gwc_lfndr_sanitize_schema( 'nonsense' ) );
+		$this->assertSame( gwc_lfndr_default_schema(), gwc_lfndr_sanitize_schema( null ) );
 	}
 
 	public function test_unknown_type_drops_the_field(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array( 'fields' => array( $this->field( 'mystery', 'not_a_real_type' ) ) )
 		);
 		$this->assertSame( array(), $schema['fields'] );
 	}
 
 	public function test_duplicate_keys_keep_only_the_first(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					$this->field( 'phone', 'phone', array( 'label' => 'First' ) ),
@@ -74,7 +74,7 @@ final class SchemaTest extends TestCase {
 	}
 
 	public function test_missing_label_falls_back_to_the_key(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					array(
@@ -90,14 +90,14 @@ final class SchemaTest extends TestCase {
 	public function test_filterable_is_forced_off_for_types_that_cannot_filter(): void {
 		// The registry says text has no facet_tokens. The Fields screen grays
 		// the checkbox from the same value, but a hand-posted form must not win.
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array( 'fields' => array( $this->field( 'notes', 'text', array( 'filterable' => true ) ) ) )
 		);
 		$this->assertFalse( $schema['fields'][0]['filterable'] );
 	}
 
 	public function test_filterable_survives_for_types_that_can_filter(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					$this->field( 'open', 'boolean', array( 'filterable' => true ) ),
@@ -110,7 +110,7 @@ final class SchemaTest extends TestCase {
 	/* ── Options ────────────────────────────────────────────────────────── */
 
 	public function test_options_are_deduped_by_value_and_slugged(): void {
-		$schema  = lfndr_sanitize_schema(
+		$schema  = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					$this->field(
@@ -143,7 +143,7 @@ final class SchemaTest extends TestCase {
 	}
 
 	public function test_option_without_a_label_falls_back_to_its_value(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					$this->field( 'kind', 'select', array( 'options' => array( array( 'value' => 'church' ) ) ) ),
@@ -159,7 +159,7 @@ final class SchemaTest extends TestCase {
 	 * reconciled, so what there is to test is that each type has its own slot
 	 * and that assigning one never disturbs another. */
 	public function test_each_type_has_its_own_role_slot(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array(
 					array(
@@ -205,13 +205,13 @@ final class SchemaTest extends TestCase {
 				'label' => 'B',
 			),
 		);
-		$first  = lfndr_sanitize_schema(
+		$first  = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => $fields,
 				'primary' => array( 'address' => 'a' ),
 			)
 		);
-		$moved  = lfndr_sanitize_schema(
+		$moved  = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => $fields,
 				'primary' => array( 'address' => 'b' ),
@@ -224,7 +224,7 @@ final class SchemaTest extends TestCase {
 	public function test_primary_field_falls_back_to_the_first_of_its_type(): void {
 		// An admin who defines one address and never opens the panel still
 		// expects Directions to work.
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields' => array(
 					array(
@@ -236,11 +236,11 @@ final class SchemaTest extends TestCase {
 			)
 		);
 		$this->assertSame( '', $schema['primary']['address'] );
-		$this->assertSame( 'a', lfndr_primary_field( 'address', $schema )['key'] );
+		$this->assertSame( 'a', gwc_lfndr_primary_field( 'address', $schema )['key'] );
 	}
 
 	public function test_the_v2_migration_lifts_the_old_flags_into_roles(): void {
-		$migrated = lfndr_migrate_schema_2(
+		$migrated = gwc_lfndr_migrate_schema_2(
 			array(
 				'fields' => array(
 					array(
@@ -266,11 +266,11 @@ final class SchemaTest extends TestCase {
 		);
 		$this->assertSame( 'office', $migrated['primary']['hours'], 'A flagged field outranks an old suspends pointer.' );
 		$this->assertSame( 'cl', $migrated['primary']['closures'] );
-		$this->assertSame( $migrated, lfndr_migrate_schema_2( $migrated ), 'Migrations must be idempotent.' );
+		$this->assertSame( $migrated, gwc_lfndr_migrate_schema_2( $migrated ), 'Migrations must be idempotent.' );
 	}
 
 	public function test_the_v2_migration_falls_back_to_suspends_then_to_order(): void {
-		$from_suspends = lfndr_migrate_schema_2(
+		$from_suspends = gwc_lfndr_migrate_schema_2(
 			array(
 				'fields' => array(
 					array(
@@ -293,7 +293,7 @@ final class SchemaTest extends TestCase {
 		);
 		$this->assertSame( 'h2', $from_suspends['primary']['hours'], 'suspends is better evidence of intent than field order.' );
 
-		$from_order = lfndr_migrate_schema_2(
+		$from_order = gwc_lfndr_migrate_schema_2(
 			array(
 				'fields' => array(
 					array(
@@ -313,21 +313,21 @@ final class SchemaTest extends TestCase {
 		$valid = array( 'phone', 'website', '__name' );
 		$this->assertSame(
 			array( '__name', 'phone' ),
-			lfndr_sanitize_order( array( '__name', 'phone', 'ghost', 'phone' ), $valid )
+			gwc_lfndr_sanitize_order( array( '__name', 'phone', 'ghost', 'phone' ), $valid )
 		);
 	}
 
 	public function test_order_accepts_a_comma_string_from_the_hidden_input(): void {
 		$this->assertSame(
 			array( '__name', 'phone' ),
-			lfndr_sanitize_order( '__name,phone', array( 'phone', '__name' ) )
+			gwc_lfndr_sanitize_order( '__name,phone', array( 'phone', '__name' ) )
 		);
 	}
 
 	public function test_resolve_order_appends_flagged_fields_missing_from_the_list(): void {
 		// The self-healing property: add a field on the Fields screen and it
 		// shows up immediately rather than invisibly.
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'       => array(
 					$this->field( 'phone', 'phone', array( 'show_detail' => true ) ),
@@ -337,12 +337,12 @@ final class SchemaTest extends TestCase {
 			)
 		);
 
-		$resolved = lfndr_resolve_order( 'detail', $schema );
+		$resolved = gwc_lfndr_resolve_order( 'detail', $schema );
 		$this->assertSame( array( '__name', 'phone', 'website' ), array_column( $resolved, 'key' ) );
 	}
 
 	public function test_resolve_order_skips_fields_not_flagged_for_that_surface(): void {
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'     => array(
 					$this->field(
@@ -366,8 +366,8 @@ final class SchemaTest extends TestCase {
 			)
 		);
 
-		$this->assertSame( array( '__name', 'city' ), array_column( lfndr_resolve_order( 'card', $schema ), 'key' ) );
-		$this->assertSame( array( 'phone' ), array_column( lfndr_resolve_order( 'detail', $schema ), 'key' ) );
+		$this->assertSame( array( '__name', 'city' ), array_column( gwc_lfndr_resolve_order( 'card', $schema ), 'key' ) );
+		$this->assertSame( array( 'phone' ), array_column( gwc_lfndr_resolve_order( 'detail', $schema ), 'key' ) );
 	}
 
 	/* ── Retirement ─────────────────────────────────────────────────────── */
@@ -375,7 +375,7 @@ final class SchemaTest extends TestCase {
 	public function test_a_retired_key_that_came_back_live_is_dropped_from_retired(): void {
 		// Otherwise the Fields screen would offer to erase the meta the live
 		// field is now reading.
-		$schema = lfndr_sanitize_schema(
+		$schema = gwc_lfndr_sanitize_schema(
 			array(
 				'fields'  => array( $this->field( 'phone', 'phone' ) ),
 				'retired' => array( $this->field( 'phone', 'text' ), $this->field( 'fax', 'text' ) ),
@@ -387,7 +387,7 @@ final class SchemaTest extends TestCase {
 	/* ── Versioning ─────────────────────────────────────────────────────── */
 
 	public function test_saving_a_schema_is_visible_to_the_next_read(): void {
-		// Regression: the memo used to live in lfndr_get_schema()'s own static,
+		// Regression: the memo used to live in gwc_lfndr_get_schema()'s own static,
 		// which no writer could reach. Any caller that saved and then read in
 		// one request — WP-CLI, an importer, this test — got the old schema
 		// back, and a location save driven by it silently skipped the new field.
@@ -396,31 +396,31 @@ final class SchemaTest extends TestCase {
 		// matters is that the read AFTER the write reflects the write, not what
 		// happened to be there first. An earlier version pinned the default to
 		// array(), which made this fail the day the plugin shipped with fields.
-		$before = array_column( lfndr_get_schema()['fields'], 'key' );
+		$before = array_column( gwc_lfndr_get_schema()['fields'], 'key' );
 		$this->assertNotContains( 'probe_key', $before );
 
-		lfndr_save_schema(
-			lfndr_sanitize_schema(
+		gwc_lfndr_save_schema(
+			gwc_lfndr_sanitize_schema(
 				array( 'fields' => array( $this->field( 'probe_key', 'phone' ) ) )
 			)
 		);
 
-		$this->assertSame( array( 'probe_key' ), array_column( lfndr_get_schema()['fields'], 'key' ) );
+		$this->assertSame( array( 'probe_key' ), array_column( gwc_lfndr_get_schema()['fields'], 'key' ) );
 	}
 
 	public function test_a_newer_schema_is_returned_untouched(): void {
 		update_option(
-			'lfndr_schema',
+			'gwc_lfndr_schema',
 			array(
-				'version'      => LFNDR_SCHEMA_VERSION + 5,
+				'version'      => GWC_LFNDR_SCHEMA_VERSION + 5,
 				'fields'       => array(),
 				'detail_order' => array( '__future' ),
 				'card_order'   => array(),
 				'retired'      => array(),
 			)
 		);
-		$schema = lfndr_get_schema();
-		$this->assertSame( LFNDR_SCHEMA_VERSION + 5, $schema['version'] );
+		$schema = gwc_lfndr_get_schema();
+		$this->assertSame( GWC_LFNDR_SCHEMA_VERSION + 5, $schema['version'] );
 		$this->assertSame( array( '__future' ), $schema['detail_order'], 'A downgrade must not normalize data it does not understand.' );
 	}
 }

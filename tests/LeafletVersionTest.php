@@ -39,7 +39,7 @@ class LeafletVersionTest extends PHPUnit\Framework\TestCase {
 		$bundled = $this->bundled_version();
 		$enqueue = (string) file_get_contents( dirname( __DIR__ ) . '/inc/enqueue.php' );
 
-		preg_match_all( "/'leaflet',\s*LFNDR_URL \. 'assets\/leaflet\/leaflet\.(?:css|js)',\s*array\([^)]*\),\s*'([^']+)'/", $enqueue, $m );
+		preg_match_all( "/'leaflet',\s*GWC_LFNDR_URL \. 'assets\/leaflet\/leaflet\.(?:css|js)',\s*array\([^)]*\),\s*'([^']+)'/", $enqueue, $m );
 
 		$this->assertCount( 2, $m[1], 'Expected both the style and the script to register a version.' );
 

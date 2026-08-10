@@ -35,7 +35,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * `lfndr_settings[_roles][hours]` → `array( '_roles', 'hours' )`.
+	 * `gwc_lfndr_settings[_roles][hours]` → `array( '_roles', 'hours' )`.
 	 *
 	 * @param string $name An input name.
 	 * @return array<int, string>
@@ -48,7 +48,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 
 	private function render_roles(): string {
 		ob_start();
-		lfndr_render_roles_fields();
+		gwc_lfndr_render_roles_fields();
 		return (string) ob_get_clean();
 	}
 
@@ -56,15 +56,15 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 		// The starter schema has an address and an hours field, so there is
 		// something to wire up. If this ever renders nothing the assertions
 		// below would pass vacuously.
-		update_option( 'lfndr_schema', lfndr_default_schema() );
-		lfndr_schema_cache( null, true );
+		update_option( 'gwc_lfndr_schema', gwc_lfndr_default_schema() );
+		gwc_lfndr_schema_cache( null, true );
 
 		$this->assertStringContainsString( '<select', $this->render_roles() );
 	}
 
 	public function test_every_role_select_is_read_by_the_settings_sanitizer(): void {
-		update_option( 'lfndr_schema', lfndr_default_schema() );
-		lfndr_schema_cache( null, true );
+		update_option( 'gwc_lfndr_schema', gwc_lfndr_default_schema() );
+		gwc_lfndr_schema_cache( null, true );
 
 		$names = array_filter(
 			$this->input_names( $this->render_roles() ),
@@ -79,7 +79,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 			$path = $this->name_path( $name );
 
 			$this->assertSame(
-				LFNDR_SETTINGS_OPTION,
+				GWC_LFNDR_SETTINGS_OPTION,
 				$path[0],
 				sprintf( 'Input "%s" is not part of the settings form, so nothing will save it.', $name )
 			);
@@ -89,17 +89,17 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 			$type  = end( $path );
 			$value = 'address' === $type ? 'address' : ( 'hours' === $type ? 'hours' : '' );
 
-			lfndr_sanitize_settings(
+			gwc_lfndr_sanitize_settings(
 				array(
 					'_tab_behavior' => '1',
 					'_roles'        => array( $type => $value ),
 				)
 			);
-			lfndr_schema_cache( null, true );
+			gwc_lfndr_schema_cache( null, true );
 
 			$this->assertSame(
 				$value,
-				(string) ( lfndr_get_schema()['primary'][ $type ] ?? '__unset__' ),
+				(string) ( gwc_lfndr_get_schema()['primary'][ $type ] ?? '__unset__' ),
 				sprintf( 'Submitting "%s" did not reach the schema. The form and the sanitizer disagree.', $name )
 			);
 		}
@@ -111,10 +111,10 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 	 * written back out on the next save forever.
 	 */
 	public function test_transient_keys_are_stripped_from_what_is_stored(): void {
-		update_option( 'lfndr_schema', lfndr_default_schema() );
-		lfndr_schema_cache( null, true );
+		update_option( 'gwc_lfndr_schema', gwc_lfndr_default_schema() );
+		gwc_lfndr_schema_cache( null, true );
 
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_behavior' => '1',
 				'_roles'        => array( 'hours' => 'hours' ),
@@ -144,7 +144,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 
 		$checked = 0;
 
-		foreach ( lfndr_option_fields() as $key => $field ) {
+		foreach ( gwc_lfndr_option_fields() as $key => $field ) {
 			// Selects are constrained to their own choices and are covered by
 			// their own test; free-form types are what this is about.
 			if ( ! isset( $samples[ $field['type'] ] ) ) {
@@ -152,7 +152,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 			}
 
 			$value = $samples[ $field['type'] ];
-			$out   = lfndr_sanitize_settings(
+			$out   = gwc_lfndr_sanitize_settings(
 				array(
 					'_tab_' . $field['tab'] => '1',
 					$key                    => $value,

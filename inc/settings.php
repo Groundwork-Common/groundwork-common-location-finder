@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const LFNDR_SETTINGS_OPTION = 'lfndr_settings';
+const GWC_LFNDR_SETTINGS_OPTION = 'gwc_lfndr_settings';
 
 /**
  * Every setting, with the value a fresh install behaves as.
@@ -19,7 +19,7 @@ const LFNDR_SETTINGS_OPTION = 'lfndr_settings';
  *
  * @return array
  */
-function lfndr_setting_defaults(): array {
+function gwc_lfndr_setting_defaults(): array {
 	return array(
 		// Map.
 		'center_lat'          => 0.0,
@@ -103,18 +103,18 @@ function lfndr_setting_defaults(): array {
 /**
  * The per-request settings memo.
  *
- * Its own function rather than a static inside lfndr_setting(), for the same
- * reason lfndr_schema_cache() exists: a writer needs a way to invalidate a
+ * Its own function rather than a static inside gwc_lfndr_setting(), for the same
+ * reason gwc_lfndr_schema_cache() exists: a writer needs a way to invalidate a
  * reader's cache, and PHP has no way to reach another function's static
  * variable. Without this, a script that calls update_option() and then reads
- * lfndr_setting() in the same request — a migration, WP-CLI, another plugin —
+ * gwc_lfndr_setting() in the same request — a migration, WP-CLI, another plugin —
  * would silently see the value from before the write.
  *
  * @param array|null $set   Value to store.
  * @param bool       $clear Forget the cached value.
  * @return array|null
  */
-function lfndr_settings_cache( ?array $set = null, bool $clear = false ): ?array {
+function gwc_lfndr_settings_cache( ?array $set = null, bool $clear = false ): ?array {
 	static $cache = null;
 	if ( $clear ) {
 		$cache = null;
@@ -126,8 +126,8 @@ function lfndr_settings_cache( ?array $set = null, bool $clear = false ): ?array
 	return $cache;
 }
 
-add_action( 'update_option_' . LFNDR_SETTINGS_OPTION, 'lfndr_reset_settings_cache' );
-add_action( 'add_option_' . LFNDR_SETTINGS_OPTION, 'lfndr_reset_settings_cache' );
+add_action( 'update_option_' . GWC_LFNDR_SETTINGS_OPTION, 'gwc_lfndr_reset_settings_cache' );
+add_action( 'add_option_' . GWC_LFNDR_SETTINGS_OPTION, 'gwc_lfndr_reset_settings_cache' );
 
 /**
  * Clear the settings memo. Hooked to both add_option_* and update_option_* —
@@ -135,8 +135,8 @@ add_action( 'add_option_' . LFNDR_SETTINGS_OPTION, 'lfndr_reset_settings_cache' 
  * on every write after, so a site's very first Settings save needs the same
  * invalidation as every one after it.
  */
-function lfndr_reset_settings_cache(): void {
-	lfndr_settings_cache( null, true );
+function gwc_lfndr_reset_settings_cache(): void {
+	gwc_lfndr_settings_cache( null, true );
 }
 
 /**
@@ -145,11 +145,11 @@ function lfndr_reset_settings_cache(): void {
  * @param string $key Setting key.
  * @return mixed
  */
-function lfndr_setting( string $key ) {
-	$settings = lfndr_settings_cache();
+function gwc_lfndr_setting( string $key ) {
+	$settings = gwc_lfndr_settings_cache();
 	if ( null === $settings ) {
-		$stored   = get_option( LFNDR_SETTINGS_OPTION );
-		$settings = lfndr_settings_cache( array_merge( lfndr_setting_defaults(), is_array( $stored ) ? $stored : array() ) );
+		$stored   = get_option( GWC_LFNDR_SETTINGS_OPTION );
+		$settings = gwc_lfndr_settings_cache( array_merge( gwc_lfndr_setting_defaults(), is_array( $stored ) ? $stored : array() ) );
 	}
 	return $settings[ $key ] ?? null;
 }
@@ -162,8 +162,8 @@ function lfndr_setting( string $key ) {
  *
  * @return DateTimeZone
  */
-function lfndr_timezone(): DateTimeZone {
-	$configured = (string) lfndr_setting( 'timezone' );
+function gwc_lfndr_timezone(): DateTimeZone {
+	$configured = (string) gwc_lfndr_setting( 'timezone' );
 	if ( '' !== $configured ) {
 		try {
 			return new DateTimeZone( $configured );
@@ -184,8 +184,8 @@ function lfndr_timezone(): DateTimeZone {
  *
  * @return string
  */
-function lfndr_units(): string {
-	$configured = (string) lfndr_setting( 'units' );
+function gwc_lfndr_units(): string {
+	$configured = (string) gwc_lfndr_setting( 'units' );
 	if ( in_array( $configured, array( 'mi', 'km' ), true ) ) {
 		return $configured;
 	}
@@ -204,16 +204,16 @@ function lfndr_units(): string {
  *
  * @return array{url:string, attribution:string, max_zoom:int}
  */
-function lfndr_resolve_map_style(): array {
-	$styles = lfndr_map_styles();
-	$key    = (string) lfndr_setting( 'map_style' );
+function gwc_lfndr_resolve_map_style(): array {
+	$styles = gwc_lfndr_map_styles();
+	$key    = (string) gwc_lfndr_setting( 'map_style' );
 	$style  = $styles[ $key ] ?? null;
 
 	if ( null === $style || '' === $style['url'] ) {
 		return array(
-			'url'         => (string) lfndr_setting( 'tile_url' ),
-			'attribution' => (string) lfndr_setting( 'tile_attr' ),
-			'max_zoom'    => (int) lfndr_setting( 'tile_maxzoom' ),
+			'url'         => (string) gwc_lfndr_setting( 'tile_url' ),
+			'attribution' => (string) gwc_lfndr_setting( 'tile_attr' ),
+			'max_zoom'    => (int) gwc_lfndr_setting( 'tile_maxzoom' ),
 		);
 	}
 
@@ -238,8 +238,8 @@ function lfndr_resolve_map_style(): array {
  *
  * @return bool
  */
-function lfndr_tiles_are_third_party(): bool {
-	$url = (string) lfndr_resolve_map_style()['url'];
+function gwc_lfndr_tiles_are_third_party(): bool {
+	$url = (string) gwc_lfndr_resolve_map_style()['url'];
 
 	if ( '' === $url ) {
 		return false;
@@ -263,8 +263,8 @@ function lfndr_tiles_are_third_party(): bool {
  *
  * @return string
  */
-function lfndr_tile_host(): string {
-	$host = wp_parse_url( (string) lfndr_resolve_map_style()['url'], PHP_URL_HOST );
+function gwc_lfndr_tile_host(): string {
+	$host = wp_parse_url( (string) gwc_lfndr_resolve_map_style()['url'], PHP_URL_HOST );
 
 	/* Tile URLs routinely carry a {s} subdomain placeholder. Left in, the gate
 	 * would name a host that does not exist. */
@@ -279,7 +279,7 @@ function lfndr_tile_host(): string {
  * @param string $lng   Longitude.
  * @return string
  */
-function lfndr_directions_url( string $query, string $lat, string $lng ): string {
+function gwc_lfndr_directions_url( string $query, string $lat, string $lng ): string {
 	/* Prefer the written address over the coordinates. Turn-by-turn services
 	 * resolve a street address to a door; a lat/lng resolves to a point, which
 	 * on a large campus or a building with one entrance is regularly the wrong
@@ -289,7 +289,7 @@ function lfndr_directions_url( string $query, string $lat, string $lng ): string
 		return '';
 	}
 
-	switch ( (string) lfndr_setting( 'directions' ) ) {
+	switch ( (string) gwc_lfndr_setting( 'directions' ) ) {
 		case 'apple':
 			$url = 'https://maps.apple.com/?daddr=' . rawurlencode( $target );
 			break;
@@ -299,7 +299,7 @@ function lfndr_directions_url( string $query, string $lat, string $lng ): string
 				: 'https://www.openstreetmap.org/search?query=' . rawurlencode( $target );
 			break;
 		case 'custom':
-			$pattern = (string) lfndr_setting( 'directions_pattern' );
+			$pattern = (string) gwc_lfndr_setting( 'directions_pattern' );
 			if ( '' === $pattern ) {
 				return '';
 			}

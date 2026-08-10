@@ -510,7 +510,7 @@ html.lfndr-scroll-lock {
 }
 
 /* The box is always drawn; only the tick inside it changes. That is what lets
-   the chip keep one width in both states — see lfndr_chip_box() in render.php
+   the chip keep one width in both states — see gwc_lfndr_chip_box() in render.php
    for why a visible box beats an empty reserved slot. */
 .lfndr__chip-box {
 	flex: 0 0 auto;

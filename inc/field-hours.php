@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_filter( 'lfndr_field_types', 'lfndr_register_hours_type' );
+add_filter( 'gwc_lfndr_field_types', 'gwc_lfndr_register_hours_type' );
 
 /**
  * Register the hours type.
@@ -15,19 +15,19 @@ add_filter( 'lfndr_field_types', 'lfndr_register_hours_type' );
  * @param array $types Registry.
  * @return array
  */
-function lfndr_register_hours_type( array $types ): array {
+function gwc_lfndr_register_hours_type( array $types ): array {
 	$types['hours'] = array(
 		'label'             => __( 'Opening hours', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
-		'render_admin'      => 'lfndr_admin_hours',
-		'sanitize'          => 'lfndr_sanitize_hours',
-		'is_empty'          => 'lfndr_empty_array',
-		'to_payload'        => 'lfndr_payload_hours',
+		'render_admin'      => 'gwc_lfndr_admin_hours',
+		'sanitize'          => 'gwc_lfndr_sanitize_hours',
+		'is_empty'          => 'gwc_lfndr_empty_array',
+		'to_payload'        => 'gwc_lfndr_payload_hours',
 		'search_text'       => null,
-		'facet_tokens'      => 'lfndr_facet_hours',
-		'schema_form'       => 'lfndr_schema_form_hours',
-		'sanitize_settings' => 'lfndr_settings_hours',
+		'facet_tokens'      => 'gwc_lfndr_facet_hours',
+		'schema_form'       => 'gwc_lfndr_schema_form_hours',
+		'sanitize_settings' => 'gwc_lfndr_settings_hours',
 		'needs_present'     => true,
 		'can_be_primary'    => true,
 		'js'                => 'hours',
@@ -57,8 +57,8 @@ function lfndr_register_hours_type( array $types ): array {
  * reason about the result.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_HOUR_STEP_DEFAULT  = 15;
-const LFNDR_HOUR_RANGE_DEFAULT = array( '07:00', '21:00' );
+const GWC_LFNDR_HOUR_STEP_DEFAULT  = 15;
+const GWC_LFNDR_HOUR_RANGE_DEFAULT = array( '07:00', '21:00' );
 
 /* ── Read, sanitize, sort ───────────────────────────────────────────────── */
 
@@ -69,7 +69,7 @@ const LFNDR_HOUR_RANGE_DEFAULT = array( '07:00', '21:00' );
  * @param int   $step Step in minutes.
  * @return string
  */
-function lfndr_sanitize_hour_time( $raw, int $step = LFNDR_HOUR_STEP_DEFAULT ): string {
+function gwc_lfndr_sanitize_hour_time( $raw, int $step = GWC_LFNDR_HOUR_STEP_DEFAULT ): string {
 	$raw = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 	if ( ! preg_match( '/^([0-9]{1,2}):([0-9]{2})$/', $raw, $m ) ) {
 		return '';
@@ -95,14 +95,14 @@ function lfndr_sanitize_hour_time( $raw, int $step = LFNDR_HOUR_STEP_DEFAULT ): 
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_sanitize_hours( $raw, array $field ): array {
+function gwc_lfndr_sanitize_hours( $raw, array $field ): array {
 	if ( ! is_array( $raw ) ) {
 		return array();
 	}
 
 	$settings    = $field['settings'];
-	$step        = (int) ( $settings['step_minutes'] ?? LFNDR_HOUR_STEP_DEFAULT );
-	$frequencies = (array) ( $settings['frequencies'] ?? array_keys( lfndr_hour_freqs() ) );
+	$step        = (int) ( $settings['step_minutes'] ?? GWC_LFNDR_HOUR_STEP_DEFAULT );
+	$frequencies = (array) ( $settings['frequencies'] ?? array_keys( gwc_lfndr_hour_freqs() ) );
 
 	$out = array();
 	foreach ( $raw as $row ) {
@@ -115,7 +115,7 @@ function lfndr_sanitize_hours( $raw, array $field ): array {
 			continue;
 		}
 
-		$start = lfndr_sanitize_hour_time( $row['start'] ?? '', $step );
+		$start = gwc_lfndr_sanitize_hour_time( $row['start'] ?? '', $step );
 		if ( '' === $start ) {
 			/* A row with no start time is an empty repeater row somebody added
 			 * and never filled in. Dropping it is the only sane reading — there
@@ -123,7 +123,7 @@ function lfndr_sanitize_hours( $raw, array $field ): array {
 			continue;
 		}
 
-		$end = lfndr_sanitize_hour_time( $row['end'] ?? '', $step );
+		$end = gwc_lfndr_sanitize_hour_time( $row['end'] ?? '', $step );
 		if ( '' !== $end && $end <= $start ) {
 			/* An end at or before the start is either a typo or an attempt at
 			 * an overnight window. We store '' — "from 9pm", open-ended — rather
@@ -151,7 +151,7 @@ function lfndr_sanitize_hours( $raw, array $field ): array {
 		}
 	}
 
-	return lfndr_sort_hour_slots( $out );
+	return gwc_lfndr_sort_hour_slots( $out );
 }
 
 /**
@@ -160,11 +160,11 @@ function lfndr_sanitize_hours( $raw, array $field ): array {
  * @param array $slots Slots.
  * @return array
  */
-function lfndr_sort_hour_slots( array $slots ): array {
+function gwc_lfndr_sort_hour_slots( array $slots ): array {
 	usort(
 		$slots,
 		static function ( array $a, array $b ): int {
-			$order = LFNDR_HOUR_FREQ_ORDER;
+			$order = GWC_LFNDR_HOUR_FREQ_ORDER;
 			return array( $order[ $a['freq'] ] ?? 9, $a['day'], $a['start'] )
 				<=> array( $order[ $b['freq'] ] ?? 9, $b['day'], $b['start'] );
 		}
@@ -196,12 +196,12 @@ function lfndr_sort_hour_slots( array $slots ): array {
  * @param array $field Field definition.
  * @return array<int, array{when: string, times: string}>
  */
-function lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
+function gwc_lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
 	if ( ! $slots ) {
 		return array();
 	}
 
-	$slots = lfndr_sort_hour_slots( $slots );
+	$slots = gwc_lfndr_sort_hour_slots( $slots );
 
 	// Pass 1: day + window -> set of frequencies.
 	$by_day_window = array();
@@ -227,7 +227,7 @@ function lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
 		usort(
 			$freqs,
 			static fn( string $a, string $b ): int =>
-				( LFNDR_HOUR_FREQ_ORDER[ $a ] ?? 9 ) <=> ( LFNDR_HOUR_FREQ_ORDER[ $b ] ?? 9 )
+				( GWC_LFNDR_HOUR_FREQ_ORDER[ $a ] ?? 9 ) <=> ( GWC_LFNDR_HOUR_FREQ_ORDER[ $b ] ?? 9 )
 		);
 		$key = implode( ',', $freqs ) . '|' . $entry['start'] . '|' . $entry['end'];
 		if ( ! isset( $by_freq_window[ $key ] ) ) {
@@ -247,14 +247,14 @@ function lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
 		$days = array_values( array_unique( $entry['days'] ) );
 		sort( $days );
 
-		$when = lfndr_hour_when_label( $entry['freqs'], $days );
-		$time = lfndr_hour_window_label( $entry['start'], $entry['end'] );
+		$when = gwc_lfndr_hour_when_label( $entry['freqs'], $days );
+		$time = gwc_lfndr_hour_window_label( $entry['start'], $entry['end'] );
 
 		if ( ! isset( $lines[ $when ] ) ) {
 			$lines[ $when ] = array(
 				'when'  => $when,
 				'times' => array(),
-				'sort'  => array( LFNDR_HOUR_FREQ_ORDER[ $entry['freqs'][0] ] ?? 9, lfndr_hour_display_index( $days[0], $field ) ),
+				'sort'  => array( GWC_LFNDR_HOUR_FREQ_ORDER[ $entry['freqs'][0] ] ?? 9, gwc_lfndr_hour_display_index( $days[0], $field ) ),
 			);
 		}
 		/* Keyed by start AND end: two windows can share a start (9–11 and 9–1
@@ -292,7 +292,7 @@ function lfndr_hour_slot_lines( array $slots, array $field = array() ): array {
  * @param array $field Field definition.
  * @return int
  */
-function lfndr_hour_display_index( int $day, array $field ): int {
+function gwc_lfndr_hour_display_index( int $day, array $field ): int {
 	$start = isset( $field['settings']['week_start'] )
 		? (int) $field['settings']['week_start']
 		: (int) get_option( 'start_of_week', 1 );
@@ -311,14 +311,14 @@ function lfndr_hour_display_index( int $day, array $field ): int {
  * @param array $days  Canonical day indices, ascending.
  * @return string
  */
-function lfndr_hour_when_label( array $freqs, array $days ): string {
-	$day_label = lfndr_hour_days_label( $days );
+function gwc_lfndr_hour_when_label( array $freqs, array $days ): string {
+	$day_label = gwc_lfndr_hour_days_label( $days );
 
 	if ( array( 'weekly' ) === $freqs ) {
 		return $day_label;
 	}
 
-	$freq_label = lfndr_hour_freqs_label( $freqs );
+	$freq_label = gwc_lfndr_hour_freqs_label( $freqs );
 
 	return '' === $freq_label
 		? $day_label
@@ -332,9 +332,9 @@ function lfndr_hour_when_label( array $freqs, array $days ): string {
  * @param array $days Canonical day indices, ascending.
  * @return string
  */
-function lfndr_hour_days_label( array $days ): string {
-	$names = lfndr_hour_days();
-	$runs  = lfndr_consecutive_runs( $days );
+function gwc_lfndr_hour_days_label( array $days ): string {
+	$names = gwc_lfndr_hour_days();
+	$runs  = gwc_lfndr_consecutive_runs( $days );
 
 	$parts = array();
 	foreach ( $runs as $run ) {
@@ -363,7 +363,7 @@ function lfndr_hour_days_label( array $days ): string {
  * @param array $freqs Frequency slugs.
  * @return string
  */
-function lfndr_hour_freqs_label( array $freqs ): string {
+function gwc_lfndr_hour_freqs_label( array $freqs ): string {
 	$freqs = array_values( array_diff( $freqs, array( 'weekly' ) ) );
 	if ( ! $freqs ) {
 		return '';
@@ -381,14 +381,14 @@ function lfndr_hour_freqs_label( array $freqs ): string {
 
 	$indices = array();
 	foreach ( $freqs as $freq ) {
-		$indices[] = LFNDR_HOUR_FREQ_ORDER[ $freq ] ?? 9;
+		$indices[] = GWC_LFNDR_HOUR_FREQ_ORDER[ $freq ] ?? 9;
 	}
 	sort( $indices );
 
-	$by_index = array_flip( LFNDR_HOUR_FREQ_ORDER );
+	$by_index = array_flip( GWC_LFNDR_HOUR_FREQ_ORDER );
 	$parts    = array();
 
-	foreach ( lfndr_consecutive_runs( $indices ) as $run ) {
+	foreach ( gwc_lfndr_consecutive_runs( $indices ) as $run ) {
 		if ( count( $run ) >= 3 ) {
 			$parts[] = sprintf(
 				/* translators: 1: first occurrence, 2: last occurrence. Forms a range like "1st – 3rd". */
@@ -412,7 +412,7 @@ function lfndr_hour_freqs_label( array $freqs ): string {
  * @param array $values Ascending integers.
  * @return array<int, array<int, int>>
  */
-function lfndr_consecutive_runs( array $values ): array {
+function gwc_lfndr_consecutive_runs( array $values ): array {
 	$runs    = array();
 	$current = array();
 
@@ -440,19 +440,19 @@ function lfndr_consecutive_runs( array $values ): array {
  * @param string $end   'HH:MM' or ''.
  * @return string
  */
-function lfndr_hour_window_label( string $start, string $end ): string {
+function gwc_lfndr_hour_window_label( string $start, string $end ): string {
 	if ( '' === $end ) {
 		return sprintf(
 			/* translators: %s: a time of day. Used when a closing time is unknown. */
 			__( 'from %s', 'groundwork-common-location-finder' ),
-			lfndr_format_time( $start )
+			gwc_lfndr_format_time( $start )
 		);
 	}
 	return sprintf(
 		/* translators: 1: opening time, 2: closing time. */
 		_x( '%1$s–%2$s', 'time range', 'groundwork-common-location-finder' ),
-		lfndr_format_time( $start ),
-		lfndr_format_time( $end )
+		gwc_lfndr_format_time( $start ),
+		gwc_lfndr_format_time( $end )
 	);
 }
 
@@ -467,7 +467,7 @@ function lfndr_hour_window_label( string $start, string $end ): string {
  * @param string $time 'HH:MM'.
  * @return string
  */
-function lfndr_format_time( string $time ): string {
+function gwc_lfndr_format_time( string $time ): string {
 	if ( ! preg_match( '/^([0-9]{2}):([0-9]{2})$/', $time, $m ) ) {
 		return $time;
 	}
@@ -486,7 +486,7 @@ function lfndr_format_time( string $time ): string {
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_payload_hours( $value, array $field ): array {
+function gwc_lfndr_payload_hours( $value, array $field ): array {
 	$slots = is_array( $value ) ? $value : array();
 
 	return array(
@@ -498,7 +498,7 @@ function lfndr_payload_hours( $value, array $field ): array {
 		 * answer for up to an hour after the day changed. The browser
 		 * recomputes that from the slots against its own clock. */
 		'slots' => array_values( $slots ),
-		'lines' => lfndr_hour_slot_lines( $slots, $field ),
+		'lines' => gwc_lfndr_hour_slot_lines( $slots, $field ),
 	);
 }
 
@@ -511,7 +511,7 @@ function lfndr_payload_hours( $value, array $field ): array {
  * @param mixed $value Value.
  * @return array
  */
-function lfndr_facet_hours( $value ): array {
+function gwc_lfndr_facet_hours( $value ): array {
 	return is_array( $value ) && $value ? array( 'has-hours' ) : array();
 }
 
@@ -524,11 +524,11 @@ function lfndr_facet_hours( $value ): array {
  * @param mixed  $value Stored value.
  * @param string $name  Input name prefix.
  */
-function lfndr_admin_hours( array $field, $value, string $name ): void {
-	$slots       = is_array( $value ) ? lfndr_sort_hour_slots( $value ) : array();
+function gwc_lfndr_admin_hours( array $field, $value, string $name ): void {
+	$slots       = is_array( $value ) ? gwc_lfndr_sort_hour_slots( $value ) : array();
 	$settings    = $field['settings'];
-	$frequencies = (array) ( $settings['frequencies'] ?? array_keys( lfndr_hour_freqs() ) );
-	$times       = lfndr_hour_time_choices( $settings );
+	$frequencies = (array) ( $settings['frequencies'] ?? array_keys( gwc_lfndr_hour_freqs() ) );
+	$times       = gwc_lfndr_hour_time_choices( $settings );
 
 	printf(
 		'<div class="lfndr-repeater" data-lfndr-repeater="%s" data-empty-text="%s">',
@@ -538,7 +538,7 @@ function lfndr_admin_hours( array $field, $value, string $name ): void {
 
 	echo '<div class="lfndr-repeater__rows">';
 	foreach ( $slots as $index => $slot ) {
-		lfndr_render_hour_row( $name, (string) $index, $slot, $frequencies, $times );
+		gwc_lfndr_render_hour_row( $name, (string) $index, $slot, $frequencies, $times );
 	}
 	echo '</div>';
 
@@ -547,7 +547,7 @@ function lfndr_admin_hours( array $field, $value, string $name ): void {
 	 * markup exists in exactly one place — PHP — and the two cannot drift as
 	 * fields are added. */
 	echo '<template class="lfndr-repeater__template">';
-	lfndr_render_hour_row( $name, '__i__', array(), $frequencies, $times );
+	gwc_lfndr_render_hour_row( $name, '__i__', array(), $frequencies, $times );
 	echo '</template>';
 
 	printf(
@@ -567,9 +567,9 @@ function lfndr_admin_hours( array $field, $value, string $name ): void {
  * @param array  $frequencies Allowed frequency slugs.
  * @param array  $times       'HH:MM' => label.
  */
-function lfndr_render_hour_row( string $name, string $index, array $slot, array $frequencies, array $times ): void {
-	$freqs = lfndr_hour_freqs();
-	$days  = lfndr_hour_days();
+function gwc_lfndr_render_hour_row( string $name, string $index, array $slot, array $frequencies, array $times ): void {
+	$freqs = gwc_lfndr_hour_freqs();
+	$days  = gwc_lfndr_hour_days();
 	$base  = $name . '[' . $index . ']';
 
 	echo '<div class="lfndr-repeater__row">';
@@ -643,13 +643,13 @@ function lfndr_render_hour_row( string $name, string $index, array $slot, array 
  * @param array $settings Field settings.
  * @return array<string, string>
  */
-function lfndr_hour_time_choices( array $settings ): array {
-	$step  = max( 5, min( 60, (int) ( $settings['step_minutes'] ?? LFNDR_HOUR_STEP_DEFAULT ) ) );
-	$first = lfndr_sanitize_hour_time( $settings['range_start'] ?? LFNDR_HOUR_RANGE_DEFAULT[0], $step );
-	$last  = lfndr_sanitize_hour_time( $settings['range_end'] ?? LFNDR_HOUR_RANGE_DEFAULT[1], $step );
+function gwc_lfndr_hour_time_choices( array $settings ): array {
+	$step  = max( 5, min( 60, (int) ( $settings['step_minutes'] ?? GWC_LFNDR_HOUR_STEP_DEFAULT ) ) );
+	$first = gwc_lfndr_sanitize_hour_time( $settings['range_start'] ?? GWC_LFNDR_HOUR_RANGE_DEFAULT[0], $step );
+	$last  = gwc_lfndr_sanitize_hour_time( $settings['range_end'] ?? GWC_LFNDR_HOUR_RANGE_DEFAULT[1], $step );
 
-	$from = '' !== $first ? lfndr_minutes_of( $first ) : 7 * 60;
-	$to   = '' !== $last ? lfndr_minutes_of( $last ) : 21 * 60;
+	$from = '' !== $first ? gwc_lfndr_minutes_of( $first ) : 7 * 60;
+	$to   = '' !== $last ? gwc_lfndr_minutes_of( $last ) : 21 * 60;
 	if ( $to <= $from ) {
 		$to = 24 * 60 - $step;
 	}
@@ -657,7 +657,7 @@ function lfndr_hour_time_choices( array $settings ): array {
 	$out = array();
 	for ( $minutes = $from; $minutes <= $to; $minutes += $step ) {
 		$time         = sprintf( '%02d:%02d', intdiv( $minutes, 60 ), $minutes % 60 );
-		$out[ $time ] = lfndr_format_time( $time );
+		$out[ $time ] = gwc_lfndr_format_time( $time );
 	}
 	return $out;
 }
@@ -668,7 +668,7 @@ function lfndr_hour_time_choices( array $settings ): array {
  * @param string $time Time.
  * @return int
  */
-function lfndr_minutes_of( string $time ): int {
+function gwc_lfndr_minutes_of( string $time ): int {
 	if ( ! preg_match( '/^([0-9]{2}):([0-9]{2})$/', $time, $m ) ) {
 		return 0;
 	}
@@ -681,8 +681,8 @@ function lfndr_minutes_of( string $time ): int {
  * @param array $raw Raw settings.
  * @return array
  */
-function lfndr_settings_hours( array $raw ): array {
-	$all   = array_keys( lfndr_hour_freqs() );
+function gwc_lfndr_settings_hours( array $raw ): array {
+	$all   = array_keys( gwc_lfndr_hour_freqs() );
 	$freqs = array_values( array_intersect( $all, (array) ( $raw['frequencies'] ?? $all ) ) );
 	if ( ! in_array( 'weekly', $freqs, true ) ) {
 		/* Weekly is not optional. It is the fallback the sanitizer assigns to
@@ -691,13 +691,13 @@ function lfndr_settings_hours( array $raw ): array {
 		array_unshift( $freqs, 'weekly' );
 	}
 
-	$step = (int) ( $raw['step_minutes'] ?? LFNDR_HOUR_STEP_DEFAULT );
-	$step = in_array( $step, array( 5, 10, 15, 30, 60 ), true ) ? $step : LFNDR_HOUR_STEP_DEFAULT;
+	$step = (int) ( $raw['step_minutes'] ?? GWC_LFNDR_HOUR_STEP_DEFAULT );
+	$step = in_array( $step, array( 5, 10, 15, 30, 60 ), true ) ? $step : GWC_LFNDR_HOUR_STEP_DEFAULT;
 
 	return array(
 		'step_minutes' => $step,
-		'range_start'  => lfndr_sanitize_hour_time( $raw['range_start'] ?? LFNDR_HOUR_RANGE_DEFAULT[0], $step ),
-		'range_end'    => lfndr_sanitize_hour_time( $raw['range_end'] ?? LFNDR_HOUR_RANGE_DEFAULT[1], $step ),
+		'range_start'  => gwc_lfndr_sanitize_hour_time( $raw['range_start'] ?? GWC_LFNDR_HOUR_RANGE_DEFAULT[0], $step ),
+		'range_end'    => gwc_lfndr_sanitize_hour_time( $raw['range_end'] ?? GWC_LFNDR_HOUR_RANGE_DEFAULT[1], $step ),
 		'frequencies'  => $freqs,
 		'week_start'   => isset( $raw['week_start'] ) ? max( 0, min( 7, (int) $raw['week_start'] ) ) : (int) get_option( 'start_of_week', 1 ),
 		'card_rows'    => max( 0, (int) ( $raw['card_rows'] ?? 3 ) ),
@@ -711,8 +711,8 @@ function lfndr_settings_hours( array $raw ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_hours( array $field ): void {
-	lfndr_schema_select_control(
+function gwc_lfndr_schema_form_hours( array $field ): void {
+	gwc_lfndr_schema_select_control(
 		$field,
 		'step_minutes',
 		__( 'Time increments', 'groundwork-common-location-finder' ),
@@ -723,13 +723,13 @@ function lfndr_schema_form_hours( array $field ): void {
 			'30' => __( '30 minutes', 'groundwork-common-location-finder' ),
 			'60' => __( 'On the hour', 'groundwork-common-location-finder' ),
 		),
-		(string) LFNDR_HOUR_STEP_DEFAULT
+		(string) GWC_LFNDR_HOUR_STEP_DEFAULT
 	);
 
-	lfndr_schema_text_control( $field, 'range_start', __( 'Earliest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 07:00.', 'groundwork-common-location-finder' ) );
-	lfndr_schema_text_control( $field, 'range_end', __( 'Latest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 21:00.', 'groundwork-common-location-finder' ) );
+	gwc_lfndr_schema_text_control( $field, 'range_start', __( 'Earliest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 07:00.', 'groundwork-common-location-finder' ) );
+	gwc_lfndr_schema_text_control( $field, 'range_end', __( 'Latest selectable time', 'groundwork-common-location-finder' ), __( '24-hour, such as 21:00.', 'groundwork-common-location-finder' ) );
 
-	$freqs   = lfndr_hour_freqs();
+	$freqs   = gwc_lfndr_hour_freqs();
 	$enabled = (array) ( $field['settings']['frequencies'] ?? array_keys( $freqs ) );
 	echo '<fieldset class="lfndr-setting"><legend>' . esc_html__( 'Recurrence options offered', 'groundwork-common-location-finder' ) . '</legend>';
 	foreach ( $freqs as $slug => $label ) {
@@ -743,7 +743,7 @@ function lfndr_schema_form_hours( array $field ): void {
 	}
 	printf( '<p class="description">%s</p></fieldset>', esc_html__( 'Weekly is always available.', 'groundwork-common-location-finder' ) );
 
-	lfndr_schema_number_control( $field, 'card_rows', __( 'Schedule lines to show on a card', 'groundwork-common-location-finder' ), __( '0 shows all of them.', 'groundwork-common-location-finder' ) );
-	lfndr_schema_checkbox_control( $field, 'open_now', __( 'Badge locations that are open right now', 'groundwork-common-location-finder' ), true );
-	lfndr_schema_checkbox_control( $field, 'open_today', __( 'Offer an "Open today" filter', 'groundwork-common-location-finder' ), true );
+	gwc_lfndr_schema_number_control( $field, 'card_rows', __( 'Schedule lines to show on a card', 'groundwork-common-location-finder' ), __( '0 shows all of them.', 'groundwork-common-location-finder' ) );
+	gwc_lfndr_schema_checkbox_control( $field, 'open_now', __( 'Badge locations that are open right now', 'groundwork-common-location-finder' ), true );
+	gwc_lfndr_schema_checkbox_control( $field, 'open_today', __( 'Offer an "Open today" filter', 'groundwork-common-location-finder' ), true );
 }

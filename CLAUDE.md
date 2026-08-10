@@ -16,7 +16,7 @@ the plugin exists.
 
 ## The shape of the code
 
-Procedural PHP, prefix `lfndr_`, no classes, no namespaces, no autoloader.
+Procedural PHP, prefix `gwc_lfndr_`, no classes, no namespaces, no autoloader.
 Eighteen files in `inc/`, required from the bootstrap with
 `if ( ! function_exists( … ) )` guards.
 
@@ -113,7 +113,7 @@ plugin. Copy it up and run it by absolute path.
 a function, so a top-level `$field = …` is a *local*, and a `global $field` in a
 helper reaches an unset variable of the same name — silently storing every
 address against an empty field definition. `tests/seed.php` looks the schema up
-inside the helper instead; `lfndr_get_schema()` memoises per request, so asking
+inside the helper instead; `gwc_lfndr_get_schema()` memoises per request, so asking
 repeatedly costs one read. Do not "tidy" that into a global.
 
 ## The rules that are load-bearing
@@ -137,7 +137,7 @@ repeatedly costs one read. Do not "tidy" that into a global.
 - **Activation does not call `flush_rewrite_rules()`.** On the activating request
   the post type has not been registered yet — `init` already fired — so a flush
   there writes rules that exclude ours, and the 404s look like a permalink bug.
-- **`lfndr_settings_cache()` and `lfndr_schema_cache()` are functions, not
+- **`gwc_lfndr_settings_cache()` and `gwc_lfndr_schema_cache()` are functions, not
   statics,** because a writer needs a way to invalidate a reader's cache and PHP
   cannot reach another function's static variable.
 
@@ -145,7 +145,7 @@ repeatedly costs one read. Do not "tidy" that into a global.
 
 `git tag` plus a GitHub Release. `deploy.yml` refuses unless the tag matches all
 three of the plugin header `Version:`, `readme.txt` `Stable tag:`, and
-`LFNDR_VERSION` — and `VersionTest` checks the same agreement locally, plus the
+`GWC_LFNDR_VERSION` — and `VersionTest` checks the same agreement locally, plus the
 changelog and upgrade notice. **Bump them together or the release is blocked.**
 
 `LeafletVersionTest` asserts the `t.version=` string inside the vendored bundle

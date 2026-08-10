@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 final class FacetsTest extends TestCase {
 
 	protected function setUp(): void {
-		lfndr_test_reset();
+		gwc_lfndr_test_reset();
 	}
 
 	/** A schema with one filterable field. */
 	private function schema( array $field ): array {
-		return lfndr_sanitize_schema( array( 'fields' => array( $field ) ) );
+		return gwc_lfndr_sanitize_schema( array( 'fields' => array( $field ) ) );
 	}
 
 	/** A payload location carrying the given facet tokens. */
@@ -73,7 +73,7 @@ final class FacetsTest extends TestCase {
 
 	public function test_only_values_present_in_the_data_get_a_chip(): void {
 		$schema = $this->schema( $this->services_field() );
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'services' => array( 'diapers' ) ) ),
 				$this->location( array( 'services' => array( 'diapers', 'formula' ) ) ),
@@ -88,7 +88,7 @@ final class FacetsTest extends TestCase {
 	}
 
 	public function test_a_field_with_no_data_at_all_renders_no_group(): void {
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array() ) ),
 			$this->schema( $this->services_field() )
 		);
@@ -99,7 +99,7 @@ final class FacetsTest extends TestCase {
 		$field               = $this->services_field();
 		$field['filterable'] = false;
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'services' => array( 'diapers' ) ) ) ),
 			$this->schema( $field )
 		);
@@ -109,7 +109,7 @@ final class FacetsTest extends TestCase {
 	/* ── Match semantics ────────────────────────────────────────────────── */
 
 	public function test_multi_choice_fields_use_and_within_the_field(): void {
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'services' => array( 'diapers', 'formula' ) ) ) ),
 			$this->schema( $this->services_field() )
 		);
@@ -118,7 +118,7 @@ final class FacetsTest extends TestCase {
 
 	public function test_single_choice_fields_use_or_within_the_field(): void {
 		// Their values are mutually exclusive, so AND would always be empty.
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'access' => array( 'open' ) ) ),
 				$this->location( array( 'access' => array( 'appointment' ) ) ),
@@ -131,7 +131,7 @@ final class FacetsTest extends TestCase {
 	/* ── Single-choice needs two present values ─────────────────────────── */
 
 	public function test_a_single_choice_field_where_everyone_answers_the_same_is_skipped(): void {
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'access' => array( 'open' ) ) ),
 				$this->location( array( 'access' => array( 'open' ) ) ),
@@ -144,7 +144,7 @@ final class FacetsTest extends TestCase {
 	public function test_a_multi_choice_field_with_one_present_value_still_renders(): void {
 		// Unlike a single choice, it still separates the locations that have it
 		// from the ones that do not.
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'services' => array( 'diapers' ) ) ),
 				$this->location( array() ),
@@ -166,7 +166,7 @@ final class FacetsTest extends TestCase {
 	}
 
 	public function test_a_boolean_that_is_true_everywhere_renders_no_toggle(): void {
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'wheelchair' => array( '1' ) ) ),
 				$this->location( array( 'wheelchair' => array( '1' ) ) ),
@@ -180,7 +180,7 @@ final class FacetsTest extends TestCase {
 		// False is stored as absence throughout, so "false everywhere" is
 		// indistinguishable from "nobody filled it in" — and neither is worth a
 		// toggle, because both always return an empty list.
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array() ), $this->location( array() ) ),
 			$this->schema( $this->boolean_field() )
 		);
@@ -188,13 +188,13 @@ final class FacetsTest extends TestCase {
 	}
 
 	public function test_only_the_true_state_produces_a_token(): void {
-		$this->assertSame( array( '1' ), lfndr_facet_boolean( true ) );
-		$this->assertSame( array(), lfndr_facet_boolean( false ) );
-		$this->assertSame( array(), lfndr_facet_boolean( '' ) );
+		$this->assertSame( array( '1' ), gwc_lfndr_facet_boolean( true ) );
+		$this->assertSame( array(), gwc_lfndr_facet_boolean( false ) );
+		$this->assertSame( array(), gwc_lfndr_facet_boolean( '' ) );
 	}
 
 	public function test_a_mixed_boolean_renders_one_toggle(): void {
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'wheelchair' => array( '1' ) ) ),
 				$this->location( array() ),
@@ -229,7 +229,7 @@ final class FacetsTest extends TestCase {
 			$locations[] = $this->location( array( 'kind' => array( 'v' . $i ) ) );
 		}
 
-		$groups = lfndr_available_facets( $locations, $this->schema( $field ) );
+		$groups = gwc_lfndr_available_facets( $locations, $this->schema( $field ) );
 		$this->assertSame( 'select', $groups[0]['widget'] );
 	}
 
@@ -237,7 +237,7 @@ final class FacetsTest extends TestCase {
 		$field                  = $this->services_field();
 		$field['filter_widget'] = 'select';
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'services' => array( 'diapers' ) ) ) ),
 			$this->schema( $field )
 		);
@@ -248,7 +248,7 @@ final class FacetsTest extends TestCase {
 		$field                 = $this->services_field();
 		$field['filter_label'] = 'Offers';
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'services' => array( 'diapers' ) ) ) ),
 			$this->schema( $field )
 		);
@@ -265,7 +265,7 @@ final class FacetsTest extends TestCase {
 			'filterable' => true,
 		);
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'hours' => array( 'has-hours' ) ) ) ),
 			$this->schema( $field )
 		);
@@ -284,7 +284,7 @@ final class FacetsTest extends TestCase {
 			'filterable' => true,
 		);
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array(
 				$this->location( array( 'hours' => array( 'has-hours' ) ) ),
 				$this->location( array( 'hours' => array( 'has-hours' ) ) ),
@@ -303,7 +303,7 @@ final class FacetsTest extends TestCase {
 			'settings'   => array( 'open_today' => false ),
 		);
 
-		$groups = lfndr_available_facets(
+		$groups = gwc_lfndr_available_facets(
 			array( $this->location( array( 'hours' => array( 'has-hours' ) ) ) ),
 			$this->schema( $field )
 		);

@@ -7,15 +7,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'wp_enqueue_scripts', 'lfndr_register_front_assets', 5 );
-add_action( 'admin_enqueue_scripts', 'lfndr_admin_assets' );
+add_action( 'wp_enqueue_scripts', 'gwc_lfndr_register_front_assets', 5 );
+add_action( 'admin_enqueue_scripts', 'gwc_lfndr_admin_assets' );
 
 /* ── Two layers, and why the asymmetry is the design ─────────────────────────
  * Layer one runs at head time and guesses whether this page contains a finder.
  * It is cheap and it gets the stylesheet into <head>, so there is no flash of
  * unstyled list.
  *
- * Layer two is lfndr_render_finder() calling lfndr_enqueue_finder() as its very
+ * Layer two is gwc_lfndr_render_finder() calling gwc_lfndr_enqueue_finder() as its very
  * first statement. It cannot be missed, because it runs from inside the thing
  * being rendered — but by then <head> is gone.
  *
@@ -28,47 +28,47 @@ add_action( 'admin_enqueue_scripts', 'lfndr_admin_assets' );
  * live in a template part, where the queried post's content is empty and there
  * is nothing to match against. Resolving the template hierarchy this early is
  * both fragile and expensive, so it is accepted rather than fought — the
- * consequence is a reflow, and `lfndr_load_assets` is there for anyone who wants
+ * consequence is a reflow, and `gwc_lfndr_load_assets` is there for anyone who wants
  * to fix it for their own template.
  * ─────────────────────────────────────────────────────────────────────────── */
 
 /**
  * Register the front-end handles, and run layer one of the gate.
  */
-function lfndr_register_front_assets(): void {
-	wp_register_style( 'leaflet', LFNDR_URL . 'assets/leaflet/leaflet.css', array(), '1.9.4' );
-	wp_register_script( 'leaflet', LFNDR_URL . 'assets/leaflet/leaflet.js', array(), '1.9.4', true );
+function gwc_lfndr_register_front_assets(): void {
+	wp_register_style( 'leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.css', array(), '1.9.4' );
+	wp_register_script( 'leaflet', GWC_LFNDR_URL . 'assets/leaflet/leaflet.js', array(), '1.9.4', true );
 
-	wp_register_style( 'lfndr-finder', LFNDR_URL . 'assets/css/location-finder.css', array( 'leaflet' ), LFNDR_VERSION );
+	wp_register_style( 'lfndr-finder', GWC_LFNDR_URL . 'assets/css/location-finder.css', array( 'leaflet' ), GWC_LFNDR_VERSION );
 	wp_register_script(
 		'lfndr-finder',
-		LFNDR_URL . 'assets/js/location-finder.js',
+		GWC_LFNDR_URL . 'assets/js/location-finder.js',
 		array( 'leaflet', 'wp-i18n' ),
-		LFNDR_VERSION,
+		GWC_LFNDR_VERSION,
 		true
 	);
 
-	wp_set_script_translations( 'lfndr-finder', 'groundwork-common-location-finder', LFNDR_DIR . 'languages' );
+	wp_set_script_translations( 'lfndr-finder', 'groundwork-common-location-finder', GWC_LFNDR_DIR . 'languages' );
 
 	/* Attached to the handle, not printed directly: wp_add_inline_style() only
 	 * ever outputs alongside a style that actually gets enqueued, so a site
 	 * that has customized Appearance but has no finder on the current page
 	 * prints nothing — the same gate that protects the base stylesheet
 	 * protects this override without any extra code here. */
-	$overrides = lfndr_appearance_css();
+	$overrides = gwc_lfndr_appearance_css();
 	if ( '' !== $overrides ) {
 		wp_add_inline_style( 'lfndr-finder', $overrides );
 	}
 
-	if ( lfndr_page_may_have_finder() ) {
-		lfndr_enqueue_finder();
+	if ( gwc_lfndr_page_may_have_finder() ) {
+		gwc_lfndr_enqueue_finder();
 	}
 }
 
 /**
  * Enqueue everything a finder needs. Idempotent, and safe to call twice.
  */
-function lfndr_enqueue_finder(): void {
+function gwc_lfndr_enqueue_finder(): void {
 	wp_enqueue_style( 'leaflet' );
 	wp_enqueue_script( 'leaflet' );
 	wp_enqueue_style( 'lfndr-finder' );
@@ -83,7 +83,7 @@ function lfndr_enqueue_finder(): void {
  *
  * @return bool
  */
-function lfndr_page_may_have_finder(): bool {
+function gwc_lfndr_page_may_have_finder(): bool {
 	$post = get_post();
 
 	if ( $post instanceof WP_Post ) {
@@ -110,7 +110,7 @@ function lfndr_page_may_have_finder(): bool {
 	 * @param bool         $load Whether to load.
 	 * @param WP_Post|null $post Current post, if any.
 	 */
-	return (bool) apply_filters( 'lfndr_load_assets', false, $post instanceof WP_Post ? $post : null );
+	return (bool) apply_filters( 'gwc_lfndr_load_assets', false, $post instanceof WP_Post ? $post : null );
 }
 
 /**
@@ -118,53 +118,53 @@ function lfndr_page_may_have_finder(): bool {
  *
  * @param string $hook Current admin page hook.
  */
-function lfndr_admin_assets( string $hook ): void {
+function gwc_lfndr_admin_assets( string $hook ): void {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 
 	$is_editor = in_array( $hook, array( 'post.php', 'post-new.php' ), true )
-		&& $screen && LFNDR_POST_TYPE === $screen->post_type;
+		&& $screen && GWC_LFNDR_POST_TYPE === $screen->post_type;
 
-	$is_fields = $screen && false !== strpos( (string) $screen->id, LFNDR_FIELDS_PAGE );
+	$is_fields = $screen && false !== strpos( (string) $screen->id, GWC_LFNDR_FIELDS_PAGE );
 
 	/* Which TAB, not which page. Appearance used to be its own submenu, and this
 	 * gate still matched on that page's slug after the tabs replaced it — so on
 	 * the Appearance tab the colour swatches silently had no script behind them,
 	 * while the orphaned page nobody was meant to reach still worked. Read the
 	 * tab, which is where the answer actually lives now. */
-	$is_settings = $is_fields && 'appearance' === lfndr_current_tab();
+	$is_settings = $is_fields && 'appearance' === gwc_lfndr_current_tab();
 
 	if ( ! $is_editor && ! $is_fields ) {
 		return;
 	}
 
-	wp_enqueue_style( 'lfndr-admin', LFNDR_URL . 'assets/css/admin.css', array(), LFNDR_VERSION );
+	wp_enqueue_style( 'lfndr-admin', GWC_LFNDR_URL . 'assets/css/admin.css', array(), GWC_LFNDR_VERSION );
 
 	if ( $is_settings ) {
 		/* Not wp-color-picker: these fields accept currentColor and var(), which
 		 * it cannot represent and would overwrite. See the note in
-		 * lfndr_render_appearance_field(). */
-		wp_enqueue_script( 'lfndr-admin-color', LFNDR_URL . 'assets/js/admin-color.js', array(), LFNDR_VERSION, true );
+		 * gwc_lfndr_render_appearance_field(). */
+		wp_enqueue_script( 'lfndr-admin-color', GWC_LFNDR_URL . 'assets/js/admin-color.js', array(), GWC_LFNDR_VERSION, true );
 		return;
 	}
 
 	if ( $is_editor ) {
-		wp_enqueue_script( 'lfndr-admin-repeater', LFNDR_URL . 'assets/js/admin-repeater.js', array(), LFNDR_VERSION, true );
+		wp_enqueue_script( 'lfndr-admin-repeater', GWC_LFNDR_URL . 'assets/js/admin-repeater.js', array(), GWC_LFNDR_VERSION, true );
 		wp_localize_script(
 			'lfndr-admin-repeater',
-			'LFNDR_REPEATER',
+			'GWC_LFNDR_REPEATER',
 			array(
 				'added'   => __( 'Row added.', 'groundwork-common-location-finder' ),
 				'removed' => __( 'Row removed.', 'groundwork-common-location-finder' ),
 			)
 		);
 
-		wp_enqueue_script( 'lfndr-admin-geocode', LFNDR_URL . 'assets/js/admin-geocode.js', array(), LFNDR_VERSION, true );
+		wp_enqueue_script( 'lfndr-admin-geocode', GWC_LFNDR_URL . 'assets/js/admin-geocode.js', array(), GWC_LFNDR_VERSION, true );
 		wp_localize_script(
 			'lfndr-admin-geocode',
-			'LFNDR_GEOCODE',
+			'GWC_LFNDR_GEOCODE',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'lfndr_geocode' ),
+				'nonce'   => wp_create_nonce( 'gwc_lfndr_geocode' ),
 				'strings' => array(
 					'searching' => __( 'Searching…', 'groundwork-common-location-finder' ),
 					'none'      => __( 'No matches. Try a fuller address.', 'groundwork-common-location-finder' ),
@@ -180,10 +180,10 @@ function lfndr_admin_assets( string $hook ): void {
 		return;
 	}
 
-	wp_enqueue_script( 'lfndr-admin-fields', LFNDR_URL . 'assets/js/admin-fields.js', array(), LFNDR_VERSION, true );
+	wp_enqueue_script( 'lfndr-admin-fields', GWC_LFNDR_URL . 'assets/js/admin-fields.js', array(), GWC_LFNDR_VERSION, true );
 
 	$with_options = array();
-	foreach ( lfndr_field_types() as $slug => $meta ) {
+	foreach ( gwc_lfndr_field_types() as $slug => $meta ) {
 		if ( ! empty( $meta['has_options'] ) ) {
 			$with_options[] = $slug;
 		}
@@ -194,7 +194,7 @@ function lfndr_admin_assets( string $hook ): void {
 	 * to reorder. Everything else in the admin JS is structural. */
 	wp_localize_script(
 		'lfndr-admin-fields',
-		'LFNDR_ADMIN',
+		'GWC_LFNDR_ADMIN',
 		array(
 			'typesWithOptions' => $with_options,
 			'strings'          => array(

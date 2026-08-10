@@ -23,28 +23,28 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 
 define( 'ABSPATH', __DIR__ . '/' );
-define( 'LFNDR_VERSION', 'test' );
-define( 'LFNDR_SCHEMA_VERSION', 1 );
-define( 'LFNDR_FILE', dirname( __DIR__ ) . '/groundwork-common-location-finder.php' );
-define( 'LFNDR_DIR', dirname( __DIR__ ) . '/' );
-define( 'LFNDR_URL', 'https://example.test/wp-content/plugins/groundwork-common-location-finder/' );
+define( 'GWC_LFNDR_VERSION', 'test' );
+define( 'GWC_LFNDR_SCHEMA_VERSION', 1 );
+define( 'GWC_LFNDR_FILE', dirname( __DIR__ ) . '/groundwork-common-location-finder.php' );
+define( 'GWC_LFNDR_DIR', dirname( __DIR__ ) . '/' );
+define( 'GWC_LFNDR_URL', 'https://example.test/wp-content/plugins/groundwork-common-location-finder/' );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
 defined( 'YEAR_IN_SECONDS' ) || define( 'YEAR_IN_SECONDS', 31536000 );
 
-/** In-memory option store, reset between tests by lfndr_test_reset(). */
-$GLOBALS['lfndr_test_options'] = array();
+/** In-memory option store, reset between tests by gwc_lfndr_test_reset(). */
+$GLOBALS['gwc_lfndr_test_options'] = array();
 
 /**
  * Reset all test state.
  */
-function lfndr_test_reset(): void {
-	$GLOBALS['lfndr_test_options'] = array();
-	if ( function_exists( 'lfndr_schema_cache' ) ) {
-		lfndr_schema_cache( null, true );
+function gwc_lfndr_test_reset(): void {
+	$GLOBALS['gwc_lfndr_test_options'] = array();
+	if ( function_exists( 'gwc_lfndr_schema_cache' ) ) {
+		gwc_lfndr_schema_cache( null, true );
 	}
-	if ( function_exists( 'lfndr_settings_cache' ) ) {
-		lfndr_settings_cache( null, true );
+	if ( function_exists( 'gwc_lfndr_settings_cache' ) ) {
+		gwc_lfndr_settings_cache( null, true );
 	}
 }
 
@@ -181,15 +181,15 @@ function wp_list_pluck( $list, $field, $index_key = null ) {
 }
 
 /* A real filter registry, small but honest. The field types register through
- * lfndr_field_types, so a no-op add_filter() would leave the composites out of
+ * gwc_lfndr_field_types, so a no-op add_filter() would leave the composites out of
  * the registry the tests see — which is exactly the difference between testing
  * the plugin and testing a subset of it that happens to be easy. */
-$GLOBALS['lfndr_test_filters'] = array();
+$GLOBALS['gwc_lfndr_test_filters'] = array();
 
 function add_filter( $hook, $callback, $priority = 10 ) {
-	$GLOBALS['lfndr_test_filters'][ $hook ][] = array( $priority, $callback );
+	$GLOBALS['gwc_lfndr_test_filters'][ $hook ][] = array( $priority, $callback );
 	usort(
-		$GLOBALS['lfndr_test_filters'][ $hook ],
+		$GLOBALS['gwc_lfndr_test_filters'][ $hook ],
 		static fn( array $a, array $b ): int => $a[0] <=> $b[0]
 	);
 	return true;
@@ -197,7 +197,7 @@ function add_filter( $hook, $callback, $priority = 10 ) {
 
 function apply_filters( $hook, $value ) {
 	$extra = array_slice( func_get_args(), 2 );
-	foreach ( $GLOBALS['lfndr_test_filters'][ $hook ] ?? array() as $entry ) {
+	foreach ( $GLOBALS['gwc_lfndr_test_filters'][ $hook ] ?? array() as $entry ) {
 		$value = call_user_func_array( $entry[1], array_merge( array( $value ), $extra ) );
 	}
 	return $value;
@@ -229,16 +229,16 @@ function wp_kses( $string, $allowed ) {
 function add_action() {}
 
 function get_option( $name, $default_value = false ) {
-	return $GLOBALS['lfndr_test_options'][ $name ] ?? $default_value;
+	return $GLOBALS['gwc_lfndr_test_options'][ $name ] ?? $default_value;
 }
 
 function update_option( $name, $value ) {
-	$GLOBALS['lfndr_test_options'][ $name ] = $value;
+	$GLOBALS['gwc_lfndr_test_options'][ $name ] = $value;
 	return true;
 }
 
 function delete_option( $name ) {
-	unset( $GLOBALS['lfndr_test_options'][ $name ] );
+	unset( $GLOBALS['gwc_lfndr_test_options'][ $name ] );
 	return true;
 }
 
@@ -248,9 +248,9 @@ function wp_timezone() {
 
 // phpcs:enable
 
-require_once LFNDR_DIR . 'inc/i18n.php';
-require_once LFNDR_DIR . 'inc/field-types.php';
-require_once LFNDR_DIR . 'inc/schema.php';
+require_once GWC_LFNDR_DIR . 'inc/i18n.php';
+require_once GWC_LFNDR_DIR . 'inc/field-types.php';
+require_once GWC_LFNDR_DIR . 'inc/schema.php';
 
 /* Hours and closures need a few more stubs. */
 // phpcs:disable Squiz.Commenting.FunctionComment.Missing
@@ -277,28 +277,28 @@ function sanitize_title_with_dashes( $t ) {
 
 /* Loaded after the filter registry exists, so their add_filter() calls at file
  * scope land the same way they do under WordPress. */
-require_once LFNDR_DIR . 'inc/settings.php';
-require_once LFNDR_DIR . 'inc/field-address.php';
-require_once LFNDR_DIR . 'inc/field-hours.php';
-require_once LFNDR_DIR . 'inc/field-closures.php';
+require_once GWC_LFNDR_DIR . 'inc/settings.php';
+require_once GWC_LFNDR_DIR . 'inc/field-address.php';
+require_once GWC_LFNDR_DIR . 'inc/field-hours.php';
+require_once GWC_LFNDR_DIR . 'inc/field-closures.php';
 
 /* facets.php reads the post type constant that cpt.php would normally define;
  * cpt.php itself is all hook registration and has nothing to unit test. */
-if ( ! defined( 'LFNDR_POST_TYPE' ) ) {
-	define( 'LFNDR_POST_TYPE', 'lfndr_location' );
+if ( ! defined( 'GWC_LFNDR_POST_TYPE' ) ) {
+	define( 'GWC_LFNDR_POST_TYPE', 'gwc_lfndr_location' );
 }
 
-require_once LFNDR_DIR . 'inc/facets.php';
-require_once LFNDR_DIR . 'inc/admin-settings.php';
-require_once LFNDR_DIR . 'inc/admin-fields.php';
-require_once LFNDR_DIR . 'inc/admin-screen.php';
+require_once GWC_LFNDR_DIR . 'inc/facets.php';
+require_once GWC_LFNDR_DIR . 'inc/admin-settings.php';
+require_once GWC_LFNDR_DIR . 'inc/admin-fields.php';
+require_once GWC_LFNDR_DIR . 'inc/admin-screen.php';
 
 /*
  * The front-end shell, for the wrapper-markup tests.
  *
  * Loaded last and with two of its collaborators stubbed rather than required.
- * lfndr_get_locations() reaches for WP_Query and the transient API, and
- * lfndr_enqueue_finder() for the whole script registry — neither has anything
+ * gwc_lfndr_get_locations() reaches for WP_Query and the transient API, and
+ * gwc_lfndr_enqueue_finder() for the whole script registry — neither has anything
  * to do with the markup under test, and pulling them in would trade a real test
  * for a large pile of stubs that exist only to be walked past. An empty result
  * set still renders the wrapper, which is the part being asserted.
@@ -327,10 +327,10 @@ function wp_add_inline_script() {
 function wp_json_encode( $data, $options = 0, $depth = 512 ) {
 	return json_encode( $data, (int) $options, (int) $depth );
 }
-function lfndr_get_locations() {
+function gwc_lfndr_get_locations() {
 	return array();
 }
-function lfndr_enqueue_finder() {}
+function gwc_lfndr_enqueue_finder() {}
 // phpcs:enable
 
-require_once LFNDR_DIR . 'inc/render.php';
+require_once GWC_LFNDR_DIR . 'inc/render.php';

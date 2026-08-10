@@ -26,7 +26,7 @@
  * shape is the sanitizer's business, not this file's. Hand-writing those arrays
  * here would produce a fixture that is correct until the day the storage format
  * changes, and then produces a demo site that is subtly wrong in a way no test
- * catches. Calling lfndr_sanitize_address() and lfndr_sanitize_hours() means the
+ * catches. Calling gwc_lfndr_sanitize_address() and gwc_lfndr_sanitize_hours() means the
  * fixture is shaped by the same code the meta box uses, so it cannot drift.
  *
  * @package LocationFinder
@@ -35,22 +35,22 @@
 defined( 'ABSPATH' ) || exit;
 
 /** Marks everything this script creates, so a re-run removes only its own work. */
-const LFNDR_SEED_MARK = '_lfndr_seed';
+const GWC_LFNDR_SEED_MARK = '_gwc_lfndr_seed';
 
 /* ── Refuse to run anywhere that matters ─────────────────────────────────────
  * This script deletes posts. Pointed at a live site it would delete that site's
  * locations. The guard is deliberately conservative: local and development only,
  * whatever anybody types.
  * ─────────────────────────────────────────────────────────────────────────── */
-$lfndr_env = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
+$gwc_lfndr_env = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
 
-if ( ! in_array( $lfndr_env, array( 'local', 'development' ), true ) ) {
-	echo "Refusing to seed: WP_ENVIRONMENT_TYPE is '", $lfndr_env, "'.\n";
+if ( ! in_array( $gwc_lfndr_env, array( 'local', 'development' ), true ) ) {
+	echo "Refusing to seed: WP_ENVIRONMENT_TYPE is '", $gwc_lfndr_env, "'.\n";
 	echo "This script deletes records. It runs on local and development only.\n";
 	exit( 1 );
 }
 
-if ( ! function_exists( 'lfndr_get_schema' ) ) {
+if ( ! function_exists( 'gwc_lfndr_get_schema' ) ) {
 	echo "The plugin is not active. Run: wp plugin activate groundwork-common-location-finder\n";
 	exit( 1 );
 }
@@ -59,35 +59,35 @@ wp_set_current_user( 1 );
 
 /* ── Clear the previous run ──────────────────────────────────────────────── */
 
-$lfndr_previous = get_posts(
+$gwc_lfndr_previous = get_posts(
 	array(
-		'post_type'      => array( LFNDR_POST_TYPE, 'page' ),
+		'post_type'      => array( GWC_LFNDR_POST_TYPE, 'page' ),
 		'post_status'    => 'any',
 		'posts_per_page' => -1,
 		'fields'         => 'ids',
 		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- a development fixture, run by hand.
-		'meta_key'       => LFNDR_SEED_MARK,
+		'meta_key'       => GWC_LFNDR_SEED_MARK,
 	)
 );
 
-foreach ( $lfndr_previous as $lfndr_id ) {
-	wp_delete_post( (int) $lfndr_id, true );
+foreach ( $gwc_lfndr_previous as $gwc_lfndr_id ) {
+	wp_delete_post( (int) $gwc_lfndr_id, true );
 }
 
-printf( "Removed %d records from a previous run.\n", count( $lfndr_previous ) );
+printf( "Removed %d records from a previous run.\n", count( $gwc_lfndr_previous ) );
 
 /* ── The schema ──────────────────────────────────────────────────────────────
- * Read, not written. lfndr_get_schema() installs the three-field default on a
+ * Read, not written. gwc_lfndr_get_schema() installs the three-field default on a
  * site that has none, and leaves an existing configuration alone. Overwriting it
  * here would throw away whatever fields somebody had just built by hand, which
  * on a demo site is exactly the work you most want to keep.
  * ─────────────────────────────────────────────────────────────────────────── */
-$lfndr_schema = lfndr_get_schema();
+$gwc_lfndr_schema = gwc_lfndr_get_schema();
 
-if ( ! lfndr_get_field( 'address', $lfndr_schema ) || ! lfndr_get_field( 'hours', $lfndr_schema ) ) {
+if ( ! gwc_lfndr_get_field( 'address', $gwc_lfndr_schema ) || ! gwc_lfndr_get_field( 'hours', $gwc_lfndr_schema ) ) {
 	echo "This site's schema has no 'address' or 'hours' field, so the fixture has\n";
 	echo "nowhere to put its data. Seeding the default schema is not this script's\n";
-	echo "job — delete the lfndr_schema option to get the defaults back.\n";
+	echo "job — delete the gwc_lfndr_schema option to get the defaults back.\n";
 	exit( 1 );
 }
 
@@ -102,48 +102,48 @@ if ( ! lfndr_get_field( 'address', $lfndr_schema ) || ! lfndr_get_field( 'hours'
  * @param float  $lng     Longitude.
  * @return int
  */
-function lfndr_seed_location( string $name, array $address, array $hours, string $phone, float $lat, float $lng ): int {
+function gwc_lfndr_seed_location( string $name, array $address, array $hours, string $phone, float $lat, float $lng ): int {
 	/* Looked up here rather than passed in or reached through a global. Under
 	 * `wp eval-file` the whole script body runs inside a function, so a
 	 * top-level $field assigned above is a local and `global $field` here would
 	 * find an unset variable of the same name — silently storing every address
-	 * against an empty field definition. lfndr_get_schema() memoises per
+	 * against an empty field definition. gwc_lfndr_get_schema() memoises per
 	 * request, so asking six times costs one read. */
-	$schema        = lfndr_get_schema();
-	$address_field = lfndr_get_field( 'address', $schema );
-	$hours_field   = lfndr_get_field( 'hours', $schema );
+	$schema        = gwc_lfndr_get_schema();
+	$address_field = gwc_lfndr_get_field( 'address', $schema );
+	$hours_field   = gwc_lfndr_get_field( 'hours', $schema );
 
 	$id = (int) wp_insert_post(
 		array(
-			'post_type'   => LFNDR_POST_TYPE,
+			'post_type'   => GWC_LFNDR_POST_TYPE,
 			'post_status' => 'publish',
 			'post_title'  => $name,
 		)
 	);
 
-	update_post_meta( $id, LFNDR_SEED_MARK, 1 );
+	update_post_meta( $id, GWC_LFNDR_SEED_MARK, 1 );
 
 	update_post_meta(
 		$id,
-		lfndr_field_meta_key( 'address' ),
-		lfndr_sanitize_address( $address, $address_field )
+		gwc_lfndr_field_meta_key( 'address' ),
+		gwc_lfndr_sanitize_address( $address, $address_field )
 	);
 
 	update_post_meta(
 		$id,
-		lfndr_field_meta_key( 'hours' ),
-		lfndr_sanitize_hours( $hours, $hours_field )
+		gwc_lfndr_field_meta_key( 'hours' ),
+		gwc_lfndr_sanitize_hours( $hours, $hours_field )
 	);
 
 	/* An empty phone is left absent rather than stored blank. That is what the
 	 * meta box does via the type's is_empty callback, and a location with a
 	 * stored empty string renders a labelled row with nothing in it. */
 	if ( '' !== $phone ) {
-		update_post_meta( $id, lfndr_field_meta_key( 'phone' ), $phone );
+		update_post_meta( $id, gwc_lfndr_field_meta_key( 'phone' ), $phone );
 	}
 
-	update_post_meta( $id, '_lfndr_lat', (string) $lat );
-	update_post_meta( $id, '_lfndr_lng', (string) $lng );
+	update_post_meta( $id, '_gwc_lfndr_lat', (string) $lat );
+	update_post_meta( $id, '_gwc_lfndr_lng', (string) $lng );
 
 	return $id;
 }
@@ -156,9 +156,9 @@ function lfndr_seed_location( string $name, array $address, array $hours, string
  * branch of the card, the detail pane and the "Open today" filter.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-$lfndr_made = array();
+$gwc_lfndr_made = array();
 
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Riverbend Food Bank — Downtown Pantry',
 	array(
 		'line1'  => '1412 Morris Avenue',
@@ -205,7 +205,7 @@ $lfndr_made[] = lfndr_seed_location(
 );
 
 // A second address line, and a Saturday-only schedule.
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Riverbend Food Bank — Bessemer Pantry',
 	array(
 		'line1'  => '2200 9th Avenue North',
@@ -229,7 +229,7 @@ $lfndr_made[] = lfndr_seed_location(
 
 // No phone. A volunteer-run site that genuinely has no number to publish, which
 // is the case the detail pane has to handle without printing an empty row.
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Fairfield Community Fridge',
 	array(
 		'line1'  => '6501 Gary Avenue',
@@ -289,7 +289,7 @@ $lfndr_made[] = lfndr_seed_location(
 
 // A monthly round. The frequency labels ("1st & 3rd Tue") are the least
 // guessable part of the hours field, so the fixture has to contain one.
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Irondale Mobile Distribution',
 	array(
 		'line1'  => 'Irondale Civic Center car park',
@@ -318,7 +318,7 @@ $lfndr_made[] = lfndr_seed_location(
 );
 
 // An open-ended closing time: "from 17:30", stored with an empty end.
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Ensley Evening Pantry',
 	array(
 		'line1'  => '1809 Avenue E',
@@ -340,7 +340,7 @@ $lfndr_made[] = lfndr_seed_location(
 	-86.8697
 );
 
-$lfndr_made[] = lfndr_seed_location(
+$gwc_lfndr_made[] = gwc_lfndr_seed_location(
 	'Homewood Senior Meals',
 	array(
 		'line1'  => '816 Oxmoor Road',
@@ -379,7 +379,7 @@ $lfndr_made[] = lfndr_seed_location(
  * there is nothing to look at on the front end and the fixture is admin-only.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-$lfndr_page = (int) wp_insert_post(
+$gwc_lfndr_page = (int) wp_insert_post(
 	array(
 		'post_type'    => 'page',
 		'post_status'  => 'publish',
@@ -389,12 +389,12 @@ $lfndr_page = (int) wp_insert_post(
 	)
 );
 
-update_post_meta( $lfndr_page, LFNDR_SEED_MARK, 1 );
+update_post_meta( $gwc_lfndr_page, GWC_LFNDR_SEED_MARK, 1 );
 
 /* ── What was made ───────────────────────────────────────────────────────── */
 
 printf( "\nRiverbend Food Bank's locations are seeded.\n\n" );
-printf( "  Locations              %d\n", count( $lfndr_made ) );
+printf( "  Locations              %d\n", count( $gwc_lfndr_made ) );
 echo "  Downtown Pantry        weekdays, closes early on Friday\n";
 echo "  Bessemer Pantry        Saturday mornings, second address line\n";
 echo "  Fairfield Fridge       open every day — and no phone number\n";
@@ -402,8 +402,8 @@ echo "  Irondale Mobile        1st & 3rd Tuesday only\n";
 echo "  Ensley Evening         Thursdays from 17:30, no closing time\n";
 echo "  Homewood Senior Meals  Mon, Wed, Fri over lunch\n";
 
-printf( "\n  Admin   %s\n", admin_url( 'edit.php?post_type=' . LFNDR_POST_TYPE ) );
-printf( "  Fields  %s\n", admin_url( 'edit.php?post_type=' . LFNDR_POST_TYPE . '&page=lfndr-fields' ) );
-printf( "  Finder  %s\n", get_permalink( $lfndr_page ) );
+printf( "\n  Admin   %s\n", admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE ) );
+printf( "  Fields  %s\n", admin_url( 'edit.php?post_type=' . GWC_LFNDR_POST_TYPE . '&page=lfndr-fields' ) );
+printf( "  Finder  %s\n", get_permalink( $gwc_lfndr_page ) );
 
 echo "\n  Every address here is invented. See the note at the top of this file.\n";

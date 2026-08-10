@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  *
  *   render_admin  (array $field, mixed $value, string $name): void
  *                 Print the meta box control. $name is the fully-formed
- *                 name="" prefix, e.g. lfndr_f[phone].
+ *                 name="" prefix, e.g. gwc_lfndr_f[phone].
  *   sanitize      (mixed $raw, array $field): mixed
  *                 Raw POST → the value stored in post meta. Never trusts input.
  *   is_empty      (mixed $value, array $field): bool
@@ -45,7 +45,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array<string, array>
  */
-function lfndr_field_types(): array {
+function gwc_lfndr_field_types(): array {
 	static $types = null;
 	if ( null !== $types ) {
 		return $types;
@@ -84,13 +84,13 @@ function lfndr_field_types(): array {
 			'label'        => $meta['label'],
 			'group'        => 'simple',
 			'multiple'     => true,
-			'render_admin' => 'lfndr_admin_' . $key,
-			'sanitize'     => 'lfndr_sanitize_' . $key,
-			'is_empty'     => 'lfndr_empty_scalar',
-			'to_payload'   => 'lfndr_payload_scalar',
-			'search_text'  => 'number' === $key ? null : 'lfndr_search_scalar',
+			'render_admin' => 'gwc_lfndr_admin_' . $key,
+			'sanitize'     => 'gwc_lfndr_sanitize_' . $key,
+			'is_empty'     => 'gwc_lfndr_empty_scalar',
+			'to_payload'   => 'gwc_lfndr_payload_scalar',
+			'search_text'  => 'number' === $key ? null : 'gwc_lfndr_search_scalar',
 			'facet_tokens' => null,
-			'schema_form'  => 'lfndr_schema_form_' . $key,
+			'schema_form'  => 'gwc_lfndr_schema_form_' . $key,
 			'js'           => $meta['js'],
 		);
 	}
@@ -99,14 +99,14 @@ function lfndr_field_types(): array {
 		'label'             => __( 'Yes / no', 'groundwork-common-location-finder' ),
 		'group'             => 'simple',
 		'multiple'          => true,
-		'render_admin'      => 'lfndr_admin_boolean',
-		'sanitize'          => 'lfndr_sanitize_boolean',
-		'is_empty'          => 'lfndr_empty_boolean',
-		'to_payload'        => 'lfndr_payload_boolean',
+		'render_admin'      => 'gwc_lfndr_admin_boolean',
+		'sanitize'          => 'gwc_lfndr_sanitize_boolean',
+		'is_empty'          => 'gwc_lfndr_empty_boolean',
+		'to_payload'        => 'gwc_lfndr_payload_boolean',
 		'search_text'       => null,
-		'facet_tokens'      => 'lfndr_facet_boolean',
-		'schema_form'       => 'lfndr_schema_form_boolean',
-		'sanitize_settings' => 'lfndr_settings_boolean',
+		'facet_tokens'      => 'gwc_lfndr_facet_boolean',
+		'schema_form'       => 'gwc_lfndr_schema_form_boolean',
+		'sanitize_settings' => 'gwc_lfndr_settings_boolean',
 		'needs_present'     => true,
 		'js'                => 'boolean',
 	);
@@ -115,14 +115,14 @@ function lfndr_field_types(): array {
 		'label'             => __( 'Choice (one)', 'groundwork-common-location-finder' ),
 		'group'             => 'choice',
 		'multiple'          => true,
-		'render_admin'      => 'lfndr_admin_select',
-		'sanitize'          => 'lfndr_sanitize_select',
-		'is_empty'          => 'lfndr_empty_scalar',
-		'to_payload'        => 'lfndr_payload_scalar',
-		'search_text'       => 'lfndr_search_choice',
-		'facet_tokens'      => 'lfndr_facet_select',
-		'schema_form'       => 'lfndr_schema_form_select',
-		'sanitize_settings' => 'lfndr_settings_select',
+		'render_admin'      => 'gwc_lfndr_admin_select',
+		'sanitize'          => 'gwc_lfndr_sanitize_select',
+		'is_empty'          => 'gwc_lfndr_empty_scalar',
+		'to_payload'        => 'gwc_lfndr_payload_scalar',
+		'search_text'       => 'gwc_lfndr_search_choice',
+		'facet_tokens'      => 'gwc_lfndr_facet_select',
+		'schema_form'       => 'gwc_lfndr_schema_form_select',
+		'sanitize_settings' => 'gwc_lfndr_settings_select',
 		'has_options'       => true,
 		'js'                => 'select',
 	);
@@ -131,13 +131,13 @@ function lfndr_field_types(): array {
 		'label'         => __( 'Choice (many)', 'groundwork-common-location-finder' ),
 		'group'         => 'choice',
 		'multiple'      => true,
-		'render_admin'  => 'lfndr_admin_multiselect',
-		'sanitize'      => 'lfndr_sanitize_multiselect',
-		'is_empty'      => 'lfndr_empty_array',
-		'to_payload'    => 'lfndr_payload_array',
-		'search_text'   => 'lfndr_search_choice',
-		'facet_tokens'  => 'lfndr_facet_multiselect',
-		'schema_form'   => 'lfndr_schema_form_multiselect',
+		'render_admin'  => 'gwc_lfndr_admin_multiselect',
+		'sanitize'      => 'gwc_lfndr_sanitize_multiselect',
+		'is_empty'      => 'gwc_lfndr_empty_array',
+		'to_payload'    => 'gwc_lfndr_payload_array',
+		'search_text'   => 'gwc_lfndr_search_choice',
+		'facet_tokens'  => 'gwc_lfndr_facet_multiselect',
+		'schema_form'   => 'gwc_lfndr_schema_form_multiselect',
 		'has_options'   => true,
 		'needs_present' => true,
 		'js'            => 'multiselect',
@@ -157,7 +157,7 @@ function lfndr_field_types(): array {
 	 *
 	 * @param array $types Registry keyed by type slug.
 	 */
-	$types = apply_filters( 'lfndr_field_types', $types );
+	$types = apply_filters( 'gwc_lfndr_field_types', $types );
 
 	return $types;
 }
@@ -170,7 +170,7 @@ function lfndr_field_types(): array {
  * @param mixed $value Value.
  * @return bool
  */
-function lfndr_empty_scalar( $value ): bool {
+function gwc_lfndr_empty_scalar( $value ): bool {
 	return '' === $value || null === $value;
 }
 
@@ -180,7 +180,7 @@ function lfndr_empty_scalar( $value ): bool {
  * @param mixed $value Value.
  * @return bool
  */
-function lfndr_empty_array( $value ): bool {
+function gwc_lfndr_empty_array( $value ): bool {
 	return ! is_array( $value ) || 0 === count( $value );
 }
 
@@ -194,7 +194,7 @@ function lfndr_empty_array( $value ): bool {
  * @param mixed $value Value.
  * @return bool
  */
-function lfndr_empty_boolean( $value ): bool {
+function gwc_lfndr_empty_boolean( $value ): bool {
 	return empty( $value );
 }
 
@@ -204,7 +204,7 @@ function lfndr_empty_boolean( $value ): bool {
  * @param mixed $value Value.
  * @return mixed
  */
-function lfndr_payload_scalar( $value ) {
+function gwc_lfndr_payload_scalar( $value ) {
 	return $value;
 }
 
@@ -214,7 +214,7 @@ function lfndr_payload_scalar( $value ) {
  * @param mixed $value Value.
  * @return array
  */
-function lfndr_payload_array( $value ): array {
+function gwc_lfndr_payload_array( $value ): array {
 	return is_array( $value ) ? array_values( $value ) : array();
 }
 
@@ -224,7 +224,7 @@ function lfndr_payload_array( $value ): array {
  * @param mixed $value Value.
  * @return bool
  */
-function lfndr_payload_boolean( $value ): bool {
+function gwc_lfndr_payload_boolean( $value ): bool {
 	return ! empty( $value );
 }
 
@@ -234,7 +234,7 @@ function lfndr_payload_boolean( $value ): bool {
  * @param mixed $value Value.
  * @return string
  */
-function lfndr_search_scalar( $value ): string {
+function gwc_lfndr_search_scalar( $value ): string {
 	return is_scalar( $value ) ? (string) $value : '';
 }
 
@@ -249,7 +249,7 @@ function lfndr_search_scalar( $value ): string {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_search_choice( $value, array $field ): string {
+function gwc_lfndr_search_choice( $value, array $field ): string {
 	$values = is_array( $value ) ? $value : array( $value );
 	$labels = array();
 	foreach ( $field['options'] as $option ) {
@@ -278,7 +278,7 @@ function lfndr_search_choice( $value, array $field ): string {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_text( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_text( array $field, $value, string $name ): void {
 	$max = (int) ( $field['settings']['maxlength'] ?? 0 );
 	printf(
 		'<input type="text" class="regular-text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s"%5$s />',
@@ -297,7 +297,7 @@ function lfndr_admin_text( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_sanitize_text( $raw, array $field ): string {
+function gwc_lfndr_sanitize_text( $raw, array $field ): string {
 	$value = sanitize_text_field( is_scalar( $raw ) ? (string) $raw : '' );
 	$max   = (int) ( $field['settings']['maxlength'] ?? 0 );
 	return $max > 0 ? mb_substr( $value, 0, $max ) : $value;
@@ -308,8 +308,8 @@ function lfndr_sanitize_text( $raw, array $field ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_text( array $field ): void {
-	lfndr_schema_number_control(
+function gwc_lfndr_schema_form_text( array $field ): void {
+	gwc_lfndr_schema_number_control(
 		$field,
 		'maxlength',
 		__( 'Maximum length', 'groundwork-common-location-finder' ),
@@ -326,7 +326,7 @@ function lfndr_schema_form_text( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_textarea( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_textarea( array $field, $value, string $name ): void {
 	printf(
 		'<textarea class="large-text" rows="%1$d" id="%2$s" name="%3$s" placeholder="%4$s">%5$s</textarea>',
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- an int cast printed through %d; the sniff cannot see through max().
@@ -345,7 +345,7 @@ function lfndr_admin_textarea( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_sanitize_textarea( $raw, array $field ): string {
+function gwc_lfndr_sanitize_textarea( $raw, array $field ): string {
 	$value = sanitize_textarea_field( is_scalar( $raw ) ? (string) $raw : '' );
 	$max   = (int) ( $field['settings']['maxlength'] ?? 0 );
 	return $max > 0 ? mb_substr( $value, 0, $max ) : $value;
@@ -356,9 +356,9 @@ function lfndr_sanitize_textarea( $raw, array $field ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_textarea( array $field ): void {
-	lfndr_schema_number_control( $field, 'rows', __( 'Rows', 'groundwork-common-location-finder' ), '' );
-	lfndr_schema_number_control(
+function gwc_lfndr_schema_form_textarea( array $field ): void {
+	gwc_lfndr_schema_number_control( $field, 'rows', __( 'Rows', 'groundwork-common-location-finder' ), '' );
+	gwc_lfndr_schema_number_control(
 		$field,
 		'maxlength',
 		__( 'Maximum length', 'groundwork-common-location-finder' ),
@@ -375,7 +375,7 @@ function lfndr_schema_form_textarea( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_url( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_url( array $field, $value, string $name ): void {
 	printf(
 		'<input type="url" class="regular-text code" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" inputmode="url" />',
 		esc_attr( 'lfndr-f-' . $field['key'] ),
@@ -395,7 +395,7 @@ function lfndr_admin_url( array $field, $value, string $name ): void {
  * @param mixed $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_url( $raw ): string {
+function gwc_lfndr_sanitize_url( $raw ): string {
 	$value = trim( is_scalar( $raw ) ? (string) $raw : '' );
 	if ( '' === $value ) {
 		return '';
@@ -411,8 +411,8 @@ function lfndr_sanitize_url( $raw ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_url( array $field ): void {
-	lfndr_schema_select_control(
+function gwc_lfndr_schema_form_url( array $field ): void {
+	gwc_lfndr_schema_select_control(
 		$field,
 		'link_text',
 		__( 'Link text', 'groundwork-common-location-finder' ),
@@ -434,7 +434,7 @@ function lfndr_schema_form_url( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_email( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_email( array $field, $value, string $name ): void {
 	printf(
 		'<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" inputmode="email" />',
 		esc_attr( 'lfndr-f-' . $field['key'] ),
@@ -454,7 +454,7 @@ function lfndr_admin_email( array $field, $value, string $name ): void {
  * @param mixed $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_email( $raw ): string {
+function gwc_lfndr_sanitize_email( $raw ): string {
 	$value = sanitize_email( is_scalar( $raw ) ? (string) $raw : '' );
 	return is_email( $value ) ? $value : '';
 }
@@ -464,8 +464,8 @@ function lfndr_sanitize_email( $raw ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_email( array $field ): void {
-	lfndr_schema_checkbox_control(
+function gwc_lfndr_schema_form_email( array $field ): void {
+	gwc_lfndr_schema_checkbox_control(
 		$field,
 		'mailto',
 		__( 'Render as a clickable mailto: link', 'groundwork-common-location-finder' ),
@@ -482,7 +482,7 @@ function lfndr_schema_form_email( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_phone( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_phone( array $field, $value, string $name ): void {
 	printf(
 		'<input type="tel" class="regular-text" id="%1$s" name="%2$s" value="%3$s" placeholder="%4$s" inputmode="tel" />',
 		esc_attr( 'lfndr-f-' . $field['key'] ),
@@ -502,7 +502,7 @@ function lfndr_admin_phone( array $field, $value, string $name ): void {
  * @param mixed $raw Raw value.
  * @return string
  */
-function lfndr_sanitize_phone( $raw ): string {
+function gwc_lfndr_sanitize_phone( $raw ): string {
 	$value = sanitize_text_field( is_scalar( $raw ) ? (string) $raw : '' );
 	return str_replace( array( '"', "'" ), '', $value );
 }
@@ -512,9 +512,9 @@ function lfndr_sanitize_phone( $raw ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_phone( array $field ): void {
-	lfndr_schema_checkbox_control( $field, 'tel_link', __( 'Render as a clickable tel: link', 'groundwork-common-location-finder' ), true );
-	lfndr_schema_checkbox_control( $field, 'mobile_action', __( 'Show a "Call" button on small screens', 'groundwork-common-location-finder' ), false );
+function gwc_lfndr_schema_form_phone( array $field ): void {
+	gwc_lfndr_schema_checkbox_control( $field, 'tel_link', __( 'Render as a clickable tel: link', 'groundwork-common-location-finder' ), true );
+	gwc_lfndr_schema_checkbox_control( $field, 'mobile_action', __( 'Show a "Call" button on small screens', 'groundwork-common-location-finder' ), false );
 }
 
 /* ── number ─────────────────────────────────────────────────────────────── */
@@ -526,7 +526,7 @@ function lfndr_schema_form_phone( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_number( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_number( array $field, $value, string $name ): void {
 	$settings = $field['settings'];
 	$attrs    = '';
 	foreach ( array( 'min', 'max', 'step' ) as $attr ) {
@@ -550,7 +550,7 @@ function lfndr_admin_number( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_sanitize_number( $raw, array $field ): string {
+function gwc_lfndr_sanitize_number( $raw, array $field ): string {
 	$raw = is_scalar( $raw ) ? trim( (string) $raw ) : '';
 	if ( '' === $raw || ! is_numeric( $raw ) ) {
 		return '';
@@ -572,11 +572,11 @@ function lfndr_sanitize_number( $raw, array $field ): string {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_number( array $field ): void {
-	lfndr_schema_number_control( $field, 'min', __( 'Minimum', 'groundwork-common-location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'max', __( 'Maximum', 'groundwork-common-location-finder' ), '' );
-	lfndr_schema_number_control( $field, 'decimals', __( 'Decimal places', 'groundwork-common-location-finder' ), '' );
-	lfndr_schema_text_control( $field, 'suffix', __( 'Suffix', 'groundwork-common-location-finder' ), __( 'Shown after the number, e.g. " seats".', 'groundwork-common-location-finder' ) );
+function gwc_lfndr_schema_form_number( array $field ): void {
+	gwc_lfndr_schema_number_control( $field, 'min', __( 'Minimum', 'groundwork-common-location-finder' ), '' );
+	gwc_lfndr_schema_number_control( $field, 'max', __( 'Maximum', 'groundwork-common-location-finder' ), '' );
+	gwc_lfndr_schema_number_control( $field, 'decimals', __( 'Decimal places', 'groundwork-common-location-finder' ), '' );
+	gwc_lfndr_schema_text_control( $field, 'suffix', __( 'Suffix', 'groundwork-common-location-finder' ), __( 'Shown after the number, e.g. " seats".', 'groundwork-common-location-finder' ) );
 }
 
 /* ── boolean ────────────────────────────────────────────────────────────── */
@@ -588,7 +588,7 @@ function lfndr_schema_form_number( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_boolean( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_boolean( array $field, $value, string $name ): void {
 	printf(
 		'<label for="%1$s"><input type="checkbox" id="%1$s" name="%2$s" value="1"%3$s /> %4$s</label>',
 		esc_attr( 'lfndr-f-' . $field['key'] ),
@@ -604,7 +604,7 @@ function lfndr_admin_boolean( array $field, $value, string $name ): void {
  * @param mixed $raw Raw value.
  * @return bool
  */
-function lfndr_sanitize_boolean( $raw ): bool {
+function gwc_lfndr_sanitize_boolean( $raw ): bool {
 	return ! empty( $raw ) && '0' !== $raw;
 }
 
@@ -621,7 +621,7 @@ function lfndr_sanitize_boolean( $raw ): bool {
  * @param mixed $value Value.
  * @return array
  */
-function lfndr_facet_boolean( $value ): array {
+function gwc_lfndr_facet_boolean( $value ): array {
 	return empty( $value ) ? array() : array( '1' );
 }
 
@@ -631,7 +631,7 @@ function lfndr_facet_boolean( $value ): array {
  * @param array $raw Raw settings.
  * @return array
  */
-function lfndr_settings_boolean( array $raw ): array {
+function gwc_lfndr_settings_boolean( array $raw ): array {
 	return array(
 		'true_label'  => sanitize_text_field( (string) ( $raw['true_label'] ?? '' ) ),
 		'false_label' => sanitize_text_field( (string) ( $raw['false_label'] ?? '' ) ),
@@ -643,9 +643,9 @@ function lfndr_settings_boolean( array $raw ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_boolean( array $field ): void {
-	lfndr_schema_text_control( $field, 'true_label', __( 'Label when true', 'groundwork-common-location-finder' ), __( 'Defaults to the field label.', 'groundwork-common-location-finder' ) );
-	lfndr_schema_text_control(
+function gwc_lfndr_schema_form_boolean( array $field ): void {
+	gwc_lfndr_schema_text_control( $field, 'true_label', __( 'Label when true', 'groundwork-common-location-finder' ), __( 'Defaults to the field label.', 'groundwork-common-location-finder' ) );
+	gwc_lfndr_schema_text_control(
 		$field,
 		'false_label',
 		__( 'Label when false', 'groundwork-common-location-finder' ),
@@ -662,7 +662,7 @@ function lfndr_schema_form_boolean( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_select( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_select( array $field, $value, string $name ): void {
 	$allow_empty = ! isset( $field['settings']['allow_empty'] ) || ! empty( $field['settings']['allow_empty'] );
 	printf(
 		'<select id="%1$s" name="%2$s">',
@@ -690,7 +690,7 @@ function lfndr_admin_select( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_sanitize_select( $raw, array $field ): string {
+function gwc_lfndr_sanitize_select( $raw, array $field ): string {
 	$value = is_scalar( $raw ) ? (string) $raw : '';
 	$valid = wp_list_pluck( $field['options'], 'value' );
 	if ( in_array( $value, $valid, true ) ) {
@@ -706,7 +706,7 @@ function lfndr_sanitize_select( $raw, array $field ): string {
  * @param mixed $value Value.
  * @return array
  */
-function lfndr_facet_select( $value ): array {
+function gwc_lfndr_facet_select( $value ): array {
 	$value = (string) $value;
 	return '' === $value ? array() : array( $value );
 }
@@ -718,7 +718,7 @@ function lfndr_facet_select( $value ): array {
  * @param array $field Field so far.
  * @return array
  */
-function lfndr_settings_select( array $raw, array $field ): array {
+function gwc_lfndr_settings_select( array $raw, array $field ): array {
 	$valid = wp_list_pluck( $field['options'], 'value' );
 	$gate  = sanitize_title( (string) ( $raw['open_now_gate'] ?? '' ) );
 	return array(
@@ -733,14 +733,14 @@ function lfndr_settings_select( array $raw, array $field ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_select( array $field ): void {
+function gwc_lfndr_schema_form_select( array $field ): void {
 	$choices = array( '' => __( '— none —', 'groundwork-common-location-finder' ) );
 	foreach ( $field['options'] as $option ) {
 		$choices[ $option['value'] ] = $option['label'];
 	}
-	lfndr_schema_select_control( $field, 'default', __( 'Default value', 'groundwork-common-location-finder' ), $choices, '' );
-	lfndr_schema_checkbox_control( $field, 'allow_empty', __( 'Allow no value', 'groundwork-common-location-finder' ), true );
-	lfndr_schema_select_control(
+	gwc_lfndr_schema_select_control( $field, 'default', __( 'Default value', 'groundwork-common-location-finder' ), $choices, '' );
+	gwc_lfndr_schema_checkbox_control( $field, 'allow_empty', __( 'Allow no value', 'groundwork-common-location-finder' ), true );
+	gwc_lfndr_schema_select_control(
 		$field,
 		'open_now_gate',
 		__( 'Only badge "Open now" when this value is set', 'groundwork-common-location-finder' ),
@@ -762,7 +762,7 @@ function lfndr_schema_form_select( array $field ): void {
  * @param mixed  $value Stored value.
  * @param string $name  Input name.
  */
-function lfndr_admin_multiselect( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_multiselect( array $field, $value, string $name ): void {
 	$current = is_array( $value ) ? $value : array();
 	echo '<span class="lfndr-checkboxes">';
 	foreach ( $field['options'] as $option ) {
@@ -784,7 +784,7 @@ function lfndr_admin_multiselect( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_sanitize_multiselect( $raw, array $field ): array {
+function gwc_lfndr_sanitize_multiselect( $raw, array $field ): array {
 	if ( ! is_array( $raw ) ) {
 		return array();
 	}
@@ -807,7 +807,7 @@ function lfndr_sanitize_multiselect( $raw, array $field ): array {
  * @param mixed $value Value.
  * @return array
  */
-function lfndr_facet_multiselect( $value ): array {
+function gwc_lfndr_facet_multiselect( $value ): array {
 	return is_array( $value ) ? array_values( $value ) : array();
 }
 
@@ -816,7 +816,7 @@ function lfndr_facet_multiselect( $value ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_multiselect( array $field ): void {
+function gwc_lfndr_schema_form_multiselect( array $field ): void {
 	unset( $field );
 	printf(
 		'<p class="description">%s</p>',
@@ -834,7 +834,7 @@ function lfndr_schema_form_multiselect( array $field ): void {
  * @param string $label Label.
  * @param string $help  Description.
  */
-function lfndr_schema_text_control( array $field, string $key, string $label, string $help ): void {
+function gwc_lfndr_schema_text_control( array $field, string $key, string $label, string $help ): void {
 	printf(
 		'<p class="lfndr-setting"><label for="%1$s">%2$s</label><br /><input type="text" class="regular-text" id="%1$s" name="settings[%3$s]" value="%4$s" />%5$s</p>',
 		esc_attr( 'lfndr-set-' . $key ),
@@ -853,7 +853,7 @@ function lfndr_schema_text_control( array $field, string $key, string $label, st
  * @param string $label Label.
  * @param string $help  Description.
  */
-function lfndr_schema_number_control( array $field, string $key, string $label, string $help ): void {
+function gwc_lfndr_schema_number_control( array $field, string $key, string $label, string $help ): void {
 	printf(
 		'<p class="lfndr-setting"><label for="%1$s">%2$s</label><br /><input type="number" class="small-text" id="%1$s" name="settings[%3$s]" value="%4$s" />%5$s</p>',
 		esc_attr( 'lfndr-set-' . $key ),
@@ -872,7 +872,7 @@ function lfndr_schema_number_control( array $field, string $key, string $label, 
  * @param string $label    Label.
  * @param bool   $fallback Default when unset.
  */
-function lfndr_schema_checkbox_control( array $field, string $key, string $label, bool $fallback ): void {
+function gwc_lfndr_schema_checkbox_control( array $field, string $key, string $label, bool $fallback ): void {
 	$value = array_key_exists( $key, $field['settings'] ) ? ! empty( $field['settings'][ $key ] ) : $fallback;
 	printf(
 		'<p class="lfndr-setting"><label><input type="checkbox" name="settings[%1$s]" value="1"%2$s /> %3$s</label></p>',
@@ -892,7 +892,7 @@ function lfndr_schema_checkbox_control( array $field, string $key, string $label
  * @param string $fallback Default when unset.
  * @param string $help     Description.
  */
-function lfndr_schema_select_control( array $field, string $key, string $label, array $choices, string $fallback, string $help = '' ): void {
+function gwc_lfndr_schema_select_control( array $field, string $key, string $label, array $choices, string $fallback, string $help = '' ): void {
 	$value = (string) ( $field['settings'][ $key ] ?? $fallback );
 	printf(
 		'<p class="lfndr-setting"><label for="%1$s">%2$s</label><br /><select id="%1$s" name="settings[%3$s]">',

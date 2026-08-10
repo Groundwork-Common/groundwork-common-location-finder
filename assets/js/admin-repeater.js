@@ -81,7 +81,7 @@
 			if ( first ) {
 				first.focus();
 			}
-			status.textContent = ( window.LFNDR_REPEATER && window.LFNDR_REPEATER.added ) || '';
+			status.textContent = ( window.GWC_LFNDR_REPEATER && window.GWC_LFNDR_REPEATER.added ) || '';
 		} );
 
 		rows.addEventListener( 'click', function ( event ) {
@@ -107,7 +107,7 @@
 			if ( target ) {
 				target.focus();
 			}
-			status.textContent = ( window.LFNDR_REPEATER && window.LFNDR_REPEATER.removed ) || '';
+			status.textContent = ( window.GWC_LFNDR_REPEATER && window.GWC_LFNDR_REPEATER.removed ) || '';
 		} );
 
 		refresh();

@@ -19,13 +19,13 @@
  * that built it is gone.
  *
  * Only when armed: the two options holding the field schema and the settings.
- * Arming is a separate option rather than a setting inside lfndr_settings,
+ * Arming is a separate option rather than a setting inside gwc_lfndr_settings,
  * precisely so a future migration of that array can never resurrect it — a
  * merge with defaults is exactly the kind of thing that would flip a buried
  * boolean back on, and the blast radius here is somebody's entire field
  * configuration.
  *
- *     update_option( 'lfndr_allow_destructive_uninstall', true );
+ *     update_option( 'gwc_lfndr_allow_destructive_uninstall', true );
  *
  * Even armed, the field VALUES on each location survive. Only the description
  * of them goes. That asymmetry is on purpose: a schema can be rebuilt from the
@@ -44,16 +44,16 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
  * flag is read per site, because on a network one site's decision to keep its
  * field schema is not another's to overrule.
  */
-function lfndr_uninstall_site() {
-	delete_transient( 'lfndr_locations' );
+function gwc_lfndr_uninstall_site() {
+	delete_transient( 'gwc_lfndr_locations' );
 
-	if ( ! get_option( 'lfndr_allow_destructive_uninstall' ) ) {
+	if ( ! get_option( 'gwc_lfndr_allow_destructive_uninstall' ) ) {
 		return;
 	}
 
-	delete_option( 'lfndr_schema' );
-	delete_option( 'lfndr_settings' );
-	delete_option( 'lfndr_allow_destructive_uninstall' );
+	delete_option( 'gwc_lfndr_schema' );
+	delete_option( 'gwc_lfndr_settings' );
+	delete_option( 'gwc_lfndr_allow_destructive_uninstall' );
 }
 
 /* Multisite: options and transients are per site, so cleaning only the current
@@ -63,18 +63,18 @@ function lfndr_uninstall_site() {
  * of where it stopped. The cap is generous enough that no realistic network
  * reaches it, and the failure mode if one does is leftover rows, not damage. */
 if ( is_multisite() ) {
-	$lfndr_sites = get_sites(
+	$gwc_lfndr_sites = get_sites(
 		array(
 			'fields' => 'ids',
 			'number' => 1000,
 		)
 	);
 
-	foreach ( $lfndr_sites as $lfndr_site_id ) {
-		switch_to_blog( $lfndr_site_id );
-		lfndr_uninstall_site();
+	foreach ( $gwc_lfndr_sites as $gwc_lfndr_site_id ) {
+		switch_to_blog( $gwc_lfndr_site_id );
+		gwc_lfndr_uninstall_site();
 		restore_current_blog();
 	}
 } else {
-	lfndr_uninstall_site();
+	gwc_lfndr_uninstall_site();
 }

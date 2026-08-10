@@ -24,7 +24,7 @@
 	 * ─────────────────────────────────────────────────────────────────────── */
 
 	var strings =
-		( window.LFNDR_ADMIN && window.LFNDR_ADMIN.strings ) || {};
+		( window.GWC_LFNDR_ADMIN && window.GWC_LFNDR_ADMIN.strings ) || {};
 
 	function t( key, fallback ) {
 		return strings[ key ] || fallback;
@@ -142,7 +142,7 @@
 		}
 
 		var withOptions =
-			( window.LFNDR_ADMIN && window.LFNDR_ADMIN.typesWithOptions ) || [];
+			( window.GWC_LFNDR_ADMIN && window.GWC_LFNDR_ADMIN.typesWithOptions ) || [];
 
 		function toggle() {
 			optionsRow.hidden = withOptions.indexOf( typeSelect.value ) === -1;

@@ -14,13 +14,13 @@ defined( 'ABSPATH' ) || exit;
  * @param array $atts Attributes from the block or shortcode.
  * @return string
  */
-function lfndr_render_finder( array $atts = array() ): string {
+function gwc_lfndr_render_finder( array $atts = array() ): string {
 	/* First statement, deliberately. This is layer two of the asset gate: layer
 	 * one guesses at head time so the CSS is in place before paint, and this
 	 * catches every case the guess misses — a template part, a widget, a page
 	 * builder. wp_enqueue_* is idempotent, so when layer one fired this does
 	 * nothing. */
-	lfndr_enqueue_finder();
+	gwc_lfndr_enqueue_finder();
 
 	static $instance = 0;
 	++$instance;
@@ -36,9 +36,9 @@ function lfndr_render_finder( array $atts = array() ): string {
 		'location_finder'
 	);
 
-	$locations = lfndr_get_locations();
-	$schema    = lfndr_get_schema();
-	$facets    = lfndr_available_facets( $locations, $schema );
+	$locations = gwc_lfndr_get_locations();
+	$schema    = gwc_lfndr_get_schema();
+	$facets    = gwc_lfndr_available_facets( $locations, $schema );
 
 	$id       = 'lfndr-' . $instance;
 	$show_map = ! in_array( strtolower( (string) $atts['show_map'] ), array( 'no', 'false', '0' ), true );
@@ -69,7 +69,7 @@ function lfndr_render_finder( array $atts = array() ): string {
 		<?php echo $named; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr applied above. ?>
 		data-lfndr-finder<?php echo $style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from absint above. ?>>
 
-		<?php lfndr_render_controls( $id, $facets, $locations ); ?>
+		<?php gwc_lfndr_render_controls( $id, $facets, $locations ); ?>
 
 		<div class="lfndr__body">
 			<div class="lfndr__panel">
@@ -85,7 +85,7 @@ function lfndr_render_finder( array $atts = array() ): string {
 					?>
 				</p>
 
-				<?php lfndr_render_static_list( $locations, $schema ); ?>
+				<?php gwc_lfndr_render_static_list( $locations, $schema ); ?>
 			</div>
 
 			<?php if ( $show_map ) : ?>
@@ -94,7 +94,7 @@ function lfndr_render_finder( array $atts = array() ): string {
 			<?php endif; ?>
 		</div>
 
-		<?php lfndr_render_payload( $id, $locations, $schema, $facets, $show_map ); ?>
+		<?php gwc_lfndr_render_payload( $id, $locations, $schema, $facets, $show_map ); ?>
 	</div>
 	<?php
 	return (string) ob_get_clean();
@@ -107,8 +107,8 @@ function lfndr_render_finder( array $atts = array() ): string {
  * @param array  $facets    Filter groups.
  * @param array  $locations Locations.
  */
-function lfndr_render_controls( string $id, array $facets, array $locations ): void {
-	$searchable = '' !== lfndr_searchable_summary();
+function gwc_lfndr_render_controls( string $id, array $facets, array $locations ): void {
+	$searchable = '' !== gwc_lfndr_searchable_summary();
 	if ( ! $searchable && ! $facets ) {
 		return;
 	}
@@ -123,7 +123,7 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 						it twice. */
 				?>
 				<label class="lfndr__search-label lfndr__visually-hidden" for="<?php echo esc_attr( $id ); ?>-q">
-					<?php echo esc_html( lfndr_searchable_summary() ); ?>
+					<?php echo esc_html( gwc_lfndr_searchable_summary() ); ?>
 				</label>
 				<input type="search" id="<?php echo esc_attr( $id ); ?>-q" class="lfndr__search-input"
 					autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
@@ -145,12 +145,12 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
 			?>
 			<button type="button" class="lfndr__filters-toggle" aria-expanded="true"
 				aria-controls="<?php echo esc_attr( $id ); ?>-filters">
-				<?php echo lfndr_icon( 'filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, literal markup; see lfndr_icon(). ?>
+				<?php echo gwc_lfndr_icon( 'filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, literal markup; see gwc_lfndr_icon(). ?>
 				<span class="lfndr__button-label"><?php esc_html_e( 'Filters', 'groundwork-common-location-finder' ); ?></span>
 			</button>
 			<div class="lfndr__filters-body" id="<?php echo esc_attr( $id ); ?>-filters">
 				<?php foreach ( $facets as $group ) : ?>
-					<?php lfndr_render_facet_group( $id, $group ); ?>
+					<?php gwc_lfndr_render_facet_group( $id, $group ); ?>
 				<?php endforeach; ?>
 				<button type="button" class="lfndr__reset" hidden>
 					<?php esc_html_e( 'Clear filters', 'groundwork-common-location-finder' ); ?>
@@ -184,7 +184,7 @@ function lfndr_render_controls( string $id, array $facets, array $locations ): v
  *
  * @return string
  */
-function lfndr_chip_box(): string {
+function gwc_lfndr_chip_box(): string {
 	/* Stroked geometry — a real rounded rect and a two-segment tick — rather
 	 * than filled paths tracing those shapes. A filled outline is the usual way
 	 * icon fonts draw a checkbox, and it is why this looked scratchy at first:
@@ -210,7 +210,7 @@ function lfndr_chip_box(): string {
  * @param string $css_class CSS class for the <svg>.
  * @return string
  */
-function lfndr_icon( string $name, string $css_class = 'lfndr__icon' ): string {
+function gwc_lfndr_icon( string $name, string $css_class = 'lfndr__icon' ): string {
 	$paths = array(
 		'filter' => 'M3 5h18l-7 8.5V19l-4 2v-7.5L3 5z',
 	);
@@ -230,7 +230,7 @@ function lfndr_icon( string $name, string $css_class = 'lfndr__icon' ): string {
  * @param string $id    Container id.
  * @param array  $group Filter group.
  */
-function lfndr_render_facet_group( string $id, array $group ): void {
+function gwc_lfndr_render_facet_group( string $id, array $group ): void {
 	$group_id = $id . '-f-' . $group['key'];
 
 	if ( 'select' === $group['widget'] ) {
@@ -272,14 +272,14 @@ function lfndr_render_facet_group( string $id, array $group ): void {
 
 	foreach ( $group['values'] as $value ) {
 		/* Every chip carries a checkbox; pressing one fills in the tick. See
-		 * lfndr_chip_box() for why it is a box rather than a bare tick. */
+		 * gwc_lfndr_chip_box() for why it is a box rather than a bare tick. */
 		printf(
 			'<button type="button" class="lfndr__chip" aria-pressed="false" data-value="%1$s">
 				%2$s<span class="lfndr__chip-label">%3$s</span>%4$s
 			</button>',
 			esc_attr( $value['value'] ),
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lfndr_chip_box() takes no arguments and returns a fixed SVG literal.
-			lfndr_chip_box(),
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- gwc_lfndr_chip_box() takes no arguments and returns a fixed SVG literal.
+			gwc_lfndr_chip_box(),
 			esc_html( $value['label'] ),
 			null === $value['count']
 				? ''
@@ -295,8 +295,8 @@ function lfndr_render_facet_group( string $id, array $group ): void {
  *
  * @return string
  */
-function lfndr_searchable_summary(): string {
-	$schema = lfndr_get_schema();
+function gwc_lfndr_searchable_summary(): string {
+	$schema = gwc_lfndr_get_schema();
 	$labels = array();
 	foreach ( $schema['fields'] as $field ) {
 		if ( ! empty( $field['searchable'] ) ) {
@@ -331,7 +331,7 @@ function lfndr_searchable_summary(): string {
  * @param array $locations Locations.
  * @param array $schema    Schema.
  */
-function lfndr_render_static_list( array $locations, array $schema ): void {
+function gwc_lfndr_render_static_list( array $locations, array $schema ): void {
 	if ( ! $locations ) {
 		printf(
 			'<p class="lfndr__empty">%s</p>',
@@ -340,7 +340,7 @@ function lfndr_render_static_list( array $locations, array $schema ): void {
 		return;
 	}
 
-	$order = lfndr_resolve_order( 'card', $schema );
+	$order = gwc_lfndr_resolve_order( 'card', $schema );
 
 	echo '<ol class="lfndr__results">';
 	foreach ( $locations as $location ) {
@@ -352,7 +352,7 @@ function lfndr_render_static_list( array $locations, array $schema ): void {
 			if ( null === $entry['field'] ) {
 				continue;
 			}
-			$text = lfndr_static_field_text( $location, $entry['field'] );
+			$text = gwc_lfndr_static_field_text( $location, $entry['field'] );
 			if ( '' === $text ) {
 				continue;
 			}
@@ -374,7 +374,7 @@ function lfndr_render_static_list( array $locations, array $schema ): void {
  * @param array $field    Field definition.
  * @return string
  */
-function lfndr_static_field_text( array $location, array $field ): string {
+function gwc_lfndr_static_field_text( array $location, array $field ): string {
 	$value = $location['f'][ $field['key'] ] ?? null;
 	if ( null === $value || '' === $value || array() === $value ) {
 		return '';
@@ -435,7 +435,7 @@ function lfndr_static_field_text( array $location, array $field ): string {
  * @param array  $facets    Filter groups.
  * @param bool   $show_map  Whether a map is rendered.
  */
-function lfndr_render_payload( string $id, array $locations, array $schema, array $facets, bool $show_map ): void {
+function gwc_lfndr_render_payload( string $id, array $locations, array $schema, array $facets, bool $show_map ): void {
 	/* ── An inert JSON island, not wp_add_inline_script() ────────────────────
 	 * wp_add_inline_script() on a handle that was never registered throws the
 	 * payload away and says nothing — no error, no console warning, just a
@@ -454,8 +454,8 @@ function lfndr_render_payload( string $id, array $locations, array $schema, arra
 	 * ─────────────────────────────────────────────────────────────────────── */
 	$payload = array(
 		'id'        => $id,
-		'schema'    => lfndr_public_schema( $schema ),
-		'config'    => lfndr_finder_config( $show_map, count( $locations ) ),
+		'schema'    => gwc_lfndr_public_schema( $schema ),
+		'config'    => gwc_lfndr_finder_config( $show_map, count( $locations ) ),
 		'facets'    => $facets,
 		'locations' => $locations,
 	);
@@ -479,8 +479,8 @@ function lfndr_render_payload( string $id, array $locations, array $schema, arra
  * @param array $schema Schema.
  * @return array
  */
-function lfndr_public_schema( array $schema ): array {
-	$types  = lfndr_field_types();
+function gwc_lfndr_public_schema( array $schema ): array {
+	$types  = gwc_lfndr_field_types();
 	$fields = array();
 
 	foreach ( $schema['fields'] as $field ) {
@@ -507,19 +507,19 @@ function lfndr_public_schema( array $schema ): array {
 			 * @param string $label Field label.
 			 * @param array  $field Field definition.
 			 */
-			'label'    => (string) apply_filters( 'lfndr_field_label', $field['label'], $field ),
+			'label'    => (string) apply_filters( 'gwc_lfndr_field_label', $field['label'], $field ),
 			'icon'     => $field['icon'],
 			'card'     => (bool) $field['show_card'],
 			'detail'   => (bool) $field['show_detail'],
 			'options'  => $options,
-			'settings' => lfndr_public_field_settings( $field ),
+			'settings' => gwc_lfndr_public_field_settings( $field ),
 		);
 	}
 
 	return array(
 		'fields'      => $fields,
-		'detailOrder' => array_column( lfndr_resolve_order( 'detail', $schema ), 'key' ),
-		'cardOrder'   => array_column( lfndr_resolve_order( 'card', $schema ), 'key' ),
+		'detailOrder' => array_column( gwc_lfndr_resolve_order( 'detail', $schema ), 'key' ),
+		'cardOrder'   => array_column( gwc_lfndr_resolve_order( 'card', $schema ), 'key' ),
 	);
 }
 
@@ -529,7 +529,7 @@ function lfndr_public_schema( array $schema ): array {
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_public_field_settings( array $field ): array {
+function gwc_lfndr_public_field_settings( array $field ): array {
 	$public = array(
 		/* No 'primary' or 'suspends' here: which field drives what is a schema
 		 * role now, shipped once in config.primary rather than repeated as a
@@ -567,21 +567,21 @@ function lfndr_public_field_settings( array $field ): array {
  * @param int  $count    Number of locations.
  * @return array
  */
-function lfndr_finder_config( bool $show_map, int $count ): array {
-	$timezone = lfndr_timezone();
-	$units    = lfndr_units();
-	$tiles    = lfndr_resolve_map_style();
+function gwc_lfndr_finder_config( bool $show_map, int $count ): array {
+	$timezone = gwc_lfndr_timezone();
+	$units    = gwc_lfndr_units();
+	$tiles    = gwc_lfndr_resolve_map_style();
 
 	$primary = array();
 	foreach ( array( 'address', 'hours', 'closures' ) as $type ) {
-		$field = lfndr_primary_field( $type );
+		$field = gwc_lfndr_primary_field( $type );
 		if ( null !== $field ) {
 			$primary[ $type ] = $field['key'];
 		}
 	}
 
 	$gate = array();
-	foreach ( lfndr_get_schema()['fields'] as $field ) {
+	foreach ( gwc_lfndr_get_schema()['fields'] as $field ) {
 		if ( 'select' === $field['type'] && '' !== ( $field['settings']['open_now_gate'] ?? '' ) ) {
 			$gate = array(
 				'field' => $field['key'],
@@ -593,9 +593,9 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 
 	return array(
 		'map'          => $show_map,
-		'center'       => array( (float) lfndr_setting( 'center_lat' ), (float) lfndr_setting( 'center_lng' ) ),
-		'zoom'         => (int) lfndr_setting( 'zoom' ),
-		'fitToMarkers' => (bool) lfndr_setting( 'fit_to_markers' ),
+		'center'       => array( (float) gwc_lfndr_setting( 'center_lat' ), (float) gwc_lfndr_setting( 'center_lng' ) ),
+		'zoom'         => (int) gwc_lfndr_setting( 'zoom' ),
+		'fitToMarkers' => (bool) gwc_lfndr_setting( 'fit_to_markers' ),
 		/**
 		 * Filter the map tile URL template.
 		 *
@@ -605,14 +605,14 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 		 *
 		 * @param string $url Tile URL with {z}/{x}/{y} placeholders.
 		 */
-		'tileUrl'      => (string) apply_filters( 'lfndr_tile_url', $tiles['url'] ),
+		'tileUrl'      => (string) apply_filters( 'gwc_lfndr_tile_url', $tiles['url'] ),
 		/**
 		 * Filter the map attribution. Removing it is a license violation for
 		 * OpenStreetMap tiles and for most commercial providers.
 		 *
 		 * @param string $attribution Attribution HTML.
 		 */
-		'attribution'  => (string) apply_filters( 'lfndr_tile_attribution', $tiles['attribution'] ),
+		'attribution'  => (string) apply_filters( 'gwc_lfndr_tile_attribution', $tiles['attribution'] ),
 		'maxZoom'      => (int) $tiles['max_zoom'],
 
 		/* The gate is only meaningful against a third party, so the setting alone
@@ -620,8 +620,8 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 		 * however this is configured. Resolved here rather than in JS because the
 		 * browser cannot compare the tile host to the site host without being told
 		 * what the site host is. */
-		'tileConsent'  => (bool) lfndr_setting( 'tile_consent' ) && lfndr_tiles_are_third_party(),
-		'tileHost'     => lfndr_tile_host(),
+		'tileConsent'  => (bool) gwc_lfndr_setting( 'tile_consent' ) && gwc_lfndr_tiles_are_third_party(),
+		'tileHost'     => gwc_lfndr_tile_host(),
 
 		/* Both forms of the timezone, because neither alone is enough. An IANA
 		 * name is what Intl needs, but WordPress lets a site record its
@@ -635,13 +635,13 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
 		'tzOffset'     => (int) ( ( new DateTimeImmutable( 'now', $timezone ) )->getOffset() / 60 ),
 
 		'units'        => $units,
-		'nearMe'       => (bool) lfndr_setting( 'near_me' ),
-		'autoLocate'   => (bool) lfndr_setting( 'auto_locate' ),
-		'pageSize'     => (int) lfndr_setting( 'page_size' ),
+		'nearMe'       => (bool) gwc_lfndr_setting( 'near_me' ),
+		'autoLocate'   => (bool) gwc_lfndr_setting( 'auto_locate' ),
+		'pageSize'     => (int) gwc_lfndr_setting( 'page_size' ),
 		'primary'      => $primary,
 		'openGate'     => $gate,
 		'total'        => $count,
-		'strings'      => lfndr_front_strings(),
+		'strings'      => gwc_lfndr_front_strings(),
 	);
 }
 
@@ -655,13 +655,13 @@ function lfndr_finder_config( bool $show_map, int $count ): array {
  *
  * @return array<string, string>
  */
-function lfndr_front_strings(): array {
+function gwc_lfndr_front_strings(): array {
 	return array(
 		/* translators: %s: number of locations. */
 		'countOne'  => __( '%s location', 'groundwork-common-location-finder' ),
 		/* translators: %s: number of locations. */
 		'countMany' => __( '%s locations', 'groundwork-common-location-finder' ),
-		'unit'      => 'mi' === lfndr_units()
+		'unit'      => 'mi' === gwc_lfndr_units()
 			? _x( 'mi', 'miles, abbreviated', 'groundwork-common-location-finder' )
 			: _x( 'km', 'kilometers, abbreviated', 'groundwork-common-location-finder' ),
 	);

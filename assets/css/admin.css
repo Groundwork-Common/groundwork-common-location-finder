@@ -378,7 +378,7 @@
 	line-height: 1.35;
 }
 
-/* The fields are behind a disclosure — see lfndr_settings_screen(). Styled as a
+/* The fields are behind a disclosure — see gwc_lfndr_settings_screen(). Styled as a
    quiet row rather than a heading, so it reads as "there is more here if you
    want it" rather than as the next section to fill in. */
 .lfndr-fine-tune {
@@ -407,7 +407,7 @@
 
 /* Sized and positioned to read as belonging to the box beside it rather than
    as a second control. Native rather than wp-color-picker — see the note in
-   lfndr_render_appearance_field() for why these fields cannot use it. */
+   gwc_lfndr_render_appearance_field() for why these fields cannot use it. */
 .lfndr-color-field__swatch {
 	flex: 0 0 auto;
 	width: 34px;

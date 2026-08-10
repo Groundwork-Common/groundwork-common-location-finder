@@ -7,15 +7,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'init', 'lfndr_register_block' );
-add_shortcode( 'location_finder', 'lfndr_shortcode' );
+add_action( 'init', 'gwc_lfndr_register_block' );
+add_shortcode( 'location_finder', 'gwc_lfndr_shortcode' );
 
 /**
  * Register the finder block.
  */
-function lfndr_register_block(): void {
+function gwc_lfndr_register_block(): void {
 	if ( function_exists( 'register_block_type_from_metadata' ) ) {
-		register_block_type_from_metadata( LFNDR_DIR . 'blocks/finder' );
+		register_block_type_from_metadata( GWC_LFNDR_DIR . 'blocks/finder' );
 	}
 }
 
@@ -30,6 +30,6 @@ function lfndr_register_block(): void {
  * @param array|string $atts Shortcode attributes.
  * @return string
  */
-function lfndr_shortcode( $atts ): string {
-	return lfndr_render_finder( is_array( $atts ) ? $atts : array() );
+function gwc_lfndr_shortcode( $atts ): string {
+	return gwc_lfndr_render_finder( is_array( $atts ) ? $atts : array() );
 }

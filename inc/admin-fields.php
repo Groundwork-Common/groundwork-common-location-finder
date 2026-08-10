@@ -7,13 +7,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const LFNDR_FIELDS_PAGE = 'lfndr-fields';
+const GWC_LFNDR_FIELDS_PAGE = 'lfndr-fields';
 
-add_action( 'admin_post_lfndr_save_field', 'lfndr_handle_save_field' );
-add_action( 'admin_post_lfndr_save_orders', 'lfndr_handle_save_orders' );
-add_action( 'admin_post_lfndr_retire_field', 'lfndr_handle_retire_field' );
-add_action( 'admin_post_lfndr_restore_field', 'lfndr_handle_restore_field' );
-add_action( 'admin_post_lfndr_erase_field', 'lfndr_handle_erase_field' );
+add_action( 'admin_post_gwc_lfndr_save_field', 'gwc_lfndr_handle_save_field' );
+add_action( 'admin_post_gwc_lfndr_save_orders', 'gwc_lfndr_handle_save_orders' );
+add_action( 'admin_post_gwc_lfndr_retire_field', 'gwc_lfndr_handle_retire_field' );
+add_action( 'admin_post_gwc_lfndr_restore_field', 'gwc_lfndr_handle_restore_field' );
+add_action( 'admin_post_gwc_lfndr_erase_field', 'gwc_lfndr_handle_erase_field' );
 
 /**
  * The URL of the Fields screen, optionally with extra query args.
@@ -21,12 +21,12 @@ add_action( 'admin_post_lfndr_erase_field', 'lfndr_handle_erase_field' );
  * @param array $args Extra query args.
  * @return string
  */
-function lfndr_fields_url( array $args = array() ): string {
+function gwc_lfndr_fields_url( array $args = array() ): string {
 	return add_query_arg(
 		array_merge(
 			array(
-				'post_type' => LFNDR_POST_TYPE,
-				'page'      => LFNDR_FIELDS_PAGE,
+				'post_type' => GWC_LFNDR_POST_TYPE,
+				'page'      => GWC_LFNDR_FIELDS_PAGE,
 			),
 			$args
 		),
@@ -37,14 +37,14 @@ function lfndr_fields_url( array $args = array() ): string {
 /**
  * Route the Fields screen: list, add, or edit.
  */
-function lfndr_fields_screen(): void {
+function gwc_lfndr_fields_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'groundwork-common-location-finder' ) );
 	}
 
-	$schema = lfndr_get_schema();
+	$schema = gwc_lfndr_get_schema();
 
-	if ( $schema['version'] > LFNDR_SCHEMA_VERSION ) {
+	if ( $schema['version'] > GWC_LFNDR_SCHEMA_VERSION ) {
 		printf(
 			'<div class="notice notice-warning"><p>%s</p></div>',
 			esc_html__( 'This field configuration was written by a newer version of Location Finder. It is being left untouched to avoid losing settings this version does not understand. Update the plugin to edit it.', 'groundwork-common-location-finder' )
@@ -53,23 +53,23 @@ function lfndr_fields_screen(): void {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only view routing.
 	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'list';
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only view routing; lfndr_sanitize_field_key() validates against ^[a-z][a-z0-9_]{0,39}$ and rejects anything else.
-	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only view routing; gwc_lfndr_sanitize_field_key() validates against ^[a-z][a-z0-9_]{0,39}$ and rejects anything else.
+	$key = isset( $_GET['field'] ) ? gwc_lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
 
 	if ( 'add' === $action ) {
-		lfndr_fields_form_screen( $schema, null );
+		gwc_lfndr_fields_form_screen( $schema, null );
 		return;
 	}
 
 	if ( 'edit' === $action && '' !== $key ) {
-		$field = lfndr_get_field( $key, $schema );
+		$field = gwc_lfndr_get_field( $key, $schema );
 		if ( null !== $field ) {
-			lfndr_fields_form_screen( $schema, $field );
+			gwc_lfndr_fields_form_screen( $schema, $field );
 			return;
 		}
 	}
 
-	lfndr_fields_list_screen( $schema );
+	gwc_lfndr_fields_list_screen( $schema );
 }
 
 /* ── List screen ────────────────────────────────────────────────────────── */
@@ -79,17 +79,17 @@ function lfndr_fields_screen(): void {
  *
  * @param array $schema Current schema.
  */
-function lfndr_fields_list_screen( array $schema ): void {
-	$types = lfndr_field_types();
+function gwc_lfndr_fields_list_screen( array $schema ): void {
+	$types = gwc_lfndr_field_types();
 	?>
 	<div class="lfndr-fields">
 		<h2 class="wp-heading-inline"><?php esc_html_e( 'Fields', 'groundwork-common-location-finder' ); ?></h2>
-		<a href="<?php echo esc_url( lfndr_fields_url( array( 'action' => 'add' ) ) ); ?>" class="page-title-action">
+		<a href="<?php echo esc_url( gwc_lfndr_fields_url( array( 'action' => 'add' ) ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Add Field', 'groundwork-common-location-finder' ); ?>
 		</a>
 		<hr class="wp-header-end" />
 
-		<?php lfndr_admin_notices(); ?>
+		<?php gwc_lfndr_admin_notices(); ?>
 
 		<p class="description">
 			<?php esc_html_e( 'Location name, latitude and longitude are always present. Everything else a location records is defined here.', 'groundwork-common-location-finder' ); ?>
@@ -116,7 +116,7 @@ function lfndr_fields_list_screen( array $schema ): void {
 					/* Built once per row rather than inline in the href twice.
 						Inline, the multi-line array the standard wants would sit
 						inside the attribute and put newlines in the URL. */
-					$edit_url = lfndr_fields_url(
+					$edit_url = gwc_lfndr_fields_url(
 						array(
 							'action' => 'edit',
 							'field'  => $field['key'],
@@ -134,8 +134,8 @@ function lfndr_fields_list_screen( array $schema ): void {
 								<span class="trash">
 									<?php
 									$retire = wp_nonce_url(
-										admin_url( 'admin-post.php?action=lfndr_retire_field&field=' . rawurlencode( $field['key'] ) ),
-										'lfndr_retire_' . $field['key']
+										admin_url( 'admin-post.php?action=gwc_lfndr_retire_field&field=' . rawurlencode( $field['key'] ) ),
+										'gwc_lfndr_retire_' . $field['key']
 									);
 									?>
 									<a href="<?php echo esc_url( $retire ); ?>"><?php esc_html_e( 'Retire', 'groundwork-common-location-finder' ); ?></a>
@@ -144,17 +144,17 @@ function lfndr_fields_list_screen( array $schema ): void {
 						</td>
 						<td><code><?php echo esc_html( $field['key'] ); ?></code></td>
 						<td><?php echo esc_html( $types[ $field['type'] ]['label'] ?? $field['type'] ); ?></td>
-						<td><?php echo esc_html( lfndr_describe_visibility( $field ) ); ?></td>
-						<td><?php echo esc_html( lfndr_describe_usage( $field ) ); ?></td>
+						<td><?php echo esc_html( gwc_lfndr_describe_visibility( $field ) ); ?></td>
+						<td><?php echo esc_html( gwc_lfndr_describe_usage( $field ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>
 			</table>
 
-			<?php lfndr_render_order_form( $schema ); ?>
+			<?php gwc_lfndr_render_order_form( $schema ); ?>
 		<?php endif; ?>
 
-		<?php lfndr_render_retired_section( $schema ); ?>
+		<?php gwc_lfndr_render_retired_section( $schema ); ?>
 	</div>
 	<?php
 }
@@ -165,7 +165,7 @@ function lfndr_fields_list_screen( array $schema ): void {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_describe_visibility( array $field ): string {
+function gwc_lfndr_describe_visibility( array $field ): string {
 	if ( ! empty( $field['show_card'] ) && ! empty( $field['show_detail'] ) ) {
 		return __( 'Card and detail', 'groundwork-common-location-finder' );
 	}
@@ -184,7 +184,7 @@ function lfndr_describe_visibility( array $field ): string {
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_describe_usage( array $field ): string {
+function gwc_lfndr_describe_usage( array $field ): string {
 	$parts = array();
 	if ( ! empty( $field['searchable'] ) ) {
 		$parts[] = __( 'Search', 'groundwork-common-location-finder' );
@@ -215,8 +215,8 @@ function lfndr_describe_usage( array $field ): string {
  *
  * @param array $schema Current schema.
  */
-function lfndr_render_roles_fields( array $schema = array() ): void {
-	$schema = $schema ? $schema : lfndr_get_schema();
+function gwc_lfndr_render_roles_fields( array $schema = array() ): void {
+	$schema = $schema ? $schema : gwc_lfndr_get_schema();
 	$roles  = array(
 		'address'  => array(
 			'label' => __( 'Address used for Directions', 'groundwork-common-location-finder' ),
@@ -260,7 +260,7 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 			<tr>
 				<th scope="row"><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $role['label'] ); ?></label></th>
 				<td>
-					<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_roles][<?php echo esc_attr( $type ); ?>]">
+					<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( GWC_LFNDR_SETTINGS_OPTION ); ?>[_roles][<?php echo esc_attr( $type ); ?>]">
 						<option value=""><?php esc_html_e( '— none —', 'groundwork-common-location-finder' ); ?></option>
 						<?php foreach ( $candidates as $candidate ) : ?>
 							<option value="<?php echo esc_attr( $candidate['key'] ); ?>" <?php selected( $current, $candidate['key'] ); ?>>
@@ -280,7 +280,7 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
 /**
  * Write the primary-role choices that rode in on the settings form.
  *
- * These belong to the schema, not to lfndr_settings, so they used to have their
+ * These belong to the schema, not to gwc_lfndr_settings, so they used to have their
  * own <form> and their own Save. That was honest about the storage and confusing
  * on screen: one tab, two save buttons, and no way to tell which covered what.
  *
@@ -291,18 +291,18 @@ function lfndr_render_roles_fields( array $schema = array() ): void {
  *
  * @param mixed $raw The submitted _roles array, from anywhere.
  */
-function lfndr_save_primary_roles( $raw ): void {
+function gwc_lfndr_save_primary_roles( $raw ): void {
 	if ( ! is_array( $raw ) ) {
 		return;
 	}
 
-	$schema  = lfndr_get_schema();
+	$schema  = gwc_lfndr_get_schema();
 	$primary = $schema['primary'];
 
 	/* Only the roles the form actually rendered are touched. A type with no
 	 * fields yet renders no row, and a blanket overwrite would clear a role
 	 * that is simply not on screen. */
-	foreach ( lfndr_primary_roles() as $type ) {
+	foreach ( gwc_lfndr_primary_roles() as $type ) {
 		if ( array_key_exists( $type, $raw ) ) {
 			$primary[ $type ] = sanitize_key( (string) $raw[ $type ] );
 		}
@@ -310,8 +310,8 @@ function lfndr_save_primary_roles( $raw ): void {
 
 	$schema['primary'] = $primary;
 
-	// lfndr_sanitize_primary_roles() clears anything that does not resolve.
-	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
+	// gwc_lfndr_sanitize_primary_roles() clears anything that does not resolve.
+	gwc_lfndr_save_schema( gwc_lfndr_sanitize_schema( $schema ) );
 }
 
 /* ── Order form ─────────────────────────────────────────────────────────── */
@@ -321,7 +321,7 @@ function lfndr_save_primary_roles( $raw ): void {
  *
  * @param array $schema Current schema.
  */
-function lfndr_render_order_form( array $schema ): void {
+function gwc_lfndr_render_order_form( array $schema ): void {
 	?>
 	<h2><?php esc_html_e( 'Display order', 'groundwork-common-location-finder' ); ?></h2>
 	<p class="description">
@@ -329,13 +329,13 @@ function lfndr_render_order_form( array $schema ): void {
 	</p>
 
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-orders">
-		<input type="hidden" name="action" value="lfndr_save_orders" />
-		<?php wp_nonce_field( 'lfndr_save_orders' ); ?>
+		<input type="hidden" name="action" value="gwc_lfndr_save_orders" />
+		<?php wp_nonce_field( 'gwc_lfndr_save_orders' ); ?>
 
 		<div class="lfndr-orders__cols">
 			<?php
-			lfndr_render_order_list( 'detail', $schema, __( 'Detail pane', 'groundwork-common-location-finder' ) );
-			lfndr_render_order_list( 'card', $schema, __( 'Result card', 'groundwork-common-location-finder' ) );
+			gwc_lfndr_render_order_list( 'detail', $schema, __( 'Detail pane', 'groundwork-common-location-finder' ) );
+			gwc_lfndr_render_order_list( 'card', $schema, __( 'Result card', 'groundwork-common-location-finder' ) );
 			?>
 		</div>
 
@@ -357,9 +357,9 @@ function lfndr_render_order_form( array $schema ): void {
  * @param array  $schema  Current schema.
  * @param string $heading Column heading.
  */
-function lfndr_render_order_list( string $surface, array $schema, string $heading ): void {
+function gwc_lfndr_render_order_list( string $surface, array $schema, string $heading ): void {
 	$flag    = 'card' === $surface ? 'show_card' : 'show_detail';
-	$shown   = lfndr_resolve_order( $surface, $schema );
+	$shown   = gwc_lfndr_resolve_order( $surface, $schema );
 	$visible = array_column( $shown, 'key' );
 
 	$hidden = array();
@@ -368,11 +368,11 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 			$hidden[] = $field;
 		}
 	}
-	foreach ( LFNDR_SYNTHETIC_KEYS as $synthetic ) {
+	foreach ( GWC_LFNDR_SYNTHETIC_KEYS as $synthetic ) {
 		if ( ! in_array( $synthetic, $visible, true ) ) {
 			$hidden[] = array(
 				'key'   => $synthetic,
-				'label' => lfndr_synthetic_label( $synthetic ),
+				'label' => gwc_lfndr_synthetic_label( $synthetic ),
 				'type'  => '',
 			);
 		}
@@ -383,9 +383,9 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 		<ol class="lfndr-order__list">
 			<?php foreach ( $shown as $entry ) : ?>
 				<?php
-				lfndr_render_order_item(
+				gwc_lfndr_render_order_item(
 					$entry['key'],
-					null !== $entry['field'] ? $entry['field']['label'] : lfndr_synthetic_label( $entry['key'] ),
+					null !== $entry['field'] ? $entry['field']['label'] : gwc_lfndr_synthetic_label( $entry['key'] ),
 					null !== $entry['field'] ? $entry['field']['type'] : '',
 					true
 				);
@@ -397,7 +397,7 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
 			</li>
 
 			<?php foreach ( $hidden as $field ) : ?>
-				<?php lfndr_render_order_item( $field['key'], $field['label'], $field['type'], false ); ?>
+				<?php gwc_lfndr_render_order_item( $field['key'], $field['label'], $field['type'], false ); ?>
 			<?php endforeach; ?>
 		</ol>
 
@@ -419,7 +419,7 @@ function lfndr_render_order_list( string $surface, array $schema, string $headin
  * @param string $type  Field type, or '' for synthetic.
  * @param bool   $shown Whether it sits above the divider.
  */
-function lfndr_render_order_item( string $key, string $label, string $type, bool $shown ): void {
+function gwc_lfndr_render_order_item( string $key, string $label, string $type, bool $shown ): void {
 	?>
 	<li class="lfndr-order__item" data-key="<?php echo esc_attr( $key ); ?>">
 		<span class="lfndr-order__label"><?php echo esc_html( $label ); ?></span>
@@ -447,7 +447,7 @@ function lfndr_render_order_item( string $key, string $label, string $type, bool
  * @param string $key Synthetic key.
  * @return string
  */
-function lfndr_synthetic_label( string $key ): string {
+function gwc_lfndr_synthetic_label( string $key ): string {
 	switch ( $key ) {
 		case '__name':
 			return __( 'Location name', 'groundwork-common-location-finder' );
@@ -469,7 +469,7 @@ function lfndr_synthetic_label( string $key ): string {
  *
  * @param array $schema Current schema.
  */
-function lfndr_render_retired_section( array $schema ): void {
+function gwc_lfndr_render_retired_section( array $schema ): void {
 	if ( empty( $schema['retired'] ) ) {
 		return;
 	}
@@ -481,7 +481,7 @@ function lfndr_render_retired_section( array $schema ): void {
 	<table class="wp-list-table widefat fixed striped">
 		<tbody>
 		<?php foreach ( $schema['retired'] as $field ) : ?>
-			<?php $count = lfndr_field_usage_count( $field['key'] ); ?>
+			<?php $count = gwc_lfndr_field_usage_count( $field['key'] ); ?>
 			<tr>
 				<td>
 					<strong><?php echo esc_html( $field['label'] ); ?></strong>
@@ -510,13 +510,13 @@ function lfndr_render_retired_section( array $schema ): void {
 					?>
 				</td>
 				<td class="lfndr-retired__actions">
-					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=lfndr_restore_field&field=' . rawurlencode( $field['key'] ) ), 'lfndr_restore_' . $field['key'] ) ); ?>">
+					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=gwc_lfndr_restore_field&field=' . rawurlencode( $field['key'] ) ), 'gwc_lfndr_restore_' . $field['key'] ) ); ?>">
 						<?php esc_html_e( 'Restore', 'groundwork-common-location-finder' ); ?>
 					</a>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-erase">
-						<input type="hidden" name="action" value="lfndr_erase_field" />
+						<input type="hidden" name="action" value="gwc_lfndr_erase_field" />
 						<input type="hidden" name="field" value="<?php echo esc_attr( $field['key'] ); ?>" />
-						<?php wp_nonce_field( 'lfndr_erase_' . $field['key'] ); ?>
+						<?php wp_nonce_field( 'gwc_lfndr_erase_' . $field['key'] ); ?>
 						<label class="screen-reader-text" for="lfndr-erase-<?php echo esc_attr( $field['key'] ); ?>">
 							<?php esc_html_e( 'Type DELETE to confirm', 'groundwork-common-location-finder' ); ?>
 						</label>
@@ -540,20 +540,20 @@ function lfndr_render_retired_section( array $schema ): void {
  * @param array      $schema Current schema.
  * @param array|null $field  Field being edited, or null when adding.
  */
-function lfndr_fields_form_screen( array $schema, ?array $field ): void {
-	$types     = lfndr_field_types();
+function gwc_lfndr_fields_form_screen( array $schema, ?array $field ): void {
+	$types     = gwc_lfndr_field_types();
 	$editing   = null !== $field;
-	$field     = $field ?? lfndr_field_defaults();
+	$field     = $field ?? gwc_lfndr_field_defaults();
 	$type_meta = $types[ $field['type'] ] ?? array();
 	?>
 	<div class="wrap lfndr-admin">
 		<h1><?php echo esc_html( $editing ? __( 'Edit Field', 'groundwork-common-location-finder' ) : __( 'Add Field', 'groundwork-common-location-finder' ) ); ?></h1>
 
-		<?php lfndr_admin_notices(); ?>
+		<?php gwc_lfndr_admin_notices(); ?>
 
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="lfndr-field-form">
-			<input type="hidden" name="action" value="lfndr_save_field" />
-			<?php wp_nonce_field( 'lfndr_save_field' ); ?>
+			<input type="hidden" name="action" value="gwc_lfndr_save_field" />
+			<?php wp_nonce_field( 'gwc_lfndr_save_field' ); ?>
 			<?php if ( $editing ) : ?>
 				<input type="hidden" name="original_key" value="<?php echo esc_attr( $field['key'] ); ?>" />
 			<?php endif; ?>
@@ -615,7 +615,7 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 					<tr class="lfndr-row-options">
 						<th scope="row"><label for="lfndr-options"><?php esc_html_e( 'Choices', 'groundwork-common-location-finder' ); ?></label></th>
 						<td>
-							<textarea id="lfndr-options" name="options" rows="6" class="large-text code"><?php echo esc_textarea( lfndr_options_to_text( $field['options'] ) ); ?></textarea>
+							<textarea id="lfndr-options" name="options" rows="6" class="large-text code"><?php echo esc_textarea( gwc_lfndr_options_to_text( $field['options'] ) ); ?></textarea>
 							<p class="description">
 								<?php esc_html_e( 'One per line. Write "Diapers" for a simple choice, or "diapers | Diapers" to set the stored value separately from the label. Stored values are permanent; labels can change.', 'groundwork-common-location-finder' ); ?>
 							</p>
@@ -695,7 +695,7 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
 
 			<p class="submit">
 				<button type="submit" class="button button-primary"><?php echo esc_html( $editing ? __( 'Save Changes', 'groundwork-common-location-finder' ) : __( 'Add Field', 'groundwork-common-location-finder' ) ); ?></button>
-				<a class="button button-secondary" href="<?php echo esc_url( lfndr_fields_url() ); ?>"><?php esc_html_e( 'Cancel', 'groundwork-common-location-finder' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( gwc_lfndr_fields_url() ); ?>"><?php esc_html_e( 'Cancel', 'groundwork-common-location-finder' ); ?></a>
 			</p>
 		</form>
 	</div>
@@ -709,7 +709,7 @@ function lfndr_fields_form_screen( array $schema, ?array $field ): void {
  * @param array $options Options list.
  * @return string
  */
-function lfndr_options_to_text( array $options ): string {
+function gwc_lfndr_options_to_text( array $options ): string {
 	$lines = array();
 	foreach ( $options as $option ) {
 		$lines[] = $option['value'] === $option['label']
@@ -725,7 +725,7 @@ function lfndr_options_to_text( array $options ): string {
  * @param string $text Raw textarea content.
  * @return array
  */
-function lfndr_options_from_text( string $text ): array {
+function gwc_lfndr_options_from_text( string $text ): array {
 	$out = array();
 
 	/* preg_split() returns false only on a malformed pattern; this one is a
@@ -766,7 +766,7 @@ function lfndr_options_from_text( string $text ): array {
 /**
  * Die unless the current user may configure fields.
  *
- * The capability half of the old lfndr_guard_admin_post(). The nonce half now
+ * The capability half of the old gwc_lfndr_guard_admin_post(). The nonce half now
  * lives at each call site as a literal check_admin_referer(), which is a real
  * improvement rather than a concession to tooling: a reader opening any handler
  * sees both checks in the first two lines, instead of having to go and confirm
@@ -778,7 +778,7 @@ function lfndr_options_from_text( string $text ): array {
  * The capability check stays shared because it is genuinely identical
  * everywhere and carries no argument to get wrong.
  */
-function lfndr_require_admin_caps(): void {
+function gwc_lfndr_require_admin_caps(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to configure location fields.', 'groundwork-common-location-finder' ), '', array( 'response' => 403 ) );
 	}
@@ -792,26 +792,26 @@ function lfndr_require_admin_caps(): void {
  * @param string $message Message code.
  * @param array  $args    Extra query args.
  */
-function lfndr_fields_redirect( string $message, array $args = array() ): void {
-	wp_safe_redirect( lfndr_fields_url( array_merge( array( 'lfndr_msg' => $message ), $args ) ) );
+function gwc_lfndr_fields_redirect( string $message, array $args = array() ): void {
+	wp_safe_redirect( gwc_lfndr_fields_url( array_merge( array( 'gwc_lfndr_msg' => $message ), $args ) ) );
 	exit;
 }
 
 /**
  * Add or update one field.
  */
-function lfndr_handle_save_field(): void {
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_save_field' );
+function gwc_lfndr_handle_save_field(): void {
+	gwc_lfndr_require_admin_caps();
+	check_admin_referer( 'gwc_lfndr_save_field' );
 
-	$schema = lfndr_get_schema();
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
-	$original = isset( $_POST['original_key'] ) ? lfndr_sanitize_field_key( wp_unslash( $_POST['original_key'] ) ) : '';
-	$editing  = '' !== $original && null !== lfndr_get_field( $original, $schema );
+	$schema = gwc_lfndr_get_schema();
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gwc_lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
+	$original = isset( $_POST['original_key'] ) ? gwc_lfndr_sanitize_field_key( wp_unslash( $_POST['original_key'] ) ) : '';
+	$editing  = '' !== $original && null !== gwc_lfndr_get_field( $original, $schema );
 
 	$label = isset( $_POST['label'] ) ? sanitize_text_field( wp_unslash( $_POST['label'] ) ) : '';
 	if ( '' === $label ) {
-		lfndr_fields_redirect(
+		gwc_lfndr_fields_redirect(
 			'label_required',
 			$editing ? array(
 				'action' => 'edit',
@@ -823,14 +823,14 @@ function lfndr_handle_save_field(): void {
 	if ( $editing ) {
 		$key = $original;
 	} else {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- passed straight to lfndr_sanitize_field_key() on the next line, and a '' result redirects rather than proceeding.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- passed straight to gwc_lfndr_sanitize_field_key() on the next line, and a '' result redirects rather than proceeding.
 		$requested = isset( $_POST['key'] ) ? (string) wp_unslash( $_POST['key'] ) : '';
-		$key       = lfndr_sanitize_field_key( '' !== trim( $requested ) ? $requested : $label );
+		$key       = gwc_lfndr_sanitize_field_key( '' !== trim( $requested ) ? $requested : $label );
 		if ( '' === $key ) {
-			lfndr_fields_redirect( 'bad_key', array( 'action' => 'add' ) );
+			gwc_lfndr_fields_redirect( 'bad_key', array( 'action' => 'add' ) );
 		}
-		if ( null !== lfndr_get_field( $key, $schema ) ) {
-			lfndr_fields_redirect( 'duplicate_key', array( 'action' => 'add' ) );
+		if ( null !== gwc_lfndr_get_field( $key, $schema ) ) {
+			gwc_lfndr_fields_redirect( 'duplicate_key', array( 'action' => 'add' ) );
 		}
 		/* A key that matches something in the retired list is a re-creation, not
 		 * a new field. Refuse it and point at Restore: silently creating a live
@@ -838,7 +838,7 @@ function lfndr_handle_save_field(): void {
 		 * and that data may be exactly what somebody retired it to hide. */
 		foreach ( $schema['retired'] as $retired ) {
 			if ( $retired['key'] === $key ) {
-				lfndr_fields_redirect( 'retired_key', array( 'action' => 'add' ) );
+				gwc_lfndr_fields_redirect( 'retired_key', array( 'action' => 'add' ) );
 			}
 		}
 	}
@@ -854,7 +854,7 @@ function lfndr_handle_save_field(): void {
 		'show_card'    => ! empty( $_POST['show_card'] ),
 		'searchable'   => ! empty( $_POST['searchable'] ),
 		'filterable'   => ! empty( $_POST['filterable'] ),
-		'options'      => isset( $_POST['options'] ) ? lfndr_options_from_text( sanitize_textarea_field( wp_unslash( $_POST['options'] ) ) ) : array(),
+		'options'      => isset( $_POST['options'] ) ? gwc_lfndr_options_from_text( sanitize_textarea_field( wp_unslash( $_POST['options'] ) ) ) : array(),
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized per-key by the type's settings sanitizer.
 		'settings'     => isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array(),
 	);
@@ -863,7 +863,7 @@ function lfndr_handle_save_field(): void {
 	 * the keys it knows about; `primary` in particular is set elsewhere, and a
 	 * round-trip through this form must not quietly clear it. */
 	if ( $editing ) {
-		$existing              = lfndr_get_field( $key, $schema );
+		$existing              = gwc_lfndr_get_field( $key, $schema );
 		$candidate['settings'] = array_merge( $existing['settings'], $candidate['settings'] );
 	}
 
@@ -879,13 +879,13 @@ function lfndr_handle_save_field(): void {
 		$schema['fields'][] = $candidate;
 	}
 
-	$sanitized = lfndr_sanitize_schema( $schema );
+	$sanitized = gwc_lfndr_sanitize_schema( $schema );
 
 	/* If the field vanished in sanitization the type was unknown — almost
 	 * always a deactivated plugin that registered it. Say so rather than
 	 * redirecting to a list that silently lacks the field just saved. */
-	if ( null === lfndr_get_field( $key, $sanitized ) ) {
-		lfndr_fields_redirect(
+	if ( null === gwc_lfndr_get_field( $key, $sanitized ) ) {
+		gwc_lfndr_fields_redirect(
 			'bad_type',
 			array(
 				'action' => $editing ? 'edit' : 'add',
@@ -894,23 +894,23 @@ function lfndr_handle_save_field(): void {
 		);
 	}
 
-	lfndr_save_schema( $sanitized );
-	lfndr_fields_redirect( $editing ? 'field_saved' : 'field_added' );
+	gwc_lfndr_save_schema( $sanitized );
+	gwc_lfndr_fields_redirect( $editing ? 'field_saved' : 'field_added' );
 }
 
 /**
  * Save both display orders, and the show flags they imply.
  */
-function lfndr_handle_save_orders(): void {
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_save_orders' );
+function gwc_lfndr_handle_save_orders(): void {
+	gwc_lfndr_require_admin_caps();
+	check_admin_referer( 'gwc_lfndr_save_orders' );
 
-	$schema = lfndr_get_schema();
-	$valid  = array_merge( wp_list_pluck( $schema['fields'], 'key' ), LFNDR_SYNTHETIC_KEYS );
+	$schema = gwc_lfndr_get_schema();
+	$valid  = array_merge( wp_list_pluck( $schema['fields'], 'key' ), GWC_LFNDR_SYNTHETIC_KEYS );
 
 	foreach ( array( 'detail', 'card' ) as $surface ) {
 		$raw   = isset( $_POST[ $surface . '_order' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $surface . '_order' ] ) ) : '';
-		$order = lfndr_sanitize_order( $raw, $valid );
+		$order = gwc_lfndr_sanitize_order( $raw, $valid );
 
 		$schema[ $surface . '_order' ] = $order;
 
@@ -924,27 +924,27 @@ function lfndr_handle_save_orders(): void {
 		}
 	}
 
-	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
-	lfndr_fields_redirect( 'orders_saved' );
+	gwc_lfndr_save_schema( gwc_lfndr_sanitize_schema( $schema ) );
+	gwc_lfndr_fields_redirect( 'orders_saved' );
 }
 
 /**
  * Retire a field: out of `fields`, into `retired`, post meta untouched.
  */
-function lfndr_handle_retire_field(): void {
+function gwc_lfndr_handle_retire_field(): void {
 	/* Read before the guard on purpose: the nonce action is per-field, so the
 	 * key is needed to know which nonce to demand. Tampering with it therefore
 	 * fails the check on the next line rather than bypassing it — and the value
 	 * is reduced to a field key before it is used for anything at all. */
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
-	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_retire_' . $key );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gwc_lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
+	$key = isset( $_GET['field'] ) ? gwc_lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
+	gwc_lfndr_require_admin_caps();
+	check_admin_referer( 'gwc_lfndr_retire_' . $key );
 
-	$schema = lfndr_get_schema();
-	$field  = lfndr_get_field( $key, $schema );
+	$schema = gwc_lfndr_get_schema();
+	$field  = gwc_lfndr_get_field( $key, $schema );
 	if ( null === $field ) {
-		lfndr_fields_redirect( 'not_found' );
+		gwc_lfndr_fields_redirect( 'not_found' );
 	}
 
 	$field['retired_at'] = gmdate( 'Y-m-d' );
@@ -958,20 +958,20 @@ function lfndr_handle_retire_field(): void {
 	);
 	$schema['retired'][] = $field;
 
-	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
-	lfndr_fields_redirect( 'field_retired' );
+	gwc_lfndr_save_schema( gwc_lfndr_sanitize_schema( $schema ) );
+	gwc_lfndr_fields_redirect( 'field_retired' );
 }
 
 /**
  * Restore a retired field, with its data intact.
  */
-function lfndr_handle_restore_field(): void {
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
-	$key = isset( $_GET['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_restore_' . $key );
+function gwc_lfndr_handle_restore_field(): void {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gwc_lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
+	$key = isset( $_GET['field'] ) ? gwc_lfndr_sanitize_field_key( wp_unslash( $_GET['field'] ) ) : '';
+	gwc_lfndr_require_admin_caps();
+	check_admin_referer( 'gwc_lfndr_restore_' . $key );
 
-	$schema  = lfndr_get_schema();
+	$schema  = gwc_lfndr_get_schema();
 	$restore = null;
 	foreach ( $schema['retired'] as $field ) {
 		if ( $field['key'] === $key ) {
@@ -980,7 +980,7 @@ function lfndr_handle_restore_field(): void {
 		}
 	}
 	if ( null === $restore ) {
-		lfndr_fields_redirect( 'not_found' );
+		gwc_lfndr_fields_redirect( 'not_found' );
 	}
 
 	unset( $restore['retired_at'], $restore['retired_by'] );
@@ -992,8 +992,8 @@ function lfndr_handle_restore_field(): void {
 		)
 	);
 
-	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
-	lfndr_fields_redirect( 'field_restored' );
+	gwc_lfndr_save_schema( gwc_lfndr_sanitize_schema( $schema ) );
+	gwc_lfndr_fields_redirect( 'field_restored' );
 }
 
 /**
@@ -1003,24 +1003,24 @@ function lfndr_handle_restore_field(): void {
  * needs a nonce, manage_options, a retired-only precondition, and the word
  * DELETE typed out.
  */
-function lfndr_handle_erase_field(): void {
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
-	$key = isset( $_POST['field'] ) ? lfndr_sanitize_field_key( wp_unslash( $_POST['field'] ) ) : '';
-	lfndr_require_admin_caps();
-	check_admin_referer( 'lfndr_erase_' . $key );
+function gwc_lfndr_handle_erase_field(): void {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gwc_lfndr_sanitize_field_key() is the sanitizer: it validates against ^[a-z][a-z0-9_]{0,39}$ and returns '' for anything else, which is stricter than sanitize_key(). PHPCS only recognises core's sanitizers.
+	$key = isset( $_POST['field'] ) ? gwc_lfndr_sanitize_field_key( wp_unslash( $_POST['field'] ) ) : '';
+	gwc_lfndr_require_admin_caps();
+	check_admin_referer( 'gwc_lfndr_erase_' . $key );
 
 	$confirm = isset( $_POST['confirm'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['confirm'] ) ) ) : '';
 	if ( 'DELETE' !== strtoupper( $confirm ) ) {
-		lfndr_fields_redirect( 'confirm_required' );
+		gwc_lfndr_fields_redirect( 'confirm_required' );
 	}
 
-	$schema  = lfndr_get_schema();
+	$schema  = gwc_lfndr_get_schema();
 	$retired = wp_list_pluck( $schema['retired'], 'key' );
 	if ( ! in_array( $key, $retired, true ) ) {
-		lfndr_fields_redirect( 'not_found' );
+		gwc_lfndr_fields_redirect( 'not_found' );
 	}
 
-	delete_post_meta_by_key( lfndr_field_meta_key( $key ) );
+	delete_post_meta_by_key( gwc_lfndr_field_meta_key( $key ) );
 
 	$schema['retired'] = array_values(
 		array_filter(
@@ -1029,8 +1029,8 @@ function lfndr_handle_erase_field(): void {
 		)
 	);
 
-	lfndr_save_schema( lfndr_sanitize_schema( $schema ) );
-	lfndr_fields_redirect( 'field_erased' );
+	gwc_lfndr_save_schema( gwc_lfndr_sanitize_schema( $schema ) );
+	gwc_lfndr_fields_redirect( 'field_erased' );
 }
 
 /* ── Notices ────────────────────────────────────────────────────────────── */
@@ -1038,9 +1038,9 @@ function lfndr_handle_erase_field(): void {
 /**
  * Print the notice for the message code in the query string.
  */
-function lfndr_admin_notices(): void {
+function gwc_lfndr_admin_notices(): void {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only message code from our own redirect.
-	$code = isset( $_GET['lfndr_msg'] ) ? sanitize_key( wp_unslash( $_GET['lfndr_msg'] ) ) : '';
+	$code = isset( $_GET['gwc_lfndr_msg'] ) ? sanitize_key( wp_unslash( $_GET['gwc_lfndr_msg'] ) ) : '';
 	if ( '' === $code ) {
 		return;
 	}

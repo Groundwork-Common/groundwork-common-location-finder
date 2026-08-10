@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_filter( 'lfndr_field_types', 'lfndr_register_address_type' );
+add_filter( 'gwc_lfndr_field_types', 'gwc_lfndr_register_address_type' );
 
 /**
  * Register the address type.
@@ -15,19 +15,19 @@ add_filter( 'lfndr_field_types', 'lfndr_register_address_type' );
  * @param array $types Registry.
  * @return array
  */
-function lfndr_register_address_type( array $types ): array {
+function gwc_lfndr_register_address_type( array $types ): array {
 	$types['address'] = array(
 		'label'             => __( 'Address', 'groundwork-common-location-finder' ),
 		'group'             => 'composite',
 		'multiple'          => true,
-		'render_admin'      => 'lfndr_admin_address',
-		'sanitize'          => 'lfndr_sanitize_address',
-		'is_empty'          => 'lfndr_empty_address',
-		'to_payload'        => 'lfndr_payload_address',
-		'search_text'       => 'lfndr_search_address',
+		'render_admin'      => 'gwc_lfndr_admin_address',
+		'sanitize'          => 'gwc_lfndr_sanitize_address',
+		'is_empty'          => 'gwc_lfndr_empty_address',
+		'to_payload'        => 'gwc_lfndr_payload_address',
+		'search_text'       => 'gwc_lfndr_search_address',
 		'facet_tokens'      => null,
-		'schema_form'       => 'lfndr_schema_form_address',
-		'sanitize_settings' => 'lfndr_settings_address',
+		'schema_form'       => 'gwc_lfndr_schema_form_address',
+		'sanitize_settings' => 'gwc_lfndr_settings_address',
 		'needs_present'     => true,
 		'can_be_primary'    => true,
 		'js'                => 'address',
@@ -43,7 +43,7 @@ function lfndr_register_address_type( array $types ): array {
  *   - the geocoder, which needs to hand a single line to Nominatim and write
  *     the parsed result back into the right boxes;
  *   - the Directions link, which needs a formatted address rather than a
- *     coordinate pair (see lfndr_directions_url() for why that matters);
+ *     coordinate pair (see gwc_lfndr_directions_url() for why that matters);
  *   - the card, which shows "Birmingham, AL" while the detail pane shows all
  *     of it;
  *   - search, which should match a postal code without also matching every
@@ -55,7 +55,7 @@ function lfndr_register_address_type( array $types ): array {
  * ─────────────────────────────────────────────────────────────────────────── */
 
 /** The subfields an address may have, in rendering order. */
-const LFNDR_ADDRESS_SUBFIELD_KEYS = array( 'line1', 'line2', 'city', 'region', 'postal', 'country' );
+const GWC_LFNDR_ADDRESS_SUBFIELD_KEYS = array( 'line1', 'line2', 'city', 'region', 'postal', 'country' );
 
 /**
  * The subfields this particular address field uses, with their labels.
@@ -63,10 +63,10 @@ const LFNDR_ADDRESS_SUBFIELD_KEYS = array( 'line1', 'line2', 'city', 'region', '
  * @param array $field Field definition.
  * @return array<string, string>
  */
-function lfndr_address_parts( array $field ): array {
-	$enabled = $field['settings']['subfields'] ?? LFNDR_ADDRESS_SUBFIELD_KEYS;
-	$enabled = array_values( array_intersect( LFNDR_ADDRESS_SUBFIELD_KEYS, (array) $enabled ) );
-	$labels  = lfndr_address_subfields();
+function gwc_lfndr_address_parts( array $field ): array {
+	$enabled = $field['settings']['subfields'] ?? GWC_LFNDR_ADDRESS_SUBFIELD_KEYS;
+	$enabled = array_values( array_intersect( GWC_LFNDR_ADDRESS_SUBFIELD_KEYS, (array) $enabled ) );
+	$labels  = gwc_lfndr_address_subfields();
 	$custom  = (array) ( $field['settings']['labels'] ?? array() );
 
 	$out = array();
@@ -83,13 +83,13 @@ function lfndr_address_parts( array $field ): array {
  * @param mixed  $value Stored value.
  * @param string $name  Input name prefix.
  */
-function lfndr_admin_address( array $field, $value, string $name ): void {
+function gwc_lfndr_admin_address( array $field, $value, string $name ): void {
 	$value = is_array( $value ) ? $value : array();
-	$parts = lfndr_address_parts( $field );
+	$parts = gwc_lfndr_address_parts( $field );
 
 	/* The geocoder fills one address, and which one is a schema-level role
 		now rather than a flag on this field. */
-	$role    = lfndr_primary_field( 'address' );
+	$role    = gwc_lfndr_primary_field( 'address' );
 	$primary = null !== $role && $role['key'] === $field['key'];
 
 	printf(
@@ -143,9 +143,9 @@ function lfndr_admin_address( array $field, $value, string $name ): void {
  * @param array $field Field definition.
  * @return array
  */
-function lfndr_sanitize_address( $raw, array $field ): array {
+function gwc_lfndr_sanitize_address( $raw, array $field ): array {
 	$raw   = is_array( $raw ) ? $raw : array();
-	$parts = lfndr_address_parts( $field );
+	$parts = gwc_lfndr_address_parts( $field );
 	$out   = array();
 
 	foreach ( array_keys( $parts ) as $key ) {
@@ -173,7 +173,7 @@ function lfndr_sanitize_address( $raw, array $field ): array {
  * @param mixed $value Value.
  * @return bool
  */
-function lfndr_empty_address( $value ): bool {
+function gwc_lfndr_empty_address( $value ): bool {
 	if ( ! is_array( $value ) ) {
 		return true;
 	}
@@ -193,23 +193,23 @@ function lfndr_empty_address( $value ): bool {
  * @param int   $post_id Post ID.
  * @return array
  */
-function lfndr_payload_address( $value, array $field, int $post_id ): array {
+function gwc_lfndr_payload_address( $value, array $field, int $post_id ): array {
 	$value = is_array( $value ) ? $value : array();
 	$out   = array();
 
-	foreach ( array_keys( lfndr_address_parts( $field ) ) as $key ) {
+	foreach ( array_keys( gwc_lfndr_address_parts( $field ) ) as $key ) {
 		$out[ $key ] = (string) ( $value[ $key ] ?? '' );
 	}
 
-	$out['formatted'] = lfndr_format_address( $value, $field );
-	$out['short']     = lfndr_format_address( $value, $field, (array) ( $field['settings']['card_parts'] ?? array( 'city', 'region' ) ) );
+	$out['formatted'] = gwc_lfndr_format_address( $value, $field );
+	$out['short']     = gwc_lfndr_format_address( $value, $field, (array) ( $field['settings']['card_parts'] ?? array( 'city', 'region' ) ) );
 
-	$role = lfndr_primary_field( 'address' );
+	$role = gwc_lfndr_primary_field( 'address' );
 	if ( null !== $role && $role['key'] === $field['key'] && ! empty( $field['settings']['directions'] ) ) {
-		$out['directionsUrl'] = lfndr_directions_url(
+		$out['directionsUrl'] = gwc_lfndr_directions_url(
 			$out['formatted'],
-			(string) get_post_meta( $post_id, '_lfndr_lat', true ),
-			(string) get_post_meta( $post_id, '_lfndr_lng', true )
+			(string) get_post_meta( $post_id, '_gwc_lfndr_lat', true ),
+			(string) get_post_meta( $post_id, '_gwc_lfndr_lng', true )
 		);
 	}
 
@@ -224,8 +224,8 @@ function lfndr_payload_address( $value, array $field, int $post_id ): array {
  * @param array|null $only  Restrict to these subfields.
  * @return string
  */
-function lfndr_format_address( array $value, array $field, ?array $only = null ): string {
-	$parts = array_keys( lfndr_address_parts( $field ) );
+function gwc_lfndr_format_address( array $value, array $field, ?array $only = null ): string {
+	$parts = array_keys( gwc_lfndr_address_parts( $field ) );
 	if ( null !== $only ) {
 		$parts = array_values( array_intersect( $parts, $only ) );
 	}
@@ -260,7 +260,7 @@ function lfndr_format_address( array $value, array $field, ?array $only = null )
  * @param array $field Field definition.
  * @return string
  */
-function lfndr_search_address( $value, array $field ): string {
+function gwc_lfndr_search_address( $value, array $field ): string {
 	if ( ! is_array( $value ) ) {
 		return '';
 	}
@@ -281,16 +281,16 @@ function lfndr_search_address( $value, array $field ): string {
  * @param array $raw Raw settings.
  * @return array
  */
-function lfndr_settings_address( array $raw ): array {
-	$subfields = array_values( array_intersect( LFNDR_ADDRESS_SUBFIELD_KEYS, (array) ( $raw['subfields'] ?? LFNDR_ADDRESS_SUBFIELD_KEYS ) ) );
+function gwc_lfndr_settings_address( array $raw ): array {
+	$subfields = array_values( array_intersect( GWC_LFNDR_ADDRESS_SUBFIELD_KEYS, (array) ( $raw['subfields'] ?? GWC_LFNDR_ADDRESS_SUBFIELD_KEYS ) ) );
 	if ( ! $subfields ) {
-		$subfields = LFNDR_ADDRESS_SUBFIELD_KEYS;
+		$subfields = GWC_LFNDR_ADDRESS_SUBFIELD_KEYS;
 	}
 
 	$labels = array();
 	foreach ( (array) ( $raw['labels'] ?? array() ) as $key => $label ) {
 		$key = sanitize_key( (string) $key );
-		if ( in_array( $key, LFNDR_ADDRESS_SUBFIELD_KEYS, true ) ) {
+		if ( in_array( $key, GWC_LFNDR_ADDRESS_SUBFIELD_KEYS, true ) ) {
 			$labels[ $key ] = sanitize_text_field( (string) $label );
 		}
 	}
@@ -311,12 +311,12 @@ function lfndr_settings_address( array $raw ): array {
  *
  * @param array $field Field definition.
  */
-function lfndr_schema_form_address( array $field ): void {
+function gwc_lfndr_schema_form_address( array $field ): void {
 	$settings  = $field['settings'];
-	$enabled   = (array) ( $settings['subfields'] ?? LFNDR_ADDRESS_SUBFIELD_KEYS );
+	$enabled   = (array) ( $settings['subfields'] ?? GWC_LFNDR_ADDRESS_SUBFIELD_KEYS );
 	$card      = (array) ( $settings['card_parts'] ?? array( 'city', 'region' ) );
 	$searchset = (array) ( $settings['search_parts'] ?? array( 'line1', 'city', 'region', 'postal' ) );
-	$labels    = lfndr_address_subfields();
+	$labels    = gwc_lfndr_address_subfields();
 	$custom    = (array) ( $settings['labels'] ?? array() );
 
 	echo '<table class="widefat striped lfndr-subfields"><thead><tr>';
@@ -327,7 +327,7 @@ function lfndr_schema_form_address( array $field ): void {
 	printf( '<th scope="col">%s</th>', esc_html__( 'Searchable', 'groundwork-common-location-finder' ) );
 	echo '</tr></thead><tbody>';
 
-	foreach ( LFNDR_ADDRESS_SUBFIELD_KEYS as $key ) {
+	foreach ( GWC_LFNDR_ADDRESS_SUBFIELD_KEYS as $key ) {
 		printf( '<tr><td><code>%s</code></td>', esc_html( $key ) );
 		printf(
 			'<td><input type="checkbox" name="settings[subfields][]" value="%1$s"%2$s aria-label="%3$s" /></td>',
@@ -362,13 +362,13 @@ function lfndr_schema_form_address( array $field ): void {
 	}
 	echo '</tbody></table>';
 
-	lfndr_schema_text_control(
+	gwc_lfndr_schema_text_control(
 		$field,
 		'default_country',
 		__( 'Default country', 'groundwork-common-location-finder' ),
 		__( 'Pre-filled on new locations. A two-letter code such as US or CA.', 'groundwork-common-location-finder' )
 	);
-	lfndr_schema_select_control(
+	gwc_lfndr_schema_select_control(
 		$field,
 		'region_format',
 		__( 'When looking up an address, fill the region with', 'groundwork-common-location-finder' ),
@@ -379,5 +379,5 @@ function lfndr_schema_form_address( array $field ): void {
 		'name',
 		__( 'Only affects what the lookup fills in — you can always edit the box afterwards.', 'groundwork-common-location-finder' )
 	);
-	lfndr_schema_checkbox_control( $field, 'directions', __( 'Offer a Directions link', 'groundwork-common-location-finder' ), true );
+	gwc_lfndr_schema_checkbox_control( $field, 'directions', __( 'Offer a Directions link', 'groundwork-common-location-finder' ), true );
 }

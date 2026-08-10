@@ -30,8 +30,8 @@ defined( 'ABSPATH' ) || exit;
  * @param array $schema    Schema.
  * @return array<int, array>
  */
-function lfndr_available_facets( array $locations, array $schema ): array {
-	$types  = lfndr_field_types();
+function gwc_lfndr_available_facets( array $locations, array $schema ): array {
+	$types  = gwc_lfndr_field_types();
 	$groups = array();
 
 	foreach ( $schema['fields'] as $field ) {
@@ -43,12 +43,12 @@ function lfndr_available_facets( array $locations, array $schema ): array {
 			continue;
 		}
 
-		$counts = lfndr_facet_counts( $locations, $field['key'] );
+		$counts = gwc_lfndr_facet_counts( $locations, $field['key'] );
 		if ( ! $counts ) {
 			continue;
 		}
 
-		$group = lfndr_build_facet_group( $field, $type, $counts, count( $locations ) );
+		$group = gwc_lfndr_build_facet_group( $field, $type, $counts, count( $locations ) );
 		if ( null !== $group ) {
 			$groups[] = $group;
 		}
@@ -61,7 +61,7 @@ function lfndr_available_facets( array $locations, array $schema ): array {
 	 * @param array $locations Payload locations.
 	 * @param array $schema    Schema.
 	 */
-	return apply_filters( 'lfndr_available_facets', $groups, $locations, $schema );
+	return apply_filters( 'gwc_lfndr_available_facets', $groups, $locations, $schema );
 }
 
 /**
@@ -71,7 +71,7 @@ function lfndr_available_facets( array $locations, array $schema ): array {
  * @param string $key       Field key.
  * @return array<string, int>
  */
-function lfndr_facet_counts( array $locations, string $key ): array {
+function gwc_lfndr_facet_counts( array $locations, string $key ): array {
 	$counts = array();
 	foreach ( $locations as $location ) {
 		foreach ( (array) ( $location['facets'][ $key ] ?? array() ) as $token ) {
@@ -91,7 +91,7 @@ function lfndr_facet_counts( array $locations, string $key ): array {
  * @param int   $total  Total locations.
  * @return array|null
  */
-function lfndr_build_facet_group( array $field, array $type, array $counts, int $total ): ?array {
+function gwc_lfndr_build_facet_group( array $field, array $type, array $counts, int $total ): ?array {
 	$label = '' !== $field['filter_label'] ? $field['filter_label'] : $field['label'];
 
 	if ( 'boolean' === $field['type'] ) {

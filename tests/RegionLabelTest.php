@@ -15,7 +15,7 @@
 class RegionLabelTest extends PHPUnit\Framework\TestCase {
 
 	private function wrapper( array $atts ): string {
-		$html = lfndr_render_finder( $atts );
+		$html = gwc_lfndr_render_finder( $atts );
 		preg_match( '/<div id="[^"]*"[^>]*>/', $html, $m );
 		return isset( $m[0] ) ? (string) preg_replace( '/\s+/', ' ', $m[0] ) : '';
 	}

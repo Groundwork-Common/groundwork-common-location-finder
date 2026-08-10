@@ -29,17 +29,17 @@ class PresetSaveTest extends PHPUnit\Framework\TestCase {
 
 		// Every box submits, holding what it was rendered with. This is the part
 		// that broke it.
-		foreach ( array_keys( lfndr_appearance_fields() ) as $key ) {
-			$post[ $key ] = (string) lfndr_setting( $key );
+		foreach ( array_keys( gwc_lfndr_appearance_fields() ) as $key ) {
+			$post[ $key ] = (string) gwc_lfndr_setting( $key );
 		}
 		foreach ( $edits as $key => $value ) {
 			$post[ $key ] = $value;
 		}
 
-		update_option( 'lfndr_settings', lfndr_sanitize_settings( $post ) );
-		lfndr_settings_cache( null, true );
+		update_option( 'gwc_lfndr_settings', gwc_lfndr_sanitize_settings( $post ) );
+		gwc_lfndr_settings_cache( null, true );
 
-		return lfndr_current_preset();
+		return gwc_lfndr_current_preset();
 	}
 
 	public function test_choosing_a_preset_actually_applies_it(): void {
@@ -48,7 +48,7 @@ class PresetSaveTest extends PHPUnit\Framework\TestCase {
 	}
 
 	public function test_every_preset_can_be_selected_from_every_other(): void {
-		$keys = array_keys( lfndr_style_presets() );
+		$keys = array_keys( gwc_lfndr_style_presets() );
 		$this->save( $keys[0] );
 
 		foreach ( $keys as $key ) {
@@ -60,8 +60,8 @@ class PresetSaveTest extends PHPUnit\Framework\TestCase {
 		$this->save( 'night' );
 		$this->save( 'ink' );
 
-		foreach ( lfndr_style_presets()['ink']['values'] as $key => $expected ) {
-			$this->assertSame( (string) $expected, (string) lfndr_setting( $key ), sprintf( 'Field "%s" did not take Ink\'s value.', $key ) );
+		foreach ( gwc_lfndr_style_presets()['ink']['values'] as $key => $expected ) {
+			$this->assertSame( (string) $expected, (string) gwc_lfndr_setting( $key ), sprintf( 'Field "%s" did not take Ink\'s value.', $key ) );
 		}
 	}
 
@@ -73,10 +73,10 @@ class PresetSaveTest extends PHPUnit\Framework\TestCase {
 	 */
 	public function test_switching_does_not_leave_the_previous_set_underneath(): void {
 		$this->save( 'night' );
-		$this->assertNotSame( '', (string) lfndr_setting( 'finder_bg' ), 'Precondition: Night sets a background.' );
+		$this->assertNotSame( '', (string) gwc_lfndr_setting( 'finder_bg' ), 'Precondition: Night sets a background.' );
 
 		$this->save( 'ink' );
-		$this->assertSame( '', (string) lfndr_setting( 'finder_bg' ), 'Ink leaves the background blank; Night\'s survived.' );
+		$this->assertSame( '', (string) gwc_lfndr_setting( 'finder_bg' ), 'Ink leaves the background blank; Night\'s survived.' );
 	}
 
 	/**
@@ -87,15 +87,15 @@ class PresetSaveTest extends PHPUnit\Framework\TestCase {
 		$this->save( 'coast' );
 
 		$this->assertSame( '', $this->save( 'coast', array( 'accent_color' => '#ff0000' ) ), 'Editing a value should read as Custom.' );
-		$this->assertSame( '#ff0000', (string) lfndr_setting( 'accent_color' ), 'The edit was discarded.' );
+		$this->assertSame( '#ff0000', (string) gwc_lfndr_setting( 'accent_color' ), 'The edit was discarded.' );
 	}
 
 	public function test_editing_while_already_custom_keeps_the_edit(): void {
 		$this->save( 'ink' );
 		$this->save( 'ink', array( 'radius' => '9px' ) );
 
-		$this->assertSame( '', lfndr_current_preset() );
-		$this->assertSame( '9px', (string) lfndr_setting( 'radius' ) );
+		$this->assertSame( '', gwc_lfndr_current_preset() );
+		$this->assertSame( '9px', (string) gwc_lfndr_setting( 'radius' ) );
 	}
 
 	public function test_resaving_the_same_preset_is_stable(): void {

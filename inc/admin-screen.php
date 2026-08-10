@@ -28,14 +28,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'admin_menu', 'lfndr_admin_menu', 9 );
+add_action( 'admin_menu', 'gwc_lfndr_admin_menu', 9 );
 
 /**
  * The tabs, in setup order.
  *
  * @return array<string, string>
  */
-function lfndr_admin_tabs(): array {
+function gwc_lfndr_admin_tabs(): array {
 	return array(
 		'fields'     => __( 'Fields', 'groundwork-common-location-finder' ),
 		'behavior'   => __( 'Behavior', 'groundwork-common-location-finder' ),
@@ -49,8 +49,8 @@ function lfndr_admin_tabs(): array {
  *
  * @return string
  */
-function lfndr_current_tab(): string {
-	$tabs = lfndr_admin_tabs();
+function gwc_lfndr_current_tab(): string {
+	$tabs = gwc_lfndr_admin_tabs();
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only navigation.
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 	return isset( $tabs[ $tab ] ) ? $tab : 'fields';
@@ -59,14 +59,14 @@ function lfndr_current_tab(): string {
 /**
  * One submenu entry, replacing the two that described the same thing.
  */
-function lfndr_admin_menu(): void {
+function gwc_lfndr_admin_menu(): void {
 	$hook = add_submenu_page(
-		'edit.php?post_type=' . LFNDR_POST_TYPE,
+		'edit.php?post_type=' . GWC_LFNDR_POST_TYPE,
 		__( 'Location Finder', 'groundwork-common-location-finder' ),
 		__( 'Settings', 'groundwork-common-location-finder' ),
 		'manage_options',
-		LFNDR_FIELDS_PAGE,
-		'lfndr_admin_screen'
+		GWC_LFNDR_FIELDS_PAGE,
+		'gwc_lfndr_admin_screen'
 	);
 
 	/* Help tabs have to be added before the screen renders, and load-{$hook} is
@@ -76,19 +76,19 @@ function lfndr_admin_menu(): void {
 	 * moved. It is false when the capability check fails, which is exactly when
 	 * there is no screen to help with. */
 	if ( $hook ) {
-		add_action( 'load-' . $hook, 'lfndr_add_help_tabs' );
+		add_action( 'load-' . $hook, 'gwc_lfndr_add_help_tabs' );
 	}
 }
 
 /**
  * Render the tab bar and the tab.
  */
-function lfndr_admin_screen(): void {
+function gwc_lfndr_admin_screen(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have permission to change these settings.', 'groundwork-common-location-finder' ) );
 	}
 
-	$current = lfndr_current_tab();
+	$current = gwc_lfndr_current_tab();
 
 	/* Add and edit are full-page views of the Fields tab rather than tabs of
 	 * their own — they are one field, not a section of the site's setup. The
@@ -97,7 +97,7 @@ function lfndr_admin_screen(): void {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only navigation.
 	$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
 	if ( 'fields' === $current && in_array( $action, array( 'add', 'edit' ), true ) ) {
-		lfndr_fields_screen();
+		gwc_lfndr_fields_screen();
 		return;
 	}
 
@@ -105,11 +105,11 @@ function lfndr_admin_screen(): void {
 	<div class="wrap lfndr-admin">
 		<h1><?php esc_html_e( 'Location Finder', 'groundwork-common-location-finder' ); ?></h1>
 
-		<?php lfndr_render_colophon(); ?>
+		<?php gwc_lfndr_render_colophon(); ?>
 
 		<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Setup sections', 'groundwork-common-location-finder' ); ?>">
-			<?php foreach ( lfndr_admin_tabs() as $slug => $label ) : ?>
-				<a href="<?php echo esc_url( lfndr_fields_url( array( 'tab' => $slug ) ) ); ?>"
+			<?php foreach ( gwc_lfndr_admin_tabs() as $slug => $label ) : ?>
+				<a href="<?php echo esc_url( gwc_lfndr_fields_url( array( 'tab' => $slug ) ) ); ?>"
 					class="nav-tab<?php echo $slug === $current ? ' nav-tab-active' : ''; ?>"
 					<?php echo $slug === $current ? ' aria-current="page"' : ''; ?>>
 					<?php echo esc_html( $label ); ?>
@@ -120,23 +120,23 @@ function lfndr_admin_screen(): void {
 		<?php
 		switch ( $current ) {
 			case 'behavior':
-				lfndr_render_option_tab( 'behavior' );
+				gwc_lfndr_render_option_tab( 'behavior' );
 				break;
 			case 'appearance':
-				lfndr_settings_screen();
+				gwc_lfndr_settings_screen();
 				break;
 			case 'advanced':
-				lfndr_render_option_tab( 'advanced' );
+				gwc_lfndr_render_option_tab( 'advanced' );
 				break;
 			default:
-				lfndr_fields_screen();
+				gwc_lfndr_fields_screen();
 		}
 		?>
 	</div>
 	<?php
 }
 
-add_filter( 'admin_footer_text', 'lfndr_admin_footer_text' );
+add_filter( 'admin_footer_text', 'gwc_lfndr_admin_footer_text' );
 
 /**
  * Replace the admin footer line on this plugin's own screens.
@@ -156,14 +156,14 @@ add_filter( 'admin_footer_text', 'lfndr_admin_footer_text' );
  * @param string $text The existing footer text.
  * @return string
  */
-function lfndr_admin_footer_text( $text ) {
+function gwc_lfndr_admin_footer_text( $text ) {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 	if ( ! $screen ) {
 		return $text;
 	}
 
-	$ours = LFNDR_POST_TYPE === $screen->post_type
-		|| false !== strpos( (string) $screen->id, LFNDR_FIELDS_PAGE );
+	$ours = GWC_LFNDR_POST_TYPE === $screen->post_type
+		|| false !== strpos( (string) $screen->id, GWC_LFNDR_FIELDS_PAGE );
 
 	if ( ! $ours ) {
 		return $text;
@@ -174,7 +174,7 @@ function lfndr_admin_footer_text( $text ) {
 		esc_html__( 'Built by %s — technology leadership and support for nonprofits.', 'groundwork-common-location-finder' ),
 		sprintf(
 			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-			esc_url( LFNDR_GWC_URL ),
+			esc_url( GWC_LFNDR_GWC_URL ),
 			esc_html__( 'Groundwork Common', 'groundwork-common-location-finder' )
 		)
 	);
@@ -196,10 +196,10 @@ function lfndr_admin_footer_text( $text ) {
  * event to come round and clear a flag.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_COLOPHON_META   = 'lfndr_colophon_collapsed_at';
-const LFNDR_COLOPHON_SNOOZE = 30 * DAY_IN_SECONDS;
+const GWC_LFNDR_COLOPHON_META   = 'gwc_lfndr_colophon_collapsed_at';
+const GWC_LFNDR_COLOPHON_SNOOZE = 30 * DAY_IN_SECONDS;
 
-add_action( 'admin_init', 'lfndr_handle_colophon_toggle' );
+add_action( 'admin_init', 'gwc_lfndr_handle_colophon_toggle' );
 
 /**
  * Is a collapse from $collapsed_at still in force at $now?
@@ -213,11 +213,11 @@ add_action( 'admin_init', 'lfndr_handle_colophon_toggle' );
  * @param int $now          Unix time now.
  * @return bool
  */
-function lfndr_colophon_snoozed( int $collapsed_at, int $now ): bool {
+function gwc_lfndr_colophon_snoozed( int $collapsed_at, int $now ): bool {
 	if ( $collapsed_at <= 0 ) {
 		return false;
 	}
-	return ( $now - $collapsed_at ) < LFNDR_COLOPHON_SNOOZE;
+	return ( $now - $collapsed_at ) < GWC_LFNDR_COLOPHON_SNOOZE;
 }
 
 /**
@@ -225,9 +225,9 @@ function lfndr_colophon_snoozed( int $collapsed_at, int $now ): bool {
  *
  * @return bool
  */
-function lfndr_colophon_is_collapsed(): bool {
-	$at = (int) get_user_meta( get_current_user_id(), LFNDR_COLOPHON_META, true );
-	return lfndr_colophon_snoozed( $at, time() );
+function gwc_lfndr_colophon_is_collapsed(): bool {
+	$at = (int) get_user_meta( get_current_user_id(), GWC_LFNDR_COLOPHON_META, true );
+	return gwc_lfndr_colophon_snoozed( $at, time() );
 }
 
 /**
@@ -238,9 +238,9 @@ function lfndr_colophon_is_collapsed(): bool {
  * and the alternative would add an endpoint, a nonce to ship to the browser and
  * a script, all to avoid a reload nobody will notice.
  */
-function lfndr_handle_colophon_toggle(): void {
+function gwc_lfndr_handle_colophon_toggle(): void {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- presence check only; the nonce is verified below before anything is written.
-	if ( ! isset( $_GET['lfndr_colophon'] ) ) {
+	if ( ! isset( $_GET['gwc_lfndr_colophon'] ) ) {
 		return;
 	}
 
@@ -248,21 +248,21 @@ function lfndr_handle_colophon_toggle(): void {
 		return;
 	}
 
-	check_admin_referer( 'lfndr_colophon' );
+	check_admin_referer( 'gwc_lfndr_colophon' );
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- verified directly above.
-	$wanted = sanitize_key( wp_unslash( $_GET['lfndr_colophon'] ) );
+	$wanted = sanitize_key( wp_unslash( $_GET['gwc_lfndr_colophon'] ) );
 
 	if ( 'collapse' === $wanted ) {
-		update_user_meta( get_current_user_id(), LFNDR_COLOPHON_META, time() );
+		update_user_meta( get_current_user_id(), GWC_LFNDR_COLOPHON_META, time() );
 	} else {
-		delete_user_meta( get_current_user_id(), LFNDR_COLOPHON_META );
+		delete_user_meta( get_current_user_id(), GWC_LFNDR_COLOPHON_META );
 	}
 
 	/* Back to the same tab, minus the toggle. Without stripping the arguments a
 	 * refresh would re-fire the toggle, and the nonce in the URL would outlive
 	 * its usefulness in the address bar. */
-	wp_safe_redirect( remove_query_arg( array( 'lfndr_colophon', '_wpnonce' ) ) );
+	wp_safe_redirect( remove_query_arg( array( 'gwc_lfndr_colophon', '_wpnonce' ) ) );
 	exit;
 }
 
@@ -272,8 +272,8 @@ function lfndr_handle_colophon_toggle(): void {
  * @param string $action 'collapse' or 'expand'.
  * @return string
  */
-function lfndr_colophon_toggle_url( string $action ): string {
-	return wp_nonce_url( add_query_arg( 'lfndr_colophon', $action ), 'lfndr_colophon' );
+function gwc_lfndr_colophon_toggle_url( string $action ): string {
+	return wp_nonce_url( add_query_arg( 'gwc_lfndr_colophon', $action ), 'gwc_lfndr_colophon' );
 }
 
 /**
@@ -298,13 +298,13 @@ function lfndr_colophon_toggle_url( string $action ): string {
  * maintained, and it describes the exchange accurately: the money buys
  * continued work, not goodwill.
  */
-function lfndr_render_colophon(): void {
+function gwc_lfndr_render_colophon(): void {
 	?>
-	<?php if ( lfndr_colophon_is_collapsed() ) : ?>
+	<?php if ( gwc_lfndr_colophon_is_collapsed() ) : ?>
 		<div class="lfndr-colophon lfndr-colophon--collapsed">
 			<span class="lfndr-colophon__logo" aria-hidden="true"></span>
 			<span class="screen-reader-text"><?php esc_html_e( 'Groundwork Common', 'groundwork-common-location-finder' ); ?></span>
-			<a class="lfndr-colophon__toggle" href="<?php echo esc_url( lfndr_colophon_toggle_url( 'expand' ) ); ?>">
+			<a class="lfndr-colophon__toggle" href="<?php echo esc_url( gwc_lfndr_colophon_toggle_url( 'expand' ) ); ?>">
 				<?php esc_html_e( 'Show', 'groundwork-common-location-finder' ); ?>
 			</a>
 		</div>
@@ -312,7 +312,7 @@ function lfndr_render_colophon(): void {
 	<?php endif; ?>
 
 	<div class="lfndr-colophon">
-		<a class="lfndr-colophon__toggle" href="<?php echo esc_url( lfndr_colophon_toggle_url( 'collapse' ) ); ?>">
+		<a class="lfndr-colophon__toggle" href="<?php echo esc_url( gwc_lfndr_colophon_toggle_url( 'collapse' ) ); ?>">
 			<?php esc_html_e( 'Hide for 30 days', 'groundwork-common-location-finder' ); ?>
 		</a>
 
@@ -332,7 +332,7 @@ function lfndr_render_colophon(): void {
 			 * by ink — "-light" is the one for light backgrounds.
 			 */
 			?>
-			<a href="<?php echo esc_url( LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
+			<a href="<?php echo esc_url( GWC_LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
 				<span class="screen-reader-text"><?php esc_html_e( 'Groundwork Common', 'groundwork-common-location-finder' ); ?></span>
 				<span class="lfndr-colophon__logo" aria-hidden="true"></span>
 			</a>
@@ -344,9 +344,9 @@ function lfndr_render_colophon(): void {
 			 * translatable string, so a translator is never handed markup they
 			 * can break and no HTML has to survive a round trip through
 			 * translate.wordpress.org. */
-			$lfndr_gwc_link = sprintf(
+			$gwc_lfndr_gwc_link = sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-				esc_url( LFNDR_GWC_URL ),
+				esc_url( GWC_LFNDR_GWC_URL ),
 				esc_html__( 'Groundwork Common', 'groundwork-common-location-finder' )
 			);
 
@@ -354,7 +354,7 @@ function lfndr_render_colophon(): void {
 				/* translators: %s: Groundwork Common, linked to the company site. */
 				esc_html__( '%s provides technology leadership and support for nonprofits — fractional, by the project, or alongside an in-house team. We release tools like this one because good technology work should leave an organization more capable, not more dependent on whoever built it.', 'groundwork-common-location-finder' ),
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- assembled directly above from esc_url() and esc_html__().
-				$lfndr_gwc_link
+				$gwc_lfndr_gwc_link
 			);
 			?>
 		</p>
@@ -365,7 +365,7 @@ function lfndr_render_colophon(): void {
 
 		<?php /* Directly under the referral ask, which is what it answers. */ ?>
 		<p>
-			<a class="button" href="<?php echo esc_url( LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="button" href="<?php echo esc_url( GWC_LFNDR_GWC_URL ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Learn about Groundwork Common', 'groundwork-common-location-finder' ); ?>
 			</a>
 		</p>
@@ -374,13 +374,13 @@ function lfndr_render_colophon(): void {
 
 		<?php /* Second column: the two things a reader can act on. */ ?>
 		<div class="lfndr-colophon__aside">
-			<?php if ( '' !== LFNDR_SPONSOR_URL ) : ?>
+			<?php if ( '' !== GWC_LFNDR_SPONSOR_URL ) : ?>
 				<p>
 					<?php esc_html_e( 'You can also support our WordPress plugins directly. While we offer the plugin free to you, it costs us to maintain it — the security updates, the compatibility testing against each new WordPress release, the bug nobody but you has hit. We can’t do it without your support, and we appreciate whatever support you can give.', 'groundwork-common-location-finder' ); ?>
 				</p>
 
 				<p>
-					<a class="button button-primary" href="<?php echo esc_url( LFNDR_SPONSOR_URL ); ?>" target="_blank" rel="noopener noreferrer">
+					<a class="button button-primary" href="<?php echo esc_url( GWC_LFNDR_SPONSOR_URL ); ?>" target="_blank" rel="noopener noreferrer">
 						<?php esc_html_e( 'Support our work', 'groundwork-common-location-finder' ); ?>
 					</a>
 				</p>
@@ -401,14 +401,14 @@ function lfndr_render_colophon(): void {
 /**
  * Every non-appearance setting, with the tab and section it belongs to.
  *
- * Same shape as lfndr_appearance_fields(): one registry driving the form, the
+ * Same shape as gwc_lfndr_appearance_fields(): one registry driving the form, the
  * sanitizer and the defaults, so the three cannot disagree. The 'type' decides
  * both how it renders and how it is sanitized, which is what stops a select
  * ever accepting a value that is not one of its options.
  *
  * @return array<string, array>
  */
-function lfndr_option_fields(): array {
+function gwc_lfndr_option_fields(): array {
 	return array(
 		// ── Behavior: results ────────────────────────────────────────────
 		'page_size'          => array(
@@ -445,7 +445,7 @@ function lfndr_option_fields(): array {
 			'tab'     => 'behavior',
 			'section' => 'results',
 			'type'    => 'select',
-			'choices' => 'lfndr_unit_choices',
+			'choices' => 'gwc_lfndr_unit_choices',
 			'label'   => __( 'Distance units', 'groundwork-common-location-finder' ),
 			'help'    => __( 'Left automatic, this follows the site language — miles for US and UK English, kilometers everywhere else.', 'groundwork-common-location-finder' ),
 		),
@@ -501,7 +501,7 @@ function lfndr_option_fields(): array {
 			'tab'     => 'behavior',
 			'section' => 'directions',
 			'type'    => 'select',
-			'choices' => 'lfndr_directions_choices',
+			'choices' => 'gwc_lfndr_directions_choices',
 			'label'   => __( 'Directions service', 'groundwork-common-location-finder' ),
 			'help'    => __( 'Where the Directions link sends people. The address is used in preference to the coordinates, because a street address resolves to a door and a coordinate resolves to a point — which on a large site is regularly the wrong side of the building.', 'groundwork-common-location-finder' ),
 		),
@@ -520,7 +520,7 @@ function lfndr_option_fields(): array {
 			'section'     => 'geocode',
 			'type'        => 'email',
 			'label'       => __( 'Contact address for lookups', 'groundwork-common-location-finder' ),
-			/* The real fallback, not a stand-in. lfndr_geocode_contact_email()
+			/* The real fallback, not a stand-in. gwc_lfndr_geocode_contact_email()
 			 * already uses the admin email when this is blank, so showing
 			 * nobody@example.com described a behaviour the plugin does not have
 			 * and invited people to type in something it did not need.
@@ -597,7 +597,7 @@ function lfndr_option_fields(): array {
  *
  * @return array<string, array<string, array{title:string, intro:string}>>
  */
-function lfndr_option_sections(): array {
+function gwc_lfndr_option_sections(): array {
 	return array(
 		'behavior' => array(
 			'roles'      => array(
@@ -639,7 +639,7 @@ function lfndr_option_sections(): array {
  *
  * @return array<string, string>
  */
-function lfndr_unit_choices(): array {
+function gwc_lfndr_unit_choices(): array {
 	return array(
 		''   => __( 'Automatic — follow the site language', 'groundwork-common-location-finder' ),
 		'mi' => __( 'Miles', 'groundwork-common-location-finder' ),
@@ -652,7 +652,7 @@ function lfndr_unit_choices(): array {
  *
  * @return array<string, string>
  */
-function lfndr_directions_choices(): array {
+function gwc_lfndr_directions_choices(): array {
 	return array(
 		'google' => __( 'Google Maps', 'groundwork-common-location-finder' ),
 		'apple'  => __( 'Apple Maps', 'groundwork-common-location-finder' ),
@@ -666,10 +666,10 @@ function lfndr_directions_choices(): array {
  *
  * @param string $tab Tab slug.
  */
-function lfndr_render_option_tab( string $tab ): void {
-	$sections = lfndr_option_sections()[ $tab ] ?? array();
+function gwc_lfndr_render_option_tab( string $tab ): void {
+	$sections = gwc_lfndr_option_sections()[ $tab ] ?? array();
 	$fields   = array_filter(
-		lfndr_option_fields(),
+		gwc_lfndr_option_fields(),
 		static function ( $field ) use ( $tab ) {
 			return $tab === $field['tab'];
 		}
@@ -677,21 +677,21 @@ function lfndr_render_option_tab( string $tab ): void {
 	?>
 
 	<form method="post" action="options.php">
-		<?php settings_fields( 'lfndr_settings_group' ); ?>
+		<?php settings_fields( 'gwc_lfndr_settings_group' ); ?>
 
 		<?php
-		/* The roles live on the schema rather than in lfndr_settings, and used
+		/* The roles live on the schema rather than in gwc_lfndr_settings, and used
 		 * to have their own form and their own Save because of it. That put two
 		 * save buttons on one tab with nothing saying which covered what — the
 		 * storage layout showing through the UI. They now ride this form under
-		 * a _roles key and lfndr_sanitize_settings() writes them where they
+		 * a _roles key and gwc_lfndr_sanitize_settings() writes them where they
 		 * belong, the same way _apply_preset already worked. */
 		if ( isset( $sections['roles'] ) ) :
 			?>
 			<h2><?php echo esc_html( $sections['roles']['title'] ); ?></h2>
 			<p class="description" style="max-width:44em"><?php echo esc_html( $sections['roles']['intro'] ); ?></p>
 			<?php
-			lfndr_render_roles_fields();
+			gwc_lfndr_render_roles_fields();
 			unset( $sections['roles'] );
 		endif;
 		?>
@@ -699,7 +699,7 @@ function lfndr_render_option_tab( string $tab ): void {
 		/* Marks the tab as submitted — the only way to tell an unchecked
 				box from a field that was never on screen. */
 		?>
-		<input type="hidden" name="<?php echo esc_attr( LFNDR_SETTINGS_OPTION ); ?>[_tab_<?php echo esc_attr( $tab ); ?>]" value="1" />
+		<input type="hidden" name="<?php echo esc_attr( GWC_LFNDR_SETTINGS_OPTION ); ?>[_tab_<?php echo esc_attr( $tab ); ?>]" value="1" />
 
 		<?php foreach ( $sections as $section_key => $section ) : ?>
 			<h2><?php echo esc_html( $section['title'] ); ?></h2>
@@ -719,7 +719,7 @@ function lfndr_render_option_tab( string $tab ): void {
 						<th scope="row">
 							<label for="lfndr-opt-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						</th>
-						<td><?php lfndr_render_option_field( $key, $field ); ?></td>
+						<td><?php gwc_lfndr_render_option_field( $key, $field ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>
@@ -737,9 +737,9 @@ function lfndr_render_option_tab( string $tab ): void {
  * @param string $key   Setting key.
  * @param array  $field Field definition.
  */
-function lfndr_render_option_field( string $key, array $field ): void {
-	$value = lfndr_setting( $key );
-	$name  = sprintf( '%s[%s]', LFNDR_SETTINGS_OPTION, $key );
+function gwc_lfndr_render_option_field( string $key, array $field ): void {
+	$value = gwc_lfndr_setting( $key );
+	$name  = sprintf( '%s[%s]', GWC_LFNDR_SETTINGS_OPTION, $key );
 	$id    = 'lfndr-opt-' . $key;
 
 	switch ( $field['type'] ) {
@@ -809,8 +809,8 @@ function lfndr_render_option_field( string $key, array $field ): void {
  * @param array $out Values accumulated so far.
  * @return array
  */
-function lfndr_sanitize_option_fields( array $raw, array $out ): array {
-	foreach ( lfndr_option_fields() as $key => $field ) {
+function gwc_lfndr_sanitize_option_fields( array $raw, array $out ): array {
+	foreach ( gwc_lfndr_option_fields() as $key => $field ) {
 		$posted = array_key_exists( $key, $raw );
 
 		/* An unchecked box posts nothing. The hidden marker each tab prints

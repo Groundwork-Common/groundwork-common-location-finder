@@ -7,7 +7,7 @@
 ( function () {
 	'use strict';
 
-	var cfg = window.LFNDR_GEOCODE;
+	var cfg = window.GWC_LFNDR_GEOCODE;
 	if ( ! cfg || ! cfg.ajaxUrl ) {
 		return;
 	}
@@ -142,7 +142,7 @@
 			var mine = ++request;
 			var url =
 				cfg.ajaxUrl +
-				'?action=lfndr_geocode&nonce=' +
+				'?action=gwc_lfndr_geocode&nonce=' +
 				encodeURIComponent( cfg.nonce ) +
 				'&q=' +
 				encodeURIComponent( query );

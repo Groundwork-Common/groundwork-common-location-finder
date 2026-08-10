@@ -6,7 +6,7 @@
  *
  *   Version:      the plugin header. What WordPress shows on the Plugins
  *                 screen and compares to decide an update is available.
- *   LFNDR_VERSION the cache buster on every enqueued script and style. Left
+ *   GWC_LFNDR_VERSION the cache buster on every enqueued script and style. Left
  *                 behind, returning visitors keep the previous CSS and JS —
  *                 the release looks correct to anyone testing in a fresh
  *                 browser and does nothing for everyone else.
@@ -42,12 +42,12 @@ class VersionTest extends PHPUnit\Framework\TestCase {
 	}
 
 	public function test_the_constant_matches_the_header(): void {
-		preg_match( "/const LFNDR_VERSION\s*=\s*'([^']+)'/", $this->plugin_file(), $m );
+		preg_match( "/const GWC_LFNDR_VERSION\s*=\s*'([^']+)'/", $this->plugin_file(), $m );
 
 		$this->assertSame(
 			$this->header_version(),
 			$m[1] ?? '',
-			'LFNDR_VERSION is the asset cache buster. Behind the header, returning visitors keep the old CSS and JS.'
+			'GWC_LFNDR_VERSION is the asset cache buster. Behind the header, returning visitors keep the old CSS and JS.'
 		);
 	}
 
@@ -88,7 +88,7 @@ class VersionTest extends PHPUnit\Framework\TestCase {
 	 * and triggers a migration run on every unrelated release.
 	 */
 	public function test_the_schema_version_is_independent_of_the_plugin_version(): void {
-		preg_match( '/const LFNDR_SCHEMA_VERSION\s*=\s*(\d+)/', $this->plugin_file(), $m );
+		preg_match( '/const GWC_LFNDR_SCHEMA_VERSION\s*=\s*(\d+)/', $this->plugin_file(), $m );
 
 		$this->assertMatchesRegularExpression( '/^\d+$/', $m[1] ?? '', 'Schema version should be a plain integer, not a semver string.' );
 	}

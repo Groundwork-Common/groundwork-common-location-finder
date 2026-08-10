@@ -40,25 +40,25 @@ defined( 'ABSPATH' ) || exit;
  * dealer network can all install it without a fork.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-const LFNDR_VERSION        = '1.0.0';
-const LFNDR_SCHEMA_VERSION = 2;
+const GWC_LFNDR_VERSION        = '1.0.0';
+const GWC_LFNDR_SCHEMA_VERSION = 2;
 
 /*
  * Where "Support this work" points. Every reference is guarded, so setting this
  * to '' removes the link and the paragraph asking for one together — a support
  * ask with nowhere to go is worse than none.
  */
-const LFNDR_SPONSOR_URL = 'https://www.groundworkcommon.com/support/';
+const GWC_LFNDR_SPONSOR_URL = 'https://www.groundworkcommon.com/support/';
 
 /* The company site. Named once because the colophon links it from three
  * places — the wordmark, the company name in the opening line, and the
  * "See what we do" link — and two of those agreeing while the third drifts
  * is the kind of thing nobody notices for a year. */
-const LFNDR_GWC_URL = 'https://www.groundworkcommon.com/';
+const GWC_LFNDR_GWC_URL = 'https://www.groundworkcommon.com/';
 
-define( 'LFNDR_FILE', __FILE__ );
-define( 'LFNDR_DIR', plugin_dir_path( __FILE__ ) );
-define( 'LFNDR_URL', plugin_dir_url( __FILE__ ) );
+define( 'GWC_LFNDR_FILE', __FILE__ );
+define( 'GWC_LFNDR_DIR', plugin_dir_path( __FILE__ ) );
+define( 'GWC_LFNDR_URL', plugin_dir_url( __FILE__ ) );
 
 /* ── Guarded requires ────────────────────────────────────────────────────────
  * Each guard names a function the file declares. This costs one function_exists
@@ -77,64 +77,64 @@ define( 'LFNDR_URL', plugin_dir_url( __FILE__ ) );
  * where a function exists on the screen you tested and is fatally undefined
  * under `wp eval`. That trade is not close.
  * ─────────────────────────────────────────────────────────────────────────── */
-if ( ! function_exists( 'lfndr_hour_days' ) ) {
-	require LFNDR_DIR . 'inc/i18n.php';
+if ( ! function_exists( 'gwc_lfndr_hour_days' ) ) {
+	require GWC_LFNDR_DIR . 'inc/i18n.php';
 }
-if ( ! function_exists( 'lfndr_setting' ) ) {
-	require LFNDR_DIR . 'inc/settings.php';
+if ( ! function_exists( 'gwc_lfndr_setting' ) ) {
+	require GWC_LFNDR_DIR . 'inc/settings.php';
 }
-if ( ! function_exists( 'lfndr_field_types' ) ) {
-	require LFNDR_DIR . 'inc/field-types.php';
+if ( ! function_exists( 'gwc_lfndr_field_types' ) ) {
+	require GWC_LFNDR_DIR . 'inc/field-types.php';
 }
-if ( ! function_exists( 'lfndr_register_address_type' ) ) {
-	require LFNDR_DIR . 'inc/field-address.php';
+if ( ! function_exists( 'gwc_lfndr_register_address_type' ) ) {
+	require GWC_LFNDR_DIR . 'inc/field-address.php';
 }
-if ( ! function_exists( 'lfndr_register_hours_type' ) ) {
-	require LFNDR_DIR . 'inc/field-hours.php';
+if ( ! function_exists( 'gwc_lfndr_register_hours_type' ) ) {
+	require GWC_LFNDR_DIR . 'inc/field-hours.php';
 }
-if ( ! function_exists( 'lfndr_register_closures_type' ) ) {
-	require LFNDR_DIR . 'inc/field-closures.php';
+if ( ! function_exists( 'gwc_lfndr_register_closures_type' ) ) {
+	require GWC_LFNDR_DIR . 'inc/field-closures.php';
 }
-if ( ! function_exists( 'lfndr_get_schema' ) ) {
-	require LFNDR_DIR . 'inc/schema.php';
+if ( ! function_exists( 'gwc_lfndr_get_schema' ) ) {
+	require GWC_LFNDR_DIR . 'inc/schema.php';
 }
-if ( ! function_exists( 'lfndr_register_post_type' ) ) {
-	require LFNDR_DIR . 'inc/cpt.php';
+if ( ! function_exists( 'gwc_lfndr_register_post_type' ) ) {
+	require GWC_LFNDR_DIR . 'inc/cpt.php';
 }
-if ( ! function_exists( 'lfndr_render_meta_box' ) ) {
-	require LFNDR_DIR . 'inc/meta-box.php';
+if ( ! function_exists( 'gwc_lfndr_render_meta_box' ) ) {
+	require GWC_LFNDR_DIR . 'inc/meta-box.php';
 }
-if ( ! function_exists( 'lfndr_get_locations' ) ) {
-	require LFNDR_DIR . 'inc/locations.php';
+if ( ! function_exists( 'gwc_lfndr_get_locations' ) ) {
+	require GWC_LFNDR_DIR . 'inc/locations.php';
 }
-if ( ! function_exists( 'lfndr_available_facets' ) ) {
-	require LFNDR_DIR . 'inc/facets.php';
+if ( ! function_exists( 'gwc_lfndr_available_facets' ) ) {
+	require GWC_LFNDR_DIR . 'inc/facets.php';
 }
-if ( ! function_exists( 'lfndr_render_finder' ) ) {
-	require LFNDR_DIR . 'inc/render.php';
+if ( ! function_exists( 'gwc_lfndr_render_finder' ) ) {
+	require GWC_LFNDR_DIR . 'inc/render.php';
 }
-if ( ! function_exists( 'lfndr_appearance_css' ) ) {
-	require LFNDR_DIR . 'inc/admin-settings.php';
+if ( ! function_exists( 'gwc_lfndr_appearance_css' ) ) {
+	require GWC_LFNDR_DIR . 'inc/admin-settings.php';
 }
-if ( ! function_exists( 'lfndr_admin_assets' ) ) {
-	require LFNDR_DIR . 'inc/enqueue.php';
+if ( ! function_exists( 'gwc_lfndr_admin_assets' ) ) {
+	require GWC_LFNDR_DIR . 'inc/enqueue.php';
 }
-if ( ! function_exists( 'lfndr_register_block' ) ) {
-	require LFNDR_DIR . 'inc/block.php';
+if ( ! function_exists( 'gwc_lfndr_register_block' ) ) {
+	require GWC_LFNDR_DIR . 'inc/block.php';
 }
-if ( ! function_exists( 'lfndr_handle_geocode' ) ) {
-	require LFNDR_DIR . 'inc/geocode.php';
+if ( ! function_exists( 'gwc_lfndr_handle_geocode' ) ) {
+	require GWC_LFNDR_DIR . 'inc/geocode.php';
 }
-if ( ! function_exists( 'lfndr_fields_screen' ) ) {
-	require LFNDR_DIR . 'inc/admin-fields.php';
+if ( ! function_exists( 'gwc_lfndr_fields_screen' ) ) {
+	require GWC_LFNDR_DIR . 'inc/admin-fields.php';
 
 	// The tab shell and the settings that were not reachable before it.
-	require LFNDR_DIR . 'inc/admin-screen.php';
+	require GWC_LFNDR_DIR . 'inc/admin-screen.php';
 
 	/* Contextual help for the settings screen. Loaded after admin-screen.php
 	 * because it is that screen's help, and after admin-fields.php because it
 	 * describes what those screens do. */
-	require LFNDR_DIR . 'inc/admin-help.php';
+	require GWC_LFNDR_DIR . 'inc/admin-help.php';
 }
 
 /* ── Activation ──────────────────────────────────────────────────────────────
@@ -149,15 +149,15 @@ if ( ! function_exists( 'lfndr_fields_screen' ) ) {
 register_activation_hook(
 	__FILE__,
 	static function (): void {
-		update_option( 'lfndr_needs_rewrite_flush', 1, false );
+		update_option( 'gwc_lfndr_needs_rewrite_flush', 1, false );
 	}
 );
 
 add_action(
 	'init',
 	static function (): void {
-		if ( get_option( 'lfndr_needs_rewrite_flush' ) ) {
-			delete_option( 'lfndr_needs_rewrite_flush' );
+		if ( get_option( 'gwc_lfndr_needs_rewrite_flush' ) ) {
+			delete_option( 'gwc_lfndr_needs_rewrite_flush' );
 			flush_rewrite_rules( false );
 		}
 	},
@@ -170,7 +170,7 @@ add_action(
 register_deactivation_hook(
 	__FILE__,
 	static function (): void {
-		delete_transient( 'lfndr_locations' );
+		delete_transient( 'gwc_lfndr_locations' );
 		flush_rewrite_rules( false );
 	}
 );

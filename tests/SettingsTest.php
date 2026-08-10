@@ -16,31 +16,31 @@ use PHPUnit\Framework\TestCase;
 final class SettingsTest extends TestCase {
 
 	protected function setUp(): void {
-		lfndr_test_reset();
+		gwc_lfndr_test_reset();
 	}
 
 	/* ── Color sanitizer ───────────────────────────────────────────────── */
 
 	public function test_a_hex_colour_is_kept(): void {
-		$this->assertSame( '#1a2b3c', lfndr_sanitize_css_color( '#1a2b3c' ) );
+		$this->assertSame( '#1a2b3c', gwc_lfndr_sanitize_css_color( '#1a2b3c' ) );
 	}
 
 	public function test_a_named_colour_is_kept(): void {
-		$this->assertSame( 'rebeccapurple', lfndr_sanitize_css_color( 'rebeccapurple' ) );
+		$this->assertSame( 'rebeccapurple', gwc_lfndr_sanitize_css_color( 'rebeccapurple' ) );
 	}
 
 	public function test_a_system_colour_keyword_is_kept(): void {
-		$this->assertSame( 'CanvasText', lfndr_sanitize_css_color( 'CanvasText' ) );
+		$this->assertSame( 'CanvasText', gwc_lfndr_sanitize_css_color( 'CanvasText' ) );
 	}
 
 	public function test_an_rgba_function_is_kept(): void {
-		$this->assertSame( 'rgba(10, 20, 30, .5)', lfndr_sanitize_css_color( 'rgba(10, 20, 30, .5)' ) );
+		$this->assertSame( 'rgba(10, 20, 30, .5)', gwc_lfndr_sanitize_css_color( 'rgba(10, 20, 30, .5)' ) );
 	}
 
 	public function test_a_color_mix_function_is_kept(): void {
 		$this->assertSame(
 			'color-mix(in srgb, currentColor 20%, transparent)',
-			lfndr_sanitize_css_color( 'color-mix(in srgb, currentColor 20%, transparent)' )
+			gwc_lfndr_sanitize_css_color( 'color-mix(in srgb, currentColor 20%, transparent)' )
 		);
 	}
 
@@ -49,21 +49,21 @@ final class SettingsTest extends TestCase {
 		// support, and the reason this field is plain text.
 		$this->assertSame(
 			'var(--wp--preset--color--accent-1)',
-			lfndr_sanitize_css_color( 'var(--wp--preset--color--accent-1)' )
+			gwc_lfndr_sanitize_css_color( 'var(--wp--preset--color--accent-1)' )
 		);
 	}
 
 	public function test_whitespace_is_trimmed(): void {
-		$this->assertSame( '#fff', lfndr_sanitize_css_color( '  #fff  ' ) );
+		$this->assertSame( '#fff', gwc_lfndr_sanitize_css_color( '  #fff  ' ) );
 	}
 
 	public function test_empty_input_is_empty_output(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( '' ) );
-		$this->assertSame( '', lfndr_sanitize_css_color( '   ' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( '' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( '   ' ) );
 	}
 
 	public function test_an_overlong_value_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( str_repeat( 'a', 201 ) ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( str_repeat( 'a', 201 ) ) );
 	}
 
 	/* ── The actual injection attempts ────────────────────────────────────
@@ -71,127 +71,127 @@ final class SettingsTest extends TestCase {
 	 * inside a <style> tag. Everything below is a way that could go wrong. */
 
 	public function test_a_style_tag_breakout_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( 'red</style><script>alert(1)</script>' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'red</style><script>alert(1)</script>' ) );
 	}
 
 	public function test_a_rule_injection_via_braces_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( 'red}body{display:none' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'red}body{display:none' ) );
 	}
 
 	public function test_a_declaration_injection_via_semicolon_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( 'red;background:url(https://evil.example/x.png)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'red;background:url(https://evil.example/x.png)' ) );
 	}
 
 	public function test_url_is_rejected_even_though_its_characters_are_all_allowed(): void {
 		// Parens and letters are legitimately needed for var()/rgba()/
 		// color-mix(), so the character allow-list alone cannot stop this —
 		// it needs an explicit name check.
-		$this->assertSame( '', lfndr_sanitize_css_color( 'url(https://evil.example/x.png)' ) );
-		$this->assertSame( '', lfndr_sanitize_css_color( 'URL(evil.example)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'url(https://evil.example/x.png)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'URL(evil.example)' ) );
 	}
 
 	public function test_css_expression_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( 'expression(alert(1))' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'expression(alert(1))' ) );
 	}
 
 	public function test_an_at_rule_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_color( '#fff}@import "https://evil.example/x.css"' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( '#fff}@import "https://evil.example/x.css"' ) );
 	}
 
 	public function test_a_colon_is_rejected(): void {
 		// No legitimate color value in this plugin's vocabulary needs one —
 		// var(), rgba(), color-mix() and hex codes all get by without it — so
 		// excluding it closes off javascript: and data: as a side effect.
-		$this->assertSame( '', lfndr_sanitize_css_color( 'javascript:alert(1)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_color( 'javascript:alert(1)' ) );
 	}
 
 	/* ── Length sanitizer ───────────────────────────────────────────────── */
 
 	public function test_each_supported_unit_is_kept(): void {
 		foreach ( array( '8px', '0.5rem', '1em', '50%', '60vh', '100vw', '2ch' ) as $value ) {
-			$this->assertSame( $value, lfndr_sanitize_css_length( $value ) );
+			$this->assertSame( $value, gwc_lfndr_sanitize_css_length( $value ) );
 		}
 	}
 
 	public function test_a_negative_length_is_kept(): void {
 		// Legitimate for something like a margin, even if none of this
 		// plugin's own length fields currently use one.
-		$this->assertSame( '-4px', lfndr_sanitize_css_length( '-4px' ) );
+		$this->assertSame( '-4px', gwc_lfndr_sanitize_css_length( '-4px' ) );
 	}
 
 	public function test_a_bare_number_with_no_unit_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_length( '8' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( '8' ) );
 	}
 
 	public function test_an_unrecognised_unit_is_rejected(): void {
-		$this->assertSame( '', lfndr_sanitize_css_length( '8pt' ) );
-		$this->assertSame( '', lfndr_sanitize_css_length( '8in' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( '8pt' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( '8in' ) );
 	}
 
 	public function test_a_length_cannot_smuggle_a_function_call(): void {
-		$this->assertSame( '', lfndr_sanitize_css_length( 'calc(100% - 8px)' ) );
-		$this->assertSame( '', lfndr_sanitize_css_length( 'var(--evil)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( 'calc(100% - 8px)' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( 'var(--evil)' ) );
 	}
 
 	public function test_empty_length_is_empty(): void {
-		$this->assertSame( '', lfndr_sanitize_css_length( '' ) );
-		$this->assertSame( '', lfndr_sanitize_css_length( '   ' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( '' ) );
+		$this->assertSame( '', gwc_lfndr_sanitize_css_length( '   ' ) );
 	}
 
 	/* ── The settings sanitizer ─────────────────────────────────────────── */
 
 	public function test_only_submitted_keys_are_touched(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'units' => 'km' ) );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'units' => 'km' ) );
 
-		$saved = lfndr_sanitize_settings( array( 'accent_color' => '#123456' ) );
+		$saved = gwc_lfndr_sanitize_settings( array( 'accent_color' => '#123456' ) );
 
 		$this->assertSame( '#123456', $saved['accent_color'] );
 		$this->assertSame( 'km', $saved['units'], 'A field this form does not own must survive untouched.' );
 	}
 
 	public function test_an_invalid_submitted_value_is_dropped_not_kept_as_typed(): void {
-		$saved = lfndr_sanitize_settings( array( 'radius' => '8px}body{display:none' ) );
+		$saved = gwc_lfndr_sanitize_settings( array( 'radius' => '8px}body{display:none' ) );
 		$this->assertSame( '', $saved['radius'] );
 	}
 
 	public function test_a_non_array_submission_does_not_fatal(): void {
-		$saved = lfndr_sanitize_settings( 'not an array' );
+		$saved = gwc_lfndr_sanitize_settings( 'not an array' );
 		$this->assertIsArray( $saved );
 	}
 
 	/* ── The CSS builder ───────────────────────────────────────────────── */
 
 	public function test_no_settings_produce_no_css(): void {
-		$this->assertSame( '', lfndr_appearance_css() );
+		$this->assertSame( '', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_one_setting_produces_one_declaration(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
-		$this->assertSame( '.lfndr{--lfndr-accent:#123456}', lfndr_appearance_css() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
+		$this->assertSame( '.lfndr{--lfndr-accent:#123456}', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_settings_are_re_validated_at_output_even_if_never_sanitized_on_save(): void {
 		// Simulates a value that reached the option without going through
-		// lfndr_sanitize_settings() — WP-CLI, a migration, another plugin.
+		// gwc_lfndr_sanitize_settings() — WP-CLI, a migration, another plugin.
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'accent_color' => 'red}body{display:none',
 				'radius'       => '8px',
 			)
 		);
-		$this->assertSame( '.lfndr{--lfndr-radius:8px}', lfndr_appearance_css() );
+		$this->assertSame( '.lfndr{--lfndr-radius:8px}', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_field_order_in_the_registry_is_the_order_in_the_output(): void {
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'gap'          => '2rem',
 				'accent_color' => '#000',
 			)
 		);
-		$this->assertSame( '.lfndr{--lfndr-accent:#000;--lfndr-gap:2rem}', lfndr_appearance_css() );
+		$this->assertSame( '.lfndr{--lfndr-accent:#000;--lfndr-gap:2rem}', gwc_lfndr_appearance_css() );
 	}
 
 	/* ── Rule-mode fields: buttons, chips & cards ─────────────────────────
@@ -200,17 +200,17 @@ final class SettingsTest extends TestCase {
 	 * shared .lfndr{} custom-property block the var-mode fields use. */
 
 	public function test_a_rule_mode_field_prints_its_own_selector_block(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'badge_bg' => '#eee' ) );
-		$fields = lfndr_appearance_fields();
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'badge_bg' => '#eee' ) );
+		$fields = gwc_lfndr_appearance_fields();
 		$this->assertSame(
 			$fields['badge_bg']['selector'] . '{background-color:#eee !important}',
-			lfndr_appearance_css()
+			gwc_lfndr_appearance_css()
 		);
 	}
 
 	public function test_background_and_text_for_the_same_selector_share_one_block(): void {
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'badge_bg'   => '#eee',
 				'badge_text' => '#111',
@@ -220,45 +220,45 @@ final class SettingsTest extends TestCase {
 		// separate selector{...} statements would still work, but this is
 		// smaller and it is what makes "only one of the pair was set" (the
 		// next test) look right rather than leaving a stray empty rule.
-		$fields = lfndr_appearance_fields();
+		$fields = gwc_lfndr_appearance_fields();
 		$this->assertSame(
 			$fields['badge_bg']['selector'] . '{background-color:#eee !important;color:#111 !important}',
-			lfndr_appearance_css()
+			gwc_lfndr_appearance_css()
 		);
 	}
 
 	public function test_setting_only_the_background_does_not_print_an_empty_text_declaration(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'card_bg' => '#fafafa' ) );
-		$css = lfndr_appearance_css();
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'card_bg' => '#fafafa' ) );
+		$css = gwc_lfndr_appearance_css();
 		$this->assertStringContainsString( 'background-color:#fafafa', $css );
 		$this->assertStringNotContainsString( 'color:;', $css );
 		$this->assertStringNotContainsString( 'color: !important', $css );
 	}
 
 	public function test_rule_mode_declarations_carry_important(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'control_bg' => '#123' ) );
-		$this->assertStringContainsString( '#123 !important', lfndr_appearance_css() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'control_bg' => '#123' ) );
+		$this->assertStringContainsString( '#123 !important', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_var_mode_declarations_never_carry_important(): void {
 		// A theme that sets --lfndr-accent for itself, per the README's own
 		// example, is meant to win — !important here would break that.
-		update_option( LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123' ) );
-		$this->assertStringNotContainsString( 'important', lfndr_appearance_css() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123' ) );
+		$this->assertStringNotContainsString( 'important', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_control_and_control_active_use_different_selectors(): void {
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'control_bg'        => '#aaa',
 				'control_active_bg' => '#bbb',
 			)
 		);
-		$fields = lfndr_appearance_fields();
+		$fields = gwc_lfndr_appearance_fields();
 		$this->assertNotSame( $fields['control_bg']['selector'], $fields['control_active_bg']['selector'] );
 
-		$css = lfndr_appearance_css();
+		$css = gwc_lfndr_appearance_css();
 		$this->assertStringContainsString( $fields['control_bg']['selector'] . '{background-color:#aaa !important}', $css );
 		$this->assertStringContainsString( $fields['control_active_bg']['selector'] . '{background-color:#bbb !important}', $css );
 	}
@@ -270,37 +270,37 @@ final class SettingsTest extends TestCase {
 		 * restate the registry — and would fail the next time a selector legitimately
 		 * gained a class — so this feeds a hostile value in and checks what escapes. */
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array( 'badge_bg' => '#fff}body{display:none' )
 		);
 		// Rejected outright rather than escaped into the block: a value that is
 		// not a color never reaches the stylesheet at all.
-		$this->assertSame( '', lfndr_appearance_css() );
+		$this->assertSame( '', gwc_lfndr_appearance_css() );
 	}
 
 	public function test_a_rule_mode_value_lands_inside_the_registrys_own_selector(): void {
-		// One update_option per test, deliberately: lfndr_setting() memoizes for
+		// One update_option per test, deliberately: gwc_lfndr_setting() memoizes for
 		// the request and the test stub does not fire the invalidation hook a
 		// real update_option() would, so a second write in the same test is not
-		// seen. The memo is covered on its own in lfndr_settings_cache()'s tests.
-		update_option( LFNDR_SETTINGS_OPTION, array( 'badge_bg' => '#fff' ) );
-		$fields = lfndr_appearance_fields();
+		// seen. The memo is covered on its own in gwc_lfndr_settings_cache()'s tests.
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'badge_bg' => '#fff' ) );
+		$fields = gwc_lfndr_appearance_fields();
 		$this->assertSame(
 			$fields['badge_bg']['selector'] . '{background-color:#fff !important}',
-			lfndr_appearance_css()
+			gwc_lfndr_appearance_css()
 		);
 	}
 
 	public function test_var_and_rule_mode_settings_can_coexist(): void {
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'accent_color' => '#000',
 				'badge_bg'     => '#eee',
 			)
 		);
-		$css    = lfndr_appearance_css();
-		$fields = lfndr_appearance_fields();
+		$css    = gwc_lfndr_appearance_css();
+		$fields = gwc_lfndr_appearance_fields();
 		$this->assertStringStartsWith( '.lfndr{--lfndr-accent:#000}', $css );
 		$this->assertStringEndsWith(
 			$fields['badge_bg']['selector'] . '{background-color:#eee !important}',
@@ -323,7 +323,7 @@ final class SettingsTest extends TestCase {
 			'badge_bg',
 			'badge_text',
 		);
-		foreach ( lfndr_appearance_fields() as $key => $field ) {
+		foreach ( gwc_lfndr_appearance_fields() as $key => $field ) {
 			if ( 'rule' === ( $field['mode'] ?? 'var' ) ) {
 				$this->assertContains( $key, $rule_mode_keys, "Unexpected rule-mode field: $key" );
 				$this->assertSame( 'color', $field['type'] );
@@ -332,8 +332,8 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_every_field_belongs_to_a_registered_section(): void {
-		$sections = array_keys( lfndr_appearance_sections() );
-		foreach ( lfndr_appearance_fields() as $key => $field ) {
+		$sections = array_keys( gwc_lfndr_appearance_sections() );
+		foreach ( gwc_lfndr_appearance_fields() as $key => $field ) {
 			$this->assertContains( $field['section'], $sections, "Field \"$key\" has no matching section." );
 		}
 	}
@@ -341,8 +341,8 @@ final class SettingsTest extends TestCase {
 	/* ── Presets ──────────────────────────────────────────────────────────── */
 
 	public function test_applying_a_preset_writes_its_values(): void {
-		$out      = lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
-		$expected = lfndr_style_presets()['night']['values'];
+		$out      = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
+		$expected = gwc_lfndr_style_presets()['night']['values'];
 		foreach ( $expected as $key => $value ) {
 			$this->assertSame( $value, $out[ $key ], "preset key {$key}" );
 		}
@@ -352,19 +352,19 @@ final class SettingsTest extends TestCase {
 		/* The light sets leave the finder background blank on purpose. Merging
 		 * rather than resetting would strand a previous dark canvas under one
 		 * of them, which is a broken finder produced by two valid choices. */
-		update_option( LFNDR_SETTINGS_OPTION, array( 'finder_bg' => '#0f172a' ) );
-		$out = lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'finder_bg' => '#0f172a' ) );
+		$out = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
 		$this->assertSame( '', $out['finder_bg'] );
 	}
 
 	public function test_the_preset_action_is_never_stored(): void {
-		$out = lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
+		$out = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
 		$this->assertArrayNotHasKey( '_apply_preset', $out );
 	}
 
 	public function test_an_unknown_preset_changes_nothing(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
-		$out = lfndr_sanitize_settings( array( '_apply_preset' => 'not-a-preset' ) );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
+		$out = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'not-a-preset' ) );
 		$this->assertSame( '#123456', $out['accent_color'] );
 	}
 
@@ -384,10 +384,10 @@ final class SettingsTest extends TestCase {
 	 * put while editing a box tunes that set into Custom.
 	 */
 	public function test_choosing_a_different_preset_overrides_the_submitted_boxes(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
-		lfndr_settings_cache( null, true );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'accent_color' => '#123456' ) );
+		gwc_lfndr_settings_cache( null, true );
 
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_apply_preset' => 'night',
 				'accent_color'  => '#abcdef',
@@ -400,10 +400,10 @@ final class SettingsTest extends TestCase {
 
 	public function test_editing_a_box_without_moving_the_radio_wins(): void {
 		// Land on Night, so the radio in the next save is not a change.
-		update_option( LFNDR_SETTINGS_OPTION, lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) ) );
-		lfndr_settings_cache( null, true );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) ) );
+		gwc_lfndr_settings_cache( null, true );
 
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_apply_preset' => 'night',
 				'accent_color'  => '#abcdef',
@@ -414,8 +414,8 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_every_preset_only_names_real_fields(): void {
-		$known = array_keys( lfndr_appearance_fields() );
-		foreach ( lfndr_style_presets() as $key => $preset ) {
+		$known = array_keys( gwc_lfndr_appearance_fields() );
+		foreach ( gwc_lfndr_style_presets() as $key => $preset ) {
 			foreach ( array_keys( $preset['values'] ) as $field ) {
 				$this->assertContains( $field, $known, "preset {$key} names unknown field {$field}" );
 			}
@@ -425,8 +425,8 @@ final class SettingsTest extends TestCase {
 	public function test_every_preset_survives_its_own_sanitizer(): void {
 		// A preset that stored a value the sanitizer then rejected would apply
 		// as blank and look like the preset simply did nothing.
-		foreach ( lfndr_style_presets() as $key => $preset ) {
-			$out = lfndr_sanitize_settings( array( '_apply_preset' => $key ) );
+		foreach ( gwc_lfndr_style_presets() as $key => $preset ) {
+			$out = gwc_lfndr_sanitize_settings( array( '_apply_preset' => $key ) );
 			foreach ( $preset['values'] as $field => $value ) {
 				$this->assertSame( $value, $out[ $field ], "preset {$key}, field {$field}" );
 			}
@@ -437,7 +437,7 @@ final class SettingsTest extends TestCase {
 		/* A canvas without padding runs the search box and the cards flat into
 		 * the edge of the color, which makes a deliberate background look like
 		 * a mistake. The two are one decision, so they travel together. */
-		foreach ( lfndr_style_presets() as $key => $preset ) {
+		foreach ( gwc_lfndr_style_presets() as $key => $preset ) {
 			$bg = $preset['values']['finder_bg'] ?? '';
 			if ( '' === $bg ) {
 				continue;
@@ -453,7 +453,7 @@ final class SettingsTest extends TestCase {
 	public function test_every_preset_with_a_background_also_sets_its_text(): void {
 		// Same pairing: text inside the finder inherits the page's color, so a
 		// canvas without ink is dark-on-dark waiting to happen.
-		foreach ( lfndr_style_presets() as $key => $preset ) {
+		foreach ( gwc_lfndr_style_presets() as $key => $preset ) {
 			$bg = $preset['values']['finder_bg'] ?? '';
 			if ( '' === $bg ) {
 				continue;
@@ -467,44 +467,44 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_current_preset_is_derived_from_the_values(): void {
-		update_option( LFNDR_SETTINGS_OPTION, lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) ) );
-		lfndr_reset_settings_cache();
-		$this->assertSame( 'night', lfndr_current_preset() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) ) );
+		gwc_lfndr_reset_settings_cache();
+		$this->assertSame( 'night', gwc_lfndr_current_preset() );
 	}
 
 	public function test_editing_one_value_makes_it_custom(): void {
 		/* The reason the chosen key is not stored: it would go on claiming the
 		 * site was on a preset it no longer matches. */
-		$values                 = lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
+		$values                 = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'night' ) );
 		$values['accent_color'] = '#abcdef';
-		update_option( LFNDR_SETTINGS_OPTION, $values );
-		lfndr_reset_settings_cache();
-		$this->assertSame( '', lfndr_current_preset() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, $values );
+		gwc_lfndr_reset_settings_cache();
+		$this->assertSame( '', gwc_lfndr_current_preset() );
 	}
 
 	public function test_a_stray_value_from_an_earlier_set_is_not_a_match(): void {
 		// Ink leaves the canvas blank; a dark canvas left over from Night means
 		// the site is not on Ink however close the rest looks.
-		$values              = lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
+		$values              = gwc_lfndr_sanitize_settings( array( '_apply_preset' => 'ink' ) );
 		$values['finder_bg'] = '#0f172a';
-		update_option( LFNDR_SETTINGS_OPTION, $values );
-		lfndr_reset_settings_cache();
-		$this->assertSame( '', lfndr_current_preset() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, $values );
+		gwc_lfndr_reset_settings_cache();
+		$this->assertSame( '', gwc_lfndr_current_preset() );
 	}
 
 	public function test_defaults_are_custom_rather_than_a_preset(): void {
-		update_option( LFNDR_SETTINGS_OPTION, array() );
-		lfndr_reset_settings_cache();
-		$this->assertSame( '', lfndr_current_preset() );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array() );
+		gwc_lfndr_reset_settings_cache();
+		$this->assertSame( '', gwc_lfndr_current_preset() );
 	}
 
 	public function test_every_preset_round_trips_through_derivation(): void {
 		// Apply each one and confirm the screen would report it back. Catches a
 		// preset whose values the sanitizer alters on the way in.
-		foreach ( array_keys( lfndr_style_presets() ) as $key ) {
-			update_option( LFNDR_SETTINGS_OPTION, lfndr_sanitize_settings( array( '_apply_preset' => $key ) ) );
-			lfndr_reset_settings_cache();
-			$this->assertSame( $key, lfndr_current_preset(), "preset {$key}" );
+		foreach ( array_keys( gwc_lfndr_style_presets() ) as $key ) {
+			update_option( GWC_LFNDR_SETTINGS_OPTION, gwc_lfndr_sanitize_settings( array( '_apply_preset' => $key ) ) );
+			gwc_lfndr_reset_settings_cache();
+			$this->assertSame( $key, gwc_lfndr_current_preset(), "preset {$key}" );
 		}
 	}
 
@@ -514,13 +514,13 @@ final class SettingsTest extends TestCase {
 		/* The point of the Behavior and Advanced tabs: 19 settings the plugin
 		 * read at runtime that nothing in wp-admin could set. If this fails,
 		 * a setting has been added with nowhere to change it. */
-		$known   = array_merge( array_keys( lfndr_appearance_fields() ), array_keys( lfndr_option_fields() ) );
-		$missing = array_diff( array_keys( lfndr_setting_defaults() ), $known );
+		$known   = array_merge( array_keys( gwc_lfndr_appearance_fields() ), array_keys( gwc_lfndr_option_fields() ) );
+		$missing = array_diff( array_keys( gwc_lfndr_setting_defaults() ), $known );
 		$this->assertSame( array(), array_values( $missing ), 'settings with no UI: ' . implode( ', ', $missing ) );
 	}
 
 	public function test_numbers_are_clamped_to_their_range(): void {
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_behavior' => '1',
 				'zoom'          => '999',
@@ -534,7 +534,7 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_a_select_never_accepts_a_value_off_its_list(): void {
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_behavior' => '1',
 				'units'         => 'parsecs',
@@ -547,8 +547,8 @@ final class SettingsTest extends TestCase {
 		/* A checkbox posts nothing when unchecked, so the tab marker is what
 		 * separates "turned off" from "not on this screen". Without it,
 		 * switching anything off would silently fail. */
-		update_option( LFNDR_SETTINGS_OPTION, array( 'near_me' => true ) );
-		$out = lfndr_sanitize_settings( array( '_tab_behavior' => '1' ) );
+		update_option( GWC_LFNDR_SETTINGS_OPTION, array( 'near_me' => true ) );
+		$out = gwc_lfndr_sanitize_settings( array( '_tab_behavior' => '1' ) );
 		$this->assertFalse( $out['near_me'] );
 	}
 
@@ -560,7 +560,7 @@ final class SettingsTest extends TestCase {
 		// site to the lookup service.
 		update_option( 'admin_email', 'admin@charity.org' );
 
-		$this->assertSame( 'admin@charity.org', lfndr_setting_defaults()['geo_email'] );
+		$this->assertSame( 'admin@charity.org', gwc_lfndr_setting_defaults()['geo_email'] );
 	}
 
 	public function test_a_saved_contact_address_does_not_follow_the_admin_email(): void {
@@ -570,31 +570,31 @@ final class SettingsTest extends TestCase {
 		// asking.
 		update_option( 'admin_email', 'admin@charity.org' );
 		update_option(
-			LFNDR_SETTINGS_OPTION,
-			lfndr_sanitize_settings(
+			GWC_LFNDR_SETTINGS_OPTION,
+			gwc_lfndr_sanitize_settings(
 				array(
 					'_tab_advanced' => '1',
 					'geo_email'     => 'locations@charity.org',
 				)
 			)
 		);
-		lfndr_settings_cache( null, true );
+		gwc_lfndr_settings_cache( null, true );
 
 		update_option( 'admin_email', 'somebody-else@charity.org' );
-		lfndr_settings_cache( null, true );
+		gwc_lfndr_settings_cache( null, true );
 
-		$this->assertSame( 'locations@charity.org', lfndr_setting( 'geo_email' ) );
+		$this->assertSame( 'locations@charity.org', gwc_lfndr_setting( 'geo_email' ) );
 	}
 
 	public function test_saving_one_tab_leaves_another_tabs_values_alone(): void {
 		update_option(
-			LFNDR_SETTINGS_OPTION,
+			GWC_LFNDR_SETTINGS_OPTION,
 			array(
 				'near_me'   => true,
 				'geo_email' => 'a@example.com',
 			)
 		);
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_advanced' => '1',
 				'geo_email'     => 'b@example.com',
@@ -607,7 +607,7 @@ final class SettingsTest extends TestCase {
 	public function test_tile_attribution_keeps_its_link_but_nothing_that_acts(): void {
 		// Attribution is a license term and is nearly always a link, so it
 		// cannot be stripped — but it is still author input.
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_advanced' => '1',
 				'tile_attr'     => '<a href="https://x.test">Tiles</a><script>alert(1)</script>',
@@ -618,13 +618,13 @@ final class SettingsTest extends TestCase {
 	}
 
 	public function test_the_tab_markers_are_never_stored(): void {
-		$out = lfndr_sanitize_settings(
+		$out = gwc_lfndr_sanitize_settings(
 			array(
 				'_tab_behavior' => '1',
 				'page_size'     => '10',
 			)
 		);
-		foreach ( array_keys( lfndr_admin_tabs() ) as $tab ) {
+		foreach ( array_keys( gwc_lfndr_admin_tabs() ) as $tab ) {
 			$this->assertArrayNotHasKey( '_tab_' . $tab, $out );
 		}
 	}

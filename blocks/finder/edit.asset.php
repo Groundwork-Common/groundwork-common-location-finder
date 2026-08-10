@@ -17,5 +17,5 @@
 
 return array(
 	'dependencies' => array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-	'version'      => LFNDR_VERSION,
+	'version'      => GWC_LFNDR_VERSION,
 );
