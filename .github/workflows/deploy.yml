@@ -83,6 +83,18 @@ jobs:
             fi
           done
 
+      # On a release the action derives the version from the tag. A manual run
+      # has no tag — GITHUB_REF is refs/heads/main, and the action would try to
+      # create tags/refs/heads/main in SVN and fail. So manual runs take the
+      # version from the readme's stable tag, which is also correct for the
+      # other use of the manual trigger: re-running a release that failed
+      # partway, where the stable tag is the version being released.
+      - name: Work out the version for manual runs
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          stable=$(grep -m1 -oE '^Stable tag:[[:space:]]*\S+' readme.txt | awk '{print $NF}')
+          echo "VERSION=$stable" >> "$GITHUB_ENV"
+
       - name: Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
