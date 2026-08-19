@@ -248,7 +248,7 @@ drag-and-drop, and every preset meets WCAG AA contrast.
 2. On a phone, with the map above the list.
 3. A location's details, opened in place.
 4. Defining a field: type, label, and where it appears.
-5. Recurring hours — "2nd and 4th Tuesday" without a plugin-specific syntax.
+5. Recurring hours — "1st and 3rd Tuesday" without a plugin-specific syntax.
 6. Appearance presets.
 
 == Changelog ==
