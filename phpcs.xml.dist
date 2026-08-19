@@ -34,6 +34,12 @@
 	<exclude-pattern>/assets/leaflet/*</exclude-pattern>
 	<exclude-pattern>/.phpunit.cache/*</exclude-pattern>
 
+	<!-- Claude Code's worktrees, each a whole second copy of this plugin.
+	     Without this, `composer lint` from the repo root lints every stale copy
+	     alongside the real source and invents hundreds of findings that CI,
+	     working from a fresh checkout, never sees. -->
+	<exclude-pattern>/.claude/*</exclude-pattern>
+
 	<!-- ── The standard itself ────────────────────────────────────────────── -->
 
 	<rule ref="WordPress"/>

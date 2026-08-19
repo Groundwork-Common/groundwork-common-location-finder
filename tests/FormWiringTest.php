@@ -227,6 +227,8 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 	}
 
 	/**
+	 * Narrow a list of call sites to those calling one named function.
+	 *
 	 * @param array<int, array{group: string, call: string, path: string}> $sites Call sites.
 	 * @param string                                                       $call  Function name to keep.
 	 * @return array<int, array{group: string, call: string, path: string}>
@@ -245,7 +247,7 @@ class FormWiringTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * The option group is the same wiring as the input names above, one level up.
 	 *
-	 * options.php does not save what it is posted. It looks the posted
+	 * Core's options.php does not save what it is posted. It looks the posted
 	 * option_page up in the allow-list that register_setting() writes, and when
 	 * the group named on the form is not a key in there it rejects the request.
 	 * That rejection is a redirect back to the settings screen: the form submits,
