@@ -15,8 +15,33 @@
 	  on every push by .github/workflows/ci.yml.
 	-->
 
-	<!-- Everything below the plugin root, minus what the exclusions below drop. -->
-	<file>.</file>
+	<!-- The shipping source and the suite, named rather than found by scanning
+	     `.` and excluding whatever should not have been found.
+
+	     `<file>.</file>` plus an exclusion is the obvious spelling and it has
+	     now failed in both directions, because an exclude-pattern is matched
+	     against the file's ABSOLUTE path — a claim about the machine's
+	     directory layout rather than about this repository. From the repo root,
+	     `.` descended into `.claude/worktrees/` and linted every stale copy;
+	     excluding `/.claude/*` fixed that, and then matched everything when the
+	     checkout was ITSELF inside a worktree, which is where a worktree
+	     session works. `composer lint` there scanned zero files and exited 0 in
+	     ~100ms, with no dots and no `N / N` line — indistinguishable from a
+	     clean pass.
+
+	     Naming the paths has neither failure: a worktree is not listed so it is
+	     never descended into, and nothing is dropped for where the checkout
+	     sits. The cost is that this list is load-bearing — a new top-level PHP
+	     file is linted by nobody until it is added here — which is a silent
+	     false PASS traded for a visible one.
+
+	     tests/ is listed on purpose. Unlike the sibling plugins this repository
+	     lints its suite, with the per-sniff exclusions further down. -->
+	<file>groundwork-common-location-finder.php</file>
+	<file>uninstall.php</file>
+	<file>inc</file>
+	<file>blocks</file>
+	<file>tests</file>
 
 	<arg name="extensions" value="php"/>
 	<arg name="basepath" value="."/>
@@ -33,12 +58,6 @@
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 	<exclude-pattern>/assets/leaflet/*</exclude-pattern>
 	<exclude-pattern>/.phpunit.cache/*</exclude-pattern>
-
-	<!-- Claude Code's worktrees, each a whole second copy of this plugin.
-	     Without this, `composer lint` from the repo root lints every stale copy
-	     alongside the real source and invents hundreds of findings that CI,
-	     working from a fresh checkout, never sees. -->
-	<exclude-pattern>/.claude/*</exclude-pattern>
 
 	<!-- ── The standard itself ────────────────────────────────────────────── -->
 
